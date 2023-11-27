@@ -117,41 +117,115 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named air_type
+# Target rules for targets named server
 
 # Build rule for target.
-air_type: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 air_type
-.PHONY : air_type
+server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server
+.PHONY : server
 
 # fast build rule for target.
-air_type/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/air_type.dir/build.make CMakeFiles/air_type.dir/build
-.PHONY : air_type/fast
+server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+.PHONY : server/fast
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+#=============================================================================
+# Target rules for targets named client
+
+# Build rule for target.
+client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client
+.PHONY : client
+
+# fast build rule for target.
+client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
+.PHONY : client/fast
+
+#=============================================================================
+# Target rules for targets named ecs
+
+# Build rule for target.
+ecs: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ecs
+.PHONY : ecs
+
+# fast build rule for target.
+ecs/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/build
+.PHONY : ecs/fast
+
+src/Client/main.o: src/Client/main.cpp.o
+.PHONY : src/Client/main.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/air_type.dir/build.make CMakeFiles/air_type.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/Client/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/main.cpp.o
+.PHONY : src/Client/main.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/Client/main.i: src/Client/main.cpp.i
+.PHONY : src/Client/main.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/air_type.dir/build.make CMakeFiles/air_type.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/Client/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/main.cpp.i
+.PHONY : src/Client/main.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/Client/main.s: src/Client/main.cpp.s
+.PHONY : src/Client/main.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/air_type.dir/build.make CMakeFiles/air_type.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/Client/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/main.cpp.s
+.PHONY : src/Client/main.cpp.s
+
+src/Ecs/main.o: src/Ecs/main.cpp.o
+.PHONY : src/Ecs/main.o
+
+# target to build an object file
+src/Ecs/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/src/Ecs/main.cpp.o
+.PHONY : src/Ecs/main.cpp.o
+
+src/Ecs/main.i: src/Ecs/main.cpp.i
+.PHONY : src/Ecs/main.i
+
+# target to preprocess a source file
+src/Ecs/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/src/Ecs/main.cpp.i
+.PHONY : src/Ecs/main.cpp.i
+
+src/Ecs/main.s: src/Ecs/main.cpp.s
+.PHONY : src/Ecs/main.s
+
+# target to generate assembly for a file
+src/Ecs/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/src/Ecs/main.cpp.s
+.PHONY : src/Ecs/main.cpp.s
+
+src/Server/main.o: src/Server/main.cpp.o
+.PHONY : src/Server/main.o
+
+# target to build an object file
+src/Server/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/main.cpp.o
+.PHONY : src/Server/main.cpp.o
+
+src/Server/main.i: src/Server/main.cpp.i
+.PHONY : src/Server/main.i
+
+# target to preprocess a source file
+src/Server/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/main.cpp.i
+.PHONY : src/Server/main.cpp.i
+
+src/Server/main.s: src/Server/main.cpp.s
+.PHONY : src/Server/main.s
+
+# target to generate assembly for a file
+src/Server/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/main.cpp.s
+.PHONY : src/Server/main.cpp.s
 
 # Help Target
 help:
@@ -161,10 +235,18 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... air_type"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... client"
+	@echo "... ecs"
+	@echo "... server"
+	@echo "... src/Client/main.o"
+	@echo "... src/Client/main.i"
+	@echo "... src/Client/main.s"
+	@echo "... src/Ecs/main.o"
+	@echo "... src/Ecs/main.i"
+	@echo "... src/Ecs/main.s"
+	@echo "... src/Server/main.o"
+	@echo "... src/Server/main.i"
+	@echo "... src/Server/main.s"
 .PHONY : help
 
 
