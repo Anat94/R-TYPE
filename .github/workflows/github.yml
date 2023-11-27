@@ -1,0 +1,28 @@
+name: Python package
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmake-version: '3.5'  # Adjust the version as needed
+
+      - name: LINUX - Launch Cmake & make
+        run: cmake --build
+
+
+
+        # runs-on: windows-latest
+        # steps:
+        #   - uses: actions/checkout@v2
+          # - name: WINDOWS - Launch Cmake & start
+          #   shell: pwsh
+          #   run: |
+          #     cmake .
+          #     call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          #     cmd.exe /c 'build.bat'
