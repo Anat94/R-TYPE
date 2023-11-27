@@ -13,7 +13,7 @@ jobs:
           cmake-version: '3.5'  # Adjust the version as needed
 
       - name: LINUX - Launch Cmake & make
-        run: cmake --build
+        run: cmake . && make
 
 
 
