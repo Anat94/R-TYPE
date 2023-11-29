@@ -1,6 +1,5 @@
 client
 libecs.so
-server
 cmake_install.cmake
 CMakeCache.txt
 CMakeFiles
