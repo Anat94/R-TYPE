@@ -48,27 +48,27 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/bin/cmake
+CMAKE_COMMAND = /home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake
 
 # The command to remove a file.
-RM = /usr/bin/cmake -E rm -f
+RM = /home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/anatole/delivery/Tek3/R-TYPE
+CMAKE_SOURCE_DIR = "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/anatole/delivery/Tek3/R-TYPE
+CMAKE_BINARY_DIR = "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype"
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
+	/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anatole/delivery/Tek3/R-TYPE/CMakeFiles /home/anatole/delivery/Tek3/R-TYPE//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/CMakeFiles" "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype//CMakeFiles/progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/anatole/delivery/Tek3/R-TYPE/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -203,6 +203,30 @@ src/Ecs/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/src/Ecs/main.cpp.s
 .PHONY : src/Ecs/main.cpp.s
 
+src/Server/Server.o: src/Server/Server.cpp.o
+.PHONY : src/Server/Server.o
+
+# target to build an object file
+src/Server/Server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/Server.cpp.o
+.PHONY : src/Server/Server.cpp.o
+
+src/Server/Server.i: src/Server/Server.cpp.i
+.PHONY : src/Server/Server.i
+
+# target to preprocess a source file
+src/Server/Server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/Server.cpp.i
+.PHONY : src/Server/Server.cpp.i
+
+src/Server/Server.s: src/Server/Server.cpp.s
+.PHONY : src/Server/Server.s
+
+# target to generate assembly for a file
+src/Server/Server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Server/Server.cpp.s
+.PHONY : src/Server/Server.cpp.s
+
 src/Server/main.o: src/Server/main.cpp.o
 .PHONY : src/Server/main.o
 
@@ -244,6 +268,9 @@ help:
 	@echo "... src/Ecs/main.o"
 	@echo "... src/Ecs/main.i"
 	@echo "... src/Ecs/main.s"
+	@echo "... src/Server/Server.o"
+	@echo "... src/Server/Server.i"
+	@echo "... src/Server/Server.s"
 	@echo "... src/Server/main.o"
 	@echo "... src/Server/main.i"
 	@echo "... src/Server/main.s"

@@ -7,6 +7,7 @@ project(R-type
 
 add_executable(server
                 src/Server/main.cpp
+                src/Server/Server.cpp
         )
 include_directories(include src)
 target_compile_features(server PRIVATE cxx_std_20)
