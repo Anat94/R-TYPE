@@ -5,28 +5,21 @@
 ** main
 */
 
-#ifndef MAIN_HPP_
-    #define MAIN_HPP_
-    #define MAX_NB_USER 1000
-    #include <netinet/in.h>
-    #include <vector>
+#ifndef SERVER_HPP
+#define SERVER_HPP
+
+#include <boost/asio.hpp>
 
 class Server {
-    public:
-        Server(int port, int max_clients);
-        ~Server();
-        int startListening();
-    private:
-        int port;
-        int serverSocket;
-        fd_set read_fds;
-        int max_clients;
-        struct sockaddr_in serverAddr;
-        std::vector<int> clientSockets;
+public:
+    Server(boost::asio::io_service& io_service, short port);
 
-        bool handle_select();
-        bool is_client_connected(int client_socket);
-        void accept_new_client();
+private:
+    void do_accept();
+    void handle_client(boost::asio::ip::tcp::socket socket);
+
+    boost::asio::ip::tcp::acceptor acceptor_;
+    boost::asio::ip::tcp::socket socket_;
 };
 
-#endif /* !MAIN_HPP_ */
+#endif // SERVER_HPP
