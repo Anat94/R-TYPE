@@ -8,9 +8,9 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <iostream>
-			
+		
 using boost::asio::ip::tcp;
-				
+		
 int main()
 {
 	// Création du service principal et du résolveur.
