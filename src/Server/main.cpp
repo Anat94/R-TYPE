@@ -5,34 +5,39 @@
 ** main
 */
 
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
 #include <iostream>
-		
-using boost::asio::ip::tcp;
-		
-int main()
-{
-	// Création du service principal et du résolveur.
-	boost::asio::io_service ios;
-				
-	// Création de l'acceptor avec le port d'écoute 7171 et une adresse quelconque de type IPv4 // (1)
-	tcp::acceptor acceptor(ios, tcp::endpoint(tcp::v4(), 7171));
-				
-	std::string msg ("Bienvenue sur le serveur !"); // (2)
-	// On attend la venue d'un client
-	while (1)
-	{
-		// Création d'une socket
-		tcp::socket socket(ios); // (3)
-				
-		// On accepte la connexion
-		acceptor.accept(socket); // (4)
-		std::cout << "Client reçu ! " << std::endl;
-			
-		// On envoi un message de bienvenue
-		socket.send(boost::asio::buffer(msg)); // (5)
-	}
-				
-	return 0;
+#include <boost/asio.hpp>
+
+using boost::asio::ip::udp;
+
+const int PORT_NUMBER = 8888;
+
+int main() {
+    try {
+        boost::asio::io_context io_context;
+
+        // Create a UDP socket
+        udp::socket socket(io_context, udp::endpoint(udp::v4(), PORT_NUMBER));
+
+        std::cout << "UDP Server listening on port " << PORT_NUMBER << "...\n";
+
+        while (true) {
+            // Buffer to store received data
+            char receive_buffer[1024];
+            udp::endpoint remote_endpoint;
+
+            // Receive data
+            size_t bytes_received = socket.receive_from(boost::asio::buffer(receive_buffer), remote_endpoint);
+
+            // Output received data
+            std::cout << "Received from " << remote_endpoint.address().to_string() << ": " << receive_buffer << std::endl;
+
+            // Echo the received data back to the client
+            socket.send_to(boost::asio::buffer(receive_buffer, bytes_received), remote_endpoint);
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    return 0;
 }
