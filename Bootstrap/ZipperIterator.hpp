@@ -5,18 +5,21 @@
 ** ZipperIterator
 */
 
-template <class ... Containers>
+#include <iostream>
+#include <iterator>
+
+template <class ...Containers>
 class zipper_iterator {
     template <class Container>
-    using iterator_t = ??? // type of Container :: begin () return value
+    using iterator_t = std::iterator<Container> // type of Container::begin () return value
     template <class Container>
-    using it_reference_t = typename iterator_t<Container>::reference ;
+    using it_reference_t = typename iterator_t<Container>::reference;
     public :
-        using value_type = std :: tuple </* retrieve it_reference_t :: value () type */&...>; // std :: tuple of references to components
-        using reference = value_type ;
-        using pointer = void;
+        using value_type = std::tuple<Containers&...>; // std :: tuple of references to components
+        using reference = value_type&;
+        using pointer = value_type*;
         using difference_type = size_t;
-        using iterator_category = /* proper iterator tag */;
+        using iterator_category = std::forward_iterator_tag;
         using iterator_tuple = std::tuple<iterator_t<Container>...>;
         // If we want zipper_iterator to be built by zipper only .
         friend containers::zipper<Containers ...>;
