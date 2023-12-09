@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Registry.hpp"
+#include "ZipperIterator.hpp"
 
 namespace component {
     struct Position {
@@ -57,8 +58,8 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
 auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sf::RenderWindow& window) {
     for (size_t i = 0; i < dra.size() && i < pos.size(); ++i) {
         if (dra[i] && pos[i]) {
-            std::cout << "Drawing at position: {"
-                      << pos[i]->x << ", " << pos[i]->y << "}" << std::endl;
+            // std::cout << "Drawing at position: {"
+            //           << pos[i]->x << ", " << pos[i]->y << "}" << std::endl;
             dra[i].value().shape->setPosition(pos[i]->x, pos[i]->y);
             window.draw(*dra[i].value().shape);
         }
@@ -66,12 +67,9 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
 };
 
 void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
-    for (size_t i = 0; i < pos.size() && i < vel.size(); ++i) {
-        if (pos[i] && vel[i]) {
-            std::cerr << i << " : Position = { " << pos[i]->x << " , " << pos[i]->y
-                      << " } , Velocity = { " << vel[i]->dx << " , " << vel[i]->dy
-                      << " } " << std::endl;
-        }
+    for (auto&& [p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
+        std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
+            << " }, Velocity = { " << v.value().dx << ", " << v.value().dy << " }" << std::endl;
     }
 }
 
@@ -107,7 +105,6 @@ int main(int argc, char *argv[]) {
     ecs.add_system<component::Position, component::Velocity>(position_system);
     ecs.add_system<component::Velocity, component::Controllable>(control_system);
     ecs.add_system<component::Drawable, component::Position>(draw_system);
-    logging_system(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>());
     while (true) {
         window.clear();
         window.pollEvent(event);
@@ -115,6 +112,7 @@ int main(int argc, char *argv[]) {
             if (event.key.code == sf::Keyboard::Escape)
                 break;
 
+        logging_system(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>());
         ecs.run_systems(window);
         window.display();
     }
