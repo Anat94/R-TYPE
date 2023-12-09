@@ -9,30 +9,7 @@
 #include "Registry.hpp"
 #include "ZipperIterator.hpp"
 
-namespace component {
-    struct Position {
-        float x, y;
-        Position(float _x, float _y) : x(_x), y(_y) {}
-    };
-
-    struct Velocity {
-        float dx, dy;
-        Velocity(float _dx, float _dy) : dx(_dx), dy(_dy) {}
-    };
-
-    struct Drawable {
-        sf::Shape *shape;
-        Drawable(sf::Shape *_shape, sf::Color _color) : shape(_shape) {
-            shape->setFillColor(_color);
-        }
-    };
-
-    struct Controllable {
-        Controllable() {};
-    };
-};
-
-auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, sf::RenderWindow& _) {
+auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
     for (size_t i = 0; i < pos.size() && i < vel.size(); ++i) {
         if (pos[i] && vel[i]) {
             pos[i]->x += vel[i]->dx;
@@ -43,30 +20,28 @@ auto position_system = [](sparse_array<component::Position> &pos, sparse_array<c
     }
 };
 
-auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, sf::RenderWindow& window) {
-    sf::Event event;
+auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
     for (size_t i = 0; i < con.size() && i < vel.size(); ++i) {
         if (con[i]) {
-            window.pollEvent(event);
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Up)
-                    vel[i]->dy += 5;
-                if (event.key.code == sf::Keyboard::Down)
+            if (content.event->type == sf::Event::KeyPressed) {
+                if (content.event->key.code == sf::Keyboard::Up)
                     vel[i]->dy -= 5;
-                if (event.key.code == sf::Keyboard::Left)
+                if (content.event->key.code == sf::Keyboard::Down)
+                    vel[i]->dy += 5;
+                if (content.event->key.code == sf::Keyboard::Left)
                     vel[i]->dx -= 5;
-                if (event.key.code == sf::Keyboard::Right)
+                if (content.event->key.code == sf::Keyboard::Right)
                     vel[i]->dx += 5;
             }
         }
     }
 };
 
-auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sf::RenderWindow& window) {
+auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
     for (size_t i = 0; i < dra.size() && i < pos.size(); ++i) {
         if (dra[i] && pos[i]) {
             dra[i].value().shape->setPosition(pos[i]->x, pos[i]->y);
-            window.draw(*dra[i].value().shape);
+            content.window->draw(*dra[i].value().shape);
         }
     }
 };
@@ -114,12 +89,12 @@ int main(int argc, char *argv[]) {
     while (true) {
         window.clear();
         window.pollEvent(event);
+        component::DrawableContent content = component::DrawableContent(window, event);
+        ecs.run_systems(content);
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Escape)
                 break;
 
-        logging_system(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>());
-        ecs.run_systems(window);
         window.display();
     }
     window.close();

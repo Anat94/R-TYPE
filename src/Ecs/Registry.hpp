@@ -8,6 +8,35 @@
 
 using entity_t = size_t;
 
+namespace component {
+    struct Position {
+        float x, y;
+        Position(float _x, float _y) : x(_x), y(_y) {}
+    };
+
+    struct Velocity {
+        float dx, dy;
+        Velocity(float _dx, float _dy) : dx(_dx), dy(_dy) {}
+    };
+
+    struct Drawable {
+        sf::Shape *shape;
+        Drawable(sf::Shape *_shape, sf::Color _color) : shape(_shape) {
+            shape->setFillColor(_color);
+        }
+    };
+
+    struct Controllable {
+        Controllable() {};
+    };
+
+    struct DrawableContent {
+        sf::RenderWindow *window;
+        sf::Event *event;
+        DrawableContent(sf::RenderWindow &_window, sf::Event &_event) : window(&_window), event(&_event) {};
+    };
+};
+
 class registry {
     public:
         template <class Component>
@@ -68,21 +97,21 @@ class registry {
 
         template <typename... Components, typename Function>
         void add_system(Function&& f) {
-            auto callable = [f = std::forward<Function>(f)](registry& r, sf::RenderWindow& window) {
-                f(r.get_components<Components>()..., window);
+            auto callable = [f = std::forward<Function>(f)](registry& r, component::DrawableContent& content) {
+                f(r.get_components<Components>()..., content);
             };
             systems.push_back(callable);
         }
 
-        void run_systems(sf::RenderWindow& window) {
+        void run_systems(component::DrawableContent &content) {
             for (auto& system : systems) {
-                system(*this, window);
+                system(*this, content);
             }
         }
 
     private:
         std::unordered_map<std::type_index, std::any> _components_arrays;
-        std::vector<std::function<void(registry&, sf::RenderWindow&)>> systems;
+        std::vector<std::function<void(registry&, component::DrawableContent&)>> systems;
         std::vector<entity_t> _dead_entities;
         entity_t _next_entity_id = 0;
 };
