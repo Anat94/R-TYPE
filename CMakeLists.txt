@@ -1,10 +1,12 @@
+# Define the project
+
 cmake_minimum_required(VERSION 3.5)
 project(R-type
         DESCRIPTION "r type project"
         LANGUAGES CXX)
 
 
-
+# Install asio
 
 if(NOT DEFINED ASIO_CMAKE_ASIO_SOURCE_DIR)
         set(ASIO_CMAKE_ASIO_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
@@ -80,41 +82,44 @@ elseif(WIN32)
         )
 endif()
 
-set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options)
-set(BOOST_ENABLE_CMAKE ON)
-
-# include(FetchContent)
-# include(FetchContent)
-# message(STATUS "Fetching BOOST")
-# FetchContent_Declare(
-#         Boost
-#         GIT_REPOSITORY https://github.com/boostorg/boost.git
-#         GIT_SHALLOW     TRUE
-#         GIT_TAG boost-1.74.0
-#         )
-# message(STATUS "BOOST Fetched")
-# FetchContent_MakeAvailable(Boost)
+# Install boost
 
 set(BOOST_INCLUDE_LIBRARIES thread filesystem system)
 set(BOOST_ENABLE_CMAKE ON)
 
-# Download and extract the boost library from GitHub
 message(STATUS "Downloading and extracting boost library sources. This will take some time...")
 include(FetchContent)
-Set(FETCHCONTENT_QUIET FALSE) # Needed to print downloading progress
+Set(FETCHCONTENT_QUIET FALSE)
 FetchContent_Declare(
         Boost
-        URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z # downloading a zip release speeds up the download
+        URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z
         USES_TERMINAL_DOWNLOAD TRUE
         GIT_PROGRESS TRUE
         DOWNLOAD_NO_EXTRACT FALSE
 )
 FetchContent_MakeAvailable(Boost)
 
+# Install sfml
 
-# add_executable(boost_test boost_test.cpp)
-# target_link_libraries(boost_test PRIVATE Boost::filesystem
-#                                          Boost::program_options)
+FetchContent_Declare(
+        sfml
+        GIT_REPOSITORY "https://github.com/SFML/SFML.git"
+)
+
+FetchContent_GetProperties(sfml)
+if(NOT sfml_POPULATED)
+        FetchContent_Populate(sfml)
+        add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
+endif()
+
+target_link_libraries(2DComputerGraphicsApp
+    PRIVATE
+        sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+)
+
 
 # COMPILATION FOR SERVER
 
@@ -134,7 +139,11 @@ add_executable(client
         )
 include_directories(include src)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-target_link_libraries(client PRIVATE sfml-graphics sfml-audio)
+target_link_libraries(client PRIVATE sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 target_compile_features(client PRIVATE cxx_std_20)
 # find_package(asio CONFIG REQUIRED)
