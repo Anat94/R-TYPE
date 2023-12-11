@@ -112,13 +112,13 @@ if(NOT sfml_POPULATED)
         add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
-target_link_libraries(2DComputerGraphicsApp
-    PRIVATE
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-)
+# target_link_libraries(2DComputerGraphicsApp
+#     PRIVATE
+#         sfml-audio
+#         sfml-graphics
+#         sfml-system
+#         sfml-window
+# )
 
 
 # COMPILATION FOR SERVER
