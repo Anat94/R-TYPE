@@ -99,28 +99,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Boost)
 
-# Install sfml
-
-FetchContent_Declare(
-        sfml
-        GIT_REPOSITORY "https://github.com/SFML/SFML.git"
-)
-
-FetchContent_GetProperties(sfml)
-if(NOT sfml_POPULATED)
-        FetchContent_Populate(sfml)
-        add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
-endif()
-
-# target_link_libraries(2DComputerGraphicsApp
-#     PRIVATE
-#         sfml-audio
-#         sfml-graphics
-#         sfml-system
-#         sfml-window
-# )
-
-
 # COMPILATION FOR SERVER
 
 add_executable(server
@@ -140,10 +118,10 @@ add_executable(client
 include_directories(include src)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(client PRIVATE sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-)
+                sfml-graphics
+                sfml-system
+                sfml-window
+        )
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 target_compile_features(client PRIVATE cxx_std_20)
 # find_package(asio CONFIG REQUIRED)
