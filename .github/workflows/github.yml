@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: choco install boot
+        run: choco install boost
 
       - name: WINDOWS - Launch Cmake & start
         run: cmake . && cmake --build .
