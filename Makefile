@@ -155,6 +155,97 @@ ecs/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/build
 .PHONY : ecs/fast
 
+#=============================================================================
+# Target rules for targets named boost_atomic
+
+# Build rule for target.
+boost_atomic: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_atomic
+.PHONY : boost_atomic
+
+# fast build rule for target.
+boost_atomic/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/atomic/CMakeFiles/boost_atomic.dir/build.make _deps/boost-build/libs/atomic/CMakeFiles/boost_atomic.dir/build
+.PHONY : boost_atomic/fast
+
+#=============================================================================
+# Target rules for targets named boost_chrono
+
+# Build rule for target.
+boost_chrono: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_chrono
+.PHONY : boost_chrono
+
+# fast build rule for target.
+boost_chrono/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/chrono/CMakeFiles/boost_chrono.dir/build.make _deps/boost-build/libs/chrono/CMakeFiles/boost_chrono.dir/build
+.PHONY : boost_chrono/fast
+
+#=============================================================================
+# Target rules for targets named boost_container
+
+# Build rule for target.
+boost_container: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_container
+.PHONY : boost_container
+
+# fast build rule for target.
+boost_container/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/container/CMakeFiles/boost_container.dir/build.make _deps/boost-build/libs/container/CMakeFiles/boost_container.dir/build
+.PHONY : boost_container/fast
+
+#=============================================================================
+# Target rules for targets named boost_date_time
+
+# Build rule for target.
+boost_date_time: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_date_time
+.PHONY : boost_date_time
+
+# fast build rule for target.
+boost_date_time/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/date_time/CMakeFiles/boost_date_time.dir/build.make _deps/boost-build/libs/date_time/CMakeFiles/boost_date_time.dir/build
+.PHONY : boost_date_time/fast
+
+#=============================================================================
+# Target rules for targets named boost_exception
+
+# Build rule for target.
+boost_exception: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_exception
+.PHONY : boost_exception
+
+# fast build rule for target.
+boost_exception/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/exception/CMakeFiles/boost_exception.dir/build.make _deps/boost-build/libs/exception/CMakeFiles/boost_exception.dir/build
+.PHONY : boost_exception/fast
+
+#=============================================================================
+# Target rules for targets named boost_filesystem
+
+# Build rule for target.
+boost_filesystem: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_filesystem
+.PHONY : boost_filesystem
+
+# fast build rule for target.
+boost_filesystem/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/filesystem/CMakeFiles/boost_filesystem.dir/build.make _deps/boost-build/libs/filesystem/CMakeFiles/boost_filesystem.dir/build
+.PHONY : boost_filesystem/fast
+
+#=============================================================================
+# Target rules for targets named boost_thread
+
+# Build rule for target.
+boost_thread: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 boost_thread
+.PHONY : boost_thread
+
+# fast build rule for target.
+boost_thread/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/boost-build/libs/thread/CMakeFiles/boost_thread.dir/build.make _deps/boost-build/libs/thread/CMakeFiles/boost_thread.dir/build
+.PHONY : boost_thread/fast
+
 src/Client/Game.o: src/Client/Game.cpp.o
 .PHONY : src/Client/Game.o
 
@@ -259,6 +350,13 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... boost_atomic"
+	@echo "... boost_chrono"
+	@echo "... boost_container"
+	@echo "... boost_date_time"
+	@echo "... boost_exception"
+	@echo "... boost_filesystem"
+	@echo "... boost_thread"
 	@echo "... client"
 	@echo "... ecs"
 	@echo "... server"
