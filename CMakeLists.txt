@@ -51,20 +51,16 @@ if(UNIX)
         INTERFACE pthread
         )
 elseif(WIN32)
-        # macro see @ https://stackoverflow.com/a/40217291/1746503
         macro(get_WIN32_WINNT version)
         if (CMAKE_SYSTEM_VERSION)
         set(ver ${CMAKE_SYSTEM_VERSION})
         string(REGEX MATCH "^([0-9]+).([0-9])" ver ${ver})
         string(REGEX MATCH "^([0-9]+)" verMajor ${ver})
-        # Check for Windows 10, b/c we'll need to convert to hex 'A'.
         if ("${verMajor}" MATCHES "10")
         set(verMajor "A")
         string(REGEX REPLACE "^([0-9]+)" ${verMajor} ver ${ver})
         endif ("${verMajor}" MATCHES "10")
-        # Remove all remaining '.' characters.
         string(REPLACE "." "" ver ${ver})
-        # Prepend each digit with a zero.
         string(REGEX REPLACE "([0-9A-Z])" "0\\1" ver ${ver})
         set(${version} "0x${ver}")
         endif(CMAKE_SYSTEM_VERSION)
@@ -83,6 +79,21 @@ elseif(WIN32)
         WIN32_LEAN_AND_MEAN
         )
 endif()
+
+set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options)
+set(BOOST_ENABLE_CMAKE ON)
+
+include(FetchContent)
+FetchContent_Declare(
+  Boost
+  GIT_REPOSITORY https://github.com/boostorg/boost.git
+  GIT_TAG boost-1.80.0
+)
+FetchContent_MakeAvailable(Boost)
+
+# add_executable(boost_test boost_test.cpp)
+# target_link_libraries(boost_test PRIVATE Boost::filesystem
+#                                          Boost::program_options)
 
 # COMPILATION FOR SERVER
 
