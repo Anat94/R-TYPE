@@ -48,27 +48,27 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -f
+RM = /usr/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype"
+CMAKE_SOURCE_DIR = /home/anatole/delivery/Tek3/R-TYPE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype"
+CMAKE_BINARY_DIR = /home/anatole/delivery/Tek3/R-TYPE
 
 #=============================================================================
 # Targets provided globally by CMake.
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/CMakeFiles" "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype//CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anatole/delivery/Tek3/R-TYPE/CMakeFiles /home/anatole/delivery/Tek3/R-TYPE//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/anatole/delivery/Tek3/R-TYPE/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -154,6 +154,30 @@ ecs: cmake_check_build_system
 ecs/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/build
 .PHONY : ecs/fast
+
+src/Client/Game.o: src/Client/Game.cpp.o
+.PHONY : src/Client/Game.o
+
+# target to build an object file
+src/Client/Game.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.o
+.PHONY : src/Client/Game.cpp.o
+
+src/Client/Game.i: src/Client/Game.cpp.i
+.PHONY : src/Client/Game.i
+
+# target to preprocess a source file
+src/Client/Game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.i
+.PHONY : src/Client/Game.cpp.i
+
+src/Client/Game.s: src/Client/Game.cpp.s
+.PHONY : src/Client/Game.s
+
+# target to generate assembly for a file
+src/Client/Game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.s
+.PHONY : src/Client/Game.cpp.s
 
 src/Client/main.o: src/Client/main.cpp.o
 .PHONY : src/Client/main.o
@@ -238,6 +262,9 @@ help:
 	@echo "... client"
 	@echo "... ecs"
 	@echo "... server"
+	@echo "... src/Client/Game.o"
+	@echo "... src/Client/Game.i"
+	@echo "... src/Client/Game.s"
 	@echo "... src/Client/main.o"
 	@echo "... src/Client/main.i"
 	@echo "... src/Client/main.s"

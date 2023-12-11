@@ -3,7 +3,6 @@ name: Test Compilation
 on: [pull_request]
 
 jobs:
-
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -13,12 +12,29 @@ jobs:
         with:
           cmake-version: '3.5'
 
+      - name: Install dependencies
+        # run: sudo apt-get install -y libasio-dev
+        # cmake_tool_chain
+        run: |
+          sudo apt-get install libsfml-dev
+          sudo apt-get install libboost-all-dev
+      # git clone https://github.com/Microsoft/vcpkg.git
+      # ./vcpkg/bootstrap-vcpkg.sh
+      # export VCPKG_ROOT=vcpkg
+      # export CMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake
+      # vcpkg install asio
+
       - name: LINUX - Launch Cmake & make
-        run: cmake . && make
+        run:  cmake . && cmake --build .
+        # run:  cmake . && cmake --build .
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: choco install boot
+
       - name: WINDOWS - Launch Cmake & start
         run: cmake . && cmake --build .
