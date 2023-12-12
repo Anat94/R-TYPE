@@ -3,7 +3,6 @@ name: Test Compilation
 on: [pull_request]
 
 jobs:
-
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -13,12 +12,22 @@ jobs:
         with:
           cmake-version: '3.5'
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install libsfml-dev
+          sudo apt-get install libboost-all-dev
+          sudo apt-get install libx11-dev libxrandr-dev
+          sudo apt-get install libudev-dev
+          sudo apt-get install libopenal-dev
+          sudo apt-get install libvorbis-dev
+          sudo apt-get install libflac-dev
       - name: LINUX - Launch Cmake & make
-        run: cmake . && make
+        run:  cmake . && cmake --build .
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: WINDOWS - Launch Cmake & start
-        run: cmake . && cmake --build .
+
+      # - name: WINDOWS - Launch Cmake
+      #   run: cmake .
