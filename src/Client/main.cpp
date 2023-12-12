@@ -7,37 +7,43 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
-#include <boost/array.hpp>
+
+using boost::asio::ip::udp;
+
+const int SERVER_PORT = 8888;
 
 int main() {
-    // Création du service principal et du résolveur.
-	boost::asio::io_service ios;
-	
-	// On veut se connecter sur la machine locale, port 7171
-	boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string("127.0.0.1"), 7171);
-	
-	// On crée une socket // (1)
-	boost::asio::ip::tcp::socket socket(ios);
-	
-	// Tentative de connexion, bloquante // (2)
-	socket.connect(endpoint);
-	
-	// Création du buffer de réception // (3)
-	boost::array<char, 128> buf;
-	while (1)
-	{
-		boost::system::error_code error;
-		// Réception des données, len = nombre d'octets reçus // (4)
-		int len = socket.read_some(boost::asio::buffer(buf), error);
-				
-		if (error == boost::asio::error::eof) // (5)
-		{
-			std::cout << "\nTerminé !" << std::endl;
-			break;
-		}
-				
-		// On affiche (6)
-		std::cout.write(buf.data(), len); 
-	}
-	return 0;
+    try {
+        boost::asio::io_context io_context;
+
+        // Create a UDP socket
+        udp::socket socket(io_context, udp::endpoint(udp::v4(), 0));
+
+        // Server endpoint
+        udp::endpoint server_endpoint(boost::asio::ip::address::from_string("10.68.251.201"), SERVER_PORT);
+
+        std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
+
+        while (true) {
+            std::string message;
+            std::getline(std::cin, message);
+
+            // Send data to the server
+            socket.send_to(boost::asio::buffer(message), server_endpoint);
+
+            // Buffer to receive data
+            char receive_buffer[1024];
+            udp::endpoint sender_endpoint;
+
+            // Receive data from the server
+            size_t bytes_received = socket.receive_from(boost::asio::buffer(receive_buffer), sender_endpoint);
+
+            // Output received data
+            std::cout << "Received from " << sender_endpoint.address().to_string() << ": " << receive_buffer << std::endl;
+        }
+    } catch (std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    return 0;
 }

@@ -65,6 +65,26 @@ CMAKE_BINARY_DIR = /home/anatole/delivery/Tek3/R-TYPE
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target package
+package: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool..."
+	/usr/bin/cpack --config ./CPackConfig.cmake
+.PHONY : package
+
+# Special rule for the target package
+package/fast: package
+.PHONY : package/fast
+
+# Special rule for the target package_source
+package_source:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool for source..."
+	/usr/bin/cpack --config ./CPackSourceConfig.cmake /home/anatole/delivery/Tek3/R-TYPE/CPackSourceConfig.cmake
+.PHONY : package_source
+
+# Special rule for the target package_source
+package_source/fast: package_source
+.PHONY : package_source/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -155,6 +175,30 @@ ecs/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ecs.dir/build.make CMakeFiles/ecs.dir/build
 .PHONY : ecs/fast
 
+src/Client/Game.o: src/Client/Game.cpp.o
+.PHONY : src/Client/Game.o
+
+# target to build an object file
+src/Client/Game.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.o
+.PHONY : src/Client/Game.cpp.o
+
+src/Client/Game.i: src/Client/Game.cpp.i
+.PHONY : src/Client/Game.i
+
+# target to preprocess a source file
+src/Client/Game.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.i
+.PHONY : src/Client/Game.cpp.i
+
+src/Client/Game.s: src/Client/Game.cpp.s
+.PHONY : src/Client/Game.s
+
+# target to generate assembly for a file
+src/Client/Game.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/Client/Game.cpp.s
+.PHONY : src/Client/Game.cpp.s
+
 src/Client/main.o: src/Client/main.cpp.o
 .PHONY : src/Client/main.o
 
@@ -234,10 +278,15 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... package"
+	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... client"
 	@echo "... ecs"
 	@echo "... server"
+	@echo "... src/Client/Game.o"
+	@echo "... src/Client/Game.i"
+	@echo "... src/Client/Game.s"
 	@echo "... src/Client/main.o"
 	@echo "... src/Client/main.i"
 	@echo "... src/Client/main.s"
