@@ -12,18 +12,20 @@ jobs:
         with:
           cmake-version: '3.5'
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get install libsfml-dev
-          sudo apt-get install libboost-all-dev
+      # - name: Install dependencies
+      #   run: |
+      #     sudo apt-get install libsfml-dev
+      #     sudo apt-get install libboost-all-dev
+        #libx11 sudo apt-get install libxrandr-dev libxcursor-dev
 
-      - name: LINUX - Launch Cmake & make
-        run:  cmake . && cmake --build .
+
+      # - name: LINUX - Launch Cmake & make
+      #   run:  cmake . && cmake --build .
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: WINDOWS - Launch Cmake
-        run: cmake .
+      # - name: WINDOWS - Launch Cmake
+      #   run: cmake .

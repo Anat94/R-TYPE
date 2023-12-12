@@ -82,25 +82,6 @@ elseif(WIN32)
         )
 endif()
 
-# Install boost
-
-if (WIN32)
-        set(BOOST_INCLUDE_LIBRARIES thread filesystem system)
-        set(BOOST_ENABLE_CMAKE ON)
-
-        message(STATUS "Downloading and extracting boost library sources. This will take some time...")
-        include(FetchContent)
-        Set(FETCHCONTENT_QUIET FALSE)
-        FetchContent_Declare(
-                Boost
-                URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z
-                USES_TERMINAL_DOWNLOAD TRUE
-                GIT_PROGRESS TRUE
-                DOWNLOAD_NO_EXTRACT FALSE
-        )
-        FetchContent_MakeAvailable(Boost)
-endif()
-
 # COMPILATION FOR SERVER
 
 add_executable(server
@@ -119,11 +100,7 @@ add_executable(client
         )
 include_directories(include src)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
-target_link_libraries(client PRIVATE sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
-        )
+target_link_libraries(client PRIVATE sfml-graphics sfml-audio)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 target_compile_features(client PRIVATE cxx_std_20)
 # find_package(asio CONFIG REQUIRED)
