@@ -1,4 +1,4 @@
-# Define the project
+# # Define the project
 
 cmake_minimum_required(VERSION 3.5)
 project(R-type
@@ -82,6 +82,49 @@ elseif(WIN32)
         )
 endif()
 
+# Install boost
+
+if (WIN32)
+        set(BOOST_INCLUDE_LIBRARIES thread filesystem system)
+        set(BOOST_ENABLE_CMAKE ON)
+
+        message(STATUS "Downloading and extracting boost library sources. This will take some time...")
+        include(FetchContent)
+        Set(FETCHCONTENT_QUIET FALSE)
+        FetchContent_Declare(
+                Boost
+                URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z
+                USES_TERMINAL_DOWNLOAD TRUE
+                GIT_PROGRESS TRUE
+                DOWNLOAD_NO_EXTRACT FALSE
+        )
+        FetchContent_MakeAvailable(Boost)
+endif()
+
+# Install sfml
+
+find_library(X11_LIBRARIES NAMES X11)
+find_library(XRANDR_LIBRARIES NAMES Xrandr)
+find_library(XCURSOR_LIBRARIES NAMES Xcursor)
+find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
+
+# if (NOT X11_LIBRARIES OR NOT XRANDR_LIBRARIES OR NOT XCURSOR_LIBRARIES OR NOT X11_INCLUDE_DIR)
+#     message(FATAL_ERROR "X11 libraries or headers not found")
+# endif()
+include_directories(${X11_INCLUDE_DIR})
+
+
+include(FetchContent)
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+FetchContent_Declare(
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 2.5.1
+)
+FetchContent_MakeAvailable(SFML)
+
 # COMPILATION FOR SERVER
 
 add_executable(server
@@ -91,6 +134,13 @@ include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(server PRIVATE asio::asio)
 target_compile_features(server PRIVATE cxx_std_20)
+
+# COMPILATION FOR ECS
+
+add_library(ecs
+                src/Ecs/main.cpp
+        )
+target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
 
@@ -106,9 +156,3 @@ target_compile_features(client PRIVATE cxx_std_20)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(client PRIVATE asio::asio)
 
-# COMPILATION FOR ECS
-
-add_library(ecs
-                src/Ecs/main.cpp
-        )
-target_include_directories(ecs PRIVATE cxx_std_20)
