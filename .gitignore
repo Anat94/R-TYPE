@@ -8,3 +8,4 @@ vcpkg/
 _deps/
 asio--src/
 .vscode
+Makefile

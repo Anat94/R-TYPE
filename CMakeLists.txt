@@ -134,6 +134,13 @@ include_directories(include src)
 # target_link_libraries(server PRIVATE asio::asio)
 target_compile_features(server PRIVATE cxx_std_20)
 
+# COMPILATION FOR ECS
+
+add_library(ecs
+                src/Ecs/main.cpp
+        )
+target_include_directories(ecs PRIVATE cxx_std_20)
+
 # COMPILATION FOR CLIENT
 
 add_executable(client
@@ -153,9 +160,3 @@ target_compile_features(client PRIVATE cxx_std_20)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(client PRIVATE asio::asio)
 
-# COMPILATION FOR ECS
-
-add_library(ecs
-                src/Ecs/main.cpp
-        )
-target_include_directories(ecs PRIVATE cxx_std_20)
