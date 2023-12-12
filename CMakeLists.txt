@@ -1,4 +1,4 @@
-# Define the project
+# # Define the project
 
 cmake_minimum_required(VERSION 3.5)
 project(R-type
@@ -103,26 +103,27 @@ endif()
 
 # Install sfml
 
-# find_library(X11_LIBRARIES NAMES X11)
-# find_library(XRANDR_LIBRARIES NAMES Xrandr)
-# find_library(XCURSOR_LIBRARIES NAMES Xcursor)
-# find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
+find_library(X11_LIBRARIES NAMES X11)
+find_library(XRANDR_LIBRARIES NAMES Xrandr)
+find_library(XCURSOR_LIBRARIES NAMES Xcursor)
+find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
 
-# # if (NOT X11_LIBRARIES OR NOT XRANDR_LIBRARIES OR NOT XCURSOR_LIBRARIES OR NOT X11_INCLUDE_DIR)
-# #     message(FATAL_ERROR "X11 libraries or headers not found")
-# # endif()
-# include_directories(${X11_INCLUDE_DIR})
+# if (NOT X11_LIBRARIES OR NOT XRANDR_LIBRARIES OR NOT XCURSOR_LIBRARIES OR NOT X11_INCLUDE_DIR)
+#     message(FATAL_ERROR "X11 libraries or headers not found")
+# endif()
+include_directories(${X11_INCLUDE_DIR})
 
 
-# include(FetchContent)
-# set(BUILD_SHARED_LIBS OFF)
-# FetchContent_Declare(
-#         SFML
-#         GIT_REPOSITORY https://github.com/SFML/SFML.git
-# )
-# FetchContent_MakeAvailable(SFML)
-# set(CMAKE_CXX_STANDARD 11)
-# set(CMAKE_CXX_STANDARD_REQUIRED true)
+include(FetchContent)
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+FetchContent_Declare(
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 2.5.1
+)
+FetchContent_MakeAvailable(SFML)
 
 # COMPILATION FOR SERVER
 
