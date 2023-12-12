@@ -17,7 +17,7 @@ int main() {
         boost::asio::io_context io_context;
 
         // Create a UDP socket
-        udp::endpoint endpoint(boost::asio::ip::make_address("10.68.251.201"), PORT_NUMBER);
+        udp::endpoint endpoint(boost::asio::ip::make_address("127.0.0.1"), PORT_NUMBER);
         udp::socket socket(io_context, endpoint);
         
         std::cout << "UDP Server listening on port " << PORT_NUMBER << "...\n";
