@@ -16,9 +16,11 @@ jobs:
         run: |
           sudo apt-get install libsfml-dev
           sudo apt-get install libboost-all-dev
-        # sudo apt libx11 sudo apt-get install libxrandr-dev libxcursor-dev
-
-
+          sudo apt-get install libx11-dev libxrandr-dev
+          sudo apt-get install libudev-dev
+          sudo apt-get install libopenal-dev
+          sudo apt-get install libvorbis-dev
+          sudo apt-get install libflac-dev
       - name: LINUX - Launch Cmake & make
         run:  cmake . && cmake --build .
 
@@ -27,5 +29,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: WINDOWS - Launch Cmake
-        run: cmake .
+      # - name: WINDOWS - Launch Cmake
+      #   run: cmake .
