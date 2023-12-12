@@ -14,8 +14,8 @@ auto position_system = [](sparse_array<component::Position> &pos, sparse_array<c
         if (pos[i] && vel[i]) {
             pos[i]->x += vel[i]->dx;
             pos[i]->y += vel[i]->dy;
-            vel[i]->dx = 0;
-            vel[i]->dy = 0;
+            // vel[i]->dx = 0;
+            // vel[i]->dy = 0;
         }
     }
 };
@@ -25,13 +25,13 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
         if (con[i]) {
             if (content.event->type == sf::Event::KeyPressed) {
                 if (content.event->key.code == sf::Keyboard::Up)
-                    vel[i]->dy -= 5;
+                    vel[i]->dy = -5;
                 if (content.event->key.code == sf::Keyboard::Down)
-                    vel[i]->dy += 5;
+                    vel[i]->dy = 5;
                 if (content.event->key.code == sf::Keyboard::Left)
-                    vel[i]->dx -= 5;
+                    vel[i]->dx = -5;
                 if (content.event->key.code == sf::Keyboard::Right)
-                    vel[i]->dx += 5;
+                    vel[i]->dx = 5;
             }
         }
     }
@@ -70,22 +70,20 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity1, component::Controllable());
     ecs.add_component(entity1, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
 
-    // entity_t entity2 = ecs.spawn_entity();
+    entity_t entity2 = ecs.spawn_entity();
 
-    // ecs.add_component(entity2, component::Position(10.0f, 10.0f));
-    // ecs.add_component(entity2, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Green));
+    ecs.add_component(entity2, component::Position(100.0f, 100.0f));
+    ecs.add_component(entity2, component::Velocity(10.0f, 10.0f));
+    ecs.add_component(entity2, component::Controllable());
+    ecs.add_component(entity2, component::Drawable(new sf::CircleShape(100, 100), sf::Color::White));
 
-    // entity_t entity3 = ecs.spawn_entity();
-
-    // ecs.add_component(entity3, component::Position(10.0f, 10.0f));
-    // ecs.add_component(entity3, component::Drawable(new sf::CircleShape(100, 100), sf::Color::Green));
-
-    window.create(sf::VideoMode(1920, 1080), "Bootstrap", sf::Style::Close | sf::Style::Fullscreen);
+    window.create(sf::VideoMode(1920, 1080), "Ecs window", sf::Style::Close | sf::Style::Fullscreen);
     window.setFramerateLimit(60);
 
     ecs.add_system<component::Position, component::Velocity>(position_system);
     ecs.add_system<component::Velocity, component::Controllable>(control_system);
     ecs.add_system<component::Drawable, component::Position>(draw_system);
+
     while (true) {
         window.clear();
         window.pollEvent(event);
