@@ -20,7 +20,7 @@ int main() {
         udp::socket socket(io_context, udp::endpoint(udp::v4(), 0));
 
         // Server endpoint
-        udp::endpoint server_endpoint(boost::asio::ip::address::from_string("127.0.0.1"), SERVER_PORT);
+        udp::endpoint server_endpoint(boost::asio::ip::address::from_string("10.68.255.58"), SERVER_PORT);
 
         std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
 
