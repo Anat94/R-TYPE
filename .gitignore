@@ -1,8 +1,9 @@
 client
 libecs.a
 server
-cmake_install.cmake
+*.cmake
 CMakeCache.txt
 CMakeFiles
 vcpkg/
 _deps/
+asio--src/
