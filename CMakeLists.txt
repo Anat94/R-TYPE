@@ -147,6 +147,7 @@ target_include_directories(ecs PRIVATE cxx_std_20)
 
 add_executable(client
                 src/Client/main.cpp
+                src/Client/Client.cpp
                 src/Client/Game.cpp
         )
 include_directories(include src)

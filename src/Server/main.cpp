@@ -8,14 +8,14 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include "Server.hpp"
-#include "Errors.hpp"
+#include "../Errors.hpp"
 
 using boost::asio::ip::udp;
 
 int error_handling(int nb_args)
 {
     if (nb_args != 3)
-        throw ArgumentError("./server <server_ip>");
+        throw ArgumentError("./server <server_ip> <server_port>");
     return 0;
 }
 
