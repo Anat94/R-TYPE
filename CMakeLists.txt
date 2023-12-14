@@ -129,6 +129,7 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(server
                 src/Server/main.cpp
+                src/Server/Server.cpp
         )
 include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
