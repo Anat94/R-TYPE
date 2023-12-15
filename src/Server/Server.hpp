@@ -8,6 +8,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 #include <iostream>
+#include <array>
 #include <boost/asio.hpp>
 
 
@@ -16,15 +17,17 @@ using boost::asio::ip::udp;
 
 class Server {
     public:
-        Server(std::string ip, int port);
+        Server(boost::asio::io_service &service, int port);
         ~Server();
-        int run();
-        void send_datas();
+        // int run();
+        // void send_datas();
         void receive_datas();
 
     private:
-        boost::asio::io_context _io_context;
+        std::array<char, 1024> _buf;
+        boost::asio::io_service::work _service;
         udp::endpoint _remote_endpoint;
+        std::vector<std::thread> _tpool;
         udp::socket _socket;
 };
 
