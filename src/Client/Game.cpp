@@ -1,19 +1,17 @@
-#include "Game.hpp"
 #include <iostream>
-#include <dlfcn.h>
+#include "LibLoader.hpp"
+#include "Game.hpp"
 
-Game::Game(int sizeX, int sizeY, std::string title)
+Game::Game(int sizeX, int sizeY, std::string title): _lib("./libecs.so")
 {
     this->_window.create(sf::VideoMode(sizeX, sizeY), title);
     initParalaxBackground();
-    _lib = dlopen("./libecs.so", RTLD_LAZY);
 }
 
 Game::~Game()
 {
     if (this->_window.isOpen())
         this->_window.close();
-    dlclose(_lib);
 }
 
 void Game::initParalaxBackground() {

@@ -9,33 +9,65 @@
 #include <iostream>
 #include <thread>
 
-Server::Server(boost::asio::io_service& io_service, short port)
-    : acceptor_(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
-      socket_(io_service) {
-    do_accept();
+Server::Server(std::string ip, int port)
+    : _io_context(),
+      _remote_endpoint(udp::endpoint(boost::asio::ip::make_address(ip), port)),
+      _socket(_io_context, _remote_endpoint)
+{
 }
 
-void Server::do_accept() {
-    acceptor_.async_accept(socket_,
-        [this](boost::system::error_code ec) {
-            if (!ec) {
-                std::thread([this]() {
-                    handle_client(std::move(socket_));
-                }).detach();
-            }
+Server::~Server() {}
 
-            do_accept();
-        }
-    );
+void Server::send_datas()
+{
+    std::string message;
+    std::getline(std::cin, message);
+    _socket.send_to(boost::asio::buffer(message, message.size()), _remote_endpoint);
 }
 
-void Server::handle_client(boost::asio::ip::tcp::socket socket) {
-    try {
-        boost::asio::streambuf buffer;
-        boost::asio::read_until(socket, buffer, '\n');
-        std::string data(boost::asio::buffer_cast<const char*>(buffer.data()));
-        boost::asio::write(socket, boost::asio::buffer(data));
-    } catch (std::exception& e) {
-        std::cerr << "Exception in thread: " << e.what() << std::endl;
+void Server::receive_datas()
+{
+    char receive_buffer[1024];
+    size_t bytes_received = _socket.receive_from(boost::asio::buffer(receive_buffer), _remote_endpoint);
+    receive_buffer[bytes_received] = '\0';
+    std::cout << "Received from " << _remote_endpoint.address().to_string() << ": " << receive_buffer << std::endl;
+}
+
+int Server::run() {
+    while (true) {
+        receive_datas();
+        send_datas();
     }
+    return 0;
 }
+
+// Server::Server(boost::asio::io_service& io_service, short port)
+//     : acceptor_(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
+//       socket_(io_service) {
+//     do_accept();
+// }
+
+// void Server::do_accept() {
+//     acceptor_.async_accept(socket_,
+//         [this](boost::system::error_code ec) {
+//             if (!ec) {
+//                 std::thread([this]() {
+//                     handle_client(std::move(socket_));
+//                 }).detach();
+//             }
+
+//             do_accept();
+//         }
+//     );
+// }
+
+// void Server::handle_client(boost::asio::ip::tcp::socket socket) {
+//     try {
+//         boost::asio::streambuf buffer;
+//         boost::asio::read_until(socket, buffer, '\n');
+//         std::string data(boost::asio::buffer_cast<const char*>(buffer.data()));
+//         boost::asio::write(socket, boost::asio::buffer(data));
+//     } catch (std::exception& e) {
+//         std::cerr << "Exception in thread: " << e.what() << std::endl;
+//     }
+// }

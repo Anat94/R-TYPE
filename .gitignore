@@ -9,3 +9,13 @@ _deps/
 asio--src/
 .vscode
 Makefile
+ZERO_CHECK*
+*vcxproj
+*.sln
+*.filters
+x64
+Debug
+*.dir
+*.smn
+asio*
+.github
