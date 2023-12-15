@@ -164,13 +164,16 @@ add_executable(server
 include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(server PRIVATE asio::asio)
-target_link_libraries(server
-  PRIVATE 
-  Boost::asio
-  Boost::filesystem
-  Boost::thread
-  Boost::program_options
-)
+
+if (WIN32)
+        target_link_libraries(server
+        PRIVATE 
+        Boost::asio
+        Boost::filesystem
+        Boost::thread
+        Boost::program_options
+        )
+endif()
 target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
@@ -212,13 +215,15 @@ target_link_libraries(client
         sfml-window
 )
 
-target_link_libraries(client
-  PRIVATE 
-  Boost::asio
-  Boost::filesystem
-  Boost::thread
-  Boost::program_options
-)
+if (WIN32)
+        target_link_libraries(client
+        PRIVATE 
+        Boost::asio
+        Boost::filesystem
+        Boost::thread
+        Boost::program_options
+        )
+endif()
 
 # target_link_libraries(client ${CMAKE_DL_LIBS})
 
