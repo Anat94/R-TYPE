@@ -7,7 +7,6 @@ project(R-type
 
 
 # Install asio
-
 if(NOT DEFINED ASIO_CMAKE_ASIO_SOURCE_DIR)
         set(ASIO_CMAKE_ASIO_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
 endif()
@@ -50,7 +49,7 @@ target_compile_definitions(asio
 
 if(UNIX)
         target_link_libraries(asio
-        INTERFACE pthread
+                INTERFACE pthread
         )
 elseif(WIN32)
         macro(get_WIN32_WINNT version)
@@ -85,7 +84,7 @@ endif()
 # Install boost
 
 if (WIN32)
-        set(BOOST_INCLUDE_LIBRARIES thread filesystem system)
+        set(BOOST_INCLUDE_LIBRARIES thread filesystem system asio program_options)
         set(BOOST_ENABLE_CMAKE ON)
 
         message(STATUS "Downloading and extracting boost library sources. This will take some time...")
@@ -97,43 +96,81 @@ if (WIN32)
                 USES_TERMINAL_DOWNLOAD TRUE
                 GIT_PROGRESS TRUE
                 DOWNLOAD_NO_EXTRACT FALSE
+                DOWNLOAD_EXTRACT_TIMESTAMP TRUE
         )
         FetchContent_MakeAvailable(Boost)
 endif()
 
 # Install sfml
 
-find_library(X11_LIBRARIES NAMES X11)
-find_library(XRANDR_LIBRARIES NAMES Xrandr)
-find_library(XCURSOR_LIBRARIES NAMES Xcursor)
-find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
+message("Avant le DL")
+# find_library(X11_LIBRARIES NAMES X11)
+# find_library(XRANDR_LIBRARIES NAMES Xrandr)
+# find_library(XCURSOR_LIBRARIES NAMES Xcursor)
+# find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
+# # find_package(X11 REQUIRED)
+# include_directories(${X11_INCLUDE_DIR})
+# # set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
+# # set(CMAKE_SUPPRESS_REGENERATION true)
+# # include_directories(${X11_INCLUDE_DIR})
+# # find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+# # include_directories(${SFML_INCLUDE_DIR})
+# # if (WIN32)
+# # list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/installed/x64-windows/share/sfml/")
+# # endif()
+# include(FetchContent)
+# set(BUILD_SHARED_LIBS OFF)
+# set(CMAKE_CXX_STANDARD 20)
+# set(CMAKE_CXX_STANDARD_REQUIRED true)
+# FetchContent_Declare(
+#         SFML
+#         GIT_REPOSITORY https://github.com/SFML/SFML.git
+#         GIT_TAG 2.5.1
+#         )
+# FetchContent_MakeAvailable(SFML)
 
-# if (NOT X11_LIBRARIES OR NOT XRANDR_LIBRARIES OR NOT XCURSOR_LIBRARIES OR NOT X11_INCLUDE_DIR)
-#     message(FATAL_ERROR "X11 libraries or headers not found")
-# endif()
-include_directories(${X11_INCLUDE_DIR})
 
+# cmake_minimum_required(VERSION 3.10)
 
-include(FetchContent)
-set(BUILD_SHARED_LIBS OFF)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED true)
+# include(FetchContent)
+
+# project(2DComputerGraphics)
+
+# set(CMAKE_CXX_STANDARD 17)
+
+set(SFML_VERSION "2.5.1")
+
 FetchContent_Declare(
-        SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.5.1
+    sfml
+    GIT_REPOSITORY "https://github.com/SFML/SFML.git"
+    GIT_TAG        "${SFML_VERSION}"
 )
-FetchContent_MakeAvailable(SFML)
+
+FetchContent_GetProperties(sfml)
+if(NOT sfml_POPULATED)
+    FetchContent_Populate(sfml)
+    add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
+endif()
+
+
+message("Après le DL")
 
 # COMPILATION FOR SERVER
 
 add_executable(server
-                src/Server/main.cpp
                 src/Server/Server.cpp
+                src/Server/main.cpp
         )
 include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(server PRIVATE asio::asio)
+target_link_libraries(server
+  PRIVATE 
+  Boost::asio
+  Boost::filesystem
+  Boost::thread
+  Boost::program_options
+)
 target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
@@ -145,20 +182,46 @@ target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
 
+# add_executable(client
+#                 src/Client/main.cpp
+#                 src/Client/Game.cpp
+#         )
+include_directories(include src src/Client)
+# set(SFML_USE_STATIC_STD_LIBS TRUE)
+# find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+# target_link_libraries(client PRIVATE sfml-audio
+#                 sfml-graphics
+#                 sfml-system
+#                 sfml-window
+        # )
+# target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
+# target_compile_features(client PRIVATE cxx_std_20)
+
 add_executable(client
-                src/Client/main.cpp
-                src/Client/Client.cpp
-                src/Client/Game.cpp
+        src/Client/Client.cpp
+        src/Client/Game.cpp
+        src/Client/main.cpp
         )
-include_directories(include src)
-set(SFML_USE_STATIC_STD_LIBS TRUE)
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
-target_link_libraries(client PRIVATE sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
-        )
-target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-target_compile_features(client PRIVATE cxx_std_20)
+        
+target_include_directories(client PRIVATE cxx_std_20)
+target_link_libraries(client
+    PRIVATE
+        sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+)
+
+target_link_libraries(client
+  PRIVATE 
+  Boost::asio
+  Boost::filesystem
+  Boost::thread
+  Boost::program_options
+)
+
+# target_link_libraries(client ${CMAKE_DL_LIBS})
+
+target_compile_options(client PRIVATE -Wall)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(client PRIVATE asio::asio)
