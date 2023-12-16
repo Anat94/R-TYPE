@@ -22,6 +22,9 @@ int main(int argc, char** argv) {
     } catch (ArgumentError e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
+    } catch (SFMLError e) {
+        std::cerr << "Sfml error: " << e.what() << std::endl;
+        return 84;
     }
 
     return 0;

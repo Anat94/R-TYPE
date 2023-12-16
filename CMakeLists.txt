@@ -167,7 +167,7 @@ include_directories(include src)
 
 if (WIN32)
         target_link_libraries(server
-        PRIVATE 
+        PRIVATE
         Boost::asio
         Boost::filesystem
         Boost::thread
@@ -201,12 +201,12 @@ include_directories(include src src/Client)
 # target_compile_features(client PRIVATE cxx_std_20)
 
 add_executable(client
-        src/Client/Client.cpp
-        src/Client/Game.cpp
-        src/Client/main.cpp
+                src/Client/Client.cpp
+                src/Client/Game.cpp
+                src/Client/main.cpp
         )
-        
 target_include_directories(client PRIVATE cxx_std_20)
+find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics )
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -217,7 +217,7 @@ target_link_libraries(client
 
 if (WIN32)
         target_link_libraries(client
-        PRIVATE 
+        PRIVATE
         Boost::asio
         Boost::filesystem
         Boost::thread

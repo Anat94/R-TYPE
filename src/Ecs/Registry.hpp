@@ -5,6 +5,7 @@
 #include <iostream>
 #include <any>
 #include "./SparseArray.hpp"
+#include <SFML/Graphics.hpp>
 
 using entity_t = size_t;
 
