@@ -7,38 +7,28 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
+#include "Server.hpp"
+#include "../Errors.hpp"
 
 using boost::asio::ip::udp;
 
-const int PORT_NUMBER = 8888;
-
-int main() {
-    try {
-        boost::asio::io_context io_context;
-
-        // Create a UDP socket
-        udp::endpoint endpoint(boost::asio::ip::make_address("10.68.251.201"), PORT_NUMBER);
-        udp::socket socket(io_context, endpoint);
-        
-        std::cout << "UDP Server listening on port " << PORT_NUMBER << "...\n";
-
-        while (true) {
-            // Buffer to store received data
-            char receive_buffer[1024];
-            udp::endpoint remote_endpoint;
-
-            // Receive data
-            size_t bytes_received = socket.receive_from(boost::asio::buffer(receive_buffer), remote_endpoint);
-
-            // Output received data
-            std::cout << "Received from " << remote_endpoint.address().to_string() << ": " << receive_buffer << std::endl;
-
-            // Echo the received data back to the client
-            socket.send_to(boost::asio::buffer(receive_buffer, bytes_received), remote_endpoint);
-        }
-    } catch (std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-
+int error_handling(int nb_args)
+{
+    if (nb_args != 2)
+        throw ArgumentError("./server <server_port>");
     return 0;
+}
+
+int main(int argc, char** argv)
+{
+    try {
+        error_handling(argc);
+        boost::asio::io_service service;
+        Server server(service, std::atoi(argv[1]));
+        service.run();
+        return 0;
+    } catch (ArgumentError e) {
+        std::cerr << "Usage: " << e.what() << std::endl;
+        return 84;
+    }
 }
