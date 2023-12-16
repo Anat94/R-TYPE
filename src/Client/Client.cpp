@@ -7,14 +7,13 @@
 
 #include "Client.hpp"
 #include <SFML/Graphics.hpp>
+#include "../Ecs/ZipperIterator.hpp"
 
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
-    for (size_t i = 0; i < pos.size() && i < vel.size(); ++i) {
-        if (pos[i] && vel[i]) {
-            pos[i]->x += vel[i]->dx;
-            pos[i]->y += vel[i]->dy;
-            // vel[i]->dx = 0;
-            // vel[i]->dy = 0;
+    for (auto &&[p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
+        if (p.has_value() && v.has_value()) {
+            p->x += v->dx;
+            p->y += v->dy;
         }
     }
 };
@@ -70,7 +69,7 @@ Client::Client(std::string ip, int port)
     _ecs.add_component(_background, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
     // Define the components for ennemy
     _ecs.add_component(_enemy, component::Position(10.0f, 10.0f));
-    _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
+    _ecs.add_component(_enemy, component::Velocity(1.0f, 0.0f));
     _ecs.add_component(_enemy, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
     // Define the components for bullet
     // _ecs.add_component(_bullet, component::Position(10.0f, 10.0f));
@@ -121,14 +120,15 @@ void Client::receive_datas()
 
 void Client::displayTexts()
 {
-    _score_text.setString("Score: " + std::to_string(_score));
-    _lives_text.setString("Lives: " + std::to_string(_lives));
-    _level_text.setString("Level: " + std::to_string(_level));
+    _window.draw(_score_text);
+    _window.draw(_lives_text);
+    _window.draw(_level_text);
 }
 
 void Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
+        printf("event");
         if (_event.type == sf::Event::Closed)
             _window.close();
         if (_event.type == sf::Event::KeyPressed) {
@@ -136,7 +136,7 @@ void Client::manageEvent()
                 _window.close();
             if (_event.key.code == sf::Keyboard::Space) {
                 _ecs.add_component(_bullet, component::Position(10.0f, 10.0f));
-                _ecs.add_component(_bullet, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
+                _ecs.add_component(_bullet, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Red));
             }
         }
     }
@@ -148,10 +148,10 @@ int Client::run()
     std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
     while (true) {
         _window.clear();
-        _window.pollEvent(_event);
-        component::DrawableContent content = component::DrawableContent(_window, _event);
-        // _ecs.run_systems(content);
         manageEvent();
+        displayTexts();
+        component::DrawableContent content = component::DrawableContent(_window, _event);
+        _ecs.run_systems(content);
 
         // send_datas();
         // receive_datas();
