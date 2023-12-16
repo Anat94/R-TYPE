@@ -1,0 +1,6 @@
+{
+    "name": "lazer",
+    "damage": 10,
+    "attack_speed": 800,
+    "texture": "lazer.png"
+}

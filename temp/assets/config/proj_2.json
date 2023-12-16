@@ -1,0 +1,6 @@
+{
+    "name": "rocket",
+    "damage": 30,
+    "attack_speed": 1000,
+    "texture": "lazer.png"
+}

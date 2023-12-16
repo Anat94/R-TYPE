@@ -1,0 +1,19 @@
+{
+    "name": "player 1",
+    "type": "player",
+    "texture": "first_person.png",
+    "projectiles": [
+        "proj_1.json",
+        "proj_2.json"
+    ],
+    "updates_on": [
+        {
+            "level": 5,
+            "texture": "first_person_evolved_1.png"
+        },
+        {
+            "level": 10,
+            "texture": "first_person_evolved_2.png"
+        }
+    ]
+}
