@@ -90,11 +90,15 @@ namespace component {
         /**
          * @brief direction value on the x-axis
          */
-        float dx;
+        float _dx;
         /**
          * @brief direction value on the y-axis
          */
-        float dy;
+        float _dy;
+        /**
+         * @brief 
+         */
+        bool _reset_on_move;
         /**
          * @brief Velocity constructor
          * 
@@ -102,7 +106,7 @@ namespace component {
          * @param _dy direction value on the y-axis
          * 
         */
-        Velocity(float _dx, float _dy) : dx(_dx), dy(_dy) {}
+        Velocity(float dx, float dy, bool reset_on_move = false) : _dx(dx), _dy(dy), _reset_on_move(reset_on_move) {}
     };
 
     /**

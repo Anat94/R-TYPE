@@ -12,10 +12,12 @@
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
     for (size_t i = 0; i < pos.size() && i < vel.size(); ++i) {
         if (pos[i] && vel[i]) {
-            pos[i]->x += vel[i]->dx;
-            pos[i]->y += vel[i]->dy;
-            // vel[i]->dx = 0;
-            // vel[i]->dy = 0;
+            pos[i]->x += vel[i]->_dx;
+            pos[i]->y += vel[i]->_dy;
+            if (vel[i]->_reset_on_move) {
+                vel[i]->_dx = 0;
+                vel[i]->_dy = 0;
+            }
         }
     }
 };
@@ -25,13 +27,13 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
         if (con[i]) {
             if (content.event->type == sf::Event::KeyPressed) {
                 if (content.event->key.code == sf::Keyboard::Up)
-                    vel[i]->dy = -5;
+                    vel[i]->_dy = -5;
                 if (content.event->key.code == sf::Keyboard::Down)
-                    vel[i]->dy = 5;
+                    vel[i]->_dy = 5;
                 if (content.event->key.code == sf::Keyboard::Left)
-                    vel[i]->dx = -5;
+                    vel[i]->_dx = -5;
                 if (content.event->key.code == sf::Keyboard::Right)
-                    vel[i]->dx = 5;
+                    vel[i]->_dx = 5;
             }
         }
     }
@@ -49,7 +51,7 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
 void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
     for (auto&& [p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
         std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
-            << " }, Velocity = { " << v.value().dx << ", " << v.value().dy << " }" << std::endl;
+            << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
     }
 }
 
@@ -66,7 +68,7 @@ int main(int argc, char *argv[]) {
     entity_t entity1 = ecs.spawn_entity();
 
     ecs.add_component(entity1, component::Position(10.0f, 10.0f));
-    ecs.add_component(entity1, component::Velocity(0.0f, 0.0f));
+    ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
     ecs.add_component(entity1, component::Controllable());
     ecs.add_component(entity1, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
 
