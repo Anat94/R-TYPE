@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** Bootstrap
+** Rtype
 ** File description:
 ** SparseArray
 */
@@ -14,25 +14,51 @@
     #include <algorithm>
     #include <utility>
 
-
-template <typename Component> // You can also mirror the definition of std::vector, that takes an additional allocator.
+/// @brief This class allows you to store any value into a list of the `Component`.
+/// @tparam Component the type of the object you want to add in your `sparse_array` object
+template <typename Component> // Type of the value you want to store in the `sparse_array` class.
 class sparse_array {
     public:
-        using value_type = std::optional<Component>; // optional component type
+        /// @brief Type of the value stored in the `sparse_array` object.
+        using value_type = std::optional<Component>;
+        /// @brief Reference type of the value stored in the `sparse_array` object.
         using reference_type = value_type &;
+        /// @brief Const reference type of the value stored in the `sparse_array` object.
         using const_reference_type = value_type const &;
-        using container_t = std::vector<value_type>; // optionally add your allocator template here.
+        /// @brief Container used to store the values in the `sparse_array` object.
+        using container_t = std::vector<value_type>;
+        /// @brief Size type of the values stored in the `sparse_array` object.
         using size_type = typename container_t::size_type;
+        /// @brief Iterator corresponding to the container's one.
         using iterator = typename container_t::iterator;
+        /// @brief Const iterator corresponding to the container's one.
         using const_iterator = typename container_t::const_iterator;
     public:
-        sparse_array()  = default; // You can add more constructors.
-        sparse_array(sparse_array const &other); // copy constructor
-        sparse_array(sparse_array &&) noexcept; // move constructor
+        /// @brief Default constructor for the `sparse_array` object.
+        sparse_array()  = default;
+        /// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+        /// @param other The second `sparse_array` object to copy from.
+        sparse_array(sparse_array const &other);
+        /// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+        /// @param other The second `sparse_array` object to copy from.
+        sparse_array(sparse_array &&other) noexcept;
+        /// @brief Default destructor for the `sparse_array` object.
         ~sparse_array()  = default;
-        sparse_array &operator=(sparse_array const &other); // copy assignment operator
-        sparse_array &operator=(sparse_array &&other) noexcept; // move assignment operator
+        /// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+        /// @param other The `sparse_array` object to copy the values from.
+        /// @return The current instance of the `sparse_array` object, filled with the values of the `other` object.
+        sparse_array &operator=(sparse_array const &other);
+        /// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+        /// @param other The `sparse_array` object to copy the values from.
+        /// @return The current instance of the `sparse_array` object, filled with the values of the `other` object.
+        sparse_array &operator=(sparse_array &&other) noexcept;
+        /// @brief Gives you access to the element at the specified index.
+        /// @param idx The index where you want to access the value.
+        /// @return The value at the specified index.
         reference_type operator[](size_t idx);
+        /// @brief Gives you access to the element at the specified index.
+        /// @param idx The index where you want to access the value.
+        /// @return The value at the specified index.
         const_reference_type operator[](size_t idx) const;
         iterator begin();
         const_iterator begin() const;

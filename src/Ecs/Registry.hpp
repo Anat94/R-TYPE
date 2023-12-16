@@ -1,9 +1,17 @@
+/*
+** EPITECH PROJECT, 2023
+** Rtype
+** File description:
+** Registry
+*/
+
 #include <unordered_map>
 #include <functional>
 #include <typeindex>
 #include <typeinfo>
 #include <iostream>
 #include <any>
+#include <SFML/Graphics.hpp>
 #include "./SparseArray.hpp"
 
 using entity_t = size_t;
@@ -29,10 +37,54 @@ namespace component {
          * 
         */
         Position(float _x, float _y) : x(_x), y(_y) {}
+        bool operator==(const Position& other) { return x == other.x && y == other.y; }
     };
 
     /**
-     * @brief velocity structure containing direction coordinates 
+     * @brief Player structure containing player's info
+     */
+    struct Player {
+        /**
+         * @brief Actual level of the player
+         */
+        int _level;
+        /**
+         * @brief Health of the player
+         */
+        int _health;
+        /**
+         * @brief Number of damage per hit of the player
+         */
+        int _damage;
+        int _xp = 0;
+        /**
+         * @brief Construct a new Player object
+         * 
+         * @param health The health of the player
+         * @param damage The damage deal by the player
+         * @param level The level of the player. Default is 0
+         */
+        Player(int health, int damage, int level = 0) : _health(health), _damage(damage), _level(level) {};
+    };
+
+    /**
+     * @brief HurtsOnCollision structure indicating if a collision
+     */
+    struct HurtsOnCollision {
+        /**
+         * @brief Number of damage taken on contact
+         */
+        int damage;
+        /**
+         * @brief Construct a new Hurts On Collision object
+         * 
+         * @param _damage The damage of the collision
+         */
+        HurtsOnCollision(int _damage) : damage(_damage) {};
+    };
+
+    /**
+     * @brief Velocity structure containing direction coordinates 
     */
     struct Velocity {
         /**
@@ -58,7 +110,7 @@ namespace component {
     */
     struct Drawable {
         /**
-         * @brief pointer an sf::Shape object from the SFML Library
+         * @brief Pointer to an sf::Shape object from the SFML Library
         */
         sf::Shape *shape;
         /**
@@ -93,13 +145,13 @@ namespace component {
 };
 
 /**
- * @brief registry class managing all the sparse_arrays
+ * @brief Registry class managing all the sparse_arrays
  * 
 */
 class registry {
     public:
         /**
-         * @brief register a component to the registry, creates an sparse_array for the corresponding component passed in template
+         * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
          * 
          * @returns sparse array reference of the created component in the registry
         */
@@ -166,6 +218,7 @@ class registry {
          * 
         */
         void kill_entity(entity_t const &e) {
+            --_next_entity_id;
             _dead_entities.push_back(e);
         }
 

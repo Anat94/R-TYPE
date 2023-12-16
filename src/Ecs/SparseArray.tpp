@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** Bootstrap
+** Rtype
 ** File description:
 ** SparseArray
 */
