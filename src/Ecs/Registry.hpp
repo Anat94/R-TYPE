@@ -75,12 +75,18 @@ namespace component {
          * @brief Number of damage taken on contact
          */
         int damage;
+
+        /**
+         * @brief Number of pierce of the object
+         * 
+         */
+        int _pierce;
         /**
          * @brief Construct a new Hurts On Collision object
          * 
          * @param _damage The damage of the collision
          */
-        HurtsOnCollision(int _damage) : damage(_damage) {};
+        HurtsOnCollision(int _damage, int pierce = 1) : damage(_damage), _pierce(pierce) {};
     };
 
     /**
@@ -228,7 +234,7 @@ class registry {
          * @return true if the entity wasn't removed,
          * @return false otherwise
          */
-        bool entity_exists(const entity_t &ent) {
+        bool entity_exists(entity_t ent) {
             auto it = std::find(_dead_entities.begin(), _dead_entities.end(), ent);
             if (it == _dead_entities.end())
                 return true;

@@ -63,18 +63,23 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
         for (auto &&[d2, p2] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
             if (first_ent_idx == second_ent_idx)
                 continue;
-            rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
-            if (listener.hasEvent(new_event)) {
-                second_ent_idx++;
-                delete new_event;
-                continue;
-            }
-            if (p1->x <= p2->x &&
+            if ((p1->x <= p2->x &&
                 p1->y <= p2->y &&
-                p1->x + 100 >= p2->x &&
-                p1->y + 100 >= p2->y) {
-                std::cout << first_ent_idx << " : " << second_ent_idx << std::endl;
-                listener.addEvent(new_event);
+                (p1->x + 100) >= p2->x &&
+                (p1->y + 100) >= p2->y) ||
+                (p2->x <= p1->x &&
+                p2->y <= p1->y &&
+                (p2->x + 100) >= p1->x &&
+                (p2->y + 100) >= p1->y)) {
+                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                if (listener.hasEvent(new_event)) {
+                    second_ent_idx++;
+                    delete new_event;
+                    continue;
+                } else
+                    listener.addEvent(new_event);
+            } else {
+
             }
             second_ent_idx++;
         }
@@ -114,7 +119,7 @@ int main(int argc, char *argv[]) {
     entity_t entity2 = ecs.spawn_entity();
 
     ecs.add_component(entity2, component::Position(700.0f, 500.0f));
-    // ecs.add_component(entity2, component::Velocity(-1.0f, -1.0f));
+    ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
     // ecs.add_component(entity2, component::HurtsOnCollision(10));
     ecs.add_component(entity2, component::Player(300, 30));
     ecs.add_component(entity2, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::White));
