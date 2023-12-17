@@ -26,8 +26,8 @@ Test(works_in_for, global_test) {
     for (auto&& [p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>())) {
         cr_assert_eq(p.value().x, pos.x);
         cr_assert_eq(p.value().y, pos.y);
-        cr_assert_eq(v.value().dx, vel.dx);
-        cr_assert_eq(v.value().dy, vel.dy);
+        cr_assert_eq(v.value()._dx, vel._dx);
+        cr_assert_eq(v.value()._dy, vel._dy);
     }
 }
 

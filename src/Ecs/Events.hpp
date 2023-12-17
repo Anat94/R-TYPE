@@ -46,7 +46,7 @@ namespace rtype {
                  */
                 virtual std::pair<entity_t, entity_t> get() const = 0;
                 virtual bool operator==(const IEvent &other) const = 0;
-                virtual void handleEvent(registry *r, EventListener &listener) = 0;
+                virtual void handleEvent(registry &r, EventListener &listener) = 0;
         };
 
         /**
@@ -79,7 +79,7 @@ namespace rtype {
                  * @param r registery_t object, containig the game instance and objects
                  * @param listener the event listener, used to create new events from this one when needed
                  */
-                virtual void handleEvent(registry *r, EventListener &listener) = 0;
+                virtual void handleEvent(registry &r, EventListener &listener) = 0;
 
             protected:
                 /**
@@ -126,7 +126,7 @@ namespace rtype {
                  * 
                  * @param reg the registry_t instance pointer
                  */
-                void addRegistry(registry *reg);
+                void addRegistry(registry &reg);
                 /**
                  * @brief Checks if the listener currently has the event passed as parameter
                  * 
@@ -167,7 +167,7 @@ namespace rtype {
                  * @param r the registry_t object used to store the game engine resources
                  * @param listener the event listener used to create new events if needed
                  */
-                void handleEvent(registry *r, EventListener &listener);
+                void handleEvent(registry &r, EventListener &listener);
         };
 
         /**
@@ -189,7 +189,7 @@ namespace rtype {
                  * @param r the registry_t object used to store the game engine resources
                  * @param listener the event listener used to create new events if needed
                  */
-                void handleEvent(registry *r, EventListener &listener);
+                void handleEvent(registry &r, EventListener &listener);
         };
 
         /**
@@ -211,7 +211,7 @@ namespace rtype {
                  * @param r the registry_t object used to store the game engine resources
                  * @param listener the event listener used to create new events if needed
                  */
-                void handleEvent(registry *r, EventListener &listener);
+                void handleEvent(registry &r, EventListener &listener);
         };
     };
 }
