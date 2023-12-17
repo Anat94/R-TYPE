@@ -18,7 +18,7 @@ bool rtype::event::EventListener::popEvent()
     if (!_events.empty()) {
         IEvent* event = _events.front();
         _events.pop();
-        
+
         event->handleEvent(*_reg, *this);
         return true;
     } else
@@ -62,9 +62,37 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
                 listener.addEvent(new_event);
             }
         }
+        return;
     } catch (const std::exception &e) {
         e.what();
         //? ignore -> entity does affect player
+    }
+
+    try {
+        std::cout << "second case" << std::endl;
+        auto &player2_pla = r.get_components<component::Player>()[_ents.second];
+
+        auto &player1_hurt = r.get_components<component::HurtsOnCollision>()[_ents.first];
+
+        std::cout << "here" << std::endl;
+        if (player1_hurt.has_value() && player2_pla.has_value()) {
+            player2_pla.value()._health -= player1_hurt.value().damage;
+            if (player2_pla.value()._health <= 0) {
+                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, _ents.first);
+                if (listener.hasEvent(new_event)) {
+                    std::cout << "Skipping event creation" << std::endl;
+                    delete new_event;
+                }
+                else {
+                    std::cout << "Adding Death event" << std::endl;
+                    listener.addEvent(new_event);
+                }
+            }
+        }
+        return;
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
+        //? ignore
     }
 }
 
@@ -93,4 +121,27 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
 void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
     // Todo: ping all other to connect new player
+}
+
+void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+{
+    entity_t shot = r.spawn_entity();
+
+    try {
+        auto player = r.get_components<component::Player>()[_ents.first];
+        auto player_pos = r.get_components<component::Position>()[_ents.first];
+        auto player_heading = r.get_components<component::Heading>()[_ents.first];
+
+        if (player_heading.has_value() && player_pos.has_value() && player.has_value()) {
+            r.add_component(shot, component::Position((player_pos->x + 50), (player_pos->y + 50)));
+            r.add_component(shot, component::HurtsOnCollision(300));
+            r.add_component(shot, component::Drawable(new sf::RectangleShape({10, 4}), sf::Color::Red));
+            if (player_heading->_rotation <= 180)
+                r.add_component(shot, component::Velocity(5.0f, 0.0f));
+            else
+                r.add_component(shot, component::Velocity(-5.0f, 0.0f));
+        }
+    } catch (std::exception &e) {
+        //? ignore -> shooter not a player for some reason ???
+    }
 }

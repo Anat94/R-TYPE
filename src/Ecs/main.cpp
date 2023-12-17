@@ -25,6 +25,7 @@ auto position_system = [](sparse_array<component::Position> &pos, sparse_array<c
 };
 
 auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
+    int first_ent_idx = 0;
     for (auto &&[v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
         if (c.has_value() && v.has_value()) {
             if (content.event->type == sf::Event::KeyPressed) {
@@ -36,8 +37,11 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
                     v->_dx = -5;
                 if (content.event->key.code == sf::Keyboard::Right)
                     v->_dx = 5;
+                if (content.event->key.code == sf::Keyboard::Space)
+                    listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
             }
         }
+        first_ent_idx++;
     }
 };
 
@@ -65,10 +69,11 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
                 delete new_event;
                 continue;
             }
-            if (p1.value().x <= p2.value().x &&
-                p1.value().y <= p2.value().y &&
-                p1.value().x + 100 >= p2.value().x &&
-                p1.value().y + 100 >= p2.value().y) {
+            if (p1->x <= p2->x &&
+                p1->y <= p2->y &&
+                p1->x + 100 >= p2->x &&
+                p1->y + 100 >= p2->y) {
+                std::cout << first_ent_idx << " : " << second_ent_idx << std::endl;
                 listener.addEvent(new_event);
             }
             second_ent_idx++;
@@ -94,6 +99,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Drawable>();
     ecs.register_component<component::Controllable>();
     ecs.register_component<component::HurtsOnCollision>();
+    ecs.register_component<component::Heading>();
     ecs.register_component<component::Player>();
 
     entity_t entity1 = ecs.spawn_entity();
@@ -102,14 +108,16 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
     ecs.add_component(entity1, component::Player(100, 20));
     ecs.add_component(entity1, component::Controllable());
+    ecs.add_component(entity1, component::Heading());
     ecs.add_component(entity1, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
 
     entity_t entity2 = ecs.spawn_entity();
 
-    ecs.add_component(entity2, component::Position(500.0f, 500.0f));
-    ecs.add_component(entity2, component::Velocity(-1.0f, -1.0f));
-    ecs.add_component(entity2, component::HurtsOnCollision(10));
-    ecs.add_component(entity2, component::Drawable(new sf::CircleShape(50, 50), sf::Color::White));
+    ecs.add_component(entity2, component::Position(700.0f, 500.0f));
+    // ecs.add_component(entity2, component::Velocity(-1.0f, -1.0f));
+    // ecs.add_component(entity2, component::HurtsOnCollision(10));
+    ecs.add_component(entity2, component::Player(300, 30));
+    ecs.add_component(entity2, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::White));
 
     window.create(sf::VideoMode(1920, 1080), "Ecs window", sf::Style::Close | sf::Style::Fullscreen);
     window.setFramerateLimit(60);
@@ -125,7 +133,7 @@ int main(int argc, char *argv[]) {
         window.pollEvent(event);
         component::DrawableContent content = component::DrawableContent(window, event);
         ecs.run_systems(content);
-        if (listener.popEvent());
+        while (listener.popEvent());
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Escape)
                 break;

@@ -146,6 +146,23 @@ namespace component {
         sf::Event *event;
         DrawableContent(sf::RenderWindow &_window, sf::Event &_event) : window(&_window), event(&_event) {};
     };
+
+    /**
+     * @brief Heading structure
+     * 
+     */
+    struct Heading {
+        /**
+         * @brief rotation of the heading
+         * 
+         */
+        float _rotation;
+        /**
+         * @brief Heading contructor
+         * 
+         */
+        Heading(float rotation = 0) : _rotation(rotation) {};
+    };
 };
 
 /**
