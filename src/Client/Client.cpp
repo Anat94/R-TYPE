@@ -94,6 +94,26 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
     }
 };
 
+bool Client::hasPendingMessages() const {
+    return _socket.available() > 0;
+}
+
+void Client::receive() {
+    _socket.async_receive(boost::asio::buffer(_receiveBuffer),
+        [this](const boost::system::error_code& error, std::size_t bytes_received) {
+            if (!error) {
+                // Process received data in receiveBuffer_
+                std::cout << "Received: " << std::string(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received) << std::endl;
+                
+                // Call receive() again to receive continuously
+                receive();
+            } else {
+                // Handle error
+                std::cerr << "Receive error: " << error.message() << std::endl;
+            }
+        });
+}
+
 Client::Client(std::string ip, int port, std::string username)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
@@ -186,30 +206,6 @@ template <typename T>
 void Client::receive_datas(T& structure) {
     _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
-    
-int Client::run()
-{
-    sf::RenderWindow window(sf::VideoMode(800, 600), "R-TYPE");
-    std::thread serverThread([&]() {
-        receive_datas(_receive_structure);
-    });
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                _send_structure.id = 3;
-                send_datas(_send_structure);
-                window.close();
-                std::cout << _receive_structure.data << std::endl;
-            }
-            if (std::find(eventsToPrint.begin(), eventsToPrint.end(), event.type) != eventsToPrint.end()) {
-                _send_structure.id = 1;
-                _send_structure.eventType = event.type;
-                send_datas(_send_structure);
-            }
-        }
-    }
-}
 
 void Client::displayTexts()
 {
@@ -244,6 +240,7 @@ int Client::run()
 {
     _music.play();
     _music.setLoop(true);
+    receive();
     while (true) {
         auto &player1 = _ecs.get_components<component::Player>()[_player];
         _lives = player1.value()._health;
@@ -253,6 +250,17 @@ int Client::run()
         _lives_text.setPosition(1750, 10);
         _window.clear();
         _window.pollEvent(_event);
+        if (_event.type == sf::Event::Closed) {
+            _send_structure.id = 3;
+            send_datas<data_struct>(_send_structure);
+            break;
+            std::cout << _receive_structure.data << std::endl;
+        }
+        if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
+            _send_structure.id = 1;
+            _send_structure.eventType = _event.type;
+            send_datas<data_struct>(_send_structure);
+        }
         component::DrawableContent content = component::DrawableContent(_window, _event);
         manageEvent();
         _ecs.run_systems(content);
@@ -260,7 +268,6 @@ int Client::run()
         // receive_datas();
         displayTexts();
         _window.display();
-
     }
     saveHighScore();
     _window.close();

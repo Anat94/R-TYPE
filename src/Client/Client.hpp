@@ -46,7 +46,6 @@ class Client {
 
         template <typename T>
         void receive_datas(T& structure);
-        void send_datas();
         void receive_datas();
         void displayTexts();
 
@@ -55,9 +54,10 @@ class Client {
         void decreaseLives() { _lives--; }
         void increaseLives() { _lives++; }
         void setLevel(int level) { _level = level; }
-
+        bool hasPendingMessages() const;
         void manageEvent();
         void saveHighScore();
+        void receive();
 
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
@@ -69,6 +69,7 @@ class Client {
         udp::socket _socket;
         data_struct _send_structure;
         snapshot _receive_structure;
+        std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
                 sf::Event::Resized,

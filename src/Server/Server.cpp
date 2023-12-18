@@ -5,7 +5,6 @@
 ** main
 */
 
-#include "../json.hpp"
 #include "Server.hpp"
 #include <iostream>
 #include <thread>
@@ -77,7 +76,7 @@ void Server::send_data_to_all_clients(const T& structure) {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value())
-            _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value());
+            _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
     }
 }
 
