@@ -139,8 +139,6 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::HurtsOnCollision>(_ents.first);
             r.kill_entity(_ents.first);
-            // auto &comp = r.get_components<component::Player>()[_ents.second];
-            // comp.value()._xp += 10;
         }
     } catch (const std::exception &e) {
         e.what();
@@ -172,7 +170,7 @@ void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListe
 
         if (player_heading.has_value() && player_pos.has_value() && player.has_value()) {
             r.add_component(shot, component::Position((player_pos->x + 100), (player_pos->y + 50)));
-            r.add_component(shot, component::HurtsOnCollision(30, _ents.first));
+            r.add_component(shot, component::HurtsOnCollision(200, _ents.first));
             r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
             if (player_heading->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
