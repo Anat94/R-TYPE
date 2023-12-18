@@ -7,10 +7,9 @@
 
 #include "Client.hpp"
 
-struct MaStructure {
-    int entier;
-    double reel;
-    char chaine[20];
+struct data_struct {
+    int id;
+    sf::Event::EventType eventType;
 };
 
 Client::Client(std::string ip, int port)
@@ -29,13 +28,6 @@ void Client::send_datas(const T& structure) {
     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
-// void Client::send_datas()
-// {
-//     std::string message;
-//     std::getline(std::cin, message);
-//     _socket.send_to(boost::asio::buffer(message), _server_endpoint);
-// }
-
 void Client::receive_datas()
 {
     char receive_buffer[1024];
@@ -47,7 +39,7 @@ void Client::receive_datas()
 
 int Client::run()
 {
-    MaStructure structure = {42, 3.14, "Bonjour"};
+    data_struct structure = {1, sf::Event::Closed};
     while (true) {
         send_datas(structure);
         receive_datas();

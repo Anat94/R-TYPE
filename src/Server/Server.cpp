@@ -9,18 +9,18 @@
 #include <iostream>
 #include <thread>
 
-struct MaStructure {
-    int entier;
-    double reel;
-    char chaine[20];
+struct data_struct {
+    int id;
+    sf::Event::EventType eventType;
 };
 
 Server::Server(boost::asio::io_service &service, int port): _service(service), _socket(service, udp::endpoint(udp::v4(), port))
 {
     _tpool.emplace_back([this, &service]() { service.run(); });
-    MaStructure structure;
+    data_struct structure;
     receive_datas(structure);
-    std::cout << structure.entier << structure.reel << structure.chaine << std::endl;
+    if (structure.eventType == sf::Event::Closed)
+        std::cout << structure.id << "Closed" << std::endl;
 }
 
 Server::~Server() {}
