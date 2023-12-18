@@ -213,6 +213,29 @@ namespace rtype {
                  */
                 void handleEvent(registry &r, EventListener &listener);
         };
+
+        /**
+         * @brief Shoot event class
+         * 
+         */
+        class ShootEvent : public AEvent {
+            public:
+                /**
+                 * @brief Construct a new Shoot Event object
+                 * 
+                 * @param shooter the entity id that shot in the event
+                 * @param projectile the entity id that got spawned during the event
+                 */
+                ShootEvent(entity_t shooter, entity_t projectile) { _ents = {shooter, projectile}; };
+
+                /**
+                 * @brief Handles the event based on the registry objects
+                 * 
+                 * @param r the registry_t object used to store the game engine resources
+                 * @param listener the event listener used to create new events if needed
+                 */
+                void handleEvent(registry &r, EventListener &listener);
+        };
     };
 }
 
