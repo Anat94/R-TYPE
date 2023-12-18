@@ -10,7 +10,7 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
-#include "../Ecs/Registry.hpp"
+#include "../Ecs/Events.hpp"
 #include <SFML/Graphics.hpp>
 #include "../Errors.hpp"
 
@@ -43,7 +43,6 @@ class Client {
         entity_t _player;
         entity_t _background;
         entity_t _enemy;
-        entity_t _bullet;
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;
