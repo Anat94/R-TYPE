@@ -31,13 +31,13 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
         if (c.has_value() && v.has_value()) {
             if (content.event->type == sf::Event::KeyPressed) {
                 if (content.event->key.code == sf::Keyboard::Up)
-                    v->_dy = -5;
+                    v->_dy = -30;
                 if (content.event->key.code == sf::Keyboard::Down)
-                    v->_dy = 5;
+                    v->_dy = 30;
                 if (content.event->key.code == sf::Keyboard::Left)
-                    v->_dx = -5;
+                    v->_dx = -30;
                 if (content.event->key.code == sf::Keyboard::Right)
-                    v->_dx = 5;
+                    v->_dx = 30;
                 if (content.event->key.code == sf::Keyboard::Space)
                     listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
             }
@@ -49,11 +49,13 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
 auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
-            d->shape->setPosition(p->x, p->y);
-            content.window->draw(*d->shape);
+            d->set();
+            d->_sprite.setPosition(p->x, p->y);
+            content.window->draw(d->_sprite);
         }
     }
 };
+
 
 auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
 {
@@ -103,27 +105,26 @@ Client::Client(std::string ip, int port)
     _ecs.register_component<component::Player>();
     _ecs.register_component<component::PlayMusic>();
     //Define the entities
-    _player = _ecs.spawn_entity();
     _background = _ecs.spawn_entity();
+    _player = _ecs.spawn_entity();
     _enemy = _ecs.spawn_entity();
+    // Define the components for background
+    _ecs.add_component(_background, component::Position(0.0f, 10.0f));
+    _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
     // Define the components for player
-    _ecs.add_component(_player, component::Position(10.0f, 10.0f));
+    _ecs.add_component(_player, component::Position(150.0f, 400.0f));
     _ecs.add_component(_player, component::Velocity(0.0f, 0.0f, true));
     _ecs.add_component(_player, component::Controllable());
     _ecs.add_component(_player, component::Heading());
-    _ecs.add_component(_player, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
+    _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
     _ecs.add_component(_player, component::Player(100, 20));
-    // Define the components for background
-    _ecs.add_component(_background, component::Position(10.0f, 10.0f));
-    _ecs.add_component(_background, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
-    // _ecs.add_component(_background, component::PlayMusic("src/Client/assets/game_music.ogg"));
     // sf::Music music;
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
     // Define the components for ennemy
     _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
     _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
-    _ecs.add_component(_enemy, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
+    _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png",  {0.1, 0.1}));
     _ecs.add_component(_enemy, component::Player(100, 20));
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");

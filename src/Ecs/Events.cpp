@@ -161,7 +161,7 @@ void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListe
         if (player_heading.has_value() && player_pos.has_value() && player.has_value()) {
             r.add_component(shot, component::Position((player_pos->x + 100), (player_pos->y + 50)));
             r.add_component(shot, component::HurtsOnCollision(300));
-            r.add_component(shot, component::Drawable(new sf::RectangleShape({10, 4}), sf::Color::Red));
+            r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
             if (player_heading->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
             else
