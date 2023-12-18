@@ -205,6 +205,7 @@ add_executable(client
                 src/Client/Client.cpp
                 src/Client/Game.cpp
                 src/Client/main.cpp
+                src/Client/Button.cpp
                 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)

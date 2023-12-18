@@ -13,27 +13,22 @@
 
 using boost::asio::ip::udp;
 
-enum state {
-    MENU,
-    GAME,
-    END
-};
-
-
 int main(int argc, char** argv) {
     try {
         if (argc != 3) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
         enum state _state = MENU;
-        if (_state == MENU) {
-            Menu menu;
-            return menu.run();
-        } else if (_state == GAME) {
-            Client client(argv[1], atoi(argv[2]));
-            return client.run();
-        } else if (_state == END) {
-            //End
+        while (_state != END) {
+            if (_state == MENU) {
+                Menu menu;
+                _state = menu.run();
+            } else if (_state == GAME) {
+                Client client(argv[1], atoi(argv[2]));
+                return client.run();
+            }
+            if (_state == SUCCES)
+                return 0;
         }
     } catch (ArgumentError e) {
         std::cerr << "Usage: " << e.what() << std::endl;
