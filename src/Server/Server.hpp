@@ -10,6 +10,7 @@
 #include <iostream>
 #include <array>
 #include <boost/asio.hpp>
+#include "ecs/Registry.hpp"
 
 
 using boost::asio::ip::udp;
@@ -17,7 +18,7 @@ using boost::asio::ip::udp;
 
 class Server {
     public:
-        Server(boost::asio::io_service &service, int port);
+        Server(boost::asio::io_service &service, int port, registry &ecs);
         ~Server();
         // int run();
         // void send_datas();
@@ -29,6 +30,7 @@ class Server {
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
         udp::socket _socket;
+        registry &_ecs;
 };
 
 // class tcp_connection {
