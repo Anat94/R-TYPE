@@ -158,12 +158,12 @@ namespace component {
 
     /**
      * @brief Heading structure
-     * 
+     *
      */
     struct Heading {
         /**
          * @brief rotation of the heading
-         * 
+         *
          */
         float _rotation;
         /**

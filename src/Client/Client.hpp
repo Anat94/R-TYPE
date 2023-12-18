@@ -16,6 +16,12 @@
 
 using boost::asio::ip::udp;
 
+enum Stage {
+    ONE,
+    TWO,
+    THREE,
+};
+
 class Client {
     public:
         Client(std::string ip, int port);
@@ -47,6 +53,7 @@ class Client {
         sf::RenderWindow _window;
         sf::Event _event;
         sf::Font _font;
+        sf::Music _music;
         //Content for gameplay
         int _score;
         int _lives;
@@ -54,6 +61,7 @@ class Client {
         sf::Text _score_text;
         sf::Text _lives_text;
         sf::Text _level_text;
+        Stage _stage;
 };
 
 #endif // CLIENT_HPP

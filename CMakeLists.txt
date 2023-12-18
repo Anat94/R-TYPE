@@ -201,6 +201,7 @@ include_directories(include src src/Client)
 # target_compile_features(client PRIVATE cxx_std_20)
 
 add_executable(client
+                src/Client/Menu.cpp
                 src/Client/Client.cpp
                 src/Client/Game.cpp
                 src/Client/main.cpp

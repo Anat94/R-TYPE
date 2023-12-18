@@ -116,7 +116,10 @@ Client::Client(std::string ip, int port)
     // Define the components for background
     _ecs.add_component(_background, component::Position(10.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
-    _ecs.add_component(_background, component::PlayMusic("src/Client/assets/game_music.ogg"));
+    // _ecs.add_component(_background, component::PlayMusic("src/Client/assets/game_music.ogg"));
+    // sf::Music music;
+    if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
+        throw SFMLError("Music not found");
     // Define the components for ennemy
     _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
     _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
@@ -187,6 +190,8 @@ void Client::manageEvent()
 int Client::run()
 {
     std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
+    _music.play();
+    _music.setLoop(true);
     while (true) {
         _window.clear();
         _window.pollEvent(_event);
