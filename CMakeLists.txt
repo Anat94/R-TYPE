@@ -161,6 +161,14 @@ add_executable(server
                 src/Server/Server.cpp
                 src/Server/main.cpp
         )
+
+if (UNIX)
+        set(CMAKE_CXX_FLAGS "-pthread -ldl")
+endif()
+#set(MY_SERVER_LINK_FLAGS -ldl)
+
+target_compile_options(server PRIVATE -ldl)
+
 include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(server PRIVATE asio::asio)

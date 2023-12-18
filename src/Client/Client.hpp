@@ -10,6 +10,9 @@
 
 #include <iostream>
 #include <boost/asio.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 using boost::asio::ip::udp;
 
@@ -18,8 +21,11 @@ class Client {
         Client(std::string ip, int port);
         ~Client();
         int run();
-        void send_datas();
-        void receive_datas();
+        template <typename T>
+        void send_datas(const T& structure);
+
+        template <typename T>
+        void receive_datas(T& structure);
 
     private:
         boost::asio::io_context _io_context;
