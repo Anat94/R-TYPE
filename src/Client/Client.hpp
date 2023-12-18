@@ -22,6 +22,11 @@ struct data_struct {
     sf::Event::EventType eventType;
 };
 
+struct snapshot {
+    int id;
+    std::string data;
+};
+
 class Client {
     public:
         Client(std::string ip, int port);
@@ -38,6 +43,7 @@ class Client {
         udp::endpoint _server_endpoint;
         udp::socket _socket;
         data_struct _send_structure;
+        snapshot _receive_structure;
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
                 sf::Event::Resized,
