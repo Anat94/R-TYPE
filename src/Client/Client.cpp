@@ -212,6 +212,8 @@ int Client::run()
                 send_datas(_send_structure);
             }
         }
+    }
+}
 
 void Client::displayTexts()
 {
@@ -244,7 +246,6 @@ void Client::saveHighScore()
 
 int Client::run()
 {
-    std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
     _music.play();
     _music.setLoop(true);
     while (true) {
