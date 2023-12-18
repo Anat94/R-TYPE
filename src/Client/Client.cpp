@@ -27,7 +27,7 @@ void Client::send_datas(const T& structure) {
 
 template <typename T>
 void Client::receive_datas(T& structure) {
-    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint)}
+    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);}
 
 int Client::run()
 {

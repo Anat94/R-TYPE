@@ -9,11 +9,6 @@
 #include <iostream>
 #include <thread>
 
-struct data_struct {
-    int id;
-    sf::Event::EventType eventType;
-};
-
 std::pair<int, int> get_position_change_for_event(sf::Event::EventType evtType)
 {
     return {5, 5};
