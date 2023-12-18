@@ -101,6 +101,7 @@ Client::Client(std::string ip, int port)
     _ecs.register_component<component::HurtsOnCollision>();
     _ecs.register_component<component::Heading>();
     _ecs.register_component<component::Player>();
+    _ecs.register_component<component::PlayMusic>();
     //Define the entities
     _player = _ecs.spawn_entity();
     _background = _ecs.spawn_entity();
@@ -115,12 +116,12 @@ Client::Client(std::string ip, int port)
     // Define the components for background
     _ecs.add_component(_background, component::Position(10.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
+    _ecs.add_component(_background, component::PlayMusic("src/Client/assets/game_music.ogg"));
     // Define the components for ennemy
     _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
     _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(_enemy, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
     _ecs.add_component(_enemy, component::Player(100, 20));
-
     // Define the window
     _window.create(sf::VideoMode(1920, 1080), "R-Type");
     _window.setFramerateLimit(60);

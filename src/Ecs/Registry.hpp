@@ -14,6 +14,8 @@
 #include <SFML/Graphics.hpp>
 #include "./SparseArray.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "../Errors.hpp"
 
 using entity_t = size_t;
 
@@ -166,9 +168,17 @@ namespace component {
         float _rotation;
         /**
          * @brief Heading contructor
-         * 
+         *
          */
         Heading(float rotation = 0) : _rotation(rotation) {};
+    };
+    struct PlayMusic {
+        PlayMusic(std::string path) {
+            sf::Music music;
+            if (!music.openFromFile(path))
+                throw SFMLError("Music not found");
+            music.play();
+        };
     };
 };
 
