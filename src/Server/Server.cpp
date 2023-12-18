@@ -71,6 +71,11 @@ void Server::recieve_from_client()
 Server::~Server() {}
 
 template <typename T>
+void Server::send_datas(const T& structure) {
+    _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _remote_endpoint);
+}
+
+template <typename T>
 void Server::receive_datas(T& structure) {
     _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _remote_endpoint);
 }

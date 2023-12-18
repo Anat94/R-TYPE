@@ -7,16 +7,13 @@
 
 #include "Client.hpp"
 
-struct data_struct {
-    int id;
-    sf::Event::EventType eventType;
-};
-
 Client::Client(std::string ip, int port)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
       _server_endpoint(udp::endpoint(boost::asio::ip::address::from_string(ip), port))
 {
+    _send_structure.id = 2;
+    send_datas(_send_structure);
 }
 
 Client::~Client()
@@ -30,26 +27,25 @@ void Client::send_datas(const T& structure) {
 
 template <typename T>
 void Client::receive_datas(T& structure) {
-    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
-}
+    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint)}
 
 int Client::run()
 {
-    data_struct send_structure = {};
-    data_struct receive_structure;
-
     sf::RenderWindow window(sf::VideoMode(800, 600), "R-TYPE");
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                send_structure.id = 3;
-                send_datas(send_structure);
+                _send_structure.id = 3;
+                send_datas(_send_structure);
                 window.close();
             }
-            send_structure.id = 1;
-            send_structure.eventType = event.type;
-            send_datas(send_structure);
+            if (std::find(eventsToPrint.begin(), eventsToPrint.end(), event.type) != eventsToPrint.end()) {
+                _send_structure.id = 1;
+                _send_structure.eventType = event.type;
+                send_datas(_send_structure);
+            }
+
         }
     }
     return 0;

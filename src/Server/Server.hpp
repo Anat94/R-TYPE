@@ -18,6 +18,15 @@
 
 using boost::asio::ip::udp;
 
+struct snapshot {
+    int id;
+    std::string data;
+};
+
+struct data_struct {
+    int id;
+    sf::Event::EventType eventType;
+};
 
 class Server {
     public:
@@ -28,6 +37,8 @@ class Server {
         entity_t connect_player(udp::endpoint player_endpoint);
         template <typename T>
         void receive_datas(T& structure);
+        template <typename T>
+        void send_datas(const T& structure);
 
     private:
         std::array<char, 1024> _buf;
