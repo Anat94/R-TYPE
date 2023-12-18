@@ -9,8 +9,9 @@
 #define SERVER_HPP
 #include <iostream>
 #include <array>
+#include "ecs/Events.hpp"
+#include "ecs/ZipperIterator.hpp"
 #include <boost/asio.hpp>
-#include "ecs/Registry.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>

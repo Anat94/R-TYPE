@@ -158,6 +158,7 @@ message("Après le DL")
 # COMPILATION FOR SERVER
 
 add_executable(server
+                src/Server/ecs/Events.cpp
                 src/Server/Server.cpp
                 src/Server/main.cpp
         )
@@ -172,6 +173,14 @@ target_compile_options(server PRIVATE -ldl)
 include_directories(include src)
 # find_package(asio CONFIG REQUIRED)
 # target_link_libraries(server PRIVATE asio::asio)
+
+target_link_libraries(server
+    PRIVATE
+        sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+)
 
 if (WIN32)
         target_link_libraries(server
