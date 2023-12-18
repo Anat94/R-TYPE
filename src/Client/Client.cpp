@@ -111,7 +111,7 @@ Client::Client(std::string ip, int port)
     //Define the entities
     _background = _ecs.spawn_entity();
     _player = _ecs.spawn_entity();
-    _enemy = _ecs.spawn_entity();
+    //_enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
@@ -125,11 +125,18 @@ Client::Client(std::string ip, int port)
     // sf::Music music;
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
+
+
+
+
     // Define the components for ennemy
-    _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
-    _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
-    _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png",  {0.1, 0.1}));
-    _ecs.add_component(_enemy, component::Player(100, 20));
+
+
+    createEnemy(std::pair(700.0f, 500.0f), std::pair(0.0f, 0.0f), std::string("src/Client/assets/ennemy.png"),  std::pair(0.1, 0.1), 100, 20);
+    createEnemy(std::pair(1000.0f, 500.0f), std::pair(0.0f, 0.0f), std::string("src/Client/assets/ennemy.png"),  std::pair(0.1, 0.1), 100, 20);
+
+
+
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
@@ -158,6 +165,17 @@ Client::Client(std::string ip, int port)
 Client::~Client()
 {
     _font.~Font();
+}
+
+void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
+    entity_t _newEnemy = _ecs.spawn_entity();
+
+    _ecs.add_component(_newEnemy,  component::Position(pos.first, pos.second));
+    _ecs.add_component(_newEnemy, component::Velocity(vel.first, vel.second));
+    _ecs.add_component(_newEnemy, component::Drawable(path_to_texture, {scale.first, scale.second}));
+    _ecs.add_component(_newEnemy, component::Player(health, damage));
+
+    _enemiesQueue.push(_newEnemy);
 }
 
 void Client::send_datas()
