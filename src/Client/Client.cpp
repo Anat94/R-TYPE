@@ -47,6 +47,9 @@ int Client::run()
                 send_datas(send_structure);
                 window.close();
             }
+            send_structure.id = 1;
+            send_structure.eventType = event.type;
+            send_datas(send_structure);
         }
     }
     return 0;
