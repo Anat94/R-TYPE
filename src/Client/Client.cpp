@@ -114,7 +114,7 @@ Client::Client(std::string ip, int port, std::string username)
     //Define the entities
     _background = _ecs.spawn_entity();
     _player = _ecs.spawn_entity();
-    //_enemy = _ecs.spawn_entity();
+    // _enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
@@ -129,16 +129,12 @@ Client::Client(std::string ip, int port, std::string username)
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
 
-
-
-
     // Define the components for ennemy
-
-
-    createEnemy(std::pair(700.0f, 500.0f), std::pair(0.0f, 0.0f), std::string("src/Client/assets/ennemy.png"),  std::pair(0.1, 0.1), 100, 20);
-    createEnemy(std::pair(1000.0f, 500.0f), std::pair(0.0f, 0.0f), std::string("src/Client/assets/ennemy.png"),  std::pair(0.1, 0.1), 100, 20);
-
-
+    entity_t _enemy = _ecs.spawn_entity();
+    _ecs.add_component(_enemy,  component::Position(700.0f, 500.0f));
+    _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
+    _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png", {0.1, 0.1}));
+    _ecs.add_component(_enemy, component::Player(100, 20));
 
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
