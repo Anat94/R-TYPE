@@ -13,6 +13,7 @@
 #include "../Ecs/Events.hpp"
 #include <SFML/Graphics.hpp>
 #include "../Errors.hpp"
+#include <queue>
 
 using boost::asio::ip::udp;
 
@@ -39,6 +40,8 @@ class Client {
 
         void manageEvent();
 
+        void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
+
     private:
         //Content for network
         boost::asio::io_context _io_context;
@@ -48,7 +51,7 @@ class Client {
         registry _ecs;
         entity_t _player;
         entity_t _background;
-        entity_t _enemy;
+        //entity_t _enemy;
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;
@@ -62,6 +65,8 @@ class Client {
         sf::Text _lives_text;
         sf::Text _level_text;
         Stage _stage;
+        // content for enemys
+        std::queue<entity_t> _enemiesQueue;
 };
 
 #endif // CLIENT_HPP
