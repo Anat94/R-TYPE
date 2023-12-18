@@ -1,9 +1,17 @@
+/*
+** EPITECH PROJECT, 2023
+** Rtype
+** File description:
+** Registry
+*/
+
 #include <unordered_map>
 #include <functional>
 #include <typeindex>
 #include <typeinfo>
 #include <iostream>
 #include <any>
+#include <SFML/Graphics.hpp>
 #include "./SparseArray.hpp"
 #include <SFML/Graphics.hpp>
 
@@ -30,20 +38,74 @@ namespace component {
          * 
         */
         Position(float _x, float _y) : x(_x), y(_y) {}
+        bool operator==(const Position& other) { return x == other.x && y == other.y; }
     };
 
     /**
-     * @brief velocity structure containing direction coordinates 
+     * @brief Player structure containing player's info
+     */
+    struct Player {
+        /**
+         * @brief Actual level of the player
+         */
+        int _level;
+        /**
+         * @brief Health of the player
+         */
+        int _health;
+        /**
+         * @brief Number of damage per hit of the player
+         */
+        int _damage;
+        int _xp = 0;
+        /**
+         * @brief Construct a new Player object
+         * 
+         * @param health The health of the player
+         * @param damage The damage deal by the player
+         * @param level The level of the player. Default is 0
+         */
+        Player(int health, int damage, int level = 0) : _health(health), _damage(damage), _level(level) {};
+    };
+
+    /**
+     * @brief HurtsOnCollision structure indicating if a collision causes damage
+     */
+    struct HurtsOnCollision {
+        /**
+         * @brief Number of damage taken on contact
+         */
+        int damage;
+
+        /**
+         * @brief Number of pierce of the object
+         * 
+         */
+        int _pierce;
+        /**
+         * @brief Construct a new Hurts On Collision object
+         * 
+         * @param _damage The damage of the collision
+         */
+        HurtsOnCollision(int _damage, int pierce = 1) : damage(_damage), _pierce(pierce) {};
+    };
+
+    /**
+     * @brief Velocity structure containing direction coordinates 
     */
     struct Velocity {
         /**
          * @brief direction value on the x-axis
          */
-        float dx;
+        float _dx;
         /**
          * @brief direction value on the y-axis
          */
-        float dy;
+        float _dy;
+        /**
+         * @brief 
+         */
+        bool _reset_on_move;
         /**
          * @brief Velocity constructor
          * 
@@ -51,7 +113,7 @@ namespace component {
          * @param _dy direction value on the y-axis
          * 
         */
-        Velocity(float _dx, float _dy) : dx(_dx), dy(_dy) {}
+        Velocity(float dx, float dy, bool reset_on_move = false) : _dx(dx), _dy(dy), _reset_on_move(reset_on_move) {}
     };
 
     /**
@@ -59,7 +121,7 @@ namespace component {
     */
     struct Drawable {
         /**
-         * @brief pointer an sf::Shape object from the SFML Library
+         * @brief Pointer to an sf::Shape object from the SFML Library
         */
         sf::Shape *shape;
         /**
@@ -91,16 +153,33 @@ namespace component {
         sf::Event *event;
         DrawableContent(sf::RenderWindow &_window, sf::Event &_event) : window(&_window), event(&_event) {};
     };
+
+    /**
+     * @brief Heading structure
+     * 
+     */
+    struct Heading {
+        /**
+         * @brief rotation of the heading
+         * 
+         */
+        float _rotation;
+        /**
+         * @brief Heading contructor
+         * 
+         */
+        Heading(float rotation = 0) : _rotation(rotation) {};
+    };
 };
 
 /**
- * @brief registry class managing all the sparse_arrays
+ * @brief Registry class managing all the sparse_arrays
  * 
 */
 class registry {
     public:
         /**
-         * @brief register a component to the registry, creates an sparse_array for the corresponding component passed in template
+         * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
          * 
          * @returns sparse array reference of the created component in the registry
         */
@@ -147,6 +226,20 @@ class registry {
             entity_t newEntity = _next_entity_id;
             ++_next_entity_id;
             return newEntity;
+        }
+
+        /**
+         * @brief Checks if the entity_t was removed from the list of entities
+         * 
+         * @param ent the entity to check
+         * @return true if the entity wasn't removed,
+         * @return false otherwise
+         */
+        bool entity_exists(entity_t ent) {
+            auto it = std::find(_dead_entities.begin(), _dead_entities.end(), ent);
+            if (it == _dead_entities.end())
+                return true;
+            return false;
         }
 
         /**

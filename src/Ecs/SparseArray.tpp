@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2023
-** Bootstrap
+** Rtype
 ** File description:
 ** SparseArray
 */
@@ -36,8 +36,8 @@ inline typename sparse_array<Component>::reference_type sparse_array<Component>:
     if (idx >= _data.size()) {
         _data.resize(idx + 1);
     }
-    if (!_data[idx] || !_data[idx].has_value())
-        throw std::out_of_range("😉");
+    // if (!_data[idx] || !_data[idx].has_value())
+    //     throw std::out_of_range("😉: out of range for []");
     return _data[idx];
 }
 
@@ -47,7 +47,7 @@ inline typename sparse_array<Component>::const_reference_type sparse_array<Compo
     if (idx < _data.size() && _data[idx])
         return _data[idx];
     else
-        throw std::out_of_range("🙂");
+        throw std::out_of_range("🙂: out of range for [] but const");
 }
 
 template<class Component>
@@ -113,10 +113,10 @@ inline typename sparse_array<Component>::reference_type &sparse_array<Component>
 template<class Component>
 inline void sparse_array<Component>::erase(size_type pos)
 {
-    if (pos < _data.size())
-        _data[pos].~value_type();
-    else
-        throw std::out_of_range("🤥");
+    if (pos < _data.size()) {
+        _data[pos].reset();
+    } else
+        throw std::out_of_range("🤥: out of range for erase");
 }
 
 template<class Component>
