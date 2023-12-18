@@ -19,8 +19,12 @@ Server::Server(boost::asio::io_service &service, int port): _service(service), _
     _tpool.emplace_back([this, &service]() { service.run(); });
     data_struct structure;
     receive_datas(structure);
-    if (structure.eventType == sf::Event::Closed)
-        std::cout << structure.id << "Closed" << std::endl;
+    if (structure.id == 1)
+        std::cout << "Event" << std::endl;
+    if (structure.id == 2)
+        std::cout << "Client connected" << std::endl;
+    if (structure.id == 3)
+        std::cout << "Disconnect" << std::endl;
 }
 
 Server::~Server() {}
