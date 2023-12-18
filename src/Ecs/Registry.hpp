@@ -13,6 +13,9 @@
 #include <any>
 #include <SFML/Graphics.hpp>
 #include "./SparseArray.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "../Errors.hpp"
 
 using entity_t = size_t;
 
@@ -76,6 +79,8 @@ namespace component {
          */
         int damage;
 
+        entity_t _sender;
+
         /**
          * @brief Number of pierce of the object
          * 
@@ -86,11 +91,11 @@ namespace component {
          * 
          * @param _damage The damage of the collision
          */
-        HurtsOnCollision(int _damage, int pierce = 1) : damage(_damage), _pierce(pierce) {};
+        HurtsOnCollision(int _damage, entity_t sender = -1, int pierce = 1) : damage(_damage), _sender(sender), _pierce(pierce) {};
     };
 
     /**
-     * @brief Velocity structure containing direction coordinates 
+     * @brief Velocity structure containing direction coordinates
     */
     struct Velocity {
         /**
@@ -127,24 +132,27 @@ namespace component {
         sf::Texture _texture;
         sf::Sprite _sprite;
         std::string _path;
-        std::pair<int, int> _scale;
+        std::pair<float, float> _scale;
+        int _rotate = 0;
         /**
          * @brief Drawable constructor
-         * 
+         *
          * @param _shape SFML sf::shape object
          * @param _color SFML Color object representing the color of the shape
-         * 
+         *
         */
-        Drawable(const std::string &path_to_texture, std::pair<int, int> scale = {1, 1}) {
+        Drawable(const std::string &path_to_texture, std::pair<float, float> scale = {1.0, 1.0}, int rotate = 0) {
             _path = path_to_texture;
             _scale = scale;
+            _rotate = rotate;
         };
 
         void set() {
             if (!_texture.loadFromFile(_path))
-                throw std::runtime_error("Could not load sprite");
+                throw SFMLError("Could not load sprite");
             _sprite.setTexture(_texture);
             _sprite.setScale(_scale.first, _scale.second);
+            _sprite.setRotation(_rotate);
         };
         // Drawable(const std::string &path_to_texture, sf::IntRect rect, int scale_x = 1, int scale_y = 1) {
         //     if (!_texture.loadFromFile(path_to_texture))
@@ -175,31 +183,39 @@ namespace component {
 
     /**
      * @brief Heading structure
-     * 
+     *
      */
     struct Heading {
         /**
          * @brief rotation of the heading
-         * 
+         *
          */
         float _rotation;
         /**
          * @brief Heading contructor
-         * 
+         *
          */
         Heading(float rotation = 0) : _rotation(rotation) {};
+    };
+    struct PlayMusic {
+        PlayMusic(std::string path) {
+            sf::Music music;
+            if (!music.openFromFile(path))
+                throw SFMLError("Music not found");
+            music.play();
+        };
     };
 };
 
 /**
  * @brief Registry class managing all the sparse_arrays
- * 
+ *
 */
 class registry {
     public:
         /**
          * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
-         * 
+         *
          * @returns sparse array reference of the created component in the registry
         */
         template <class Component>
@@ -212,7 +228,7 @@ class registry {
 
         /**
          * @brief get a sparse_array of Component passed as template, from the registry
-         * 
+         *
          * @returns sparse array reference of component in the registry
         */
         template <class Component>

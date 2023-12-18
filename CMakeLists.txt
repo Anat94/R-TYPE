@@ -184,7 +184,7 @@ target_link_libraries(server
 
 if (WIN32)
         target_link_libraries(server
-        PRIVATE 
+        PRIVATE
         Boost::asio
         Boost::filesystem
         Boost::thread
@@ -195,8 +195,8 @@ target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
 
-add_library(ecs
-                src/Ecs/main.cpp
+add_library(ecs STATIC
+                src/Ecs/Events.cpp
         )
 target_include_directories(ecs PRIVATE cxx_std_20)
 
@@ -218,12 +218,15 @@ include_directories(include src src/Client)
 # target_compile_features(client PRIVATE cxx_std_20)
 
 add_executable(client
-        src/Client/Client.cpp
-        src/Client/Game.cpp
-        src/Client/main.cpp
-        )
-        
+                src/Client/Menu.cpp
+                src/Client/Client.cpp
+                src/Client/Game.cpp
+                src/Client/main.cpp
+                src/Client/Button.cpp
+                )
 target_include_directories(client PRIVATE cxx_std_20)
+target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
+find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -231,15 +234,14 @@ target_link_libraries(client
         sfml-system
         sfml-window
 )
-
 if (WIN32)
         target_link_libraries(client
-        PRIVATE 
+        PRIVATE
         Boost::asio
         Boost::filesystem
         Boost::thread
         Boost::program_options
-        )
+)
 endif()
 
 # target_link_libraries(client ${CMAKE_DL_LIBS})
