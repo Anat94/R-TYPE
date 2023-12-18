@@ -50,5 +50,5 @@ cmake --build ..
 ### Windows
 
 ```powershell
-./Debug/client <ip_addr> <port>
+./Debug/client.exe <ip_addr> <port>
 ```
