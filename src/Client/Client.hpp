@@ -38,6 +38,7 @@ class Client {
         void setLevel(int level) { _level = level; }
 
         void manageEvent();
+        void saveHighScore();
 
     private:
         //Content for network

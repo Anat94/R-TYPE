@@ -9,6 +9,10 @@
 #include <SFML/Graphics.hpp>
 #include "../Ecs/ZipperIterator.hpp"
 #include "../Ecs/Events.hpp"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 
 rtype::event::EventListener listener;
 
@@ -136,8 +140,9 @@ Client::Client(std::string ip, int port)
     _ecs.add_system<component::Drawable, component::Position>(draw_system);
     _ecs.add_system<component::Drawable, component::Position>(collision_system);
     //Define the gameplay
+    auto &player1 = _ecs.get_components<component::Player>()[_player];
     _score = 0;
-    _lives = 3;
+    _lives = player1.value()._health;
     _level = 1;
     _font = sf::Font();
     if (!_font.loadFromFile("src/Client/assets/font.ttf"))
@@ -148,7 +153,6 @@ Client::Client(std::string ip, int port)
     _lives_text.setPosition(1750, 10);
     _level_text = sf::Text("Level: " + std::to_string(_level), _font, 30);
     _level_text.setPosition(950, 10);
-
 }
 
 Client::~Client()
@@ -188,24 +192,42 @@ void Client::manageEvent()
 
 }
 
+void Client::saveHighScore()
+{
+    std::ofstream file;
+    file.open("./db.txt");
+    if (file.is_open()) {
+        printf("Score: %d\n", _score);
+        file << _score;
+        file.close();
+    }
+    printf("NONScore: %d\n", _score);
+
+}
+
 int Client::run()
 {
     std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
     _music.play();
     _music.setLoop(true);
     while (true) {
+        auto &player1 = _ecs.get_components<component::Player>()[_player];
+        _lives = player1.value()._health;
+        _score = player1.value()._xp;
+        _score_text.setString("Score: " + std::to_string(_score));
+        _lives_text.setString("Score: " + std::to_string(_lives));
+        _lives_text.setPosition(1750, 10);
         _window.clear();
         _window.pollEvent(_event);
         component::DrawableContent content = component::DrawableContent(_window, _event);
         manageEvent();
         _ecs.run_systems(content);
-
         // send_datas();
         // receive_datas();
         displayTexts();
         _window.display();
 
     }
+    saveHighScore();
     _window.close();
-    return 0;
 }

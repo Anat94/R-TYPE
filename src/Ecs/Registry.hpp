@@ -79,6 +79,8 @@ namespace component {
          */
         int damage;
 
+        entity_t _sender;
+
         /**
          * @brief Number of pierce of the object
          * 
@@ -89,11 +91,11 @@ namespace component {
          * 
          * @param _damage The damage of the collision
          */
-        HurtsOnCollision(int _damage, int pierce = 1) : damage(_damage), _pierce(pierce) {};
+        HurtsOnCollision(int _damage, entity_t sender = -1, int pierce = 1) : damage(_damage), _sender(sender), _pierce(pierce) {};
     };
 
     /**
-     * @brief Velocity structure containing direction coordinates 
+     * @brief Velocity structure containing direction coordinates
     */
     struct Velocity {
         /**
@@ -207,13 +209,13 @@ namespace component {
 
 /**
  * @brief Registry class managing all the sparse_arrays
- * 
+ *
 */
 class registry {
     public:
         /**
          * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
-         * 
+         *
          * @returns sparse array reference of the created component in the registry
         */
         template <class Component>
@@ -226,7 +228,7 @@ class registry {
 
         /**
          * @brief get a sparse_array of Component passed as template, from the registry
-         * 
+         *
          * @returns sparse array reference of component in the registry
         */
         template <class Component>

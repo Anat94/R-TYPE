@@ -51,10 +51,12 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
         auto &player1_pla = r.get_components<component::Player>()[_ents.first];
 
         auto &player2_hurt = r.get_components<component::HurtsOnCollision>()[_ents.second];
-
         player1_pla.value()._health -= player2_hurt.value().damage;
+        std::cout << "player1_pla : " << _ents.first << std::endl;
+        std::cout << "player1_pla : " << _ents.second << std::endl;
+        std::cout << "player1_pla : " << player2_hurt.value()._sender << std::endl;
         if (player1_pla.value()._health <= 0) {
-            rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, _ents.second);
+            rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
             if (listener.hasEvent(new_event))
                 delete new_event;
             else
@@ -82,7 +84,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
         if (player1_hurt.has_value() && player2_pla.has_value()) {
             player2_pla.value()._health -= player1_hurt.value().damage;
             if (player2_pla.value()._health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, _ents.second);
+                rtype::event::DeathEvent *new_event = new DeathEvent(player1_hurt.value()._sender, _ents.second);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -108,12 +110,21 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
 {
     //! remove player
     try {
+        printf("ds try\n");
+        std::cout << _ents.first <<"," << _ents.second << std::endl;
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Player>(_ents.first);
             r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
             r.kill_entity(_ents.first);
+            auto &comp = r.get_components<component::Player>()[_ents.second];
+            std::cout << _ents.second << std::endl;
+            if (!comp.has_value())
+                return;
+            std::cout << "xp : " << comp.value()._xp <<  std::endl;
+            comp.value()._xp += 10;
+            std::cout << "xp : " << comp.value()._xp <<  std::endl;
         }
         return;
     } catch (const std::exception &e) {
@@ -128,13 +139,13 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::HurtsOnCollision>(_ents.first);
             r.kill_entity(_ents.first);
+            // auto &comp = r.get_components<component::Player>()[_ents.second];
+            // comp.value()._xp += 10;
         }
-        return;
     } catch (const std::exception &e) {
         e.what();
         //? ignore -> entity not a projectile
     }
-    
 
     try {
         // TODO: get the shooter / entity and xp them
@@ -152,6 +163,7 @@ void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListe
 void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
+    std::cout << "shoot=" << shot << std::endl;
 
     try {
         auto player = r.get_components<component::Player>()[_ents.first];
@@ -160,7 +172,7 @@ void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListe
 
         if (player_heading.has_value() && player_pos.has_value() && player.has_value()) {
             r.add_component(shot, component::Position((player_pos->x + 100), (player_pos->y + 50)));
-            r.add_component(shot, component::HurtsOnCollision(300));
+            r.add_component(shot, component::HurtsOnCollision(30, _ents.first));
             r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
             if (player_heading->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
