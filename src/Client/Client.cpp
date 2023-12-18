@@ -28,21 +28,26 @@ void Client::send_datas(const T& structure) {
     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
-void Client::receive_datas()
-{
-    char receive_buffer[1024];
-    udp::endpoint sender_endpoint;
-    size_t bytes_received = _socket.receive_from(boost::asio::buffer(receive_buffer), sender_endpoint);
-    receive_buffer[bytes_received] = '\0';
-    std::cout << "Received from " << sender_endpoint.address().to_string() << ": " << receive_buffer << std::endl;
+template <typename T>
+void Client::receive_datas(T& structure) {
+    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
 int Client::run()
 {
-    data_struct structure = {1, sf::Event::Closed};
-    while (true) {
-        send_datas(structure);
-        receive_datas();
+    data_struct send_structure = {};
+    data_struct receive_structure;
+
+    sf::RenderWindow window(sf::VideoMode(800, 600), "R-TYPE");
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                send_structure.id = 3;
+                send_datas(send_structure);
+                window.close();
+            }
+        }
     }
     return 0;
 }

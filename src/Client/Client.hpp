@@ -23,7 +23,9 @@ class Client {
         int run();
         template <typename T>
         void send_datas(const T& structure);
-        void receive_datas();
+
+        template <typename T>
+        void receive_datas(T& structure);
 
     private:
         boost::asio::io_context _io_context;
