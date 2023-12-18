@@ -7,6 +7,12 @@
 
 #include "Client.hpp"
 
+struct MaStructure {
+    int entier;
+    double reel;
+    char chaine[20];
+};
+
 Client::Client(std::string ip, int port)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
@@ -18,12 +24,17 @@ Client::~Client()
 {
 }
 
-void Client::send_datas()
-{
-    std::string message;
-    std::getline(std::cin, message);
-    _socket.send_to(boost::asio::buffer(message), _server_endpoint);
+template <typename T>
+void Client::send_datas(const T& structure) {
+    _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
+
+// void Client::send_datas()
+// {
+//     std::string message;
+//     std::getline(std::cin, message);
+//     _socket.send_to(boost::asio::buffer(message), _server_endpoint);
+// }
 
 void Client::receive_datas()
 {
@@ -36,9 +47,9 @@ void Client::receive_datas()
 
 int Client::run()
 {
-    std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
     while (true) {
-        send_datas();
+        MaStructure structure = {42, 3.14, "Bonjour"};
+        send_datas(structure);
         receive_datas();
     }
     return 0;

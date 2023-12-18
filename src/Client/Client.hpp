@@ -18,7 +18,8 @@ class Client {
         Client(std::string ip, int port);
         ~Client();
         int run();
-        void send_datas();
+        template <typename T>
+        void send_datas(const T& structure);
         void receive_datas();
 
     private:
