@@ -25,6 +25,7 @@ Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, s
     inputBox.setOutlineColor(sf::Color::Black);
     inputBox.setPosition(position);
 
+    text.setFont(_font);
     text.setCharacterSize(10);
     text.setFillColor(sf::Color::Black);
     text.setPosition(position.x + 5, position.y + 5);
