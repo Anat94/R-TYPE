@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity1, component::Player(100, 20));
     ecs.add_component(entity1, component::Controllable());
     ecs.add_component(entity1, component::Heading());
-    ecs.add_component(entity1, component::Drawable(argv[1]));
+    ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
     entity_t entity2 = ecs.spawn_entity();
 
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
     // ecs.add_component(entity2, component::HurtsOnCollision(10));
     ecs.add_component(entity2, component::Player(300, 30));
-    ecs.add_component(entity2, component::Drawable(argv[2]));
+    ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
     window.create(sf::VideoMode(1920, 1080), "Ecs window", sf::Style::Close | sf::Style::Fullscreen);
     window.setFramerateLimit(60);
