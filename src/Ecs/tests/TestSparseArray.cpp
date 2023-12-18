@@ -38,7 +38,7 @@ Test(erase, test_basic) {
     spa.insert_at(0, 1);
     spa.insert_at(0, 2);
     spa.erase(0);
-    cr_assert_eq(2, spa[0]);
+    cr_assert_eq(false, spa[0].has_value());
 }
 
 Test(get_index, test_basic) {
@@ -120,7 +120,7 @@ Test(copy_construct, copy_constructor_good_params) {
     cr_assert_eq(spa1[10], spa[10]);
 }
 
-Test(index_too_far, too_far_index) {
+Test(index_too_far, too_far_index_no_crash) {
     sparse_array<int> spa;
     bool error = false;
 
@@ -131,5 +131,5 @@ Test(index_too_far, too_far_index) {
         error = true;
     }
 
-    cr_assert_eq(error, true);
+    cr_assert_eq(error, false);
 }

@@ -68,7 +68,7 @@ namespace component {
     };
 
     /**
-     * @brief HurtsOnCollision structure indicating if a collision
+     * @brief HurtsOnCollision structure indicating if a collision causes damage
      */
     struct HurtsOnCollision {
         /**
@@ -90,11 +90,15 @@ namespace component {
         /**
          * @brief direction value on the x-axis
          */
-        float dx;
+        float _dx;
         /**
          * @brief direction value on the y-axis
          */
-        float dy;
+        float _dy;
+        /**
+         * @brief 
+         */
+        bool _reset_on_move;
         /**
          * @brief Velocity constructor
          * 
@@ -102,7 +106,7 @@ namespace component {
          * @param _dy direction value on the y-axis
          * 
         */
-        Velocity(float _dx, float _dy) : dx(_dx), dy(_dy) {}
+        Velocity(float dx, float dy, bool reset_on_move = false) : _dx(dx), _dy(dy), _reset_on_move(reset_on_move) {}
     };
 
     /**
@@ -201,6 +205,20 @@ class registry {
         }
 
         /**
+         * @brief Checks if the entity_t was removed from the list of entities
+         * 
+         * @param ent the entity to check
+         * @return true if the entity wasn't removed,
+         * @return false otherwise
+         */
+        bool entity_exists(const entity_t &ent) {
+            auto it = std::find(_dead_entities.begin(), _dead_entities.end(), ent);
+            if (it == _dead_entities.end())
+                return true;
+            return false;
+        }
+
+        /**
          * @brief from a size_t index, get an entity_t value
          * 
          * @param idx index to convert
@@ -218,7 +236,6 @@ class registry {
          * 
         */
         void kill_entity(entity_t const &e) {
-            --_next_entity_id;
             _dead_entities.push_back(e);
         }
 
