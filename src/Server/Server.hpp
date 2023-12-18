@@ -21,7 +21,8 @@ class Server {
         ~Server();
         // int run();
         // void send_datas();
-        void receive_datas();
+        template <typename T>
+        void receive_datas(T& structure);
 
     private:
         std::array<char, 1024> _buf;

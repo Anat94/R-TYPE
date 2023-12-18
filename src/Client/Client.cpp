@@ -47,8 +47,8 @@ void Client::receive_datas()
 
 int Client::run()
 {
+    MaStructure structure = {42, 3.14, "Bonjour"};
     while (true) {
-        MaStructure structure = {42, 3.14, "Bonjour"};
         send_datas(structure);
         receive_datas();
     }
