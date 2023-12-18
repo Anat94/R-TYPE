@@ -48,8 +48,9 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
 auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
-            d->shape->setPosition(p->x, p->y);
-            content.window->draw(*d->shape);
+            d->set();
+            d->_sprite.setPosition(p->x, p->y);
+            content.window->draw(d->_sprite);
         }
     }
 };
@@ -98,6 +99,12 @@ int main(int argc, char *argv[]) {
     sf::RenderWindow window;
     sf::Event event;
     registry ecs;
+    sf::Texture _texture;
+    _texture.loadFromFile(argv[1]);
+
+    sf::Sprite _sprite;
+    _sprite.setTexture(_texture);
+    _sprite.setPosition(100, 100);
 
     ecs.register_component<component::Position>();
     ecs.register_component<component::Velocity>();
@@ -114,7 +121,7 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity1, component::Player(100, 20));
     ecs.add_component(entity1, component::Controllable());
     ecs.add_component(entity1, component::Heading());
-    ecs.add_component(entity1, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
+    ecs.add_component(entity1, component::Drawable(argv[1]));
 
     entity_t entity2 = ecs.spawn_entity();
 
@@ -122,7 +129,7 @@ int main(int argc, char *argv[]) {
     ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
     // ecs.add_component(entity2, component::HurtsOnCollision(10));
     ecs.add_component(entity2, component::Player(300, 30));
-    ecs.add_component(entity2, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::White));
+    ecs.add_component(entity2, component::Drawable(argv[2]));
 
     window.create(sf::VideoMode(1920, 1080), "Ecs window", sf::Style::Close | sf::Style::Fullscreen);
     window.setFramerateLimit(60);
@@ -142,6 +149,7 @@ int main(int argc, char *argv[]) {
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Escape)
                 break;
+        window.draw(_sprite);
         window.display();
     }
     window.close();
