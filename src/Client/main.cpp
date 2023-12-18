@@ -24,8 +24,9 @@ int main(int argc, char** argv) {
         while (_state != END) {
             if (_state == MENU) {
                 Menu menu;
-                tmp_username = menu.getUsername();
                 _state = menu.run();
+                tmp_username = menu.getUsername();
+                std::cout << "1username: " << tmp_username << std::endl;
             } else if (_state == GAME) {
                 Client client(argv[1], atoi(argv[2]), tmp_username);
                 return client.run();

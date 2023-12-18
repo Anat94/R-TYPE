@@ -112,7 +112,7 @@ Client::Client(std::string ip, int port, std::string username)
     //Define the entities
     _background = _ecs.spawn_entity();
     _player = _ecs.spawn_entity();
-    // _enemy = _ecs.spawn_entity();
+    _enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
@@ -128,7 +128,6 @@ Client::Client(std::string ip, int port, std::string username)
         throw SFMLError("Music not found");
 
     // Define the components for ennemy
-    entity_t _enemy = _ecs.spawn_entity();
     _ecs.add_component(_enemy,  component::Position(700.0f, 500.0f));
     _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png", {0.1, 0.1}));
@@ -164,17 +163,6 @@ Client::~Client()
     _font.~Font();
 }
 
-void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
-    entity_t _newEnemy = _ecs.spawn_entity();
-
-    _ecs.add_component(_newEnemy,  component::Position(pos.first, pos.second));
-    _ecs.add_component(_newEnemy, component::Velocity(vel.first, vel.second));
-    _ecs.add_component(_newEnemy, component::Drawable(path_to_texture, {scale.first, scale.second}));
-    _ecs.add_component(_newEnemy, component::Player(health, damage));
-
-    _enemiesQueue.push(_newEnemy);
-}
-
 void Client::send_datas()
 {
     std::string message;
@@ -202,22 +190,49 @@ void Client::manageEvent()
 {
     while (listener.popEvent());
     if (_event.type == sf::Event::KeyPressed)
-        if (_event.key.code == sf::Keyboard::Escape)
+        if (_event.key.code == sf::Keyboard::Escape) {
+            saveHighScore();
+            _window.close();
             std::exit(0);
+        }
 
 }
 
 void Client::saveHighScore()
 {
-    std::ofstream file;
-    file.open("./db.txt");
-    if (file.is_open()) {
-        printf("Score: %d\n", _score);
-        file << _score;
-        file.close();
-    }
-    printf("NONScore: %d\n", _score);
+    try {
 
+        std::ifstream myFile("db.txt");
+        if (!myFile.is_open()) {
+            throw std::runtime_error("Failed to open file for writing.");
+        }
+        int lastScore = 0;
+        std::string firstLine;
+        if (std::getline(myFile, firstLine)) {
+            std::cout << firstLine << std::endl;
+            size_t colonPos = firstLine.find(':');
+            std::string score = firstLine.substr(colonPos + 1);
+            score.erase(0, score.find_first_not_of(" "));
+            score.erase(score.find_last_not_of(" ") + 1);
+            lastScore = std::stoi(score);
+        } else {
+            throw std::runtime_error("Failed to read the first line from the file.");
+        }
+
+        myFile.close();
+        std::fstream file("db.txt");
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file for writing.");
+        }
+        if (lastScore <= _score)
+            file << _username << ": "<< _score << std::endl;
+
+        if (file.fail()) {
+            throw std::runtime_error("Failed to write to the file.");
+        }
+    } catch (const std::exception& e) {
+        std::cout << "An error occurred: " << e.what() << std::endl;
+    }
 }
 
 int Client::run()
@@ -225,6 +240,7 @@ int Client::run()
     std::cout << "Enter a message to send (Press Ctrl+C to exit):\n";
     _music.play();
     _music.setLoop(true);
+    _music.setVolume(25);
     while (true) {
         auto &player1 = _ecs.get_components<component::Player>()[_player];
         _lives = player1.value()._health;

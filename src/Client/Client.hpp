@@ -53,7 +53,7 @@ class Client {
         registry _ecs;
         entity_t _player;
         entity_t _background;
-        //entity_t _enemy;
+        entity_t _enemy;
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;

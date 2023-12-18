@@ -7,15 +7,42 @@
 
 #include "Menu.hpp"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 
 Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, sf::Color::White, sf::Color::Red, sf::Color::Blue)
 {
     _window.create(sf::VideoMode(800, 600), "Menu");
     _font.loadFromFile("src/Client/assets/font.ttf");
+
+    std::ifstream myFile("db.txt");
+    if (!myFile.is_open()) {
+        throw std::runtime_error("Failed to open file for writing.");
+    }
+    std::string firstLine;
+    if (std::getline(myFile, firstLine)) {
+        std::cout << firstLine << std::endl;
+        size_t colonPos = firstLine.find(':');
+        std::string score = firstLine.substr(colonPos + 1);
+        lastUsername = firstLine.substr(0, colonPos);
+        lastUsername.erase(lastUsername.find_last_not_of(" ") + 1);
+        score.erase(0, score.find_first_not_of(" "));
+        score.erase(score.find_last_not_of(" ") + 1);
+        lastScore = std::stoi(score);
+    } else {
+        throw std::runtime_error("Failed to read the first line from the file.");
+    }
+
     _title.setFont(_font);
     _title.setPosition(280, 150);
     _title.setString("NAPTE");
     _title.setCharacterSize(70);
+
+    _highScore.setFont(_font);
+    _highScore.setPosition(275, 50);
+    _highScore.setCharacterSize(20);
+    _highScore.setString("Highscore by " + lastUsername + ": " +  std::to_string(lastScore));
 
     sf::Vector2f position(300, 300);
 
@@ -38,7 +65,6 @@ Menu::~Menu()
 }
 
 enum state Menu::run() {
-    
     while (_window.isOpen()) {
         sf::Event event;
         while (_window.pollEvent(event)) {
@@ -72,6 +98,7 @@ enum state Menu::run() {
         }
         _window.clear();
         _window.draw(_title);
+        _window.draw(_highScore);
         draw(_window);
         _btnPlay.render(_window);
         _window.display();
@@ -98,5 +125,5 @@ void Menu::draw(sf::RenderWindow& window) {
 }
 
 std::string Menu::getUsername() const {
-    return username.toAnsiString();
+    return username;
 }
