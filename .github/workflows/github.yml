@@ -21,8 +21,18 @@ jobs:
           sudo apt-get install libopenal-dev
           sudo apt-get install libvorbis-dev
           sudo apt-get install libflac-dev
+
       - name: LINUX - Launch Cmake & make
         run:  cmake . && cmake --build .
+
+      - name: Install Criterion
+        run: ./criterion.sh
+
+      - name: LINUX - Launch tests
+        working-directory: ./src/Ecs/tests
+        run: |
+         g++ TestSparseArray.cpp TestZipperIterator.cpp -lcriterion
+         ./a.out
 
   windows:
     runs-on: windows-latest
@@ -30,4 +40,4 @@ jobs:
       - uses: actions/checkout@v2
 
       # - name: WINDOWS - Launch Cmake
-      #   run: cmake .
+      #   run: cmake . && cmake --build .
