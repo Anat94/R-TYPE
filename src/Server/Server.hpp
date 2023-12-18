@@ -18,9 +18,19 @@
 
 using boost::asio::ip::udp;
 
-struct snapshot {
+struct snapshot_position {
     int id;
-    std::string data;
+    sparse_array<component::Position> data;
+};
+
+struct snapshot_velocity {
+    int id;
+    sparse_array<component::Velocity> data;
+};
+
+struct snapshot_player {
+    int id;
+    sparse_array<component::Player> data;
 };
 
 struct data_struct {
@@ -38,7 +48,7 @@ class Server {
         template <typename T>
         void receive_datas(T& structure);
         template <typename T>
-        void send_datas(const T& structure);
+        void send_data_to_all_clients(const T& structure);
 
     private:
         std::array<char, 1024> _buf;

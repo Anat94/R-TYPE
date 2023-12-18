@@ -5,6 +5,7 @@
 ** main
 */
 
+#include "../json.hpp"
 #include "Server.hpp"
 #include <iostream>
 #include <thread>
@@ -57,6 +58,12 @@ void Server::recieve_from_client()
     if (structure.id == 1) {
         std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
         _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(structure.eventType)));
+        snapshot_position snap_p = {4, _ecs.get_components<component::Position>()};
+        send_data_to_all_clients<snapshot_position>(snap_p);
+        snapshot_velocity snap_v = {5, _ecs.get_components<component::Velocity>()};
+        send_data_to_all_clients<snapshot_velocity>(snap_v);
+        snapshot_player snap_pl = {6, _ecs.get_components<component::Player>()};
+        send_data_to_all_clients<snapshot_player>(snap_pl);
     }
     if (structure.id == 3)
         _ecs.kill_entity(player_entity);
@@ -66,8 +73,12 @@ void Server::recieve_from_client()
 Server::~Server() {}
 
 template <typename T>
-void Server::send_datas(const T& structure) {
-    _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _remote_endpoint);
+void Server::send_data_to_all_clients(const T& structure) {
+    sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+    for (size_t i; i < all_endpoints.size(); i++) {
+        if (all_endpoints[i].has_value())
+            _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value());
+    }
 }
 
 template <typename T>
