@@ -107,7 +107,7 @@ void logging_system(sparse_array<component::Position> &pos, sparse_array<compone
 
 void runServer(const char *argv, registry &ecs) {
     boost::asio::io_service service;
-    Server server(service, std::atoi(argv), ecs);
+    Server server(service, std::atoi(argv), ecs, listener);
     service.run();
 }
 
@@ -129,6 +129,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::HurtsOnCollision>();
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Player>();
+    ecs.register_component<component::Endpoint>();
 
     // entity_t entity1 = ecs.spawn_entity();
 

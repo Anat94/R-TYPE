@@ -12,7 +12,13 @@
 #include <iostream>
 #include <any>
 #include <SFML/Graphics.hpp>
+#include <boost/asio.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "./SparseArray.hpp"
+
+using boost::asio::ip::udp;
 
 using entity_t = size_t;
 
@@ -189,6 +195,19 @@ namespace component {
          * 
          */
         Heading(float rotation = 0) : _rotation(rotation) {};
+    };
+    struct Endpoint {
+        /**
+         * @brief endpoint associated to the entity
+         * 
+         */
+        udp::endpoint _endpoint;
+        /**
+         * @brief endpoint constructor
+         * 
+         */
+        Endpoint(udp::endpoint endpoint) : _endpoint(endpoint) {};
+        bool operator==(const udp::endpoint other) { return _endpoint == other; }
     };
 };
 

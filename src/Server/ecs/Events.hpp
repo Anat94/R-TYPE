@@ -152,6 +152,31 @@ namespace rtype {
          * @brief Collision event class
          * 
          */
+        class UpdatePositionEvent : public AEvent {
+            public:
+                /**
+                 * @brief Construct a new Collision Event object
+                 * 
+                 * @param gotTouched entity id that got touched in the event
+                 * @param touched entity id that touched during the event
+                 */
+                UpdatePositionEvent(entity_t to_move, std::pair<int, int> pos) { _to_move = {to_move}; _pos = pos; };
+                /**
+                 * @brief Handles the event based on the registry objects
+                 * 
+                 * @param r the registry_t object used to store the game engine resources
+                 * @param listener the event listener used to create new events if needed
+                 */
+                void handleEvent(registry &r, EventListener &listener);
+            private:
+                entity_t _to_move;
+                std::pair<int, int> _pos;
+        };
+
+        /**
+         * @brief Collision event class
+         * 
+         */
         class CollisionEvent : public AEvent {
             public:
                 /**

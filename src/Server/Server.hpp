@@ -30,9 +30,11 @@ struct data_struct {
 
 class Server {
     public:
-        Server(boost::asio::io_service &service, int port, registry &ecs);
+        Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
         ~Server();
         void recieve_from_client();
+        entity_t get_player_entity_from_connection_address(udp::endpoint);
+        entity_t connect_player(udp::endpoint player_endpoint);
         template <typename T>
         void receive_datas(T& structure);
         template <typename T>
@@ -45,6 +47,7 @@ class Server {
         std::vector<std::thread> _tpool;
         udp::socket _socket;
         registry &_ecs;
+        rtype::event::EventListener &_listener;
 };
 
 #endif // SERVER_HPP
