@@ -9,6 +9,8 @@
 #define SERVER_HPP
 #include <iostream>
 #include <array>
+#include "ecs/Events.hpp"
+#include "ecs/ZipperIterator.hpp"
 #include <boost/asio.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -19,8 +21,9 @@ using boost::asio::ip::udp;
 
 class Server {
     public:
-        Server(boost::asio::io_service &service, int port);
+        Server(boost::asio::io_service &service, int port, registry &ecs);
         ~Server();
+        void recieve_from_client();
         template <typename T>
         void receive_datas(T& structure);
 
@@ -30,6 +33,7 @@ class Server {
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
         udp::socket _socket;
+        registry &_ecs;
 };
 
 #endif // SERVER_HPP

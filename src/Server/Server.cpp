@@ -14,9 +14,13 @@ struct data_struct {
     sf::Event::EventType eventType;
 };
 
-Server::Server(boost::asio::io_service &service, int port): _service(service), _socket(service, udp::endpoint(udp::v4(), port))
+Server::Server(boost::asio::io_service &service, int port, registry &ecs): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs)
 {
     _tpool.emplace_back([this, &service]() { service.run(); });
+    recieve_from_client();
+}
+
+void Server::recieve_from_client() {
     data_struct structure;
     receive_datas(structure);
     if (structure.id == 1)
@@ -25,6 +29,7 @@ Server::Server(boost::asio::io_service &service, int port): _service(service), _
         std::cout << "Client connected" << std::endl;
     if (structure.id == 3)
         std::cout << "Disconnect" << std::endl;
+    recieve_from_client();
 }
 
 Server::~Server() {}
