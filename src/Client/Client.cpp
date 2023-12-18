@@ -126,7 +126,7 @@ Client::Client(std::string ip, int port)
     _ecs.add_component(_enemy, component::Drawable(new sf::RectangleShape({100, 100}), sf::Color::Blue));
     _ecs.add_component(_enemy, component::Player(100, 20));
     // Define the window
-    _window.create(sf::VideoMode(1920, 1080), "R-Type");
+    _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
     // Define the component
