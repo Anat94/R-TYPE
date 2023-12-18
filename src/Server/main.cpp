@@ -132,22 +132,22 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Player>();
 
-    entity_t entity1 = ecs.spawn_entity();
+    // entity_t entity1 = ecs.spawn_entity();
 
-    ecs.add_component(entity1, component::Position(10.0f, 10.0f));
-    ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
-    ecs.add_component(entity1, component::Player(100, 20));
-    ecs.add_component(entity1, component::Controllable());
-    ecs.add_component(entity1, component::Heading());
-    ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
+    // ecs.add_component(entity1, component::Position(10.0f, 10.0f));
+    // ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
+    // ecs.add_component(entity1, component::Player(100, 20));
+    // ecs.add_component(entity1, component::Controllable());
+    // ecs.add_component(entity1, component::Heading());
+    // ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
-    entity_t entity2 = ecs.spawn_entity();
+    // entity_t entity2 = ecs.spawn_entity();
 
-    ecs.add_component(entity2, component::Position(700.0f, 500.0f));
-    ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
-    // ecs.add_component(entity2, component::HurtsOnCollision(10));
-    ecs.add_component(entity2, component::Player(300, 30));
-    ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
+    // ecs.add_component(entity2, component::Position(700.0f, 500.0f));
+    // ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
+    // // ecs.add_component(entity2, component::HurtsOnCollision(10));
+    // ecs.add_component(entity2, component::Player(300, 30));
+    // ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
     listener.addRegistry(ecs);
 
