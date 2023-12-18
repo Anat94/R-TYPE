@@ -25,7 +25,7 @@ enum Stage {
 
 class Client {
     public:
-        Client(std::string ip, int port);
+        Client(std::string ip, int port, std::string _username);
         ~Client();
         int run();
         void send_datas();
@@ -44,6 +44,7 @@ class Client {
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
     private:
+        std::string _username;
         //Content for network
         boost::asio::io_context _io_context;
         udp::endpoint _server_endpoint;
