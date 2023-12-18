@@ -178,7 +178,7 @@ target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
 
-add_library(ecs
+add_library(ecs STATIC
                 src/Ecs/Events.cpp
         )
 target_include_directories(ecs PRIVATE cxx_std_20)
