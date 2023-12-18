@@ -41,9 +41,12 @@ int Client::run()
                 send_datas(_send_structure);
                 window.close();
             }
-            _send_structure.id = 1;
-            _send_structure.eventType = event.type;
-            send_datas(_send_structure);
+            if (std::find(eventsToPrint.begin(), eventsToPrint.end(), event.type) != eventsToPrint.end()) {
+                _send_structure.id = 1;
+                _send_structure.eventType = event.type;
+                send_datas(_send_structure);
+            }
+
         }
     }
     return 0;

@@ -13,6 +13,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <vector>
 
 using boost::asio::ip::udp;
 
@@ -37,6 +38,31 @@ class Client {
         udp::endpoint _server_endpoint;
         udp::socket _socket;
         data_struct _send_structure;
+        std::vector<sf::Event::EventType> eventsToPrint = {
+                sf::Event::Closed,
+                sf::Event::Resized,
+                sf::Event::LostFocus,
+                sf::Event::GainedFocus,
+                sf::Event::TextEntered,
+                sf::Event::KeyPressed,
+                sf::Event::KeyReleased,
+                sf::Event::MouseWheelMoved,
+                sf::Event::MouseWheelScrolled,
+                sf::Event::MouseButtonPressed,
+                sf::Event::MouseButtonReleased,
+                //sf::Event::MouseMoved,
+                sf::Event::MouseEntered,
+                sf::Event::MouseLeft,
+                sf::Event::JoystickButtonPressed,
+                sf::Event::JoystickButtonReleased,
+                sf::Event::JoystickMoved,
+                sf::Event::JoystickConnected,
+                sf::Event::JoystickDisconnected,
+                sf::Event::TouchBegan,
+                sf::Event::TouchMoved,
+                sf::Event::TouchEnded,
+                sf::Event::SensorChanged
+            };
 };
 
 #endif // CLIENT_HPP
