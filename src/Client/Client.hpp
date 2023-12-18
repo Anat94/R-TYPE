@@ -16,6 +16,11 @@
 
 using boost::asio::ip::udp;
 
+struct data_struct {
+    int id;
+    sf::Event::EventType eventType;
+};
+
 class Client {
     public:
         Client(std::string ip, int port);
@@ -31,6 +36,7 @@ class Client {
         boost::asio::io_context _io_context;
         udp::endpoint _server_endpoint;
         udp::socket _socket;
+        data_struct _send_structure;
 };
 
 #endif // CLIENT_HPP
