@@ -130,24 +130,27 @@ namespace component {
         sf::Texture _texture;
         sf::Sprite _sprite;
         std::string _path;
-        std::pair<int, int> _scale;
+        std::pair<float, float> _scale;
+        int _rotate = 0;
         /**
          * @brief Drawable constructor
-         * 
+         *
          * @param _shape SFML sf::shape object
          * @param _color SFML Color object representing the color of the shape
-         * 
+         *
         */
-        Drawable(const std::string &path_to_texture, std::pair<int, int> scale = {1, 1}) {
+        Drawable(const std::string &path_to_texture, std::pair<float, float> scale = {1.0, 1.0}, int rotate = 0) {
             _path = path_to_texture;
             _scale = scale;
+            _rotate = rotate;
         };
 
         void set() {
             if (!_texture.loadFromFile(_path))
-                throw std::runtime_error("Could not load sprite");
+                throw SFMLError("Could not load sprite");
             _sprite.setTexture(_texture);
             _sprite.setScale(_scale.first, _scale.second);
+            _sprite.setRotation(_rotate);
         };
         // Drawable(const std::string &path_to_texture, sf::IntRect rect, int scale_x = 1, int scale_y = 1) {
         //     if (!_texture.loadFromFile(path_to_texture))

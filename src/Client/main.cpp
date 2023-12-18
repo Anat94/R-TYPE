@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
         if (argc != 3) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
-        enum state _state = MENU;
+        enum state _state = GAME;
         if (_state == MENU) {
             Menu menu;
             return menu.run();

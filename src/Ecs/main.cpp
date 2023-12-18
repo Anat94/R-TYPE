@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::HurtsOnCollision>();
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Player>();
-    
+
 
     entity_t entity1 = ecs.spawn_entity();
 
