@@ -31,10 +31,13 @@ class Menu {
         sf::RenderWindow _window;
         sf::Font _font;
         sf::Text _title;
+        sf::Text _highScore;
         Button _btnPlay;
         sf::RectangleShape inputBox;
         sf::Text text;
         sf::String username;
+        int lastScore = 0;
+        std::string lastUsername;
 };
 
 #endif /* !MENU_HPP_ */

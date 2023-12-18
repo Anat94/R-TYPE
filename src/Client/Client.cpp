@@ -184,7 +184,6 @@ Client::Client(std::string ip, int port, std::string username)
         throw SFMLError("Music not found");
 
     // Define the components for ennemy
-    entity_t _enemy = _ecs.spawn_entity();
     _ecs.add_component(_enemy,  component::Position(700.0f, 500.0f));
     _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png", {0.1, 0.1}));
@@ -264,22 +263,49 @@ void Client::manageEvent()
         send_datas<data_struct>(_send_structure);
     }
     if (_event.type == sf::Event::KeyPressed)
-        if (_event.key.code == sf::Keyboard::Escape)
+        if (_event.key.code == sf::Keyboard::Escape) {
+            saveHighScore();
+            _window.close();
             std::exit(0);
+        }
 
 }
 
 void Client::saveHighScore()
 {
-    std::ofstream file;
-    file.open("./db.txt");
-    if (file.is_open()) {
-        printf("Score: %d\n", _score);
-        file << _score;
-        file.close();
-    }
-    printf("NONScore: %d\n", _score);
+    try {
 
+        std::ifstream myFile("db.txt");
+        if (!myFile.is_open()) {
+            throw std::runtime_error("Failed to open file for writing.");
+        }
+        int lastScore = 0;
+        std::string firstLine;
+        if (std::getline(myFile, firstLine)) {
+            std::cout << firstLine << std::endl;
+            size_t colonPos = firstLine.find(':');
+            std::string score = firstLine.substr(colonPos + 1);
+            score.erase(0, score.find_first_not_of(" "));
+            score.erase(score.find_last_not_of(" ") + 1);
+            lastScore = std::stoi(score);
+        } else {
+            throw std::runtime_error("Failed to read the first line from the file.");
+        }
+
+        myFile.close();
+        std::fstream file("db.txt");
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file for writing.");
+        }
+        if (lastScore <= _score)
+            file << _username << ": "<< _score << std::endl;
+
+        if (file.fail()) {
+            throw std::runtime_error("Failed to write to the file.");
+        }
+    } catch (const std::exception& e) {
+        std::cout << "An error occurred: " << e.what() << std::endl;
+    }
 }
 
 int Client::run()
@@ -287,6 +313,7 @@ int Client::run()
     _music.play();
     _music.setLoop(true);
     std::thread receiveThread(&Client::receive, this);
+    _music.setVolume(25);
     while (true) {
         auto &player1 = _ecs.get_components<component::Player>()[_player];
         _lives = player1.value()._health;
