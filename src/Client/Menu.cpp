@@ -49,7 +49,7 @@ enum state Menu::run() {
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    if (_btnPlay.isPressed()) {
+                    if (_btnPlay.isPressed() && username.getSize() > 0) {
                         return GAME;
                     }
                 }
