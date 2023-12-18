@@ -19,14 +19,14 @@ Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, s
 
     sf::Vector2f position(300, 300);
 
-    inputBox.setSize(sf::Vector2f(300, 40));
+    inputBox.setSize(sf::Vector2f(200, 40));
     inputBox.setFillColor(sf::Color::White);
     inputBox.setOutlineThickness(2);
     inputBox.setOutlineColor(sf::Color::Black);
     inputBox.setPosition(position);
 
     text.setFont(_font);
-    text.setCharacterSize(10);
+    text.setCharacterSize(20);
     text.setFillColor(sf::Color::Black);
     text.setPosition(position.x + 5, position.y + 5);
 
