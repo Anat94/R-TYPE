@@ -39,8 +39,31 @@ namespace component {
          * @param _y Y Coordinate value
          * 
         */
+       template<class Archive>
+        void serialize(Archive & ar, const unsigned int version) {
+            ar & x;
+            ar & y;
+        }
         Position(float _x, float _y) : x(_x), y(_y) {}
         bool operator==(const Position& other) { return x == other.x && y == other.y; }
+    };
+
+    /**
+     * @brief Position structure containing x and y coordinates
+    */
+    struct ServerEntity {
+        /**
+         * @brief x Coordinate value
+         */
+        float entity;
+        /**
+         * @brief Position constructor
+         * 
+         * @param _x X Coordinate value
+         * @param _y Y Coordinate value
+         * 
+        */
+        ServerEntity(entity_t _entity) : entity(_entity) {}
     };
 
     /**

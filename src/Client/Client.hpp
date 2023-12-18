@@ -25,9 +25,19 @@ struct data_struct {
     sf::Event::EventType eventType;
 };
 
-struct snapshot {
+struct snapshot_position {
     int id;
-    std::string data;
+    sparse_array<component::Position> data;
+};
+
+struct snapshot_velocity {
+    int id;
+    sparse_array<component::Velocity> data;
+};
+
+struct snapshot_player {
+    int id;
+    sparse_array<component::Player> data;
 };
 
 enum Stage {
@@ -68,7 +78,7 @@ class Client {
         udp::endpoint _server_endpoint;
         udp::socket _socket;
         data_struct _send_structure;
-        snapshot _receive_structure;
+        snapshot_position _recieve_structure;
         std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
@@ -83,8 +93,8 @@ class Client {
                 sf::Event::MouseButtonPressed,
                 sf::Event::MouseButtonReleased,
                 //sf::Event::MouseMoved,
-                sf::Event::MouseEntered,
-                sf::Event::MouseLeft,
+                // sf::Event::MouseEntered,
+                // sf::Event::MouseLeft,
                 sf::Event::JoystickButtonPressed,
                 sf::Event::JoystickButtonReleased,
                 sf::Event::JoystickMoved,
@@ -99,7 +109,7 @@ class Client {
         registry _ecs;
         entity_t _player;
         entity_t _background;
-        //entity_t _enemy;
+        entity_t _enemy;
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;

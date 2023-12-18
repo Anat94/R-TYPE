@@ -99,19 +99,52 @@ bool Client::hasPendingMessages() const {
 }
 
 void Client::receive() {
-    _socket.async_receive(boost::asio::buffer(_receiveBuffer),
-        [this](const boost::system::error_code& error, std::size_t bytes_received) {
-            if (!error) {
-                // Process received data in receiveBuffer_
-                std::cout << "Received: " << std::string(_receiveBuffer.begin(), _receiveBuffer.begin() + bytes_received) << std::endl;
-                
-                // Call receive() again to receive continuously
-                receive();
-            } else {
-                // Handle error
-                std::cerr << "Receive error: " << error.message() << std::endl;
-            }
-        });
+    _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
+    std::cout << "RECIEVED\n";
+    sparse_array<component::Position> recieved_pos = _recieve_structure.data;
+    sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+    for (int i = 0; i < recieved_pos.size(); i++) {
+        sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+        entity_t real_entity = -1;
+        for (size_t j = 0; j < servEntities.size(); j++)
+            real_entity = servEntities[j].value().entity == i ? servEntities[j].value().entity : real_entity;
+        if (real_entity > -1 && pos[real_entity].has_value()) {
+            std::cout << "UPDATED PLAYER\n";
+            pos[real_entity].value().x = recieved_pos[i].value().x;
+            pos[real_entity].value().y = recieved_pos[i].value().y;
+        } else {
+            std::cout << "CREATED PLAYER\n";
+            entity_t new_player = _ecs.spawn_entity();
+            std::cout << recieved_pos[i].value().x << std::endl;
+            _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
+            // _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
+            // _ecs.add_component(new_player, component::Controllable());
+            // _ecs.add_component(new_player, component::Heading());
+            // _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+            // _ecs.add_component(new_player, component::Player(100, 20));
+            // _ecs.add_component(new_player, component::ServerEntity(i));
+            std::cout << "FINISHED CREATING\n";
+        }
+    }
+    // receive();
+    // _socket.async_receive(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)),
+    //     [this](const boost::system::error_code& error, std::size_t bytes_received) {
+    //         std::cout << "Recieved from server\n";
+    //         // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+    //         // for (size_t i = 0; i < _recieve_structure.data.size(); i++) {
+    //         //     if (pos[i].has_value()) {
+    //         //         pos[i].value().x = _recieve_structure.data[i].value().x;
+    //         //         pos[i].value().y = _recieve_structure.data[i].value().y;
+    //         //     } else {
+    //         //         _ecs.add_component(i, component::Velocity(0.0f, 0.0f, true));
+    //         //         _ecs.add_component(i, component::Controllable());
+    //         //         _ecs.add_component(i, component::Heading());
+    //         //         _ecs.add_component(i, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+    //         //         _ecs.add_component(i, component::Player(100, 20));
+    //         //         _ecs.add_component(i, component::Position(_recieve_structure.data[i].value().x, _recieve_structure.data[i].value().y));
+    //         //     }
+    //         // }
+    //     });
 }
 
 Client::Client(std::string ip, int port, std::string username)
@@ -131,10 +164,11 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::Heading>();
     _ecs.register_component<component::Player>();
     _ecs.register_component<component::PlayMusic>();
+    _ecs.register_component<component::ServerEntity>();
     //Define the entities
     _background = _ecs.spawn_entity();
     _player = _ecs.spawn_entity();
-    // _enemy = _ecs.spawn_entity();
+    _enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 10.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
@@ -145,7 +179,7 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_component(_player, component::Heading());
     _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
     _ecs.add_component(_player, component::Player(100, 20));
-    // sf::Music music;
+    sf::Music music;
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
 
@@ -202,9 +236,11 @@ void Client::send_datas(const T& structure) {
     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
-template <typename T>
-void Client::receive_datas(T& structure) {
-    _socket.receive_from(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
+void Client::receive_datas() {
+    std::cout << "START RECIEVE";
+    _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
+    std::cout << "RECIEVED\n";
+    receive_datas();
 }
 
 void Client::displayTexts()
@@ -217,6 +253,16 @@ void Client::displayTexts()
 void Client::manageEvent()
 {
     while (listener.popEvent());
+    if (_event.type == sf::Event::Closed) {
+        _send_structure.id = 3;
+        send_datas<data_struct>(_send_structure);
+        return;
+    }
+    if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
+        _send_structure.id = 1;
+        _send_structure.eventType = _event.type;
+        send_datas<data_struct>(_send_structure);
+    }
     if (_event.type == sf::Event::KeyPressed)
         if (_event.key.code == sf::Keyboard::Escape)
             std::exit(0);
@@ -240,7 +286,7 @@ int Client::run()
 {
     _music.play();
     _music.setLoop(true);
-    receive();
+    std::thread receiveThread(&Client::receive, this);
     while (true) {
         auto &player1 = _ecs.get_components<component::Player>()[_player];
         _lives = player1.value()._health;
@@ -250,17 +296,6 @@ int Client::run()
         _lives_text.setPosition(1750, 10);
         _window.clear();
         _window.pollEvent(_event);
-        if (_event.type == sf::Event::Closed) {
-            _send_structure.id = 3;
-            send_datas<data_struct>(_send_structure);
-            break;
-            std::cout << _receive_structure.data << std::endl;
-        }
-        if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
-            _send_structure.id = 1;
-            _send_structure.eventType = _event.type;
-            send_datas<data_struct>(_send_structure);
-        }
         component::DrawableContent content = component::DrawableContent(_window, _event);
         manageEvent();
         _ecs.run_systems(content);

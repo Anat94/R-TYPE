@@ -20,7 +20,7 @@ using boost::asio::ip::udp;
 
 struct snapshot_position {
     int id;
-    sparse_array<component::Position> data;
+    std::map<entity_t, std::pair<float, float>> data;
 };
 
 struct snapshot_velocity {
