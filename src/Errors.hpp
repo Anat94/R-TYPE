@@ -35,4 +35,16 @@ class ArgumentError : public std::exception{
         std::string _message;
 };
 
+class SFMLError : public std::exception{
+    public:
+        SFMLError(std::string message) : _message(message) {}
+        ~SFMLError() {};
+
+        const char *what() const noexcept { return _message.c_str(); };
+
+    protected:
+    private:
+        std::string _message;
+};
+
 #endif //ERRORS_HPP
