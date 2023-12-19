@@ -180,7 +180,7 @@ add_executable(client
                 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
+# find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
 target_link_libraries(client
     PRIVATE
         sfml-audio
