@@ -14,6 +14,8 @@
 #include "../Ecs/Events.hpp"
 #include "Client.hpp"
 
+bool can_read = true;
+std::mutex mtx;
 rtype::event::EventListener listener;
 
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
@@ -70,13 +72,18 @@ auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<c
 };
 
 auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
+    can_read = false;
+    std::lock_guard<std::mutex> lock(mtx);
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
+            std::cout << "HAS VALUE\n";
             d->set();
             d->_sprite.setPosition(p->x, p->y);
             content.window->draw(d->_sprite);
         }
     }
+    std::cout << "HAS VALUE\n";
+    can_read = true;
 };
 
 
@@ -120,47 +127,44 @@ bool Client::hasPendingMessages() const {
 void Client::receive() {
     _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
     std::cout << "RECIEVED\n";
-    // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    // sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
-    // entity_t real_entity = -1;
-    // for (size_t j = 0; j < servEntities.size(); j++)
-    //     real_entity = servEntities[j].value().entity == _recieve_structure.entity ? servEntities[j].value().entity : real_entity;
-    // if (real_entity > -1 && pos[real_entity].has_value()) {
-    //     std::cout << "UPDATED PLAYER\n";
-    //     pos[real_entity].value().x = _recieve_structure.data.x;
-    //     pos[real_entity].value().y = _recieve_structure.data.y;
-    // } else {
-    //     std::cout << "CREATED PLAYER\n";
-    //     entity_t new_player = _ecs.spawn_entity();
-    //     std::cout << _recieve_structure.data.x << std::endl;
-    //     _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
-    //     _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
-    //     _ecs.add_component(new_player, component::Controllable());
-    //     _ecs.add_component(new_player, component::Heading());
-    //     _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-    //     _ecs.add_component(new_player, component::Player(100, 20));
-    //     _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
-    //     std::cout << "FINISHED CREATING\n";
-    // }
-    // receive();
-    // _socket.async_receive(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)),
-    //     [this](const boost::system::error_code& error, std::size_t bytes_received) {
-    //         std::cout << "Recieved from server\n";
-    //         // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    //         // for (size_t i = 0; i < _recieve_structure.data.size(); i++) {
-    //         //     if (pos[i].has_value()) {
-    //         //         pos[i].value().x = _recieve_structure.data[i].value().x;
-    //         //         pos[i].value().y = _recieve_structure.data[i].value().y;
-    //         //     } else {
-    //         //         _ecs.add_component(i, component::Velocity(0.0f, 0.0f, true));
-    //         //         _ecs.add_component(i, component::Controllable());
-    //         //         _ecs.add_component(i, component::Heading());
-    //         //         _ecs.add_component(i, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-    //         //         _ecs.add_component(i, component::Player(100, 20));
-    //         //         _ecs.add_component(i, component::Position(_recieve_structure.data[i].value().x, _recieve_structure.data[i].value().y));
-    //         //     }
-    //         // }
-    //     });
+    sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+    sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << servEntities[j].value().entity << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == _recieve_structure.entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        entity_t real_entity = _recieve_structure.entity + 1;
+        if (real_entity > 0 && pos[real_entity].has_value()) {
+            std::cout << "UPDATED PLAYER\n";
+            std::cout << _recieve_structure.data.x << std::endl;
+            pos[real_entity].value().x = _recieve_structure.data.x;
+            pos[real_entity].value().y = _recieve_structure.data.y;
+        } else {
+            // std::lock_guard<std::mutex> lock(mtx);
+            std::cout << "CREATED PLAYER\n";
+            entity_t new_player = _ecs.spawn_entity();
+            // std::cout << _recieve_structure.entity << std::endl;
+            // std::cout << new_player << std::endl;
+            std::cout << _recieve_structure.data.x << std::endl;
+            _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
+            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
+            // _ecs.add_component(new_player, component::Controllable());
+            _ecs.add_component(new_player, component::Heading());
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+            // _ecs.add_component(new_player, component::Player(100, 20));
+            _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
+            std::cout << "FINISHED CREATING\n";
+        }
+    } catch (std::exception ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    _send_structure.id = 5;
+    _send_structure.package_id = _recieve_structure.package_id;
+    send_datas(_send_structure);
+    receive();
 }
 
 Client::Client(std::string ip, int port, std::string username)
@@ -225,9 +229,9 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_system<component::Velocity, component::Controllable>(control_system);
     _ecs.add_system<component::Position, component::Velocity>(position_system);
     _ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
+    _ecs.add_system<component::Drawable, component::Position>(collision_system);
     _ecs.add_system<component::Drawable, component::Scale>(scale_system);
     _ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
-    _ecs.add_system<component::Drawable, component::Position>(collision_system);
     _ecs.add_system<component::Drawable, component::Position>(draw_system);
     //Define the gameplay
     _score = 0;
@@ -292,7 +296,7 @@ void Client::manageEvent()
         }
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), evt.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
-            _send_structure.eventType = evt.type;
+            _send_structure.event = evt;
             send_datas<data_struct>(_send_structure);
             _event = evt;
             return;

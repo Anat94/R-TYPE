@@ -55,7 +55,7 @@ namespace component {
         /**
          * @brief x Coordinate value
          */
-        float entity;
+        entity_t entity;
         /**
          * @brief Position constructor
          * 
