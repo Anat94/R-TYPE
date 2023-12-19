@@ -38,9 +38,9 @@ struct snapshot_velocity {
     sparse_array<component::Velocity> data;
 };
 
-struct snapshot_player {
+struct snapshot_health {
     int id;
-    sparse_array<component::Player> data;
+    sparse_array<component::Health> data;
 };
 
 enum Stage {
