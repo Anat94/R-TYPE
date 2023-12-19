@@ -21,6 +21,7 @@ using boost::asio::ip::udp;
 struct snapshot_position {
     int id;
     std::map<entity_t, std::pair<float, float>> data;
+    int package_id;
 };
 
 struct snapshot_velocity {
@@ -49,7 +50,7 @@ class Server {
         template <typename T>
         void receive_datas(T& structure);
         template <typename T>
-        void send_data_to_all_clients(const T& structure);
+        void send_data_to_all_clients(T& structure);
 
     private:
         std::array<char, 1024> _buf;
@@ -59,6 +60,7 @@ class Server {
         udp::socket _socket;
         registry &_ecs;
         rtype::event::EventListener &_listener;
+        int _package_id = 0;
 };
 
 #endif // SERVER_HPP

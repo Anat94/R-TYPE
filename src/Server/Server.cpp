@@ -86,10 +86,12 @@ void Server::recieve_from_client()
 Server::~Server() {}
 
 template <typename T>
-void Server::send_data_to_all_clients(const T& structure) {
+void Server::send_data_to_all_clients(T& structure) {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value()) {
+            structure.package_id = _package_id;
+            _package_id += 1;
             _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
