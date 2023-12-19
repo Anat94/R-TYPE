@@ -146,48 +146,6 @@ void Client::receive() {
     _send_structure.package_id = _recieve_structure.package_id;
     send_datas(_send_structure);
     receive();
-
-    // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    // sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
-    // entity_t real_entity = -1;
-    // for (size_t j = 0; j < servEntities.size(); j++)
-    //     real_entity = servEntities[j].value().entity == _recieve_structure.entity ? servEntities[j].value().entity : real_entity;
-    // if (real_entity > -1 && pos[real_entity].has_value()) {
-    //     std::cout << "UPDATED PLAYER\n";
-    //     pos[real_entity].value().x = _recieve_structure.data.x;
-    //     pos[real_entity].value().y = _recieve_structure.data.y;
-    // } else {
-    //     std::cout << "CREATED PLAYER\n";
-    //     entity_t new_player = _ecs.spawn_entity();
-    //     std::cout << _recieve_structure.data.x << std::endl;
-    //     _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
-    //     _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
-    //     _ecs.add_component(new_player, component::Controllable());
-    //     _ecs.add_component(new_player, component::Heading());
-    //     _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-    //     _ecs.add_component(new_player, component::Player(100, 20));
-    //     _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
-    //     std::cout << "FINISHED CREATING\n";
-    // }
-    // receive();
-    // _socket.async_receive(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)),
-    //     [this](const boost::system::error_code& error, std::size_t bytes_received) {
-    //         std::cout << "Recieved from server\n";
-    //         // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    //         // for (size_t i = 0; i < _recieve_structure.data.size(); i++) {
-    //         //     if (pos[i].has_value()) {
-    //         //         pos[i].value().x = _recieve_structure.data[i].value().x;
-    //         //         pos[i].value().y = _recieve_structure.data[i].value().y;
-    //         //     } else {
-    //         //         _ecs.add_component(i, component::Velocity(0.0f, 0.0f, true));
-    //         //         _ecs.add_component(i, component::Controllable());
-    //         //         _ecs.add_component(i, component::Heading());
-    //         //         _ecs.add_component(i, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-    //         //         _ecs.add_component(i, component::Player(100, 20));
-    //         //         _ecs.add_component(i, component::Position(_recieve_structure.data[i].value().x, _recieve_structure.data[i].value().y));
-    //         //     }
-    //         // }
-    //     });
 }
 
 Client::Client(std::string ip, int port, std::string username)

@@ -30,8 +30,11 @@ struct data_struct {
 
 struct snapshot_position {
     int id;
-    std::map<entity_t, std::pair<float, float>> data;
+    entity_t entity;
+    component::Position data;
     int package_id;
+
+    snapshot_position(): data(0, 0) {};
 };
 
 struct snapshot_velocity {
