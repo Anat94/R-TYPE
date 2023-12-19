@@ -92,8 +92,17 @@ void Server::recieve_from_client()
     }
     if (structure.id == 3)
         _ecs.kill_entity(player_entity);
-    if (structure.id == 5)
+    if (structure.id == 5) {
+            int id = 0;
+            _position_packages.erase(
+                std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const snapshot_position& snapshot) {
+                        return snapshot.package_id == id;
+                }
+                ),
+                _position_packages.end()
+            );
         std::cout << structure.package_id << std::endl;
+    }
 
     recieve_from_client();
 }
@@ -107,6 +116,7 @@ void Server::send_data_to_all_clients(T& structure) {
         if (all_endpoints[i].has_value()) {
             structure.package_id = _package_id;
             _package_id += 1;
+            _position_packages.push_back(structure);
             _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }

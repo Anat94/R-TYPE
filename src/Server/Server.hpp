@@ -55,6 +55,7 @@ class Server {
         void send_data_to_all_clients(T& structure);
 
     private:
+        std::vector<snapshot_position> _position_packages;
         std::array<char, 1024> _buf;
         boost::asio::io_service::work _service;
         udp::endpoint _remote_endpoint;
