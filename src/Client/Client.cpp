@@ -101,6 +101,10 @@ bool Client::hasPendingMessages() const {
 void Client::receive() {
     _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
     std::cout << "RECIEVED\n";
+    _send_structure.id = 5;
+    _send_structure.package_id = _recieve_structure.package_id;
+    send_datas(_send_structure);
+
     // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     // sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
     // entity_t real_entity = -1;

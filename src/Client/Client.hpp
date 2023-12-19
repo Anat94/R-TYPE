@@ -23,14 +23,14 @@ using boost::asio::ip::udp;
 struct data_struct {
     int id;
     sf::Event::EventType eventType;
+    int package_id;
+
 };
 
 struct snapshot_position {
     int id;
-    entity_t entity;
-    component::Position data;
-
-    snapshot_position(): data(0, 0) {};
+    std::map<entity_t, std::pair<float, float>> data;
+    int package_id;
 };
 
 struct snapshot_velocity {
