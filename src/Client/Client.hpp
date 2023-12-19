@@ -23,11 +23,8 @@ using boost::asio::ip::udp;
 struct data_struct {
     int id;
     sf::Event::EventType eventType;
-};
-
-struct response_client {
-    int id;
     int package_id;
+
 };
 
 struct snapshot_position {
@@ -86,7 +83,6 @@ class Client {
         udp::endpoint _server_endpoint;
         udp::socket _socket;
         data_struct _send_structure;
-        response_client _package_confirmation;
         snapshot_position _recieve_structure;
         std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {
