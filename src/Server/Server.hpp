@@ -20,7 +20,8 @@ using boost::asio::ip::udp;
 
 struct snapshot_position {
     int id;
-    std::map<entity_t, std::pair<float, float>> data;
+    entity_t entity;
+    component::Position data;
 };
 
 struct snapshot_velocity {
@@ -35,7 +36,7 @@ struct snapshot_player {
 
 struct data_struct {
     int id;
-    sf::Event::EventType eventType;
+    sf::Event event;
 };
 
 class Server {
@@ -45,6 +46,7 @@ class Server {
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
+        std::pair<int, int> get_position_change_for_event(entity_t entity, sf::Event event);
         template <typename T>
         void receive_datas(T& structure);
         template <typename T>

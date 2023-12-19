@@ -17,12 +17,13 @@
 #include "../Ecs/Events.hpp"
 #include "../Errors.hpp"
 #include <queue>
+#include <mutex>
 
 using boost::asio::ip::udp;
 
 struct data_struct {
     int id;
-    sf::Event::EventType eventType;
+    sf::Event event;
 };
 
 struct snapshot_position {
