@@ -25,6 +25,11 @@ struct data_struct {
     sf::Event::EventType eventType;
 };
 
+struct response_client {
+    int id;
+    int package_id;
+};
+
 struct snapshot_position {
     int id;
     entity_t entity;
