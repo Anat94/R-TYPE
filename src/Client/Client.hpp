@@ -27,7 +27,10 @@ struct data_struct {
 
 struct snapshot_position {
     int id;
-    sparse_array<component::Position> data;
+    entity_t entity;
+    component::Position data;
+
+    snapshot_position(): data(0, 0) {};
 };
 
 struct snapshot_velocity {

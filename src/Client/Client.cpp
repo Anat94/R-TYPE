@@ -101,31 +101,28 @@ bool Client::hasPendingMessages() const {
 void Client::receive() {
     _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
     std::cout << "RECIEVED\n";
-    sparse_array<component::Position> recieved_pos = _recieve_structure.data;
-    sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    for (int i = 0; i < recieved_pos.size(); i++) {
-        sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
-        entity_t real_entity = -1;
-        for (size_t j = 0; j < servEntities.size(); j++)
-            real_entity = servEntities[j].value().entity == i ? servEntities[j].value().entity : real_entity;
-        if (real_entity > -1 && pos[real_entity].has_value()) {
-            std::cout << "UPDATED PLAYER\n";
-            pos[real_entity].value().x = recieved_pos[i].value().x;
-            pos[real_entity].value().y = recieved_pos[i].value().y;
-        } else {
-            std::cout << "CREATED PLAYER\n";
-            entity_t new_player = _ecs.spawn_entity();
-            std::cout << recieved_pos[i].value().x << std::endl;
-            _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-            // _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
-            // _ecs.add_component(new_player, component::Controllable());
-            // _ecs.add_component(new_player, component::Heading());
-            // _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-            // _ecs.add_component(new_player, component::Player(100, 20));
-            // _ecs.add_component(new_player, component::ServerEntity(i));
-            std::cout << "FINISHED CREATING\n";
-        }
-    }
+    // sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+    // sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+    // entity_t real_entity = -1;
+    // for (size_t j = 0; j < servEntities.size(); j++)
+    //     real_entity = servEntities[j].value().entity == _recieve_structure.entity ? servEntities[j].value().entity : real_entity;
+    // if (real_entity > -1 && pos[real_entity].has_value()) {
+    //     std::cout << "UPDATED PLAYER\n";
+    //     pos[real_entity].value().x = _recieve_structure.data.x;
+    //     pos[real_entity].value().y = _recieve_structure.data.y;
+    // } else {
+    //     std::cout << "CREATED PLAYER\n";
+    //     entity_t new_player = _ecs.spawn_entity();
+    //     std::cout << _recieve_structure.data.x << std::endl;
+    //     _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
+    //     _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
+    //     _ecs.add_component(new_player, component::Controllable());
+    //     _ecs.add_component(new_player, component::Heading());
+    //     _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+    //     _ecs.add_component(new_player, component::Player(100, 20));
+    //     _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
+    //     std::cout << "FINISHED CREATING\n";
+    // }
     // receive();
     // _socket.async_receive(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)),
     //     [this](const boost::system::error_code& error, std::size_t bytes_received) {
@@ -201,7 +198,7 @@ Client::Client(std::string ip, int port, std::string username)
     //Define the gameplay
     auto &player1 = _ecs.get_components<component::Player>()[_player];
     _score = 0;
-    _lives = player1.value()._health;
+    _lives = 0; // player1.value()._health;
     _level = 1;
     _font = sf::Font();
     if (!_font.loadFromFile("src/Client/assets/font.ttf"))
@@ -251,24 +248,28 @@ void Client::displayTexts()
 
 void Client::manageEvent()
 {
-    while (listener.popEvent());
-    if (_event.type == sf::Event::Closed) {
-        _send_structure.id = 3;
-        send_datas<data_struct>(_send_structure);
-        return;
-    }
-    if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
-        _send_structure.id = 1;
-        _send_structure.eventType = _event.type;
-        send_datas<data_struct>(_send_structure);
-    }
-    if (_event.type == sf::Event::KeyPressed)
-        if (_event.key.code == sf::Keyboard::Escape) {
-            saveHighScore();
+    sf::Event evt;
+    while (_window.pollEvent(evt)) {
+        if (evt.type == sf::Event::Closed) {
+            _send_structure.id = 3;
+            send_datas<data_struct>(_send_structure);
             _window.close();
             std::exit(0);
         }
-
+        if (std::find(eventsToPrint.begin(), eventsToPrint.end(), evt.type) != eventsToPrint.end()) {
+            _send_structure.id = 1;
+            _send_structure.eventType = evt.type;
+            send_datas<data_struct>(_send_structure);
+            _event = evt;
+            return;
+        }
+        if (evt.type == sf::Event::KeyPressed)
+            if (evt.key.code == sf::Keyboard::Escape) {
+                saveHighScore();
+                _window.close();
+                std::exit(0);
+            }
+    }
 }
 
 void Client::saveHighScore()
@@ -322,9 +323,9 @@ int Client::run()
         _lives_text.setString("Score: " + std::to_string(_lives));
         _lives_text.setPosition(1750, 10);
         _window.clear();
-        _window.pollEvent(_event);
-        component::DrawableContent content = component::DrawableContent(_window, _event);
         manageEvent();
+        component::DrawableContent content = component::DrawableContent(_window, _event);
+        while (listener.popEvent());
         _ecs.run_systems(content);
         // send_datas();
         // receive_datas();
