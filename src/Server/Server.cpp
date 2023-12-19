@@ -77,7 +77,8 @@ void Server::recieve_from_client()
     }
     if (structure.id == 3)
         _ecs.kill_entity(player_entity);
-    if (structure.id == 5);
+    if (structure.id == 5)
+        std::cout << structure.package_id << std::endl;
 
     recieve_from_client();
 }

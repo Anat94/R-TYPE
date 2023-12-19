@@ -18,11 +18,6 @@
 
 using boost::asio::ip::udp;
 
-struct response_client {
-    int id;
-    int package_id;
-};
-
 struct snapshot_position {
     int id;
     std::map<entity_t, std::pair<float, float>> data;
@@ -41,6 +36,7 @@ struct snapshot_player {
 struct data_struct {
     int id;
     sf::Event::EventType eventType;
+    int package_id;
 };
 
 class Server {
