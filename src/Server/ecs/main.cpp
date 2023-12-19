@@ -1,25 +1,15 @@
 /*
 ** EPITECH PROJECT, 2023
-** rtype
+** Bootstrap
 ** File description:
 ** main
 */
 
-#include <iostream>
-#include <boost/asio.hpp>
-#include "Server.hpp"
-#include "../Errors.hpp"
-
-using boost::asio::ip::udp;
+#include <SFML/Graphics.hpp>
+#include "Events.hpp"
+#include "ZipperIterator.hpp"
 
 rtype::event::EventListener listener;
-
-int error_handling(int nb_args)
-{
-    if (nb_args != 2)
-        throw ArgumentError("./server <server_port>");
-    return 0;
-}
 
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
     for (auto &&[p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
@@ -55,15 +45,15 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
     }
 };
 
-// auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
-//     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-//         if (d.has_value() && p.has_value()) {
-//             d->set();
-//             d->_sprite.setPosition(p->x, p->y);
-//             content.window->draw(d->_sprite);
-//         }
-//     }
-// };
+auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
+    for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
+        if (d.has_value() && p.has_value()) {
+            d->set();
+            d->_sprite.setPosition(p->x, p->y);
+            content.window->draw(d->_sprite);
+        }
+    }
+};
 
 auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
 {
@@ -82,7 +72,7 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
                 p2->y <= p1->y &&
                 (p2->x + 100) >= p1->x &&
                 (p2->y + 100) >= p1->y)) {
-                rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
                 if (listener.hasEvent(new_event)) {
                     second_ent_idx++;
                     delete new_event;
@@ -105,22 +95,16 @@ void logging_system(sparse_array<component::Position> &pos, sparse_array<compone
     }
 }
 
-void runServer(const char *argv, registry &ecs) {
-    boost::asio::io_service service;
-    Server server(service, std::atoi(argv), ecs, listener);
-    service.run();
-}
-
 int main(int argc, char *argv[]) {
-    // sf::RenderWindow window;
+    sf::RenderWindow window;
     sf::Event event;
     registry ecs;
-    // sf::Texture _texture;
-    // _texture.loadFromFile(argv[1]);
+    sf::Texture _texture;
+    _texture.loadFromFile(argv[1]);
 
-    // sf::Sprite _sprite;
-    // _sprite.setTexture(_texture);
-    // _sprite.setPosition(100, 100);
+    sf::Sprite _sprite;
+    _sprite.setTexture(_texture);
+    _sprite.setPosition(100, 100);
 
     ecs.register_component<component::Position>();
     ecs.register_component<component::Velocity>();
@@ -129,40 +113,45 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::HurtsOnCollision>();
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Player>();
-    ecs.register_component<component::Endpoint>();
 
-    // entity_t entity1 = ecs.spawn_entity();
+    entity_t entity1 = ecs.spawn_entity();
 
-    // ecs.add_component(entity1, component::Position(10.0f, 10.0f));
-    // ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
-    // ecs.add_component(entity1, component::Player(100, 20));
-    // ecs.add_component(entity1, component::Controllable());
-    // ecs.add_component(entity1, component::Heading());
-    // ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
+    ecs.add_component(entity1, component::Position(10.0f, 10.0f));
+    ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
+    ecs.add_component(entity1, component::Player(100, 20));
+    ecs.add_component(entity1, component::Controllable());
+    ecs.add_component(entity1, component::Heading());
+    ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
-    // entity_t entity2 = ecs.spawn_entity();
+    entity_t entity2 = ecs.spawn_entity();
 
-    // ecs.add_component(entity2, component::Position(700.0f, 500.0f));
-    // ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
-    // // ecs.add_component(entity2, component::HurtsOnCollision(10));
-    // ecs.add_component(entity2, component::Player(300, 30));
-    // ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
+    ecs.add_component(entity2, component::Position(700.0f, 500.0f));
+    ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
+    // ecs.add_component(entity2, component::HurtsOnCollision(10));
+    ecs.add_component(entity2, component::Player(300, 30));
+    ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
 
+    window.create(sf::VideoMode(1920, 1080), "Ecs window", sf::Style::Close | sf::Style::Fullscreen);
+    window.setFramerateLimit(60);
     listener.addRegistry(ecs);
 
     ecs.add_system<component::Position, component::Velocity>(position_system);
     ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    // ecs.add_system<component::Drawable, component::Position>(draw_system);
+    ecs.add_system<component::Drawable, component::Position>(draw_system);
     ecs.add_system<component::Drawable, component::Position>(collision_system);
 
-    error_handling(argc);
-    std::thread serverThread([&]() {
-        runServer(argv[1], ecs);
-    });
     while (true) {
-        component::DrawableContent content = component::DrawableContent(event);
+        window.clear();
+        window.pollEvent(event);
+        component::DrawableContent content = component::DrawableContent(window, event);
         ecs.run_systems(content);
         while (listener.popEvent());
+        if (event.type == sf::Event::KeyPressed)
+            if (event.key.code == sf::Keyboard::Escape)
+                break;
+        window.draw(_sprite);
+        window.display();
     }
+    window.close();
     return 0;
 }
