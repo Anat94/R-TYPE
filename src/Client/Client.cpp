@@ -153,7 +153,9 @@ void Client::receive() {
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
             // _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png");
+            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Rotation(90));
             // _ecs.add_component(new_player, component::Player(100, 20));
             _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
             std::cout << "FINISHED CREATING\n";
