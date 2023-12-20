@@ -6,8 +6,6 @@
 */
 
 #include "Server.hpp"
-#include <iostream>
-#include <thread>
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
 {
@@ -24,11 +22,12 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
     return {0, 0};
 }
 
-Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener)
+Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
     _tpool.emplace_back([this, &service]() { service.run(); });
     recieve_from_client();
 }
+
 
 entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoint)
 {
@@ -93,7 +92,7 @@ void Server::recieve_from_client()
     if (structure.id == 3)
         _ecs.kill_entity(player_entity);
     if (structure.id == 5) {
-            int id = 0;
+            int id = structure.package_id;
             _position_packages.erase(
                 std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const snapshot_position& snapshot) {
                         return snapshot.package_id == id;
@@ -107,7 +106,10 @@ void Server::recieve_from_client()
     recieve_from_client();
 }
 
-Server::~Server() {}
+Server::~Server() {
+    if (_send_thread.joinable())
+        _send_thread.join();
+}
 
 template <typename T>
 void Server::send_data_to_all_clients(T& structure) {
@@ -118,6 +120,19 @@ void Server::send_data_to_all_clients(T& structure) {
             _package_id += 1;
             _position_packages.push_back(structure);
             _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
+        }
+    }
+}
+
+void Server::sendPositionPackagesPeriodically() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        for (auto& snapshot : _position_packages) {
+            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+            for (size_t i = 0; i < all_endpoints.size(); i++) {
+                if (all_endpoints[i].has_value())
+                    _socket.send_to(boost::asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            }
         }
     }
 }

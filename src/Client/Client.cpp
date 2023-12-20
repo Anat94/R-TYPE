@@ -57,13 +57,13 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
     std::lock_guard<std::mutex> lock(mtx);
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
-            std::cout << "HAS VALUE\n";
+            //std::cout << "HAS VALUE\n";
             d->set();
             d->_sprite.setPosition(p->x, p->y);
             content.window->draw(d->_sprite);
         }
     }
-    std::cout << "HAS VALUE\n";
+    //std::cout << "HAS VALUE\n";
     can_read = true;
 };
 
@@ -142,6 +142,7 @@ void Client::receive() {
     } catch (std::exception ex) {
         std::cout << ex.what() << std::endl;
     }
+    std::cout << "RECEIVED PACKET NUMBER:" << _recieve_structure.package_id << std::endl;
     _send_structure.id = 5;
     _send_structure.package_id = _recieve_structure.package_id;
     send_datas(_send_structure);

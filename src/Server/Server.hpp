@@ -8,6 +8,8 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <array>
 #include "ecs/Events.hpp"
 #include "ecs/ZipperIterator.hpp"
@@ -53,6 +55,7 @@ class Server {
         void receive_datas(T& structure);
         template <typename T>
         void send_data_to_all_clients(T& structure);
+        void sendPositionPackagesPeriodically();
 
     private:
         std::vector<snapshot_position> _position_packages;
@@ -63,6 +66,7 @@ class Server {
         udp::socket _socket;
         registry &_ecs;
         rtype::event::EventListener &_listener;
+        std::thread _send_thread;
         int _package_id = 0;
 };
 
