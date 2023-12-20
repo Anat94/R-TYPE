@@ -150,7 +150,8 @@ void Client::receive() {
             // std::cout << new_player << std::endl;
             std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
-            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
+            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::ResetOnMove());
             // _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Heading());
             _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png");
