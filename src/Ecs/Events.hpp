@@ -7,8 +7,8 @@
 
 #ifndef EVENT_HPP_
     #define EVENT_HPP_
-    #include <queue>
     #include "Registry.hpp"
+    #include <queue>
 
 /**
  * @brief Namespace for the project
@@ -212,6 +212,39 @@ namespace rtype {
                  * @param listener the event listener used to create new events if needed
                  */
                 void handleEvent(registry &r, EventListener &listener);
+        };
+
+        /**
+         * @brief Update Position event class
+         * 
+         */
+        class UpdatePositionEvent : public AEvent {
+            public:
+                /**
+                 * @brief Construct a new Collision Event object
+                 * 
+                 * @param to_move entity id to move
+                 * @param pos position to move entity by
+                 */
+                UpdatePositionEvent(entity_t to_move, std::pair<int, int> pos) { _to_move = {to_move}; _pos = pos; };
+                /**
+                 * @brief Handles the event based on the registry objects
+                 * 
+                 * @param r the registry_t object used to store the game engine resources
+                 * @param listener the event listener used to create new events if needed
+                 */
+                void handleEvent(registry &r, EventListener &listener);
+            private:
+                /**
+                 * @brief entity to move
+                 * 
+                 */
+                entity_t _to_move;
+                /**
+                 * @brief position to move entity by
+                 * 
+                 */
+                std::pair<int, int> _pos;
         };
 
         /**
