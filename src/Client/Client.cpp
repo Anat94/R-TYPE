@@ -154,7 +154,7 @@ void Client::receive() {
             _ecs.add_component(new_player, component::ResetOnMove());
             // _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png");
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
             _ecs.add_component(new_player, component::Scale(0.1f));
             _ecs.add_component(new_player, component::Rotation(90));
             // _ecs.add_component(new_player, component::Player(100, 20));
