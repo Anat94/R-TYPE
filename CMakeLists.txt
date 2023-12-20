@@ -158,7 +158,7 @@ message("Après le DL")
 # COMPILATION FOR SERVER
 
 add_executable(server
-                src/Server/ecs/Events.cpp
+                src/Ecs/Events.cpp
                 src/Server/Server.cpp
                 src/Server/main.cpp
         )

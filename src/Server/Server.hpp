@@ -6,49 +6,55 @@
 */
 
 #ifndef SERVER_HPP
-#define SERVER_HPP
-#include <iostream>
-#include <array>
-#include "ecs/Events.hpp"
-#include "ecs/ZipperIterator.hpp"
-#include <boost/asio.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
+    #define SERVER_HPP
+    #define MAX_BUF_SIZE 11024
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
+    #include <iostream>
+    #include <array>
+    #include <boost/asio.hpp>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
+    #include <SFML/System.hpp>
+    #include <functional>
 
 using boost::asio::ip::udp;
 
-struct snapshot_position {
-    int id;
+struct BaseMessage {
+    int16_t id;
+};
+
+struct SnapshotPosition: public BaseMessage {
     entity_t entity;
     component::Position data;
-    int package_id;
+    int packet_id;
+
+    SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
+    entity(entity_),  data(data_), packet_id(packet_id_) {
+        id = id_;
+    };
 };
 
-struct snapshot_velocity {
-    int id;
-    sparse_array<component::Velocity> data;
-};
-
-struct snapshot_player {
-    int id;
-    sparse_array<component::Player> data;
-};
-
-struct data_struct {
-    int id;
+struct EventMessage: public BaseMessage {
     sf::Event event;
-    int package_id;
+    int packet_id;
 };
 
 class Server {
+    typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
         Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
+        void send_position_snapshots_for_all_players();
+        std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, sf::Event event);
+        void recieve_client_event(std::vector<char> &, entity_t);
+        void recieve_connection_event(std::vector<char> &, entity_t);
+        void recieve_disconnection_event(std::vector<char> &, entity_t);
+        void recieve_packet_confirm(std::vector<char> &, entity_t);
         template <typename T>
         void receive_datas(T& structure);
         template <typename T>
@@ -62,7 +68,14 @@ class Server {
         udp::socket _socket;
         registry &_ecs;
         rtype::event::EventListener &_listener;
-        int _package_id = 0;
+        int _packet_id = 0;
+        std::map<int16_t, messageParserHandle> _messageParser = {
+            {1, &Server::recieve_client_event},
+            {2, &Server::recieve_connection_event},
+            {3, &Server::recieve_disconnection_event},
+            {5, &Server::recieve_packet_confirm}
+        };
+
 };
 
 #endif // SERVER_HPP

@@ -44,6 +44,20 @@ bool rtype::event::EventListener::hasEvent(rtype::event::IEvent *event)
     return false;
 }
 
+void rtype::event::UpdatePositionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+{
+    try {
+
+        auto &player1_pla = r.get_components<component::Position>()[_to_move];
+
+        player1_pla.value().x += _pos.first;
+        player1_pla.value().y += _pos.second;
+    } catch (const std::exception &e) {
+        e.what();
+    }
+}
+
+
 void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
     try {

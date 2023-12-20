@@ -57,13 +57,11 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
     std::lock_guard<std::mutex> lock(mtx);
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
-            std::cout << "HAS VALUE\n";
             d->set();
             d->_sprite.setPosition(p->x, p->y);
             content.window->draw(d->_sprite);
         }
     }
-    std::cout << "HAS VALUE\n";
     can_read = true;
 };
 
@@ -101,13 +99,20 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
     }
 };
 
-bool Client::hasPendingMessages() const {
-    return _socket.available() > 0;
+std::vector<char> Client::recieve_raw_data_from_client()
+{
+    std::vector<char> receivedData(MAX_BUF_SIZE);
+    size_t bytesRead = _socket.receive_from(boost::asio::buffer(receivedData), _server_endpoint);
+
+    receivedData.resize(bytesRead);
+    return receivedData;
 }
 
-void Client::receive() {
-    _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
-    std::cout << "RECIEVED\n";
+int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(SnapshotPosition))
+        return -1;
+    SnapshotPosition *snapshot = reinterpret_cast<SnapshotPosition *>(server_msg.data());
     sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
@@ -117,34 +122,42 @@ void Client::receive() {
         //     std::cout << "j is: " << j << servEntities[j].value().entity << std::endl;
         //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == _recieve_structure.entity) ? servEntities[j].value().entity : real_entity;
         // }
-        entity_t real_entity = _recieve_structure.entity + 1;
+        entity_t real_entity = snapshot->entity + 1;
         if (real_entity > 0 && pos[real_entity].has_value()) {
             std::cout << "UPDATED PLAYER\n";
-            std::cout << _recieve_structure.data.x << std::endl;
-            pos[real_entity].value().x = _recieve_structure.data.x;
-            pos[real_entity].value().y = _recieve_structure.data.y;
+            std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+            pos[real_entity].value().x = snapshot->data.x;
+            pos[real_entity].value().y = snapshot->data.y;
         } else {
-            // std::lock_guard<std::mutex> lock(mtx);
             std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
-            // std::cout << _recieve_structure.entity << std::endl;
-            // std::cout << new_player << std::endl;
-            std::cout << _recieve_structure.data.x << std::endl;
-            _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
+            _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
-            // _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Heading());
             _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-            // _ecs.add_component(new_player, component::Player(100, 20));
-            _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
-            std::cout << "FINISHED CREATING\n";
+            _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
+            std::cout << _recieve_structure.data.x << ", " << _recieve_structure.data.y << std::endl;
         }
     } catch (std::exception ex) {
         std::cout << ex.what() << std::endl;
     }
-    _send_structure.id = 5;
-    _send_structure.package_id = _recieve_structure.package_id;
-    send_datas(_send_structure);
+    return snapshot->packet_id;
+}
+
+void Client::receive()
+{
+    std::vector<char> server_msg = recieve_raw_data_from_client();
+    if (server_msg.size() < sizeof(BaseMessage))
+        return;
+    BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
+
+    if (_messageParser.find(baseMsg->id) == _messageParser.end())
+        throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    ConfirmationMessage to_send;
+    to_send.id = 5;
+    to_send.packet_id = packet_id;
+    send_to_server(to_send);
     receive();
 }
 
@@ -155,7 +168,7 @@ Client::Client(std::string ip, int port, std::string username)
       _username(username)
 {
     _send_structure.id = 2;
-    send_datas(_send_structure);
+    send_to_server(_send_structure);
     // Define the systems
     _ecs.register_component<component::Position>();
     _ecs.register_component<component::Velocity>();
@@ -232,7 +245,7 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 }
 
 template <typename T>
-void Client::send_datas(const T& structure) {
+void Client::send_to_server(const T& structure) {
     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
@@ -256,14 +269,14 @@ void Client::manageEvent()
     while (_window.pollEvent(evt)) {
         if (evt.type == sf::Event::Closed) {
             _send_structure.id = 3;
-            send_datas<data_struct>(_send_structure);
+            send_to_server<EventMessage>(_send_structure);
             _window.close();
             std::exit(0);
         }
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), evt.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
             _send_structure.event = evt;
-            send_datas<data_struct>(_send_structure);
+            send_to_server<EventMessage>(_send_structure);
             _event = evt;
             return;
         }
