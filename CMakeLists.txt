@@ -103,41 +103,6 @@ endif()
 
 # Install sfml
 
-message("Avant le DL")
-# find_library(X11_LIBRARIES NAMES X11)
-# find_library(XRANDR_LIBRARIES NAMES Xrandr)
-# find_library(XCURSOR_LIBRARIES NAMES Xcursor)
-# find_path(X11_INCLUDE_DIR NAMES X11/Xlib.h)
-# # find_package(X11 REQUIRED)
-# include_directories(${X11_INCLUDE_DIR})
-# # set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake)
-# # set(CMAKE_SUPPRESS_REGENERATION true)
-# # include_directories(${X11_INCLUDE_DIR})
-# # find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
-# # include_directories(${SFML_INCLUDE_DIR})
-# # if (WIN32)
-# # list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/installed/x64-windows/share/sfml/")
-# # endif()
-# include(FetchContent)
-# set(BUILD_SHARED_LIBS OFF)
-# set(CMAKE_CXX_STANDARD 20)
-# set(CMAKE_CXX_STANDARD_REQUIRED true)
-# FetchContent_Declare(
-#         SFML
-#         GIT_REPOSITORY https://github.com/SFML/SFML.git
-#         GIT_TAG 2.5.1
-#         )
-# FetchContent_MakeAvailable(SFML)
-
-
-# cmake_minimum_required(VERSION 3.10)
-
-# include(FetchContent)
-
-# project(2DComputerGraphics)
-
-# set(CMAKE_CXX_STANDARD 17)
-
 set(SFML_VERSION "2.5.1")
 
 FetchContent_Declare(
@@ -171,8 +136,6 @@ endif()
 target_compile_options(server PRIVATE -ldl)
 
 include_directories(include src)
-# find_package(asio CONFIG REQUIRED)
-# target_link_libraries(server PRIVATE asio::asio)
 
 target_link_libraries(server
     PRIVATE
@@ -207,15 +170,6 @@ target_include_directories(ecs PRIVATE cxx_std_20)
 #                 src/Client/Game.cpp
 #         )
 include_directories(include src src/Client)
-# set(SFML_USE_STATIC_STD_LIBS TRUE)
-# find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
-# target_link_libraries(client PRIVATE sfml-audio
-#                 sfml-graphics
-#                 sfml-system
-#                 sfml-window
-        # )
-# target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-# target_compile_features(client PRIVATE cxx_std_20)
 
 add_executable(client
                 src/Client/Menu.cpp
@@ -226,7 +180,7 @@ add_executable(client
                 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
+# find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -244,8 +198,4 @@ if (WIN32)
 )
 endif()
 
-# target_link_libraries(client ${CMAKE_DL_LIBS})
-
 target_compile_options(client PRIVATE -Wall)
-# find_package(asio CONFIG REQUIRED)
-# target_link_libraries(client PRIVATE asio::asio)

@@ -61,51 +61,24 @@ void rtype::event::UpdatePositionEvent::handleEvent(registry &r, rtype::event::E
 void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
     try {
-
-        auto &player1_pla = r.get_components<component::Player>()[_ents.first];
+        auto &player1_h = r.get_components<component::Health>()[_ents.first];
 
         auto &player2_hurt = r.get_components<component::HurtsOnCollision>()[_ents.second];
-        player1_pla.value()._health -= player2_hurt.value().damage;
-        std::cout << "player1_pla : " << _ents.first << std::endl;
-        std::cout << "player1_pla : " << _ents.second << std::endl;
-        std::cout << "player1_pla : " << player2_hurt.value()._sender << std::endl;
-        if (player1_pla.value()._health <= 0) {
-            rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
-            if (listener.hasEvent(new_event))
-                delete new_event;
-            else
-                listener.addEvent(new_event);
-        }
-        player2_hurt->_pierce -= 1;
-        if (player2_hurt->_pierce <= 0) {
-            rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, -1);
-            if (listener.hasEvent(new_event))
-                delete new_event;
-            else
-                listener.addEvent(new_event);
-        }
-        return;
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity does affect player
-    }
+        auto &player2_d = r.get_components<component::Damage>()[_ents.second];
+        auto &player2_p = r.get_components<component::Pierce>()[_ents.second];
 
-    try {
-        auto &player2_pla = r.get_components<component::Player>()[_ents.second];
-
-        auto &player1_hurt = r.get_components<component::HurtsOnCollision>()[_ents.first];
-
-        if (player1_hurt.has_value() && player2_pla.has_value()) {
-            player2_pla.value()._health -= player1_hurt.value().damage;
-            if (player2_pla.value()._health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(player1_hurt.value()._sender, _ents.second);
+        if (player1_h.has_value() && player2_hurt.has_value()
+            && player2_d.has_value()) {
+            player1_h->_health -= player2_d->_damage;
+            if (player1_h->_health <= 0) {
+                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
                     listener.addEvent(new_event);
             }
-            player1_hurt->_pierce -= 1;
-            if (player1_hurt->_pierce <= 0) {
+            player2_p->_pierce -= 1;
+            if (player2_p->_pierce <= 0) {
                 rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, -1);
                 if (listener.hasEvent(new_event))
                     delete new_event;
@@ -115,7 +88,39 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
         }
         return;
     } catch (const std::exception &e) {
-        std::cout << e.what() << std::endl;
+        e.what();
+        //? ignore -> entity does affect player
+    }
+
+    try {
+        auto &player1_hurt = r.get_components<component::HurtsOnCollision>()[_ents.first];
+        auto &player1_p = r.get_components<component::Pierce>()[_ents.first];
+        auto &player1_d = r.get_components<component::Damage>()[_ents.first];
+
+        auto &player2_h = r.get_components<component::Health>()[_ents.second];
+
+        if (player1_hurt.has_value() && player2_h.has_value()
+            && player1_p.has_value() && player1_d.has_value()) {
+            player2_h->_health -= player1_d->_damage;
+            if (player2_h->_health <= 0) {
+                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, player1_hurt->_sender);
+                if (listener.hasEvent(new_event))
+                    delete new_event;
+                else
+                    listener.addEvent(new_event);
+            }
+            player1_p->_pierce -= 1;
+            if (player1_p->_pierce <= 0) {
+                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, -1);
+                if (listener.hasEvent(new_event))
+                    delete new_event;
+                else
+                    listener.addEvent(new_event);
+            }
+        }
+        return;
+    } catch (const std::exception &e) {
+        e.what();
         //? ignore
     }
 }
@@ -124,21 +129,23 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
 {
     //! remove player
     try {
-        printf("ds try\n");
-        std::cout << _ents.first <<"," << _ents.second << std::endl;
         if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Player>(_ents.first);
+            r.remove_component<component::Health>(_ents.first);
+            r.remove_component<component::Score>(_ents.first);
+            r.remove_component<component::Controllable>(_ents.first);
+            r.remove_component<component::Scale>(_ents.first);
+            r.remove_component<component::Rotation>(_ents.first);
+            r.remove_component<component::ResetOnMove>(_ents.first);
+            r.remove_component<component::Damage>(_ents.first);
+            r.remove_component<component::Heading>(_ents.first);
             r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
             r.kill_entity(_ents.first);
-            auto &comp = r.get_components<component::Player>()[_ents.second];
+            auto &enemy_score = r.get_components<component::Score>()[_ents.second];
             std::cout << _ents.second << std::endl;
-            if (!comp.has_value())
-                return;
-            std::cout << "xp : " << comp.value()._xp <<  std::endl;
-            comp.value()._xp += 10;
-            std::cout << "xp : " << comp.value()._xp <<  std::endl;
+            if (enemy_score.has_value())
+                enemy_score->_score += 10;
         }
         return;
     } catch (const std::exception &e) {
@@ -158,13 +165,6 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
         e.what();
         //? ignore -> entity not a projectile
     }
-
-    try {
-        // TODO: get the shooter / entity and xp them
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> damager not a player
-    }
 }
 
 void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
@@ -175,18 +175,19 @@ void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListe
 void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
-    std::cout << "shoot=" << shot << std::endl;
 
     try {
-        auto player = r.get_components<component::Player>()[_ents.first];
-        auto player_pos = r.get_components<component::Position>()[_ents.first];
-        auto player_heading = r.get_components<component::Heading>()[_ents.first];
+        auto player_p = r.get_components<component::Position>()[_ents.first];
+        auto player_h = r.get_components<component::Heading>()[_ents.first];
+        auto player_d = r.get_components<component::Damage>()[_ents.first];
 
-        if (player_heading.has_value() && player_pos.has_value() && player.has_value()) {
-            r.add_component(shot, component::Position((player_pos->x + 100), (player_pos->y + 50)));
-            r.add_component(shot, component::HurtsOnCollision(200, _ents.first));
+        if (player_h.has_value() && player_p.has_value()
+            && player_d.has_value()) {
+            r.add_component(shot, component::Position((player_p->x + 200), (player_p->y + 30)));
+            r.add_component(shot, component::HurtsOnCollision(_ents.first));
+            r.add_component(shot, component::Damage(player_d->_damage));
             r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
-            if (player_heading->_rotation <= 180)
+            if (player_h->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
             else
                 r.add_component(shot, component::Velocity(-5.0f, 0.0f));
