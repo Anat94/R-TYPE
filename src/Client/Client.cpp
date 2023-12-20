@@ -5,14 +5,14 @@
 ** Client.cpp
 */
 
-#include "Client.hpp"
 #include <SFML/Graphics.hpp>
-#include "../Ecs/ZipperIterator.hpp"
-#include "../Ecs/Events.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include "../Ecs/ZipperIterator.hpp"
+#include "../Ecs/Events.hpp"
+#include "Client.hpp"
 
 bool can_read = true;
 std::mutex mtx;
@@ -23,34 +23,53 @@ auto position_system = [](sparse_array<component::Position> &pos, sparse_array<c
         if (p.has_value() && v.has_value()) {
             p->x += v->_dx;
             p->y += v->_dy;
-            if (v->_reset_on_move) {
-                v->_dx = 0;
-                v->_dy = 0;
-            }
         }
     }
 };
 
-// auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
-//     int first_ent_idx = 0;
-    // for (auto &&[v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
-    //     if (c.has_value() && v.has_value()) {
-    //         if (content.event->type == sf::Event::KeyPressed) {
-    //             if (content.event->key.code == sf::Keyboard::Up)
-    //                 v->_dy = -30;
-    //             if (content.event->key.code == sf::Keyboard::Down)
-    //                 v->_dy = 30;
-    //             if (content.event->key.code == sf::Keyboard::Left)
-    //                 v->_dx = -30;
-    //             if (content.event->key.code == sf::Keyboard::Right)
-    //                 v->_dx = 30;
-    //             if (content.event->key.code == sf::Keyboard::Space)
-    //                 listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
-    //         }
-    //     }
-    //     first_ent_idx++;
-    // }
-// };
+auto reset_on_move_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::ResetOnMove> &res, component::DrawableContent& _) {
+    for (auto &&[v, r] : zipper<sparse_array<component::Velocity>, sparse_array<component::ResetOnMove>>(vel, res)) {
+        if (v.has_value() && r.has_value()) {
+            v->_dx = 0;
+            v->_dy = 0;
+        }
+    }
+};
+
+auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
+    int first_ent_idx = 0;
+    for (auto &&[v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
+        if (c.has_value() && v.has_value()) {
+            if (content.event->type == sf::Event::KeyPressed) {
+                if (content.event->key.code == sf::Keyboard::Up)
+                    v->_dy = -30;
+                if (content.event->key.code == sf::Keyboard::Down)
+                    v->_dy = 30;
+                if (content.event->key.code == sf::Keyboard::Left)
+                    v->_dx = -30;
+                if (content.event->key.code == sf::Keyboard::Right)
+                    v->_dx = 30;
+                if (content.event->key.code == sf::Keyboard::Space)
+                    listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
+            }
+        }
+        first_ent_idx++;
+    }
+};
+
+auto scale_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca, component::DrawableContent& _) {
+    for (auto &&[d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
+        if (d.has_value() && s.has_value())
+            d->_sprite.setScale(s->_scale.first, s->_scale.second);
+    }
+};
+
+auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot, component::DrawableContent& _) {
+    for (auto &&[d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
+        if (d.has_value() && r.has_value())
+            d->_sprite.setRotation(r->_degrees);
+    }
+};
 
 auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
     can_read = false;
@@ -131,10 +150,13 @@ void Client::receive() {
             // std::cout << new_player << std::endl;
             std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
-            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
+            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::ResetOnMove());
             // _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
+            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Rotation(90));
             // _ecs.add_component(new_player, component::Player(100, 20));
             _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
             std::cout << "FINISHED CREATING\n";
@@ -157,50 +179,64 @@ Client::Client(std::string ip, int port, std::string username)
     _send_structure.id = 2;
     send_datas(_send_structure);
     // Define the systems
+    _ecs.register_component<component::Scale>();
+    _ecs.register_component<component::Score>();
+    _ecs.register_component<component::Damage>();
+    _ecs.register_component<component::Health>();
+    _ecs.register_component<component::Pierce>();
+    _ecs.register_component<component::Heading>();
     _ecs.register_component<component::Position>();
     _ecs.register_component<component::Velocity>();
     _ecs.register_component<component::Drawable>();
-    // _ecs.register_component<component::Controllable>();
-    _ecs.register_component<component::HurtsOnCollision>();
-    _ecs.register_component<component::Heading>();
-    _ecs.register_component<component::Player>();
+    _ecs.register_component<component::Rotation>();
     _ecs.register_component<component::PlayMusic>();
+    _ecs.register_component<component::ResetOnMove>();
     _ecs.register_component<component::ServerEntity>();
+    _ecs.register_component<component::Controllable>();
+    _ecs.register_component<component::HurtsOnCollision>();
     //Define the entities
     _background = _ecs.spawn_entity();
-    // _player = _ecs.spawn_entity();
-    // _enemy = _ecs.spawn_entity();
+    _player = _ecs.spawn_entity();
+    _enemy = _ecs.spawn_entity();
     // Define the components for background
-    _ecs.add_component(_background, component::Position(0.0f, 10.0f));
-    _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg", {1., 1.}));
+    _ecs.add_component(_background, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg"));
     // Define the components for player
-    // _ecs.add_component(_player, component::Position(150.0f, 400.0f));
-    // _ecs.add_component(_player, component::Velocity(0.0f, 0.0f, true));
-    // _ecs.add_component(_player, component::Controllable());
-    // _ecs.add_component(_player, component::Heading());
-    // _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png", {0.1, 0.1}, 90));
-    // _ecs.add_component(_player, component::Player(100, 20));
-    sf::Music music;
+    _ecs.add_component(_player, component::Position(150.0f, 400.0f));
+    _ecs.add_component(_player, component::Velocity(0.0f, 0.0f));
+    _ecs.add_component(_player, component::ResetOnMove());
+    _ecs.add_component(_player, component::Controllable());
+    _ecs.add_component(_player, component::Heading());
+    _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png"));
+    _ecs.add_component(_player, component::Scale(0.1));
+    _ecs.add_component(_player, component::Rotation(90));
+    _ecs.add_component(_player, component::Health(100));
+    _ecs.add_component(_player, component::Damage(20));
+    _ecs.add_component(_player, component::Score());
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
 
     // Define the components for ennemy
-    // _ecs.add_component(_enemy,  component::Position(700.0f, 500.0f));
-    // _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
-    // _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png", {0.1, 0.1}));
-    // _ecs.add_component(_enemy, component::Player(100, 20));
+    _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
+    _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
+    _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png"));
+    _ecs.add_component(_enemy, component::Scale(0.1));
+    _ecs.add_component(_enemy, component::Health(100));
+    _ecs.add_component(_enemy, component::Damage(20));
 
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
     // Define the component
+    _ecs.add_system<component::Velocity, component::Controllable>(control_system);
     _ecs.add_system<component::Position, component::Velocity>(position_system);
-    // _ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    _ecs.add_system<component::Drawable, component::Position>(draw_system);
+    _ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
     _ecs.add_system<component::Drawable, component::Position>(collision_system);
+    _ecs.add_system<component::Drawable, component::Scale>(scale_system);
+    _ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
+    _ecs.add_system<component::Drawable, component::Position>(draw_system);
     //Define the gameplay
-    // auto &player1 = _ecs.get_components<component::Player>()[_player];
     _score = 0;
     _lives = 0; // player1.value()._health;
     _level = 1;
@@ -218,15 +254,16 @@ Client::Client(std::string ip, int port, std::string username)
 Client::~Client()
 {
     _font.~Font();
+    _music.stop();
 }
 
 void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
     entity_t _newEnemy = _ecs.spawn_entity();
 
-    _ecs.add_component(_newEnemy,  component::Position(pos.first, pos.second));
+    _ecs.add_component(_newEnemy, component::Position(pos.first, pos.second));
     _ecs.add_component(_newEnemy, component::Velocity(vel.first, vel.second));
-    _ecs.add_component(_newEnemy, component::Drawable(path_to_texture, {scale.first, scale.second}));
-    _ecs.add_component(_newEnemy, component::Player(health, damage));
+    _ecs.add_component(_newEnemy, component::Drawable(path_to_texture));
+    _ecs.add_component(_newEnemy, component::Health(health));
 
     _enemiesQueue.push(_newEnemy);
 }
@@ -320,11 +357,12 @@ int Client::run()
     std::thread receiveThread(&Client::receive, this);
     _music.setVolume(25);
     while (true) {
-        // auto &player1 = _ecs.get_components<component::Player>()[_player];
-        _lives = 1;//player1.value()._health;
-        _score = 0; //player1.value()._xp;
+        auto &player1_h = _ecs.get_components<component::Health>()[_player];
+        auto &player1_s = _ecs.get_components<component::Score>()[_player];
+        _lives = ((player1_h.has_value()) ? (player1_h->_health) : (0));
+        _score = ((player1_s.has_value()) ? (player1_s->_score) : (0));
         _score_text.setString("Score: " + std::to_string(_score));
-        _lives_text.setString("Score: " + std::to_string(_lives));
+        _lives_text.setString("Health: " + std::to_string(_lives));
         _lives_text.setPosition(1750, 10);
         _window.clear();
         manageEvent();
