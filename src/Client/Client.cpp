@@ -57,11 +57,13 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
     std::lock_guard<std::mutex> lock(mtx);
     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (d.has_value() && p.has_value()) {
+            //std::cout << "HAS VALUE\n";
             d->set();
             d->_sprite.setPosition(p->x, p->y);
             content.window->draw(d->_sprite);
         }
     }
+    //std::cout << "HAS VALUE\n";
     can_read = true;
 };
 
@@ -155,6 +157,7 @@ void Client::receive()
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
     ConfirmationMessage to_send;
+    std::cout << "RECEIVED PACKET NUMBER:" << packet_id << std::endl;
     to_send.id = 5;
     to_send.packet_id = packet_id;
     send_to_server(to_send);

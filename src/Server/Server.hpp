@@ -11,6 +11,8 @@
     #include "../Ecs/Events.hpp"
     #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
+    #include <thread>
+    #include <chrono>
     #include <array>
     #include <boost/asio.hpp>
     #include <SFML/Window.hpp>
@@ -22,6 +24,10 @@ using boost::asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
+};
+
+struct ConfirmationMessage: public BaseMessage {
+    int packet_id;
 };
 
 struct SnapshotPosition: public BaseMessage {
@@ -56,11 +62,11 @@ class Server {
         void recieve_disconnection_event(std::vector<char> &, entity_t);
         void recieve_packet_confirm(std::vector<char> &, entity_t);
         template <typename T>
-        void receive_datas(T& structure);
-        template <typename T>
         void send_data_to_all_clients(T& structure);
+        void sendPositionPackagesPeriodically();
 
     private:
+        std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
         boost::asio::io_service::work _service;
         udp::endpoint _remote_endpoint;
@@ -76,6 +82,7 @@ class Server {
             {5, &Server::recieve_packet_confirm}
         };
 
+        std::thread _send_thread;
 };
 
 #endif // SERVER_HPP

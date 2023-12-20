@@ -6,8 +6,8 @@
 */
 
 #include "Server.hpp"
-#include <iostream>
-#include <thread>
+
+bool can_mod = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
 {
@@ -24,11 +24,12 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
     return {0, 0};
 }
 
-Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener)
+Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
     _tpool.emplace_back([this, &service]() { service.run(); });
     recieve_from_client();
 }
+
 
 entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoint)
 {
@@ -97,7 +98,7 @@ void Server::recieve_from_client()
     if (player_entity == -1) {
         player_entity = connect_player(_remote_endpoint);
     }
-    std::cout << baseMsg->id << std::endl;
+    std::cout << "message id: " << baseMsg->id << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
@@ -105,7 +106,17 @@ void Server::recieve_from_client()
 }
 
 void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
-    static_cast<void>(client_msg);
+    ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
+    int id = confirmMsg->packet_id;
+
+    while (!can_mod) continue;
+    _position_packages.erase(
+        std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const SnapshotPosition& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _position_packages.end()
+    );
 }
 
 void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
@@ -129,7 +140,10 @@ void Server::recieve_disconnection_event(std::vector<char> &client_msg, entity_t
     _ecs.kill_entity(player_entity);
 }
 
-Server::~Server() {}
+Server::~Server() {
+    if (_send_thread.joinable())
+        _send_thread.join();
+}
 
 template <typename T>
 void Server::send_data_to_all_clients(T& structure) {
@@ -138,7 +152,24 @@ void Server::send_data_to_all_clients(T& structure) {
         if (all_endpoints[i].has_value()) {
             structure.packet_id = _packet_id;
             _packet_id += 1;
+            while (!can_mod) continue;
+            _position_packages.push_back(structure);
             _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
+    }
+}
+
+void Server::sendPositionPackagesPeriodically() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        can_mod = false;
+        for (auto& snapshot : _position_packages) {
+            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+            for (size_t i = 0; i < all_endpoints.size(); i++) {
+                if (all_endpoints[i].has_value())
+                    _socket.send_to(boost::asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            }
+        }
+        can_mod = true;
     }
 }
