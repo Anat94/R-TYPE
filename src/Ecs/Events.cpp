@@ -163,16 +163,19 @@ void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListe
     entity_t shot = r.spawn_entity();
 
     try {
+        auto player_hit = r.get_components<component::Hitbox>()[_ents.first];
         auto player_p = r.get_components<component::Position>()[_ents.first];
         auto player_h = r.get_components<component::Heading>()[_ents.first];
         auto player_d = r.get_components<component::Damage>()[_ents.first];
 
-        if (player_h.has_value() && player_p.has_value()
-            && player_d.has_value()) {
-            r.add_component(shot, component::Position((player_p->x + 200), (player_p->y + 30)));
+        if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value()) {
+            component::Position top_left = component::Position(((player_p->x + player_hit->_top_right.x) + 1), (player_p->y + ((player_hit->_bottom_right.y - player_hit->_top_right.y) / 2)));
+            std::cout << "shot at: " << top_left.x << ", " << top_left.y << std::endl;
+            r.add_component(shot, component::Position(top_left.x, top_left.y));
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
-            r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
+            r.add_component(shot, component::Drawable("temp/assets/textures/sprites/Hobbit-Idle1.png"));
+            r.add_component(shot, component::Hitbox(component::Position(0, 0), component::Position(64, 64)));
             if (player_h->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
             else

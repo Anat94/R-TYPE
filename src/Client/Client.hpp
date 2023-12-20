@@ -72,7 +72,7 @@ class Client {
         void increaseLives() { _lives++; }
         void setLevel(int level) { _level = level; }
         bool hasPendingMessages() const;
-        void manageEvent();
+        int manageEvent();
         void saveHighScore();
         void receive();
 

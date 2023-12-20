@@ -45,6 +45,9 @@ namespace component {
          * 
         */
         Position(float _x, float _y) : x(_x), y(_y) {};
+        bool operator==(const Position& other) const {
+            return x == other.x && y == other.y;
+        }
         bool operator==(const Position& other) { return x == other.x && y == other.y; };
     };
     
@@ -96,6 +99,38 @@ namespace component {
             _top_right(Position(bottom_right.x, top_left.y)),
             _bottom_left(Position(top_left.x, bottom_right.y))
         {};
+        bool isOverlap(float p1, float q1, float p2, float q2) {
+            return (p1 < q2) && (q1 > p2);
+        }
+        bool isTouching(const Hitbox &other) {
+            return (_bottom_right.x >= other._top_left.x && _top_left.x <= other._bottom_right.x) &&
+                (_bottom_right.y >= other._top_left.y && _top_left.y <= other._bottom_right.y);
+        };
+        Hitbox update(const Position &pos) {
+            Hitbox new_one = *this;
+            new_one._top_left.x += pos.x;
+            new_one._top_left.y += pos.y;
+            new_one._top_right.x += pos.x;
+            new_one._top_right.y += pos.y;
+            new_one._bottom_left.x += pos.x;
+            new_one._bottom_left.y += pos.y;
+            new_one._bottom_right.x += pos.x;
+            new_one._bottom_right.y += pos.y;
+            return new_one;
+        };
+        friend std::ostream& operator<<(std::ostream& os, const Hitbox& hitbox) {
+            os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
+            os << "Top Right: (" << hitbox._top_right.x << ", " << hitbox._top_right.y << "), ";
+            os << "Bottom Left: (" << hitbox._bottom_left.x << ", " << hitbox._bottom_left.y << "), ";
+            os << "Bottom Right: (" << hitbox._bottom_right.x << ", " << hitbox._bottom_right.y << ")";
+            return os;
+        };
+        bool operator==(const Hitbox& other) const {
+          return _top_left == other._top_left &&
+                 _top_right == other._top_right &&
+                 _bottom_left == other._bottom_left &&
+                 _bottom_right == other._bottom_right;
+        };
     };
 
     /**
