@@ -216,33 +216,33 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::HurtsOnCollision>();
     //Define the entities
     _background = _ecs.spawn_entity();
-    _player = _ecs.spawn_entity();
-    _enemy = _ecs.spawn_entity();
+    // _player = _ecs.spawn_entity();
+    // _enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg"));
     // Define the components for player
-    _ecs.add_component(_player, component::Position(150.0f, 400.0f));
-    _ecs.add_component(_player, component::Velocity(0.0f, 0.0f));
-    _ecs.add_component(_player, component::ResetOnMove());
-    _ecs.add_component(_player, component::Controllable());
-    _ecs.add_component(_player, component::Heading());
-    _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png"));
-    _ecs.add_component(_player, component::Scale(0.1));
-    _ecs.add_component(_player, component::Rotation(90));
-    _ecs.add_component(_player, component::Health(100));
-    _ecs.add_component(_player, component::Damage(20));
-    _ecs.add_component(_player, component::Score());
+    // _ecs.add_component(_player, component::Position(150.0f, 400.0f));
+    // _ecs.add_component(_player, component::Velocity(0.0f, 0.0f));
+    // _ecs.add_component(_player, component::ResetOnMove());
+    // _ecs.add_component(_player, component::Controllable());
+    // _ecs.add_component(_player, component::Heading());
+    // _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png"));
+    // _ecs.add_component(_player, component::Scale(0.1));
+    // _ecs.add_component(_player, component::Rotation(90));
+    // _ecs.add_component(_player, component::Health(100));
+    // _ecs.add_component(_player, component::Damage(20));
+    // _ecs.add_component(_player, component::Score());
     if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
         throw SFMLError("Music not found");
 
     // Define the components for ennemy
-    _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
-    _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
-    _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png"));
-    _ecs.add_component(_enemy, component::Scale(0.1));
-    _ecs.add_component(_enemy, component::Health(100));
-    _ecs.add_component(_enemy, component::Damage(20));
+    // _ecs.add_component(_enemy, component::Position(700.0f, 500.0f));
+    // _ecs.add_component(_enemy, component::Velocity(0.0f, 0.0f));
+    // _ecs.add_component(_enemy, component::Drawable("src/Client/assets/ennemy.png"));
+    // _ecs.add_component(_enemy, component::Scale(0.1));
+    // _ecs.add_component(_enemy, component::Health(100));
+    // _ecs.add_component(_enemy, component::Damage(20));
 
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
@@ -377,10 +377,10 @@ int Client::run()
     std::thread receiveThread(&Client::receive, this);
     _music.setVolume(25);
     while (true) {
-        auto &player1_h = _ecs.get_components<component::Health>()[_player];
-        auto &player1_s = _ecs.get_components<component::Score>()[_player];
-        _lives = ((player1_h.has_value()) ? (player1_h->_health) : (0));
-        _score = ((player1_s.has_value()) ? (player1_s->_score) : (0));
+        // auto &player1_h = _ecs.get_components<component::Health>()[_player];
+        // auto &player1_s = _ecs.get_components<component::Score>()[_player];
+        _lives = 0;// ((player1_h.has_value()) ? (player1_h->_health) : (0));
+        _score = 0; //((player1_s.has_value()) ? (player1_s->_score) : (0));
         _score_text.setString("Score: " + std::to_string(_score));
         _lives_text.setString("Health: " + std::to_string(_lives));
         _lives_text.setPosition(1750, 10);

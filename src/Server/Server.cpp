@@ -48,10 +48,16 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-    _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f, true));
-    _ecs.add_component(new_player, component::Player(100, 20));
+    _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
+    _ecs.add_component(new_player, component::ResetOnMove());
+    _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
+    _ecs.add_component(new_player, component::Scale(0.1));
+    _ecs.add_component(new_player, component::Rotation(90));
+    _ecs.add_component(new_player, component::Health(100));
+    _ecs.add_component(new_player, component::Damage(20));
+    _ecs.add_component(new_player, component::Score());
     std::cout << "New player connected !" << std::endl;
     return new_player;
 }

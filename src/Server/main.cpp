@@ -21,15 +21,21 @@ int error_handling(int nb_args)
     return 0;
 }
 
+
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
     for (auto &&[p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
         if (p.has_value() && v.has_value()) {
             p->x += v->_dx;
             p->y += v->_dy;
-            if (v->_reset_on_move) {
-                v->_dx = 0;
-                v->_dy = 0;
-            }
+        }
+    }
+};
+
+auto reset_on_move_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::ResetOnMove> &res, component::DrawableContent& _) {
+    for (auto &&[v, r] : zipper<sparse_array<component::Velocity>, sparse_array<component::ResetOnMove>>(vel, res)) {
+        if (v.has_value() && r.has_value()) {
+            v->_dx = 0;
+            v->_dy = 0;
         }
     }
 };
@@ -40,13 +46,13 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
         if (c.has_value() && v.has_value()) {
             if (content.event->type == sf::Event::KeyPressed) {
                 if (content.event->key.code == sf::Keyboard::Up)
-                    v->_dy = -5;
+                    v->_dy = -30;
                 if (content.event->key.code == sf::Keyboard::Down)
-                    v->_dy = 5;
+                    v->_dy = 30;
                 if (content.event->key.code == sf::Keyboard::Left)
-                    v->_dx = -5;
+                    v->_dx = -30;
                 if (content.event->key.code == sf::Keyboard::Right)
-                    v->_dx = 5;
+                    v->_dx = 30;
                 if (content.event->key.code == sf::Keyboard::Space)
                     listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
             }
@@ -55,15 +61,19 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
     }
 };
 
-// auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& content) {
-//     for (auto &&[d, p] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-//         if (d.has_value() && p.has_value()) {
-//             d->set();
-//             d->_sprite.setPosition(p->x, p->y);
-//             content.window->draw(d->_sprite);
-//         }
-//     }
-// };
+auto scale_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca, component::DrawableContent& _) {
+    for (auto &&[d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
+        if (d.has_value() && s.has_value())
+            d->_sprite.setScale(s->_scale.first, s->_scale.second);
+    }
+};
+
+auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot, component::DrawableContent& _) {
+    for (auto &&[d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
+        if (d.has_value() && r.has_value())
+            d->_sprite.setRotation(r->_degrees);
+    }
+};
 
 auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
 {
@@ -82,7 +92,7 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
                 p2->y <= p1->y &&
                 (p2->x + 100) >= p1->x &&
                 (p2->y + 100) >= p1->y)) {
-                rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
                 if (listener.hasEvent(new_event)) {
                     second_ent_idx++;
                     delete new_event;
@@ -122,13 +132,21 @@ int main(int argc, char *argv[]) {
     // _sprite.setTexture(_texture);
     // _sprite.setPosition(100, 100);
 
+    ecs.register_component<component::Scale>();
+    ecs.register_component<component::Score>();
+    ecs.register_component<component::Damage>();
+    ecs.register_component<component::Health>();
+    ecs.register_component<component::Pierce>();
+    ecs.register_component<component::Heading>();
     ecs.register_component<component::Position>();
     ecs.register_component<component::Velocity>();
     ecs.register_component<component::Drawable>();
+    ecs.register_component<component::Rotation>();
+    ecs.register_component<component::PlayMusic>();
+    ecs.register_component<component::ResetOnMove>();
+    ecs.register_component<component::ServerEntity>();
     ecs.register_component<component::Controllable>();
     ecs.register_component<component::HurtsOnCollision>();
-    ecs.register_component<component::Heading>();
-    ecs.register_component<component::Player>();
     ecs.register_component<component::Endpoint>();
 
     // entity_t entity1 = ecs.spawn_entity();
@@ -150,10 +168,12 @@ int main(int argc, char *argv[]) {
 
     listener.addRegistry(ecs);
 
-    ecs.add_system<component::Position, component::Velocity>(position_system);
     ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    // ecs.add_system<component::Drawable, component::Position>(draw_system);
+    ecs.add_system<component::Position, component::Velocity>(position_system);
+    ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
     ecs.add_system<component::Drawable, component::Position>(collision_system);
+    ecs.add_system<component::Drawable, component::Scale>(scale_system);
+    ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 
     error_handling(argc);
     std::thread serverThread([&]() {
