@@ -9,9 +9,19 @@
 #include <iostream>
 #include <thread>
 
-std::pair<int, int> get_position_change_for_event(sf::Event::EventType evtType)
+std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
 {
-    return {5, 5};
+    if (event.key.code == sf::Keyboard::Up)
+        return {0, -30};
+    if (event.key.code == sf::Keyboard::Down)
+        return {0, 30};
+    if (event.key.code == sf::Keyboard::Left)
+        return {-30, 0};
+    if (event.key.code == sf::Keyboard::Right)
+        return {30, 0};
+    if (event.key.code == sf::Keyboard::Space)
+        _listener.addEvent(new rtype::event::ShootEvent(entity, -1));
+    return {0, 0};
 }
 
 Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener)
@@ -67,9 +77,14 @@ void Server::recieve_from_client()
     }
     if (structure.id == 1) {
         std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-        _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(structure.eventType)));
-        snapshot_position snap_p = {4, convert_to_map(_ecs.get_components<component::Position>())};
-        send_data_to_all_clients<snapshot_position>(snap_p);
+        _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, structure.event)));
+        sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+        for (size_t i = 0; i < pos.size(); i++) {
+            if (pos[i].has_value()) {
+                snapshot_position snap_p = {4, i, component::Position(pos[i].value().x, pos[i].value().y)};
+                send_data_to_all_clients<snapshot_position>(snap_p);
+            }
+        }
         // snapshot_velocity snap_v = {5, _ecs.get_components<component::Velocity>()};
         // send_data_to_all_clients<snapshot_velocity>(snap_v);
         // snapshot_player snap_pl = {6, _ecs.get_components<component::Player>()};
@@ -77,16 +92,21 @@ void Server::recieve_from_client()
     }
     if (structure.id == 3)
         _ecs.kill_entity(player_entity);
+    if (structure.id == 5)
+        std::cout << structure.package_id << std::endl;
+
     recieve_from_client();
 }
 
 Server::~Server() {}
 
 template <typename T>
-void Server::send_data_to_all_clients(const T& structure) {
+void Server::send_data_to_all_clients(T& structure) {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value()) {
+            structure.package_id = _package_id;
+            _package_id += 1;
             _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
