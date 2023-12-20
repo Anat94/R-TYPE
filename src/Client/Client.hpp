@@ -17,18 +17,22 @@
 #include "../Ecs/Events.hpp"
 #include "../Errors.hpp"
 #include <queue>
+#include <mutex>
 
 using boost::asio::ip::udp;
 
 struct data_struct {
     int id;
-    sf::Event::EventType eventType;
+    sf::Event event;
+    int package_id;
+
 };
 
 struct snapshot_position {
     int id;
     entity_t entity;
     component::Position data;
+    int package_id;
 
     snapshot_position(): data(0, 0) {};
 };
@@ -38,9 +42,9 @@ struct snapshot_velocity {
     sparse_array<component::Velocity> data;
 };
 
-struct snapshot_player {
+struct snapshot_health {
     int id;
-    sparse_array<component::Player> data;
+    sparse_array<component::Health> data;
 };
 
 enum Stage {
