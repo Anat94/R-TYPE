@@ -11,7 +11,7 @@
 #include "Client.hpp"
 #include "Menu.hpp"
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 int main(int argc, char** argv) {
     std::string tmp_username;

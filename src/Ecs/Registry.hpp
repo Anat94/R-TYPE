@@ -18,7 +18,7 @@
 #include <SFML/Audio.hpp>
 #include <boost/asio.hpp>
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 using entity_t = size_t;
 

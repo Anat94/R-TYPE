@@ -81,26 +81,6 @@ elseif(WIN32)
         )
 endif()
 
-# Install boost
-
-if (WIN32)
-        set(BOOST_INCLUDE_LIBRARIES thread filesystem system asio program_options)
-        set(BOOST_ENABLE_CMAKE ON)
-
-        message(STATUS "Downloading and extracting boost library sources. This will take some time...")
-        include(FetchContent)
-        Set(FETCHCONTENT_QUIET FALSE)
-        FetchContent_Declare(
-                Boost
-                URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z
-                USES_TERMINAL_DOWNLOAD TRUE
-                GIT_PROGRESS TRUE
-                DOWNLOAD_NO_EXTRACT FALSE
-                DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-        )
-        FetchContent_MakeAvailable(Boost)
-endif()
-
 # Install sfml
 
 set(SFML_VERSION "2.5.1")
@@ -145,15 +125,15 @@ target_link_libraries(server
         sfml-window
 )
 
-if (WIN32)
-        target_link_libraries(server
-        PRIVATE
-        Boost::asio
-        Boost::filesystem
-        Boost::thread
-        Boost::program_options
-        )
-endif()
+# if (WIN32)
+#         target_link_libraries(server
+#         PRIVATE
+#         Boost::asio
+#         Boost::filesystem
+#         Boost::thread
+#         Boost::program_options
+#         )
+# endif()
 target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
@@ -188,14 +168,14 @@ target_link_libraries(client
         sfml-system
         sfml-window
 )
-if (WIN32)
-        target_link_libraries(client
-        PRIVATE
-        Boost::asio
-        Boost::filesystem
-        Boost::thread
-        Boost::program_options
-)
-endif()
+# if (WIN32)
+#         target_link_libraries(client
+#         PRIVATE
+#         Boost::asio
+#         Boost::filesystem
+#         Boost::thread
+#         Boost::program_options
+# )
+# endif()
 
 target_compile_options(client PRIVATE -Wall)

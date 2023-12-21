@@ -20,7 +20,7 @@
     #include <SFML/System.hpp>
     #include <functional>
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
@@ -49,7 +49,7 @@ struct EventMessage: public BaseMessage {
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
+        Server(asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -68,7 +68,7 @@ class Server {
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
-        boost::asio::io_service::work _service;
+        asio::io_service::work _service;
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
         udp::socket _socket;
