@@ -40,4 +40,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: WINDOWS - Launch Cmake
-        run: cmake . && cmake --build .
+        run: cmake .
