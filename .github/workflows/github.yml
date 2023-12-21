@@ -21,6 +21,8 @@ jobs:
           sudo apt-get install libopenal-dev
           sudo apt-get install libvorbis-dev
           sudo apt-get install libflac-dev
+          sudo apt-get install libxinerama-dev
+
 
       - name: LINUX - Launch Cmake & make
         run:  cmake . && cmake --build .

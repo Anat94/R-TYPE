@@ -120,6 +120,21 @@ endif()
 
 message("Après le DL")
 
+# Install raylib
+
+set(RAYLIB_VERSION "master")
+set(FETCHCONTENT_QUIET FALSE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_GAMES    OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+    raylib
+    GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
+    GIT_TAG       "${RAYLIB_VERSION}"
+    GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(raylib)
+
 # COMPILATION FOR SERVER
 
 add_executable(server
@@ -165,10 +180,6 @@ target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
 
-# add_executable(client
-#                 src/Client/main.cpp
-#                 src/Client/Game.cpp
-#         )
 include_directories(include src src/Client)
 
 add_executable(client
@@ -179,8 +190,10 @@ add_executable(client
                 src/Client/Button.cpp
                 )
 target_include_directories(client PRIVATE cxx_std_20)
+
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-# find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
+#! Uncomment raylib to use it and comment sfml
+# target_link_libraries(client PRIVATE raylib)
 target_link_libraries(client
     PRIVATE
         sfml-audio
