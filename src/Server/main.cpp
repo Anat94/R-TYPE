@@ -23,7 +23,7 @@ int error_handling(int nb_args)
 
 
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
-    for (auto &&[p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
+    for (auto &&[_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
         if (p.has_value() && v.has_value()) {
             p->x += v->_dx;
             p->y += v->_dy;
@@ -32,7 +32,7 @@ auto position_system = [](sparse_array<component::Position> &pos, sparse_array<c
 };
 
 auto reset_on_move_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::ResetOnMove> &res, component::DrawableContent& _) {
-    for (auto &&[v, r] : zipper<sparse_array<component::Velocity>, sparse_array<component::ResetOnMove>>(vel, res)) {
+    for (auto &&[_, v, r] : zipper<sparse_array<component::Velocity>, sparse_array<component::ResetOnMove>>(vel, res)) {
         if (v.has_value() && r.has_value()) {
             v->_dx = 0;
             v->_dy = 0;
@@ -41,8 +41,7 @@ auto reset_on_move_system = [](sparse_array<component::Velocity> &vel, sparse_ar
 };
 
 auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
-    int first_ent_idx = 0;
-    for (auto &&[v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
+    for (auto &&[first_ent_idx, v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
         if (c.has_value() && v.has_value()) {
             if (content.event->type == sf::Event::KeyPressed) {
                 if (content.event->key.code == sf::Keyboard::Up)
@@ -57,19 +56,18 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
                     listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
             }
         }
-        first_ent_idx++;
     }
 };
 
 auto scale_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca, component::DrawableContent& _) {
-    for (auto &&[d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
+    for (auto &&[_, d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
         if (d.has_value() && s.has_value())
             d->_sprite.setScale(s->_scale.first, s->_scale.second);
     }
 };
 
 auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot, component::DrawableContent& _) {
-    for (auto &&[d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
+    for (auto &&[_, d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
         if (d.has_value() && r.has_value())
             d->_sprite.setRotation(r->_degrees);
     }
@@ -77,11 +75,9 @@ auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<c
 
 auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
 {
-    int first_ent_idx = 0;
-    for (auto &&[d1, p1] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
+    for (auto &&[first_ent_idx, d1, p1] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
         if (!d1.has_value() || !p1.has_value()) continue;
-        int second_ent_idx = 0;
-        for (auto &&[d2, p2] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
+        for (auto &&[second_ent_idx, d2, p2] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
             if (first_ent_idx == second_ent_idx)
                 continue;
             if ((p1->x <= p2->x &&
@@ -102,14 +98,12 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
             } else {
 
             }
-            second_ent_idx++;
         }
-        first_ent_idx++;
     }
 };
 
 void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
-    for (auto&& [p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
+    for (auto&& [_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
         std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
             << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
     }
