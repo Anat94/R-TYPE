@@ -18,33 +18,33 @@
 #include "../Errors.hpp"
 #include <queue>
 #include <mutex>
+#define MAX_BUF_SIZE 11024
 
 using boost::asio::ip::udp;
 
-struct data_struct {
-    int id;
-    sf::Event event;
-    int package_id;
-
+struct BaseMessage {
+    int16_t id;
 };
 
-struct snapshot_position {
-    int id;
+struct SnapshotPosition: public BaseMessage {
     entity_t entity;
     component::Position data;
-    int package_id;
+    int packet_id;
 
-    snapshot_position(): data(0, 0) {};
+    SnapshotPosition(): data(0, 0) {};
+    SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
+    entity(entity_),  data(data_), packet_id(packet_id_) {
+        id = id_;
+    };
 };
 
-struct snapshot_velocity {
-    int id;
-    sparse_array<component::Velocity> data;
+struct ConfirmationMessage: public BaseMessage {
+    int packet_id;
 };
 
-struct snapshot_health {
-    int id;
-    sparse_array<component::Health> data;
+struct EventMessage: public BaseMessage {
+    sf::Event event;
+    int packet_id;
 };
 
 enum Stage {
@@ -54,12 +54,13 @@ enum Stage {
 };
 
 class Client {
+    typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
         Client(std::string ip, int port, std::string _username);
         ~Client();
         int run();
         template <typename T>
-        void send_datas(const T& structure);
+        void send_to_server(const T& structure);
 
         template <typename T>
         void receive_datas(T& structure);
@@ -71,10 +72,11 @@ class Client {
         void decreaseLives() { _lives--; }
         void increaseLives() { _lives++; }
         void setLevel(int level) { _level = level; }
-        bool hasPendingMessages() const;
         void manageEvent();
         void saveHighScore();
         void receive();
+        int recieve_position_snapshot_update(std::vector<char> &);
+        std::vector<char> recieve_raw_data_from_client();
 
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
@@ -84,8 +86,8 @@ class Client {
         boost::asio::io_context _io_context;
         udp::endpoint _server_endpoint;
         udp::socket _socket;
-        data_struct _send_structure;
-        snapshot_position _recieve_structure;
+        EventMessage _send_structure;
+        SnapshotPosition _recieve_structure;
         std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
@@ -132,6 +134,9 @@ class Client {
         Stage _stage;
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
+        std::map<int16_t, messageParserHandle> _messageParser = {
+            {4, &Client::recieve_position_snapshot_update}
+        };
 };
 
 #endif // CLIENT_HPP

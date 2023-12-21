@@ -5,6 +5,8 @@
 ** Registry
 */
 
+#include "./SparseArray.hpp"
+#include "../Errors.hpp"
 #include <unordered_map>
 #include <functional>
 #include <typeindex>
@@ -12,10 +14,11 @@
 #include <iostream>
 #include <any>
 #include <SFML/Graphics.hpp>
-#include "./SparseArray.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "../Errors.hpp"
+#include <boost/asio.hpp>
+
+using boost::asio::ip::udp;
 
 using entity_t = size_t;
 
@@ -292,12 +295,31 @@ namespace component {
     };
 
     /**
+     * @brief endpoint system structure
+     * 
+     */
+    struct Endpoint {
+        /**
+         * @brief endpoint associated to the entity
+         * 
+         */
+        udp::endpoint _endpoint;
+        /**
+         * @brief endpoint constructor
+         * 
+         */
+        Endpoint(udp::endpoint endpoint) : _endpoint(endpoint) {};
+        bool operator==(const udp::endpoint other) { return _endpoint == other; }
+    };
+
+    /**
      * @brief DrawableContent util structure
      * 
     */
     struct DrawableContent {
         sf::RenderWindow *window;
         sf::Event *event;
+        DrawableContent(sf::Event &_event) : window(nullptr), event(&_event) {};
         DrawableContent(sf::RenderWindow &_window, sf::Event &_event) : window(&_window), event(&_event) {};
     };
 
