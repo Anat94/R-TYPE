@@ -95,9 +95,10 @@ namespace component {
          * @param bottom_right the bottom right position of the hitbox to be set
          */
         Hitbox(const Position &top_left, const Position &bottom_right) :
-            _top_left(top_left), _bottom_right(bottom_right),
+            _top_left(top_left), 
             _top_right(Position(bottom_right.x, top_left.y)),
-            _bottom_left(Position(top_left.x, bottom_right.y))
+            _bottom_left(Position(top_left.x, bottom_right.y)),
+            _bottom_right(bottom_right)
         {};
         bool isOverlap(float p1, float q1, float p2, float q2) {
             return (p1 < q2) && (q1 > p2);
@@ -240,7 +241,7 @@ namespace component {
          * 
          * @param pierce The pierce number
          */
-        Pierce(int pierce) : _pierce(pierce) {};
+        Pierce(int pierce = 1) : _pierce(pierce) {};
     };
 
     /**

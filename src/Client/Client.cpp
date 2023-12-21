@@ -98,16 +98,13 @@ auto collision_system = [](sparse_array<component::Hitbox> &hit, sparse_array<co
             auto temp_h1 = h1->update(*p1);
             auto temp_h2 = h2->update(*p2);
             if (temp_h1.isTouching(temp_h2) || temp_h2.isTouching(temp_h1)) {
-                std::cout << "Collided for event !" << std::endl;
-                rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(first_ent_idx + 1, second_ent_idx);
                 if (listener.hasEvent(new_event)) {
                     second_ent_idx++;
                     delete new_event;
                     continue;
                 } else
                     listener.addEvent(new_event);
-            } else {
-
             }
             second_ent_idx++;
         }
@@ -156,7 +153,7 @@ void Client::receive() {
             _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
             std::cout << "FINISHED CREATING\n";
         }
-    } catch (std::exception ex) {
+    } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
     _send_structure.id = 5;
@@ -206,7 +203,7 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_component(_player, component::Drawable("src/Client/assets/ship.png"));
     _ecs.add_component(_player, component::Scale(0.1f));
     _ecs.add_component(_player, component::Rotation(90));
-    _ecs.add_component(_player, component::Health(100));
+    _ecs.add_component(_player, component::Health(20));
     _ecs.add_component(_player, component::Damage(20));
     _ecs.add_component(_player, component::Score());
     _ecs.add_component(_player, component::Hitbox(component::Position(0.0f, 0.0f), component::Position(118.4f, 118.4f)));
@@ -221,7 +218,6 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_component(_enemy, component::Health(1));
     _ecs.add_component(_enemy, component::Damage(20));
     _ecs.add_component(_enemy, component::Hitbox(component::Position(0.0f, 0.0f), component::Position(119.9f, 87.2f)));
-    std::cout << 700 << ", " << 500 << ", " << 700 + 119.9 << ", " << 500 + 87.2 << std::endl;
     // Define the window
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);

@@ -55,7 +55,7 @@ enum Stage {
 
 class Client {
     public:
-        Client(std::string ip, int port, std::string _username);
+        Client(std::string ip, int port, std::string _username = "");
         ~Client();
         int run();
         template <typename T>
@@ -79,11 +79,11 @@ class Client {
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
     private:
+        boost::asio::io_context _io_context;
+        udp::socket _socket;
+        udp::endpoint _server_endpoint;
         std::string _username;
         //Content for network
-        boost::asio::io_context _io_context;
-        udp::endpoint _server_endpoint;
-        udp::socket _socket;
         data_struct _send_structure;
         snapshot_position _recieve_structure;
         std::array<char, 1024> _receiveBuffer;

@@ -64,7 +64,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
                     listener.addEvent(new_event);
             }
             player2_p->_pierce -= 1;
-            if (player2_p->_pierce <= 0) {
+            if (player2_p->_pierce == 0) {
                 rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, -1);
                 if (listener.hasEvent(new_event))
                     delete new_event;
@@ -96,7 +96,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
                     listener.addEvent(new_event);
             }
             player1_p->_pierce -= 1;
-            if (player1_p->_pierce <= 0) {
+            if (player1_p->_pierce == 0) {
                 rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, -1);
                 if (listener.hasEvent(new_event))
                     delete new_event;
@@ -113,25 +113,47 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
 
 void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
 {
-    //! remove player
+    //! remove enemy
     try {
+        r.get_components<component::Controllable>()[_ents.first]; // see if the entity is the player
         if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Score>(_ents.first);
-            r.remove_component<component::Controllable>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Rotation>(_ents.first);
-            r.remove_component<component::ResetOnMove>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Heading>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
+            r.remove_component<component::Drawable>(_ents.first);
+            r.remove_component<component::Scale>(_ents.first);
+            r.remove_component<component::Health>(_ents.first);
+            r.remove_component<component::Damage>(_ents.first);
+            r.remove_component<component::Hitbox>(_ents.first);
             r.kill_entity(_ents.first);
-            auto &enemy_score = r.get_components<component::Score>()[_ents.second];
-            std::cout << _ents.second << std::endl;
-            if (enemy_score.has_value())
-                enemy_score->_score += 10;
+            auto &killer_score = r.get_components<component::Score>()[_ents.second];
+            if (killer_score.has_value())
+                killer_score->_score += 10;
+        }
+        return;
+    } catch (const std::exception &e) {
+        e.what();
+        //? ignore -> entity not a player
+    }
+
+    try {
+        r.get_components<component::Controllable>()[_ents.first]; // see if the entity is the player
+        if (r.entity_exists(_ents.first)) {
+            r.remove_component<component::Position>(_ents.first);
+            r.remove_component<component::Velocity>(_ents.first);
+            r.remove_component<component::ResetOnMove>(_ents.first);
+            r.remove_component<component::Controllable>(_ents.first);
+            r.remove_component<component::Heading>(_ents.first);
+            r.remove_component<component::Drawable>(_ents.first);
+            r.remove_component<component::Scale>(_ents.first);
+            r.remove_component<component::Rotation>(_ents.first);
+            r.remove_component<component::Health>(_ents.first);
+            r.remove_component<component::Damage>(_ents.first);
+            r.remove_component<component::Hitbox>(_ents.first);
+            r.remove_component<component::Hitbox>(_ents.first);
+            r.kill_entity(_ents.first);
+            auto &killer_score = r.get_components<component::Score>()[_ents.second];
+            if (killer_score.has_value())
+                killer_score->_score += 10;
         }
         return;
     } catch (const std::exception &e) {
@@ -170,12 +192,12 @@ void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListe
 
         if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value()) {
             component::Position top_left = component::Position(((player_p->x + player_hit->_top_right.x) + 1), (player_p->y + ((player_hit->_bottom_right.y - player_hit->_top_right.y) / 2)));
-            std::cout << "shot at: " << top_left.x << ", " << top_left.y << std::endl;
             r.add_component(shot, component::Position(top_left.x, top_left.y));
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
             r.add_component(shot, component::Drawable("temp/assets/textures/sprites/Hobbit-Idle1.png"));
             r.add_component(shot, component::Hitbox(component::Position(0, 0), component::Position(64, 64)));
+            r.add_component(shot, component::Pierce());
             if (player_h->_rotation <= 180)
                 r.add_component(shot, component::Velocity(5.0f, 0.0f));
             else
