@@ -17,7 +17,7 @@ include(FetchContent)
 
 FetchContent_Declare(asio
         GIT_REPOSITORY  https://github.com/chriskohlhoff/asio.git
-        GIT_TAG         "main"
+        # GIT_TAG         "main"
         GIT_SHALLOW     TRUE
         SOURCE_DIR      ${ASIO_CMAKE_ASIO_DEP_DIR}
 )
@@ -113,7 +113,6 @@ if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
 #set(MY_SERVER_LINK_FLAGS -ldl)
-# target_link_libraries(server )
 target_compile_options(server PRIVATE -ldl)
 
 include_directories(include src)
@@ -127,15 +126,6 @@ target_link_libraries(server
         asio
 )
 
-# if (WIN32)
-#         target_link_libraries(server
-#         PRIVATE
-#         Boost::asio
-#         Boost::filesystem
-#         Boost::thread
-#         Boost::program_options
-#         )
-# endif()
 target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
@@ -143,17 +133,11 @@ target_compile_features(server PRIVATE cxx_std_20)
 add_library(ecs STATIC
                 src/Ecs/Events.cpp
         )
-# #include asio to the ecs
-# target_include_directories(ecs PRIVATE ${asio_SOURCE_DIR}/asio/include)
 target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
 
-# add_executable(client
-#                 src/Client/main.cpp
-#                 src/Client/Game.cpp
-#         )
 include_directories(include src src/Client)
 
 add_executable(client
@@ -165,8 +149,6 @@ add_executable(client
                 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-# find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
-# target_link_libraries(client asio)
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -175,13 +157,4 @@ target_link_libraries(client
         sfml-window
         asio
 )
-# if (WIN32)
-#         target_link_libraries(client
-#         PRIVATE
-#         Boost::asio
-#         Boost::filesystem
-#         Boost::thread
-#         Boost::program_options
-# )
-# endif()
 target_compile_options(client PRIVATE -Wall)
