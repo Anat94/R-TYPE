@@ -17,6 +17,7 @@ include(FetchContent)
 
 FetchContent_Declare(asio
         GIT_REPOSITORY  https://github.com/chriskohlhoff/asio.git
+        GIT_TAG         "main"
         GIT_SHALLOW     TRUE
         SOURCE_DIR      ${ASIO_CMAKE_ASIO_DEP_DIR}
 )
@@ -27,8 +28,8 @@ if(NOT asio_POPULATED)
         message(STATUS "Fetching asio ${ASIO_CMAKE_ASIO_TAG}")
 
         if(EXISTS "${ASIO_CMAKE_ASIO_DEP_DIR}/asio")
-        set(FETCHCONTENT_SOURCE_DIR_ASIO ${ASIO_CMAKE_ASIO_DEP_DIR})
-        message(STATUS "asio ${ASIO_CMAKE_ASIO_TAG} source found at ${ASIO_CMAKE_ASIO_DEP_DIR}; skip fetching.")
+                set(FETCHCONTENT_SOURCE_DIR_ASIO ${ASIO_CMAKE_ASIO_DEP_DIR})
+                message(STATUS "asio ${ASIO_CMAKE_ASIO_TAG} source found at ${ASIO_CMAKE_ASIO_DEP_DIR}; skip fetching.")
         endif()
 
         FetchContent_Populate(asio)
@@ -112,7 +113,7 @@ if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
 #set(MY_SERVER_LINK_FLAGS -ldl)
-
+# target_link_libraries(server )
 target_compile_options(server PRIVATE -ldl)
 
 include_directories(include src)
@@ -123,6 +124,7 @@ target_link_libraries(server
         sfml-graphics
         sfml-system
         sfml-window
+        asio
 )
 
 # if (WIN32)
@@ -141,6 +143,9 @@ target_compile_features(server PRIVATE cxx_std_20)
 add_library(ecs STATIC
                 src/Ecs/Events.cpp
         )
+# #include asio to the ecs
+# target_include_directories(ecs PRIVATE ${asio_SOURCE_DIR}/asio/include)
+target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
@@ -161,12 +166,14 @@ add_executable(client
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 # find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
+# target_link_libraries(client asio)
 target_link_libraries(client
     PRIVATE
         sfml-audio
         sfml-graphics
         sfml-system
         sfml-window
+        asio
 )
 # if (WIN32)
 #         target_link_libraries(client
@@ -177,5 +184,4 @@ target_link_libraries(client
 #         Boost::program_options
 # )
 # endif()
-
 target_compile_options(client PRIVATE -Wall)

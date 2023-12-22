@@ -14,7 +14,7 @@
     #include <thread>
     #include <chrono>
     #include <array>
-    #include <boost/asio.hpp>
+    #include <asio.hpp>
     #include <SFML/Window.hpp>
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
@@ -49,7 +49,7 @@ struct EventMessage: public BaseMessage {
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
+        Server(asio::io_context& service, int port, registry& ecs, rtype::event::EventListener& listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -68,12 +68,13 @@ class Server {
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
-        asio::io_service::work _service;
+        // asio::io_service &_service;
+        asio::io_context &_service;
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
-        udp::socket _socket;
         registry &_ecs;
         rtype::event::EventListener &_listener;
+        asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {1, &Server::recieve_client_event},

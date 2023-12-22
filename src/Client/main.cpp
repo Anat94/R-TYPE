@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include "../Errors.hpp"
 #include "Client.hpp"
 #include "Menu.hpp"

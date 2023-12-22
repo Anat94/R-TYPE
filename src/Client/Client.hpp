@@ -9,7 +9,7 @@
 #define CLIENT_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>

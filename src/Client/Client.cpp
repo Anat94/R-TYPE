@@ -187,7 +187,8 @@ void Client::receive()
 Client::Client(std::string ip, int port, std::string username)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
-      _server_endpoint(udp::endpoint(asio::ip::address::from_string(ip), port)),
+    //   _server_endpoint(udp::endpoint(asio::ip::address::from_string(ip), port)),
+      _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _username(username)
 {
     _send_structure.id = 2;
