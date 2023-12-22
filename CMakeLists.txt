@@ -123,13 +123,9 @@ execute_process(COMMAND bash
     ${CMAKE_CURRENT_SOURCE_DIR}/mongo.sh
     RESULT_VARIABLE script_result
 OUTPUT_VARIABLE script_output)
-#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#     RESULT_VARIABLE result
-# )
 message("APres le DL mongo")
 
 # COMPILATION FOR SERVER
-
 find_package(libmongocxx REQUIRED)
 add_executable(server
                 src/Ecs/Events.cpp
