@@ -117,17 +117,24 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
-
-message("Après le DL")
+# INSTALL MONGODB
+message("Avant le DL mongo")
+execute_process(COMMAND bash
+    ${CMAKE_CURRENT_SOURCE_DIR}/mongo.sh
+    RESULT_VARIABLE script_result
+OUTPUT_VARIABLE script_output)
+message("APres le DL mongo")
 
 # COMPILATION FOR SERVER
-
+find_package(libmongocxx REQUIRED)
 add_executable(server
                 src/Ecs/Events.cpp
                 src/Server/Server.cpp
                 src/Server/main.cpp
+                src/Server/database.cpp
         )
 
+target_include_directories(server PRIVATE ${LIBMONGOCXX_INCLUDE_DIRS})
 if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
@@ -143,6 +150,7 @@ target_link_libraries(server
         sfml-graphics
         sfml-system
         sfml-window
+        ${LIBMONGOCXX_LIBRARIES}
 )
 
 if (WIN32)

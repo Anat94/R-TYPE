@@ -26,6 +26,11 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
 
 Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
+    try {
+        connectToDB();
+    } catch (const std::exception& e) {
+        std::cout<< "Exception: " << e.what() << std::endl;
+    }
     _tpool.emplace_back([this, &service]() { service.run(); });
     recieve_from_client();
 }
