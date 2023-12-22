@@ -17,6 +17,7 @@ include(FetchContent)
 
 FetchContent_Declare(asio
         GIT_REPOSITORY  https://github.com/chriskohlhoff/asio.git
+        # GIT_TAG         "main"
         GIT_SHALLOW     TRUE
         SOURCE_DIR      ${ASIO_CMAKE_ASIO_DEP_DIR}
 )
@@ -27,8 +28,8 @@ if(NOT asio_POPULATED)
         message(STATUS "Fetching asio ${ASIO_CMAKE_ASIO_TAG}")
 
         if(EXISTS "${ASIO_CMAKE_ASIO_DEP_DIR}/asio")
-        set(FETCHCONTENT_SOURCE_DIR_ASIO ${ASIO_CMAKE_ASIO_DEP_DIR})
-        message(STATUS "asio ${ASIO_CMAKE_ASIO_TAG} source found at ${ASIO_CMAKE_ASIO_DEP_DIR}; skip fetching.")
+                set(FETCHCONTENT_SOURCE_DIR_ASIO ${ASIO_CMAKE_ASIO_DEP_DIR})
+                message(STATUS "asio ${ASIO_CMAKE_ASIO_TAG} source found at ${ASIO_CMAKE_ASIO_DEP_DIR}; skip fetching.")
         endif()
 
         FetchContent_Populate(asio)
@@ -81,26 +82,6 @@ elseif(WIN32)
         )
 endif()
 
-# Install boost
-
-if (WIN32)
-        set(BOOST_INCLUDE_LIBRARIES thread filesystem system asio program_options)
-        set(BOOST_ENABLE_CMAKE ON)
-
-        message(STATUS "Downloading and extracting boost library sources. This will take some time...")
-        include(FetchContent)
-        Set(FETCHCONTENT_QUIET FALSE)
-        FetchContent_Declare(
-                Boost
-                URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.7z
-                USES_TERMINAL_DOWNLOAD TRUE
-                GIT_PROGRESS TRUE
-                DOWNLOAD_NO_EXTRACT FALSE
-                DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-        )
-        FetchContent_MakeAvailable(Boost)
-endif()
-
 # Install sfml
 
 set(SFML_VERSION "2.5.1")
@@ -139,7 +120,6 @@ if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
 #set(MY_SERVER_LINK_FLAGS -ldl)
-
 target_compile_options(server PRIVATE -ldl)
 
 include_directories(include src)
@@ -150,18 +130,10 @@ target_link_libraries(server
         sfml-graphics
         sfml-system
         sfml-window
+        asio
         ${LIBMONGOCXX_LIBRARIES}
 )
 
-if (WIN32)
-        target_link_libraries(server
-        PRIVATE
-        Boost::asio
-        Boost::filesystem
-        Boost::thread
-        Boost::program_options
-        )
-endif()
 target_compile_features(server PRIVATE cxx_std_20)
 
 # COMPILATION FOR ECS
@@ -169,14 +141,11 @@ target_compile_features(server PRIVATE cxx_std_20)
 add_library(ecs STATIC
                 src/Ecs/Events.cpp
         )
+target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
 
 # COMPILATION FOR CLIENT
 
-# add_executable(client
-#                 src/Client/main.cpp
-#                 src/Client/Game.cpp
-#         )
 include_directories(include src src/Client)
 
 add_executable(client
@@ -188,22 +157,12 @@ add_executable(client
                 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-# find_package(SFML 2.5 COMPONENTS REQUIRED audio graphics)
 target_link_libraries(client
     PRIVATE
         sfml-audio
         sfml-graphics
         sfml-system
         sfml-window
+        asio
 )
-if (WIN32)
-        target_link_libraries(client
-        PRIVATE
-        Boost::asio
-        Boost::filesystem
-        Boost::thread
-        Boost::program_options
-)
-endif()
-
 target_compile_options(client PRIVATE -Wall)

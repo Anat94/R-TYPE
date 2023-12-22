@@ -9,7 +9,7 @@
 #define ERRORS_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
 class Error : public std::exception{
     public:

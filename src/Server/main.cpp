@@ -6,11 +6,11 @@
 */
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include "Server.hpp"
 #include "../Errors.hpp"
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 rtype::event::EventListener listener;
 
@@ -110,7 +110,7 @@ void logging_system(sparse_array<component::Position> &pos, sparse_array<compone
 }
 
 void runServer(const char *argv, registry &ecs) {
-    boost::asio::io_service service;
+    asio::io_context service;
     Server server(service, std::atoi(argv), ecs, listener);
     service.run();
 }

@@ -14,11 +14,10 @@
 #include <iostream>
 #include <any>
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 using entity_t = size_t;
 
