@@ -6,9 +6,6 @@
 */
 
 #include "Server.hpp"
-#include <bsoncxx/json.hpp>
-#include <mongocxx/client.hpp>
-#include <mongocxx/instance.hpp>
 
 bool can_mod = true;
 
@@ -30,16 +27,7 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
 Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
     try {
-        mongocxx::instance inst{};
-        const auto uri = mongocxx::uri{"mongodb+srv://anatolebabin:admin@cluster0.efwsldn.mongodb.net/?retryWrites=true&w=majority"};
-        mongocxx::options::client client_options;
-        const auto api = mongocxx::options::server_api{mongocxx::options::server_api::version::k_version_1};
-        client_options.server_api_opts(api);
-        mongocxx::client conn{ uri, client_options };
-        mongocxx::database db = conn["admin"];
-        const auto ping_cmd = bsoncxx::builder::basic::make_document(bsoncxx::builder::basic::kvp("ping", 1));
-        db.run_command(ping_cmd.view());
-        std::cout << "Pinged your deployment. You successfully connected to MongoDB!" << std::endl;
+        connectToDB();
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
     }

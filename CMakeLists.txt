@@ -135,6 +135,7 @@ add_executable(server
                 src/Ecs/Events.cpp
                 src/Server/Server.cpp
                 src/Server/main.cpp
+                src/Server/database.cpp
         )
 
 target_include_directories(server PRIVATE ${LIBMONGOCXX_INCLUDE_DIRS})
