@@ -47,4 +47,16 @@ class SFMLError : public std::exception{
         std::string _message;
 };
 
+class DatabaseError : public std::exception{
+    public:
+        DatabaseError(std::string message) : _message(message) {}
+        ~DatabaseError() {};
+
+        const char *what() const noexcept { return _message.c_str(); };
+
+    protected:
+    private:
+        std::string _message;
+};
+
 #endif //ERRORS_HPP

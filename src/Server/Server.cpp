@@ -34,6 +34,12 @@ Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event:
     _tpool.emplace_back([this, &service]() {
         service.run();
     });
+    try {
+        connectToDB();
+    } catch (const std::exception& e) {
+        std::cout<< "Exception: " << e.what() << std::endl;
+    }
+    _tpool.emplace_back([this, &service]() { service.run(); });
     recieve_from_client();
 }
 

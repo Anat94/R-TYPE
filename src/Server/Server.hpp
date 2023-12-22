@@ -19,6 +19,14 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
+    #include <bsoncxx/json.hpp>
+    #include <mongocxx/client.hpp>
+    #include <mongocxx/instance.hpp>
+    #include <mongocxx/uri.hpp>
+    #include <mongocxx/options/client.hpp>
+    #include <mongocxx/options/server_api.hpp>
+    #include <bsoncxx/builder/stream/document.hpp>
+    #include <bsoncxx/json.hpp>
 
 using asio::ip::udp;
 
@@ -64,6 +72,10 @@ class Server {
         template <typename T>
         void send_data_to_all_clients(T& structure);
         void sendPositionPackagesPeriodically();
+        std::vector<std::string> getDatabases();
+        void getHighScore();
+        void addHighScore(std::string name, int score);
+        void connectToDB();
 
     private:
         std::vector<SnapshotPosition> _position_packages;
@@ -84,6 +96,10 @@ class Server {
         };
 
         std::thread _send_thread;
+        mongocxx::client _mongo_client;
+        mongocxx::database highscoreDb;
+        int _highScore = 0;
+        std::string _nameForHighScore = "";
 };
 
 #endif // SERVER_HPP
