@@ -14,13 +14,21 @@
     #include <thread>
     #include <chrono>
     #include <array>
-    #include <boost/asio.hpp>
+    #include <asio.hpp>
     #include <SFML/Window.hpp>
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
+    #include <bsoncxx/json.hpp>
+    #include <mongocxx/client.hpp>
+    #include <mongocxx/instance.hpp>
+    #include <mongocxx/uri.hpp>
+    #include <mongocxx/options/client.hpp>
+    #include <mongocxx/options/server_api.hpp>
+    #include <bsoncxx/builder/stream/document.hpp>
+    #include <bsoncxx/json.hpp>
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
@@ -49,7 +57,7 @@ struct EventMessage: public BaseMessage {
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
+        Server(asio::io_context& service, int port, registry& ecs, rtype::event::EventListener& listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -64,16 +72,21 @@ class Server {
         template <typename T>
         void send_data_to_all_clients(T& structure);
         void sendPositionPackagesPeriodically();
+        std::vector<std::string> getDatabases();
+        void getHighScore();
+        void addHighScore(std::string name, int score);
+        void connectToDB();
 
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
-        boost::asio::io_service::work _service;
+        // asio::io_service &_service;
+        asio::io_context &_service;
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
-        udp::socket _socket;
         registry &_ecs;
         rtype::event::EventListener &_listener;
+        asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {1, &Server::recieve_client_event},
@@ -83,6 +96,10 @@ class Server {
         };
 
         std::thread _send_thread;
+        mongocxx::client _mongo_client;
+        mongocxx::database highscoreDb;
+        int _highScore = 0;
+        std::string _nameForHighScore = "";
 };
 
 #endif // SERVER_HPP
