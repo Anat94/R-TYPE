@@ -481,6 +481,15 @@ class registry {
             components.erase(from);
         }
 
+        // template <typename... Components, typename SystemType>
+        // void add_system(SystemType&& system) {
+        //     static_assert(std::is_base_of<ISystems, std::decay_t<SystemType>>::value,
+        //                 "SystemType must inherit from ISystems");
+        //     auto callable = [system = std::forward<SystemType>(system)](Registry& r, component::DrawableContent& content) {
+        //         system(r.get_components<Components>()..., content);
+        //     };
+        //     systems.push_back(callable);
+        // }
         /**
          * @brief add a system to the registry
          * 
