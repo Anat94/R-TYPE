@@ -71,7 +71,7 @@ void Server::signUp(std::string name, std::string password) {
         }
     }
     bsoncxx::builder::stream::document document{};
-    document << "name" << name << "password" << password << "id" << makePersonnalID();
+    document << "name" << name << "password" << password << "id" << makePersonnalID() << "friends" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::close_array;
     playerCollection.insert_one(document.view());
     std::cout << "Connected" << std::endl;
 }
@@ -87,4 +87,34 @@ void Server::signIn(std::string name, std::string password) {
         }
     }
     std::cout << "Wrong password or username" << std::endl;
+}
+
+void Server::addFriend(std::string name, std::string friendId) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name) {
+            bsoncxx::builder::stream::document filter{};
+            filter << "name" << doc["name"].get_utf8().value.to_string();
+
+            bsoncxx::builder::stream::document updateDoc{};
+            updateDoc << "$push" << bsoncxx::builder::stream::open_document
+                      << "friends"
+                      << friendId
+                      << bsoncxx::builder::stream::close_document;
+
+            auto result = playerCollection.update_one(filter.view(), updateDoc.view());
+
+            if (result) {
+                std::cout << "Friend added" << std::endl;
+            } else {
+                std::cout << "Failed to update the document" << std::endl;
+            }
+
+            return;
+        }
+    }
+
+    std::cout << "User not found" << std::endl;
 }
