@@ -81,7 +81,7 @@ class Server {
         std::string makePersonnalID();
         void addFriend(std::string name, std::string friendName);
         void removeFriend(std::string name, std::string friendName);
-
+        void displayFriends(std::string name);
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;

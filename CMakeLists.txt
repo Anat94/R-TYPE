@@ -107,7 +107,6 @@ OUTPUT_VARIABLE script_output)
 message("APres le DL mongo")
 
 # COMPILATION FOR SERVER
-find_package(libmongocxx REQUIRED)
 add_executable(server
                 src/Ecs/Events.cpp
                 src/Server/Server.cpp

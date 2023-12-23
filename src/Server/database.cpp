@@ -7,6 +7,8 @@
 
 #include "Server.hpp"
 #include <random>
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/json.hpp>
 
 std::vector<std::string> Server::getDatabases()
 {
@@ -143,6 +145,37 @@ void Server::removeFriend(std::string name, std::string friendId) {
                 std::cout << "Failed to update the document" << std::endl;
             }
 
+            return;
+        }
+    }
+
+    std::cout << "User not found" << std::endl;
+}
+
+using bsoncxx::builder::stream::document;
+void Server::displayFriends(std::string name) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name) {
+            std::cout << "Friends: " << std::endl;
+            printf("coucou je suis la");
+            for (auto&& friendId : doc["friends"].get_array().value) {
+                printf("coucou je suis la");
+                bsoncxx::builder::stream::document filter{};
+                filter << "friendId" << friendId.get_utf8().value.to_string(); // Assuming friendId is the correct field name
+
+                auto innerCursor = playerCollection.find(filter.view());
+
+                for (auto&& innerDoc : innerCursor) {
+                    auto friendArray = innerDoc["friends"].get_array().value; // Assuming "friends" is the correct field name
+                    for (auto&& friendValue : friendArray) {
+                        std::string friendName = friendValue.get_utf8().value.to_string();
+                        std::cout << friendName << std::endl;
+                    }
+                }
+            }
             return;
         }
     }
