@@ -76,7 +76,9 @@ class Server {
         void getHighScore();
         void addHighScore(std::string name, int score);
         void connectToDB();
-        void addPlayerToDB(std::string name, std::string password);
+        void signUp(std::string name, std::string password);
+        void signIn(std::string name, std::string password);
+        std::string makePersonnalID();
 
     private:
         std::vector<SnapshotPosition> _position_packages;

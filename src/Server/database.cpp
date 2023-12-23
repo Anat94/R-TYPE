@@ -6,6 +6,7 @@
 */
 
 #include "Server.hpp"
+#include <random>
 
 std::vector<std::string> Server::getDatabases()
 {
@@ -48,9 +49,42 @@ void Server::connectToDB() {
     std::cout << "Pinged your deployment. You successfully connected to MongoDB!" << std::endl;
 }
 
-void Server::addPlayerToDB(std::string name, std::string password) {
+std::string Server::makePersonnalID()
+{
+    std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+
+    std::shuffle(str.begin(), str.end(), generator);
+    std::cout << str.substr(0, 10) << std::endl;
+    return str.substr(0, 10);
+}
+
+void Server::signUp(std::string name, std::string password) {
     mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name) {
+            std::cout << "User already exists" << std::endl;
+            return;
+        }
+    }
     bsoncxx::builder::stream::document document{};
-    document << "name" << name << "password" << password;
+    document << "name" << name << "password" << password << "id" << makePersonnalID();
     playerCollection.insert_one(document.view());
+    std::cout << "Connected" << std::endl;
+}
+
+void Server::signIn(std::string name, std::string password) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name && doc["password"].get_utf8().value.to_string() == password) {
+            std::cout << "Connected" << std::endl;
+            return;
+        }
+    }
+    std::cout << "Wrong password or username" << std::endl;
 }
