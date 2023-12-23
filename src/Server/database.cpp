@@ -118,3 +118,34 @@ void Server::addFriend(std::string name, std::string friendId) {
 
     std::cout << "User not found" << std::endl;
 }
+
+
+void Server::removeFriend(std::string name, std::string friendId) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name) {
+            bsoncxx::builder::stream::document filter{};
+            filter << "name" << doc["name"].get_utf8().value.to_string();
+
+            bsoncxx::builder::stream::document updateDoc{};
+            updateDoc << "$pull" << bsoncxx::builder::stream::open_document
+                      << "friends"
+                      << friendId
+                      << bsoncxx::builder::stream::close_document;
+
+            auto result = playerCollection.update_one(filter.view(), updateDoc.view());
+
+            if (result) {
+                std::cout << "Friend removed" << std::endl;
+            } else {
+                std::cout << "Failed to update the document" << std::endl;
+            }
+
+            return;
+        }
+    }
+
+    std::cout << "User not found" << std::endl;
+}

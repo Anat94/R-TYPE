@@ -80,6 +80,7 @@ class Server {
         void signIn(std::string name, std::string password);
         std::string makePersonnalID();
         void addFriend(std::string name, std::string friendName);
+        void removeFriend(std::string name, std::string friendName);
 
     private:
         std::vector<SnapshotPosition> _position_packages;
