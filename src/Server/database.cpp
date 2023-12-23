@@ -6,6 +6,7 @@
 */
 
 #include "Server.hpp"
+#include <random>
 
 std::vector<std::string> Server::getDatabases()
 {
@@ -13,8 +14,7 @@ std::vector<std::string> Server::getDatabases()
 }
 
 void Server::getHighScore() {
-    mongocxx::database rtypeDb = _mongo_client["Rtype"];
-    mongocxx::collection highScoreCollection = rtypeDb["HighScore"];
+    mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
     auto cursor = highScoreCollection.find({});
 
     for (auto&& doc : cursor) {
@@ -27,8 +27,7 @@ void Server::getHighScore() {
 }
 
 void Server::addHighScore(std::string name, int score) {
-    mongocxx::database rtypeDb = _mongo_client["Rtype"];
-    mongocxx::collection highScoreCollection = rtypeDb["HighScore"];
+    mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
     bsoncxx::builder::stream::document document{};
     document << "name" << name << "value" << score;
     highScoreCollection.insert_one(document.view());
@@ -44,8 +43,48 @@ void Server::connectToDB() {
     client_options.server_api_opts(api);
     _mongo_client = mongocxx::client{ uri, client_options };
 
-    mongocxx::database db = _mongo_client["admin"];
+    _rtypeDb = _mongo_client["Rtype"];
     const auto ping_cmd = bsoncxx::builder::basic::make_document(bsoncxx::builder::basic::kvp("ping", 1));
-    db.run_command(ping_cmd.view());
+    _rtypeDb.run_command(ping_cmd.view());
     std::cout << "Pinged your deployment. You successfully connected to MongoDB!" << std::endl;
+}
+
+std::string Server::makePersonnalID()
+{
+    std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+    std::random_device rd;
+    std::mt19937 generator(rd());
+
+    std::shuffle(str.begin(), str.end(), generator);
+    std::cout << str.substr(0, 10) << std::endl;
+    return str.substr(0, 10);
+}
+
+void Server::signUp(std::string name, std::string password) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name) {
+            std::cout << "User already exists" << std::endl;
+            return;
+        }
+    }
+    bsoncxx::builder::stream::document document{};
+    document << "name" << name << "password" << password << "id" << makePersonnalID();
+    playerCollection.insert_one(document.view());
+    std::cout << "Connected" << std::endl;
+}
+
+void Server::signIn(std::string name, std::string password) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    auto cursor = playerCollection.find({});
+
+    for (auto&& doc : cursor) {
+        if (doc["name"].get_utf8().value.to_string() == name && doc["password"].get_utf8().value.to_string() == password) {
+            std::cout << "Connected" << std::endl;
+            return;
+        }
+    }
+    std::cout << "Wrong password or username" << std::endl;
 }
