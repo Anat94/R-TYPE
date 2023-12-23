@@ -76,6 +76,7 @@ class Server {
         void getHighScore();
         void addHighScore(std::string name, int score);
         void connectToDB();
+        void addPlayerToDB(std::string name, std::string password);
 
     private:
         std::vector<SnapshotPosition> _position_packages;
@@ -97,6 +98,7 @@ class Server {
 
         std::thread _send_thread;
         mongocxx::client _mongo_client;
+        mongocxx::database _rtypeDb;
         mongocxx::database highscoreDb;
         int _highScore = 0;
         std::string _nameForHighScore = "";

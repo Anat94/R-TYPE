@@ -13,8 +13,7 @@ std::vector<std::string> Server::getDatabases()
 }
 
 void Server::getHighScore() {
-    mongocxx::database rtypeDb = _mongo_client["Rtype"];
-    mongocxx::collection highScoreCollection = rtypeDb["HighScore"];
+    mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
     auto cursor = highScoreCollection.find({});
 
     for (auto&& doc : cursor) {
@@ -27,8 +26,7 @@ void Server::getHighScore() {
 }
 
 void Server::addHighScore(std::string name, int score) {
-    mongocxx::database rtypeDb = _mongo_client["Rtype"];
-    mongocxx::collection highScoreCollection = rtypeDb["HighScore"];
+    mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
     bsoncxx::builder::stream::document document{};
     document << "name" << name << "value" << score;
     highScoreCollection.insert_one(document.view());
@@ -44,8 +42,15 @@ void Server::connectToDB() {
     client_options.server_api_opts(api);
     _mongo_client = mongocxx::client{ uri, client_options };
 
-    mongocxx::database db = _mongo_client["admin"];
+    _rtypeDb = _mongo_client["Rtype"];
     const auto ping_cmd = bsoncxx::builder::basic::make_document(bsoncxx::builder::basic::kvp("ping", 1));
-    db.run_command(ping_cmd.view());
+    _rtypeDb.run_command(ping_cmd.view());
     std::cout << "Pinged your deployment. You successfully connected to MongoDB!" << std::endl;
+}
+
+void Server::addPlayerToDB(std::string name, std::string password) {
+    mongocxx::collection playerCollection = _rtypeDb["Users"];
+    bsoncxx::builder::stream::document document{};
+    document << "name" << name << "password" << password;
+    playerCollection.insert_one(document.view());
 }
