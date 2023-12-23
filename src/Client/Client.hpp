@@ -24,28 +24,38 @@ using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
+    int packet_id;
 };
 
 struct SnapshotPosition: public BaseMessage {
     entity_t entity;
     component::Position data;
-    int packet_id;
 
     SnapshotPosition(): data(0, 0) {};
     SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
-    entity(entity_),  data(data_), packet_id(packet_id_) {
+    entity(entity_),  data(data_) {
         id = id_;
+        packet_id = packet_id_;
     };
 };
 
 struct ConfirmationMessage: public BaseMessage {
-    int packet_id;
 };
 
 struct EventMessage: public BaseMessage {
     sf::Event event;
-    int packet_id;
 };
+
+struct SnapshotScore: public BaseMessage {
+    entity_t entity;
+    component::Score data;
+};
+
+struct SnapshotHealth: public BaseMessage {
+    entity_t entity;
+    component::Health data;
+};
+
 
 enum Stage {
     ONE,
@@ -76,6 +86,8 @@ class Client {
         void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
+        int recieve_score_snapshot_update(std::vector<char> &);
+        int recieve_health_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
 
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
@@ -135,7 +147,9 @@ class Client {
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {4, &Client::recieve_position_snapshot_update}
+            {4, &Client::recieve_position_snapshot_update},
+            {6, &Client::recieve_score_snapshot_update},
+            {7, &Client::recieve_health_snapshot_update}
         };
 };
 

@@ -98,16 +98,7 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
-# INSTALL MONGODB
-message("Avant le DL mongo")
-execute_process(COMMAND bash
-    ${CMAKE_CURRENT_SOURCE_DIR}/mongo.sh
-    RESULT_VARIABLE script_result
-OUTPUT_VARIABLE script_output)
-message("APres le DL mongo")
-
 # COMPILATION FOR SERVER
-find_package(libmongocxx REQUIRED)
 add_executable(server
                 src/Ecs/Events.cpp
                 src/Server/Server.cpp
@@ -131,7 +122,6 @@ target_link_libraries(server
         sfml-system
         sfml-window
         asio
-        ${LIBMONGOCXX_LIBRARIES}
 )
 
 target_compile_features(server PRIVATE cxx_std_20)

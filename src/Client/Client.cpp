@@ -123,6 +123,90 @@ std::vector<char> Client::recieve_raw_data_from_client()
     return receivedData;
 }
 
+int Client::recieve_score_snapshot_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(SnapshotScore))
+        return -1;
+    SnapshotScore *snapshot = reinterpret_cast<SnapshotScore *>(server_msg.data());
+    sparse_array<component::Score> scores = _ecs.get_components<component::Score>();
+    sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << servEntities[j].value().entity << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == _recieve_structure.entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        entity_t real_entity = snapshot->entity + 1;
+        if (real_entity > 0 && scores[real_entity].has_value()) {
+            std::cout << "UPDATED PLAYER SCORE\n";
+            std::cout << snapshot->data._score << std::endl;
+            scores[real_entity]->_score = snapshot->data._score;
+        } else {
+            std::cout << "CREATED PLAYER\n";
+            entity_t new_player = _ecs.spawn_entity();
+            // std::cout << _recieve_structure.entity << std::endl;
+            // std::cout << new_player << std::endl;
+            _ecs.add_component(new_player, component::Position(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::ResetOnMove());
+            // _ecs.add_component(new_player, component::Controllable());
+            _ecs.add_component(new_player, component::Score(scores[real_entity]->_score));
+            _ecs.add_component(new_player, component::Health(200));
+            _ecs.add_component(new_player, component::Heading());
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
+            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Rotation(90));
+            // _ecs.add_component(new_player, component::Player(100, 20));
+            _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
+            std::cout << snapshot->data._score << std::endl;
+        }
+    } catch (std::exception ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+int Client::recieve_health_snapshot_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(SnapshotHealth))
+        return -1;
+    SnapshotHealth *snapshot = reinterpret_cast<SnapshotHealth *>(server_msg.data());
+    sparse_array<component::Health> healths = _ecs.get_components<component::Health>();
+    sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 1;
+        if (real_entity > 0 && healths[real_entity].has_value()) {
+            std::cout << "UPDATED PLAYER HEALTH\n";
+            std::cout << snapshot->data._health << std::endl;
+            healths[real_entity]->_health = snapshot->data._health;
+        } else {
+            std::cout << "CREATED PLAYER\n";
+            entity_t new_player = _ecs.spawn_entity();
+            // std::cout << _recieve_structure.entity << std::endl;
+            // std::cout << new_player << std::endl;
+            _ecs.add_component(new_player, component::Position(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
+            _ecs.add_component(new_player, component::ResetOnMove());
+            // _ecs.add_component(new_player, component::Controllable());
+            _ecs.add_component(new_player, component::Score(0));
+            _ecs.add_component(new_player, component::Health(snapshot->data._health));
+            _ecs.add_component(new_player, component::Heading());
+            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
+            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Rotation(90));
+            // _ecs.add_component(new_player, component::Player(100, 20));
+            _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
+            std::cout << snapshot->data._health << std::endl;
+        }
+    } catch (std::exception ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
 int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
@@ -151,7 +235,9 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
+            _ecs.add_component(new_player, component::Score(0));
             // _ecs.add_component(new_player, component::Controllable());
+            _ecs.add_component(new_player, component::Health(200));
             _ecs.add_component(new_player, component::Heading());
             _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
             _ecs.add_component(new_player, component::Scale(0.1f));

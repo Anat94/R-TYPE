@@ -31,15 +31,16 @@ Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event:
       _listener(listener),
       _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
-    _tpool.emplace_back([this, &service]() {
-        service.run();
-    });
-    try {
-        connectToDB();
-    } catch (const std::exception& e) {
-        std::cout<< "Exception: " << e.what() << std::endl;
+    for (int i = 0; i < 4; ++i) {
+        _tpool.emplace_back([this, &service]() {
+            service.run();
+        });
     }
-    _tpool.emplace_back([this, &service]() { service.run(); });
+    // try {
+    //     connectToDB();
+    // } catch (const std::exception& e) {
+    //     std::cout<< "Exception: " << e.what() << std::endl;
+    // }
     recieve_from_client();
 }
 
@@ -105,6 +106,50 @@ void Server::send_position_snapshots_for_all_players()
     }
 }
 
+void Server::send_score_snapshots_for_all_players()
+{
+    sparse_array<component::Score> scores = _ecs.get_components<component::Score>();
+    for (size_t i = 0; i < scores.size(); i++) {
+        if (scores[i].has_value()) {
+            SnapshotScore snap_p {6, i, component::Score(scores[i]->_score), 0};
+            send_data_to_all_clients<SnapshotScore>(snap_p);
+        }
+    }
+}
+
+void Server::send_health_snapshots_for_all_players()
+{
+    sparse_array<component::Health> healths = _ecs.get_components<component::Health>();
+    for (size_t i = 0; i < healths.size(); i++) {
+        if (healths[i].has_value()) {
+            SnapshotHealth snap_p {6, i, component::Health(healths[i]->_health), 0};
+            send_data_to_all_clients<SnapshotHealth>(snap_p);
+        }
+    }
+}
+
+void Server::send_score_snapshots_for_individual_players()
+{
+    sparse_array<component::Score> scores = _ecs.get_components<component::Score>();
+    for (size_t i = 0; i < scores.size(); i++) {
+        if (scores[i].has_value()) {
+            SnapshotScore snap_p {6, i, component::Score(scores[i]->_score), 0};
+            send_data_to_client_by_entity<SnapshotScore>(snap_p, i);
+        }
+    }
+}
+
+void Server::send_health_snapshots_for_individual_players()
+{
+    sparse_array<component::Health> healths = _ecs.get_components<component::Health>();
+    for (size_t i = 0; i < healths.size(); i++) {
+        if (healths[i].has_value()) {
+            SnapshotHealth snap_p {7, i, component::Health(healths[i]->_health), 0};
+            send_data_to_client_by_entity<SnapshotHealth>(snap_p, i);
+        }
+    }
+}
+
 void Server::recieve_from_client()
 {
     std::vector<char> client_msg = recieve_raw_data_from_client();
@@ -129,8 +174,8 @@ void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) 
 
     while (!can_mod) continue;
     _position_packages.erase(
-        std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const SnapshotPosition& snapshot) {
-            return snapshot.packet_id == id;
+        std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const BaseMessage *snapshot) {
+            return snapshot->packet_id == id;
         }
         ),
         _position_packages.end()
@@ -145,6 +190,8 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
     send_position_snapshots_for_all_players();
+    send_score_snapshots_for_individual_players();
+    send_health_snapshots_for_individual_players();
 }
 
 void Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
@@ -171,10 +218,28 @@ void Server::send_data_to_all_clients(T& structure) {
             structure.packet_id = _packet_id;
             _packet_id += 1;
             while (!can_mod) continue;
-            _position_packages.push_back(structure);
+            if (dynamic_cast<BaseMessage *>(&structure) != nullptr) {
+                _position_packages.push_back(&structure);
+            }
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
+}
+
+template <typename T>
+void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
+    auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
+    if (!endpoint.has_value()) {
+        std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+        return;
+    }
+    structure.packet_id = _packet_id;
+    _packet_id += 1;
+    while (!can_mod) continue;
+    if (dynamic_cast<BaseMessage *>(&structure) != nullptr) {
+        _position_packages.push_back(&structure);
+    }
+    _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
 }
 
 void Server::sendPositionPackagesPeriodically() {
@@ -185,7 +250,7 @@ void Server::sendPositionPackagesPeriodically() {
             sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
             for (size_t i = 0; i < all_endpoints.size(); i++) {
                 if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+                    _socket.send_to(asio::buffer(snapshot, sizeof(*snapshot)), all_endpoints[i].value()._endpoint);
             }
         }
         can_mod = true;

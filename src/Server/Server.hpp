@@ -19,39 +19,60 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
-    #include <bsoncxx/json.hpp>
-    #include <mongocxx/client.hpp>
-    #include <mongocxx/instance.hpp>
-    #include <mongocxx/uri.hpp>
-    #include <mongocxx/options/client.hpp>
-    #include <mongocxx/options/server_api.hpp>
-    #include <bsoncxx/builder/stream/document.hpp>
-    #include <bsoncxx/json.hpp>
+    // #include <bsoncxx/json.hpp>
+    // #include <mongocxx/client.hpp>
+    // #include <mongocxx/instance.hpp>
+    // #include <mongocxx/uri.hpp>
+    // #include <mongocxx/options/client.hpp>
+    // #include <mongocxx/options/server_api.hpp>
+    // #include <bsoncxx/builder/stream/document.hpp>
+    // #include <bsoncxx/json.hpp>
 
 using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
+    int packet_id;
 };
 
 struct ConfirmationMessage: public BaseMessage {
-    int packet_id;
 };
 
 struct SnapshotPosition: public BaseMessage {
     entity_t entity;
     component::Position data;
-    int packet_id;
 
     SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
-    entity(entity_),  data(data_), packet_id(packet_id_) {
+    entity(entity_),  data(data_) {
         id = id_;
+        packet_id = packet_id_;
+    };
+};
+
+struct SnapshotScore: public BaseMessage {
+    entity_t entity;
+    component::Score data;
+
+    SnapshotScore(int16_t id_, entity_t entity_, component::Score data_, int packet_id_):
+    entity(entity_),  data(data_) {
+        id = id_;
+        packet_id = packet_id_;
+    };
+};
+
+struct SnapshotHealth: public BaseMessage {
+    entity_t entity;
+    component::Health data;
+
+    SnapshotHealth(int16_t id_, entity_t entity_, component::Health data_, int packet_id_):
+    entity(entity_),  data(data_) {
+        id = id_;
+        packet_id = packet_id_;
     };
 };
 
 struct EventMessage: public BaseMessage {
     sf::Event event;
-    int packet_id;
 };
 
 class Server {
@@ -63,6 +84,10 @@ class Server {
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
         void send_position_snapshots_for_all_players();
+        void send_score_snapshots_for_all_players();
+        void send_health_snapshots_for_all_players();
+        void send_score_snapshots_for_individual_players();
+        void send_health_snapshots_for_individual_players();
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, sf::Event event);
         void recieve_client_event(std::vector<char> &, entity_t);
@@ -71,19 +96,21 @@ class Server {
         void recieve_packet_confirm(std::vector<char> &, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
+        template <typename T>
+        void send_data_to_client_by_entity(T& structure, entity_t entity);
         void sendPositionPackagesPeriodically();
         std::vector<std::string> getDatabases();
         void getHighScore();
         void addHighScore(std::string name, int score);
-        void connectToDB();
-        void signUp(std::string name, std::string password);
-        void signIn(std::string name, std::string password);
-        std::string makePersonnalID();
-        void addFriend(std::string name, std::string friendName);
-        void removeFriend(std::string name, std::string friendName);
+        // void connectToDB();
+        // void signUp(std::string name, std::string password);
+        // void signIn(std::string name, std::string password);
+        // std::string makePersonnalID();
+        // void addFriend(std::string name, std::string friendName);
+        // void removeFriend(std::string name, std::string friendName);
 
     private:
-        std::vector<SnapshotPosition> _position_packages;
+        std::vector<BaseMessage *> _position_packages;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -101,9 +128,9 @@ class Server {
         };
 
         std::thread _send_thread;
-        mongocxx::client _mongo_client;
-        mongocxx::database _rtypeDb;
-        mongocxx::database highscoreDb;
+        // mongocxx::client _mongo_client;
+        // mongocxx::database _rtypeDb;
+        // mongocxx::database highscoreDb;
         int _highScore = 0;
         std::string _nameForHighScore = "";
 };
