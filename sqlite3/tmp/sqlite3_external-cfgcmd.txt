@@ -1,1 +1,1 @@
-cmd='/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src/sqlite3_external/configure'
+cmd=''
