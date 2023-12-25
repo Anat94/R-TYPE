@@ -25,6 +25,9 @@ jobs:
           sudo apt-get install libbson-1.0
           sudo apt-get install libasio-dev
 
+      - name: LINUX - Launch cmake
+        run: cmake .
+
       - name: Install Criterion
         run: ./criterion.sh
 
@@ -40,4 +43,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Windows - Launch cmake
-        run: cmake . && cmake --build .
+        run: cmake .

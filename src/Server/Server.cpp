@@ -35,8 +35,8 @@ Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event:
         service.run();
     });
     try {
-        connectToDB();
-        displayFriends("admin");
+        // connectToDB();
+        // displayFriends("admin");
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
     }
