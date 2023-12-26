@@ -5,7 +5,7 @@ project(R-type
         DESCRIPTION "r type project"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
-
+enable_testing()
 
 # Install asio
 if(NOT DEFINED ASIO_CMAKE_ASIO_SOURCE_DIR)
@@ -184,3 +184,24 @@ target_link_libraries(client
         asio
 )
 target_compile_options(client PRIVATE -Wall)
+
+
+# Create binary for unit_tests
+
+add_executable(my_tests
+        tests/TestSparseArray.cpp
+        tests/TestZipperIterator.cpp
+)
+
+target_link_libraries(my_tests
+    PRIVATE
+        ecs  # Assuming 'ecs' is your library
+        asio
+        sfml-audio
+        sfml-graphics
+        sfml-system
+        sfml-window
+        criterion
+)
+
+add_test(NAME my_tests COMMAND tests)

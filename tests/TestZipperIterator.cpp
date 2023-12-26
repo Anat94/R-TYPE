@@ -7,8 +7,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <criterion/criterion.h>
-#include "../Registry.hpp"
-#include "../ZipperIterator.hpp"
+#include "../src/Ecs/Registry.hpp"
+#include "../src/Ecs/ZipperIterator.hpp"
 
 Test(works_in_for, global_test) {
     registry ecs;

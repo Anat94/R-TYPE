@@ -6,7 +6,7 @@
 */
 
 #include <criterion/criterion.h>
-#include "../SparseArray.hpp"
+#include "../src/Ecs/SparseArray.hpp"
 
 Test(insert_at, test_basic) {
     sparse_array<int> spa;
