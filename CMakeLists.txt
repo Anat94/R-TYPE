@@ -216,6 +216,8 @@ target_compile_options(client PRIVATE -Wall)
 add_executable(my_tests
         tests/TestSparseArray.cpp
         tests/TestZipperIterator.cpp
+        src/Server/Server.cpp
+        src/Server/database.cpp
 )
 
 target_link_libraries(my_tests
