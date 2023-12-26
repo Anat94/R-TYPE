@@ -102,16 +102,25 @@ endif()
 # INSTALL SQLITE3
 
 include(ExternalProject)
-
-ExternalProject_Add(
-    sqlite3_external
-    URL https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
-    PREFIX ${CMAKE_BINARY_DIR}/sqlite3
-    CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/sqlite3/src/sqlite3_external/configure
-    BUILD_COMMAND make
-    INSTALL_COMMAND ""
-)
-
+if (UNIX)
+        ExternalProject_Add(
+        sqlite3_external
+        URL https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
+        PREFIX ${CMAKE_BINARY_DIR}/sqlite3
+        CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/sqlite3/src/sqlite3_external/configure
+        BUILD_COMMAND make
+        INSTALL_COMMAND ""
+        )
+else()
+        ExternalProject_Add(
+                sqlite3_external
+                URL https://www.sqlite.org/2023/sqlite-amalgamation-3440200.zip
+                PREFIX ${CMAKE_BINARY_DIR}/sqlite3
+                CONFIGURE_COMMAND ""
+                BUILD_COMMAND ""
+                INSTALL_COMMAND ""
+        )
+endif()
 ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
 include_directories(${SOURCE_DIR})
 
