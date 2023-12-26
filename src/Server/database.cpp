@@ -16,41 +16,94 @@
 // 	return _mongo_client.list_database_names();
 // }
 
-// void Server::getHighScore() {
-//     mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
-//     auto cursor = highScoreCollection.find({});
 
-//     for (auto&& doc : cursor) {
-//         std::cout << bsoncxx::to_json(doc) << std::endl;
-//         if (doc["value"].get_int32() > _highScore) {
-//             _highScore = doc["value"].get_int32();
-//             _nameForHighScore = doc["name"].get_utf8().value.to_string();
-//         }
-//     }
-// }
+static int callbackIsNameInBdd(void* data, int argc, char** argv, char** azColName) {
+    bool* nameExists = static_cast<bool*>(data);
+    *nameExists = true;
+    return 0;
+}
 
-// void Server::addHighScore(std::string name, int score) {
-//     mongocxx::collection highScoreCollection = _rtypeDb["HighScore"];
-//     bsoncxx::builder::stream::document document{};
-//     document << "name" << name << "value" << score;
-//     highScoreCollection.insert_one(document.view());
-// }
+bool Server::IsNameInBdd(std::string name)
+{
+    const std::string tableName = "HighScore";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
+    char *zErrMsg = 0;
+    bool nameExists = false;
+    int rc;
+    rc = sqlite3_exec(_db, sql.c_str(), callbackIsNameInBdd, &nameExists, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    return nameExists;
+}
 
-// void Server::connectToDB() {
-//     mongocxx::instance inst{};
-//     const auto uri = mongocxx::uri{"mongodb+srv://anatolebabin:admin@cluster0.efwsldn.mongodb.net/?retryWrites=true&w=majority"};
+struct HighScore {
+    std::string name;
+    int score;
+};
 
-//     mongocxx::options::client client_options;
-//     const auto api = mongocxx::options::server_api{mongocxx::options::server_api::version::k_version_1};
+static int callbackGetHighScore(void* data, int argc, char** argv, char** azColName) {
+    std::vector<HighScore>* results = static_cast<std::vector<HighScore>*>(data);
+    results->push_back({argv[0], std::stoi(argv[1])});
+    return 0;
+}
 
-//     client_options.server_api_opts(api);
-//     _mongo_client = mongocxx::client{ uri, client_options };
+void Server::getHighScore() {
+    const std::string tableName = "HighScore";
+    std::string sql = "SELECT * FROM " + tableName + " ORDER BY score DESC LIMIT 3;";
+    char *zErrMsg = 0;
+    std::vector<HighScore> results;
+    int rc;
+    rc = sqlite3_exec(_db, sql.c_str(), callbackGetHighScore, &results, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    for (const auto& highScore : results) {
+        std::cout << "Name: " << highScore.name << ", Score: " << highScore.score << std::endl;
+    }
+}
 
-//     _rtypeDb = _mongo_client["Rtype"];
-//     const auto ping_cmd = bsoncxx::builder::basic::make_document(bsoncxx::builder::basic::kvp("ping", 1));
-//     _rtypeDb.run_command(ping_cmd.view());
-//     std::cout << "Pinged your deployment. You successfully connected to MongoDB!" << std::endl;
-// }
+void Server::addHighScore(std::string name, int score) {
+    const std::string tableName = "HighScore";
+    std::string sql;
+    if (IsNameInBdd(name) == true) {
+        sql = "UPDATE " + tableName + " SET score = " + std::to_string(score) + " WHERE name = '" + name + "';";
+    } else {
+        sql = "INSERT INTO " + tableName + " (name, score) VALUES ('" + name + "', " + std::to_string(score) + ");";
+    }
+    char *zErrMsg = 0;
+    int rc;
+    sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "12SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    } else {
+        fprintf(stdout, "Records created successfully\n");
+    }
+}
+
+void Server::connectToDB() {
+    int rc;
+    rc = sqlite3_open("db/rtype.db", &_db);
+    if (rc) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+        exit(84);
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
+    // std::string sql12 = "DELETE FROM HIGHSCORE WHERE 1;";
+    // char *zErrMsg = 0;
+    // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
+    // if (rc != SQLITE_OK) {
+    //     fprintf(stderr, "SQL error: %s\n", zErrMsg);
+    //     sqlite3_free(zErrMsg);
+    // } else {
+    //     fprintf(stdout, "Records created successfully\n");
+    // }
+
+}
 
 // std::string Server::makePersonnalID()
 // {
