@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.5)
 project(R-type
         DESCRIPTION "r type project"
         LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
 
 
 # Install asio
@@ -98,31 +99,48 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
-# INSTALL MONGODB
-message("Avant le DL mongo")
-execute_process(COMMAND bash
-    ${CMAKE_CURRENT_SOURCE_DIR}/mongo.sh
-    RESULT_VARIABLE script_result
-OUTPUT_VARIABLE script_output)
-message("APres le DL mongo")
+# INSTALL SQLITE3
+
+include(ExternalProject)
+if (UNIX)
+        ExternalProject_Add(
+        sqlite3_external
+        URL https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
+        PREFIX ${CMAKE_BINARY_DIR}/sqlite3
+        CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/sqlite3/src/sqlite3_external/configure
+        BUILD_COMMAND make
+        INSTALL_COMMAND ""
+        )
+else()
+        ExternalProject_Add(
+                sqlite3_external
+                URL https://www.sqlite.org/2023/sqlite-amalgamation-3440200.zip
+                PREFIX ${CMAKE_BINARY_DIR}/sqlite3
+                CONFIGURE_COMMAND ""
+                BUILD_COMMAND ""
+                INSTALL_COMMAND ""
+        )
+endif()
+ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
+include_directories(${SOURCE_DIR})
+
 
 # COMPILATION FOR SERVER
-find_package(libmongocxx REQUIRED)
-add_executable(server
-                src/Ecs/Events.cpp
-                src/Server/Server.cpp
-                src/Server/main.cpp
-                src/Server/database.cpp
-        )
 
-target_include_directories(server PRIVATE ${LIBMONGOCXX_INCLUDE_DIRS})
+add_executable(server
+        src/Ecs/Events.cpp
+        src/Server/Server.cpp
+        src/Server/main.cpp
+        src/Server/database.cpp
+)
+
 if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
-#set(MY_SERVER_LINK_FLAGS -ldl)
 target_compile_options(server PRIVATE -ldl)
-
-include_directories(include src)
+add_dependencies(server sqlite3_external)
+ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
+target_include_directories(server PRIVATE ${BINARY_DIR})
 
 target_link_libraries(server
     PRIVATE
@@ -131,7 +149,7 @@ target_link_libraries(server
         sfml-system
         sfml-window
         asio
-        ${LIBMONGOCXX_LIBRARIES}
+        ${BINARY_DIR}/.libs/libsqlite3.so
 )
 
 target_compile_features(server PRIVATE cxx_std_20)

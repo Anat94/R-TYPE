@@ -19,14 +19,7 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
-    #include <bsoncxx/json.hpp>
-    #include <mongocxx/client.hpp>
-    #include <mongocxx/instance.hpp>
-    #include <mongocxx/uri.hpp>
-    #include <mongocxx/options/client.hpp>
-    #include <mongocxx/options/server_api.hpp>
-    #include <bsoncxx/builder/stream/document.hpp>
-    #include <bsoncxx/json.hpp>
+    #include <sqlite3.h>
 
 using asio::ip::udp;
 
@@ -54,6 +47,11 @@ struct EventMessage: public BaseMessage {
     int packet_id;
 };
 
+struct Friendship {
+    std::string name;
+    std::string id;
+};
+
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
@@ -72,16 +70,19 @@ class Server {
         template <typename T>
         void send_data_to_all_clients(T& structure);
         void sendPositionPackagesPeriodically();
-        std::vector<std::string> getDatabases();
+        void connectToDB();
         void getHighScore();
         void addHighScore(std::string name, int score);
-        void connectToDB();
+        bool IsNameInBdd(std::string name);
         void signUp(std::string name, std::string password);
-        void signIn(std::string name, std::string password);
+        bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();
+        void signIn(std::string name, std::string password);
         void addFriend(std::string name, std::string friendName);
+        bool checkIfFriendshipExist(std::string name, std::string friendId);
         void removeFriend(std::string name, std::string friendName);
-
+        void displayFriends(std::string name);
+        Friendship getFriendsData(std::string id);
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
@@ -101,9 +102,7 @@ class Server {
         };
 
         std::thread _send_thread;
-        mongocxx::client _mongo_client;
-        mongocxx::database _rtypeDb;
-        mongocxx::database highscoreDb;
+        sqlite3 *_db;
         int _highScore = 0;
         std::string _nameForHighScore = "";
 };
