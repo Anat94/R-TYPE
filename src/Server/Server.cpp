@@ -36,14 +36,17 @@ Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event:
     });
     try {
         connectToDB();
-        // signUp("admin", "admin");
-        signIn("admin", "admin");
+        // signUp("Jacques", "Jacques");
+        // signIn("admin", "admin");
         // addHighScore("admin", 100);
         // addHighScore("Anatole", 110);
         // addHighScore("Pierre", 80);
         // addHighScore("Jacques", 90);
         // getHighScore();
-        // displayFriends("admin");
+        // addFriend("admin", "9AEPR4G1XK");
+        // addFriend("Anatole", "7GH8W64ZQX");
+        // removeFriend("admin", "9AEPR4G1XK");
+        displayFriends("admin");
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
     }

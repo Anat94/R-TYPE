@@ -85,7 +85,7 @@ void Server::connectToDB() {
     } else {
         fprintf(stderr, "Opened database successfully\n");
     }
-    // std::string sql12 = "CREATE TABLE IF NOT EXISTS FRIENDS (name VARCHAR(255), friendID VARCHAR(255));";
+    // std::string sql12 = "DELETE FROM FRIENDS";
     // char *zErrMsg = 0;
     // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
     // if (rc != SQLITE_OK) {
@@ -172,68 +172,100 @@ void Server::signIn(std::string name, std::string password) {
         std::cout << "Bad credentials" << std::endl;
 }
 
-void Server::addFriend(std::string name, std::string friendId) {
-
+static int callbackCheckFriendship(void *data, int argc, char** argv, char** azColName) {
+    bool* friendshipExists = static_cast<bool*>(data);
+    *friendshipExists = true;
+    return 0;
 }
 
+bool Server::checkIfFriendshipExist(std::string name, std::string friendId) {
+    const std::string tableName = "FRIENDS";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "' AND friendId = '" + friendId + "';";
+    bool exist = false;
+    char *zErrMsg = 0;
+    int rc = sqlite3_exec(_db, sql.c_str(), callbackCheckFriendship, &exist, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    if (exist == true)
+        return true;
+    else
+        return false;
+}
 
-// void Server::removeFriend(std::string name, std::string friendId) {
-//     mongocxx::collection playerCollection = _rtypeDb["Users"];
-//     auto cursor = playerCollection.find({});
+void Server::addFriend(std::string name, std::string friendId) {
+    if (checkIfFriendshipExist(name, friendId) == true) {
+        std::cout << "Friendship already exist" << std::endl;
+        return;
+    }
+    const std::string tableName = "FRIENDS";
+    std::string sql = "INSERT INTO " + tableName + "(name, friendID) VALUES ( '" + name +"', '" + friendId + "');";
+    char *zErrMsg = 0;
+    int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    std::cout << "Friend added" << std::endl;
+}
 
-//     for (auto&& doc : cursor) {
-//         if (doc["name"].get_utf8().value.to_string() == name) {
-//             bsoncxx::builder::stream::document filter{};
-//             filter << "name" << doc["name"].get_utf8().value.to_string();
+void Server::removeFriend(std::string name, std::string friendName) {
+    const std::string tableName = "FRIENDS";
+    std::string sql = "DELETE FROM " + tableName + " WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
+    char *zErrMsg = 0;
+    int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    std::cout << "Friend removed" << std::endl;
+}
 
-//             bsoncxx::builder::stream::document updateDoc{};
-//             updateDoc << "$pull" << bsoncxx::builder::stream::open_document
-//                       << "friends"
-//                       << friendId
-//                       << bsoncxx::builder::stream::close_document;
+static int callbackGetFriendsData(void *data, int argc, char** argv, char** azColName) {
+    Friendship* myFriend = static_cast<Friendship*>(data);
+    myFriend->name = argv[0];
+    myFriend->id = argv[1];
+    return 0;
+}
 
-//             auto result = playerCollection.update_one(filter.view(), updateDoc.view());
+Friendship Server::getFriendsData(std::string id)
+{
+    const std::string tableName = "USERS";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE id = '" + id + "';";
+    char *zErrMsg = 0;
+    Friendship myFriend;
+    int rc = sqlite3_exec(_db, sql.c_str(), callbackGetFriendsData, &myFriend, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    return myFriend;
+}
 
-//             if (result) {
-//                 std::cout << "Friend removed" << std::endl;
-//             } else {
-//                 std::cout << "Failed to update the document" << std::endl;
-//             }
+struct CallbackData {
+    Server* server;
+    std::vector<Friendship>* friends;
+};
 
-//             return;
-//         }
-//     }
+static int callbackDisplayFriends(void *data, int argc, char** argv, char** azColName) {
+    CallbackData* callbackData = static_cast<CallbackData*>(data);
+    callbackData->friends->push_back(callbackData->server->getFriendsData(argv[1]));
+    return 0;
+}
 
-//     std::cout << "User not found" << std::endl;
-// }
-
-// using bsoncxx::builder::stream::document;
-// void Server::displayFriends(std::string name) {
-//     mongocxx::collection playerCollection = _rtypeDb["Users"];
-//     auto cursor = playerCollection.find({});
-
-//     for (auto&& doc : cursor) {
-//         if (doc["name"].get_utf8().value.to_string() == name) {
-//             std::cout << "Friends: " << std::endl;
-//             printf("coucou je suis la");
-//             for (auto&& friendId : doc["friends"].get_array().value) {
-//                 printf("coucou je suis la");
-//                 bsoncxx::builder::stream::document filter{};
-//                 filter << "friendId" << friendId.get_utf8().value.to_string(); // Assuming friendId is the correct field name
-
-//                 auto innerCursor = playerCollection.find(filter.view());
-
-//                 for (auto&& innerDoc : innerCursor) {
-//                     auto friendArray = innerDoc["friends"].get_array().value; // Assuming "friends" is the correct field name
-//                     for (auto&& friendValue : friendArray) {
-//                         std::string friendName = friendValue.get_utf8().value.to_string();
-//                         std::cout << friendName << std::endl;
-//                     }
-//                 }
-//             }
-//             return;
-//         }
-//     }
-
-//     std::cout << "User not found" << std::endl;
-// }
+void Server::displayFriends(std::string name) {
+    const std::string tableName = "FRIENDS";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
+    char *zErrMsg = 0;
+    std::vector<Friendship> friends;
+    CallbackData callbackData = { this, &friends };
+    int rc = sqlite3_exec(_db, sql.c_str(), callbackDisplayFriends, &callbackData, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    for (const auto& friendData : friends) {
+        std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
+    }
+}

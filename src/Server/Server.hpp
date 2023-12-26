@@ -47,6 +47,11 @@ struct EventMessage: public BaseMessage {
     int packet_id;
 };
 
+struct Friendship {
+    std::string name;
+    std::string id;
+};
+
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
@@ -74,8 +79,10 @@ class Server {
         std::string makePersonnalID();
         void signIn(std::string name, std::string password);
         void addFriend(std::string name, std::string friendName);
-        // void removeFriend(std::string name, std::string friendName);
-        // void displayFriends(std::string name);
+        bool checkIfFriendshipExist(std::string name, std::string friendId);
+        void removeFriend(std::string name, std::string friendName);
+        void displayFriends(std::string name);
+        Friendship getFriendsData(std::string id);
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
@@ -96,9 +103,6 @@ class Server {
 
         std::thread _send_thread;
         sqlite3 *_db;
-        // mongocxx::client _mongo_client;
-        // mongocxx::database _rtypeDb;
-        // mongocxx::database highscoreDb;
         int _highScore = 0;
         std::string _nameForHighScore = "";
 };
