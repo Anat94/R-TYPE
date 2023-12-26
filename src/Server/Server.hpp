@@ -19,6 +19,7 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
+    #include <sqlite3.h>
 
 using asio::ip::udp;
 
@@ -64,10 +65,11 @@ class Server {
         template <typename T>
         void send_data_to_all_clients(T& structure);
         void sendPositionPackagesPeriodically();
+        void connectToDB();
+        void getHighScore();
+        void addHighScore(std::string name, int score);
+        bool IsNameInBdd(std::string name);
         // std::vector<std::string> getDatabases();
-        // void getHighScore();
-        // void addHighScore(std::string name, int score);
-        // void connectToDB();
         // void signUp(std::string name, std::string password);
         // void signIn(std::string name, std::string password);
         // std::string makePersonnalID();
@@ -93,6 +95,7 @@ class Server {
         };
 
         std::thread _send_thread;
+        sqlite3 *_db;
         // mongocxx::client _mongo_client;
         // mongocxx::database _rtypeDb;
         // mongocxx::database highscoreDb;
