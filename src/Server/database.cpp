@@ -8,14 +8,6 @@
 #include "Server.hpp"
 #include <random>
 #include <sqlite3.h>
-// #include <bsoncxx/builder/stream/document.hpp>
-// #include <bsoncxx/json.hpp>
-
-// std::vector<std::string> Server::getDatabases()
-// {
-// 	return _mongo_client.list_database_names();
-// }
-
 
 static int callbackIsNameInBdd(void* data, int argc, char** argv, char** azColName) {
     bool* nameExists = static_cast<bool*>(data);
@@ -93,7 +85,7 @@ void Server::connectToDB() {
     } else {
         fprintf(stderr, "Opened database successfully\n");
     }
-    // std::string sql12 = "DELETE FROM HIGHSCORE WHERE 1;";
+    // std::string sql12 = "CREATE TABLE IF NOT EXISTS FRIENDS (name VARCHAR(255), friendID VARCHAR(255));";
     // char *zErrMsg = 0;
     // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
     // if (rc != SQLITE_OK) {
@@ -102,78 +94,87 @@ void Server::connectToDB() {
     // } else {
     //     fprintf(stdout, "Records created successfully\n");
     // }
-
 }
 
-// std::string Server::makePersonnalID()
-// {
-//     std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+std::string Server::makePersonnalID()
+{
+    std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-//     std::random_device rd;
-//     std::mt19937 generator(rd());
+    std::random_device rd;
+    std::mt19937 generator(rd());
 
-//     std::shuffle(str.begin(), str.end(), generator);
-//     std::cout << str.substr(0, 10) << std::endl;
-//     return str.substr(0, 10);
-// }
+    std::shuffle(str.begin(), str.end(), generator);
+    std::cout << str.substr(0, 10) << std::endl;
+    return str.substr(0, 10);
+}
 
-// void Server::signUp(std::string name, std::string password) {
-//     mongocxx::collection playerCollection = _rtypeDb["Users"];
-//     auto cursor = playerCollection.find({});
-//     for (auto&& doc : cursor) {
-//         if (doc["name"].get_utf8().value.to_string() == name) {
-//             std::cout << "User already exists" << std::endl;
-//             return;
-//         }
-//     }
-//     bsoncxx::builder::stream::document document{};
-//     document << "name" << name << "password" << password << "id" << makePersonnalID() << "friends" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::close_array;
-//     playerCollection.insert_one(document.view());
-//     std::cout << "Connected" << std::endl;
-// }
+static int callbackIsUserExists(void* data, int argc, char** argv, char** azColName) {
+    bool* nameExists = static_cast<bool*>(data);
+    *nameExists = true;
+    return 0;
+}
 
-// void Server::signIn(std::string name, std::string password) {
-//     mongocxx::collection playerCollection = _rtypeDb["Users"];
-//     auto cursor = playerCollection.find({});
+bool Server::checkIfUserExist(std::string name, std::string password) {
+    const std::string tableName = "USERS";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
+    char *zErrMsg = 0;
+    bool nameExists = false;
+    int rc;
+    rc = sqlite3_exec(_db, sql.c_str(), callbackIsUserExists, &nameExists, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    if (nameExists == true) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-//     for (auto&& doc : cursor) {
-//         if (doc["name"].get_utf8().value.to_string() == name && doc["password"].get_utf8().value.to_string() == password) {
-//             std::cout << "Connected" << std::endl;
-//             return;
-//         }
-//     }
-//     std::cout << "Wrong password or username" << std::endl;
-// }
+void Server::signUp(std::string name, std::string password) {
+    const std::string tableName = "USERS";
+    if (checkIfUserExist(name, password) == true) {
+        std::cout << "User already exist" << std::endl;
+        return;
+    }
+    std::string sql = "INSERT INTO " + tableName + " (id, name, password) VALUES ('" + makePersonnalID() +"', '" + name + "', '" + password + "');";
+    char *zErrMsg = 0;
+    int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    } else {
+        fprintf(stdout, "Records created successfully\n");
+    }
+}
 
-// void Server::addFriend(std::string name, std::string friendId) {
-//     mongocxx::collection playerCollection = _rtypeDb["Users"];
-//     auto cursor = playerCollection.find({});
+static int callbackSignIn(void *data, int argc, char** argv, char** azColName) {
+    bool* userExists = static_cast<bool*>(data);
+    *userExists = true;
+    return 0;
+}
 
-//     for (auto&& doc : cursor) {
-//         if (doc["name"].get_utf8().value.to_string() == name) {
-//             bsoncxx::builder::stream::document filter{};
-//             filter << "name" << doc["name"].get_utf8().value.to_string();
+void Server::signIn(std::string name, std::string password) {
+    const std::string tableName = "USERS";
+    std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "' AND password = '" + password + "';";
+    char *zErrMsg = 0;
+    bool userExists = false;
+    int rc;
+    rc = sqlite3_exec(_db, sql.c_str(), callbackSignIn, &userExists, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    if (userExists == true)
+        std::cout << "User succesfully connected" << std::endl;
+    else
+        std::cout << "Bad credentials" << std::endl;
+}
 
-//             bsoncxx::builder::stream::document updateDoc{};
-//             updateDoc << "$push" << bsoncxx::builder::stream::open_document
-//                       << "friends"
-//                       << friendId
-//                       << bsoncxx::builder::stream::close_document;
+void Server::addFriend(std::string name, std::string friendId) {
 
-//             auto result = playerCollection.update_one(filter.view(), updateDoc.view());
-
-//             if (result) {
-//                 std::cout << "Friend added" << std::endl;
-//             } else {
-//                 std::cout << "Failed to update the document" << std::endl;
-//             }
-
-//             return;
-//         }
-//     }
-
-//     std::cout << "User not found" << std::endl;
-// }
+}
 
 
 // void Server::removeFriend(std::string name, std::string friendId) {

@@ -69,11 +69,11 @@ class Server {
         void getHighScore();
         void addHighScore(std::string name, int score);
         bool IsNameInBdd(std::string name);
-        // std::vector<std::string> getDatabases();
-        // void signUp(std::string name, std::string password);
-        // void signIn(std::string name, std::string password);
-        // std::string makePersonnalID();
-        // void addFriend(std::string name, std::string friendName);
+        void signUp(std::string name, std::string password);
+        bool checkIfUserExist(std::string name, std::string password);
+        std::string makePersonnalID();
+        void signIn(std::string name, std::string password);
+        void addFriend(std::string name, std::string friendName);
         // void removeFriend(std::string name, std::string friendName);
         // void displayFriends(std::string name);
     private:
