@@ -1,18 +1,11 @@
-/*
-** EPITECH PROJECT, 2023
-** rtype
-** File description:
-** TestZipperIterator
-*/
-
+#include <gtest/gtest.h>
 #include <SFML/Graphics.hpp>
-#include <criterion/criterion.h>
 #include "../src/Ecs/Registry.hpp"
 #include "../src/Ecs/ZipperIterator.hpp"
 
-Test(works_in_for, global_test) {
+TEST(TestZipperIterator, works_in_for_global_test) {
     registry ecs;
-    
+
     ecs.register_component<component::Position>();
     ecs.register_component<component::Velocity>();
 
@@ -23,18 +16,24 @@ Test(works_in_for, global_test) {
     ecs.add_component(entity1, component::Position(10.0f, 10.0f));
     ecs.add_component(entity1, component::Velocity(0.0f, 0.0f));
 
-    for (auto&& [_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>())) {
-        cr_assert_eq(p.value().x, pos.x);
-        cr_assert_eq(p.value().y, pos.y);
-        cr_assert_eq(v.value()._dx, vel._dx);
-        cr_assert_eq(v.value()._dy, vel._dy);
+    auto pos_components = ecs.get_components<component::Position>();
+    auto vel_components = ecs.get_components<component::Velocity>();
+
+    auto it = zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos_components, vel_components).begin();
+
+    for (; it != zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos_components, vel_components).end(); ++it) {
+        auto [_, p, v] = *it;
+        EXPECT_EQ(p.value().x, pos.x);
+        EXPECT_EQ(p.value().y, pos.y);
+        EXPECT_EQ(v.value()._dx, vel._dx);
+        EXPECT_EQ(v.value()._dy, vel._dy);
     }
 }
 
-Test(operator_plus_plus, error_index_too_big) {
+TEST(TestZipperIterator, operator_plus_plus_error_index_too_big) {
     registry ecs;
     bool error = false;
-    
+
     ecs.register_component<component::Position>();
     ecs.register_component<component::Velocity>();
 
@@ -44,14 +43,18 @@ Test(operator_plus_plus, error_index_too_big) {
 
     ecs.add_component(entity1, component::Position(10.0f, 10.0f));
     ecs.add_component(entity1, component::Velocity(0.0f, 0.0f));
-    zipper<sparse_array<component::Position>, sparse_array<component::Velocity>> zip(ecs.get_components<component::Position>(), ecs.get_components<component::Velocity>());
-    auto it = zip.begin();
-    ++it;
+
+    auto pos_components = ecs.get_components<component::Position>();
+    auto vel_components = ecs.get_components<component::Velocity>();
+
+    auto it = zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos_components, vel_components).begin();
+
     try {
         ++it;
         ++it;
-    } catch (std::exception) {
+        ++it;
+    } catch (const std::exception &) {
         error = true;
     }
-    cr_assert_eq(error, true);
+    EXPECT_EQ(error, true);
 }

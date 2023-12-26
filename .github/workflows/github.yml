@@ -28,9 +28,6 @@ jobs:
       - name: LINUX - Launch cmake
         run: cmake .
 
-      - name: Install Criterion
-        run: ./criterion.sh
-
       - name: LINUX - Launch tests
         run: cmake --build . --target my_tests
 

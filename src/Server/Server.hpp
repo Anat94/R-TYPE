@@ -73,7 +73,7 @@ class Server {
         void connectToDB();
         void getHighScore();
         void addHighScore(std::string name, int score);
-        bool IsNameInBdd(std::string name);
+        virtual bool IsNameInBdd(std::string name);
         void signUp(std::string name, std::string password);
         bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();

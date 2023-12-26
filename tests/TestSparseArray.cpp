@@ -1,47 +1,40 @@
-/*
-** EPITECH PROJECT, 2023
-** Bootstrap
-** File description:
-** TestSparseArray
-*/
-
-#include <criterion/criterion.h>
+#include <gtest/gtest.h>
 #include "../src/Ecs/SparseArray.hpp"
 
-Test(insert_at, test_basic) {
+TEST(TestSparseArray, insert_at_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    cr_assert_eq(1, spa[0]);
+    EXPECT_EQ(1, spa[0]);
 }
 
-Test(size, test_basic) {
+TEST(TestSparseArray, size_test_basic) {
     sparse_array<int> spa;
 
-    cr_assert_eq(0, spa.size());
+    EXPECT_EQ(0, spa.size());
     spa.insert_at(0, 1);
-    cr_assert_eq(1, spa.size());
+    EXPECT_EQ(1, spa.size());
 }
 
-Test(emplace_at, test_basic) {
+TEST(TestSparseArray, emplace_at_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    cr_assert_eq(1, spa[0]);
+    EXPECT_EQ(1, spa[0]);
     spa.emplace_at(0, 2);
-    cr_assert_eq(2, spa[0]);
+    EXPECT_EQ(2, spa[0]);
 }
 
-Test(erase, test_basic) {
+TEST(TestSparseArray, erase_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
     spa.insert_at(0, 2);
     spa.erase(0);
-    cr_assert_eq(false, spa[0].has_value());
+    EXPECT_EQ(false, spa[0].has_value());
 }
 
-Test(get_index, test_basic) {
+TEST(TestSparseArray, get_index_test_basic) {
     sparse_array<int> spa;
     spa.insert_at(0, 10);
     spa.insert_at(1, 20);
@@ -50,10 +43,10 @@ Test(get_index, test_basic) {
     int valueToFind = 20;
 
     sparse_array<int>::size_type index = spa.get_index(valueToFind);
-    cr_assert_eq(1, index);
+    EXPECT_EQ(1, index);
 }
 
-Test(get_index, error_test_basic) {
+TEST(TestSparseArray, get_index_error_test_basic) {
     sparse_array<int> spa;
     spa.insert_at(0, 10);
     spa.insert_at(1, 20);
@@ -62,52 +55,44 @@ Test(get_index, error_test_basic) {
     int valueToFind = 40;
 
     sparse_array<int>::size_type index = spa.get_index(valueToFind);
-    cr_assert_eq(-1, index);
+    EXPECT_EQ(-1, index);
 }
 
-Test(erase, error_test_basic) {
+TEST(TestSparseArray, erase_error_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    try {
-        spa.erase(3);
-    } catch (const std::exception &e) {
-        cr_assert_eq(true, true);
-    }
+    EXPECT_THROW(spa.erase(3), std::exception);
 }
 
-Test(emplace_at, error_test_basic) {
+TEST(TestSparseArray, emplace_at_error_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    cr_assert_eq(1, spa[0]);
-    try {
-        spa.emplace_at(-2, 2);
-    } catch (const std::exception &e) {
-        cr_assert_eq(true, true);
-    }
+    EXPECT_EQ(1, spa[0]);
+    EXPECT_THROW(spa.emplace_at(-2, 2), std::exception);
 }
 
-Test(insert_at, error_test_basic) {
+TEST(TestSparseArray, insert_at_error_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    cr_assert_eq(1, spa[0]);
+    EXPECT_EQ(1, spa[0]);
 }
 
-Test(insert_at, multiple_places) {
+TEST(TestSparseArray, insert_at_multiple_places) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
     spa.insert_at(4, 2);
     spa.insert_at(10, 3);
 
-    cr_assert_eq(1, spa[0]);
-    cr_assert_eq(2, spa[4]);
-    cr_assert_eq(3, spa[10]);
+    EXPECT_EQ(1, spa[0]);
+    EXPECT_EQ(2, spa[4]);
+    EXPECT_EQ(3, spa[10]);
 }
 
-Test(copy_construct, copy_constructor_good_params) {
+TEST(TestSparseArray, copy_construct_copy_constructor_good_params) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
@@ -115,12 +100,12 @@ Test(copy_construct, copy_constructor_good_params) {
     spa.insert_at(10, 3);
 
     sparse_array<int> spa1(spa);
-    cr_assert_eq(spa1[0], spa[0]);
-    cr_assert_eq(spa1[4], spa[4]);
-    cr_assert_eq(spa1[10], spa[10]);
+    EXPECT_EQ(spa1[0], spa[0]);
+    EXPECT_EQ(spa1[4], spa[4]);
+    EXPECT_EQ(spa1[10], spa[10]);
 }
 
-Test(index_too_far, too_far_index_no_crash) {
+TEST(TestSparseArray, index_too_far_too_far_index_no_crash) {
     sparse_array<int> spa;
     bool error = false;
 
@@ -131,5 +116,5 @@ Test(index_too_far, too_far_index_no_crash) {
         error = true;
     }
 
-    cr_assert_eq(error, false);
+    EXPECT_EQ(error, false);
 }

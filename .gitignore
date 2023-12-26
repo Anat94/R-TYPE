@@ -20,3 +20,4 @@ Debug
 asio*
 .github
 my_tests
+sqlite3

@@ -104,12 +104,12 @@ endif()
 include(ExternalProject)
 if (UNIX)
         ExternalProject_Add(
-        sqlite3_external
-        URL https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
-        PREFIX ${CMAKE_BINARY_DIR}/sqlite3
-        CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/sqlite3/src/sqlite3_external/configure
-        BUILD_COMMAND make
-        INSTALL_COMMAND ""
+                sqlite3_external
+                URL https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
+                PREFIX ${CMAKE_BINARY_DIR}/sqlite3
+                CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/sqlite3/src/sqlite3_external/configure
+                BUILD_COMMAND make
+                INSTALL_COMMAND ""
         )
 else()
         ExternalProject_Add(
@@ -123,6 +123,31 @@ else()
 endif()
 ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
 include_directories(${SOURCE_DIR})
+
+# INSTALL GOOGLETESTS
+
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY  https://github.com/google/googletest.git
+        GIT_TAG        release-1.11.0
+)
+
+# FetchContent_GetProperties(googletest)
+FetchContent_MakeAvailable(googletest)
+
+
+if(NOT googletest_POPULATED)
+        message(STATUS "Fetching googletest ${googletest_TAG}")
+
+        if(EXISTS "${googletest_SOURCE_DIR}/googletest")
+                set(FETCHCONTENT_SOURCE_DIR_GOOGLETEST ${googletest_SOURCE_DIR})
+                message(STATUS "googletest ${googletest_TAG} source found at ${googletest_SOURCE_DIR}; skip fetching.")
+        endif()
+
+        FetchContent_Populate(googletest)
+        message(STATUS "Populating googletest ${googletest_TAG} done; src at ${googletest_SOURCE_DIR}")
+endif()
+
 
 
 # COMPILATION FOR SERVER
@@ -201,7 +226,11 @@ target_link_libraries(my_tests
         sfml-graphics
         sfml-system
         sfml-window
-        criterion
+        # criterion
+        gtest
+        gmock
+        gmock_main
+        ${BINARY_DIR}/.libs/libsqlite3.so
 )
 
 add_test(NAME my_tests COMMAND tests)
