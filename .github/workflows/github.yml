@@ -25,25 +25,16 @@ jobs:
           sudo apt-get install libbson-1.0
           sudo apt-get install libasio-dev
 
-      - name: Install Criterion
-        run: ./criterion.sh
+      - name: LINUX - Launch cmake
+        run: cmake .
 
       - name: LINUX - Launch tests
-        working-directory: ./src/Ecs/tests
-        run: |
-         g++ TestSparseArray.cpp TestZipperIterator.cpp -lcriterion
-         ./a.out
+        run: cmake --build . --target my_tests
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Install Criterion
-      #   run: ./criterion.sh
-
-      # - name: WINDOWS - Launch tests
-      #   working-directory: ./src/Ecs/tests
-      #   run: |
-      #    g++ TestSparseArray.cpp TestZipperIterator.cpp -lcriterion
-      #    ./a.out
+      - name: Windows - Launch cmake
+        run: cmake .

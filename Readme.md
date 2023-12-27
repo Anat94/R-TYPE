@@ -52,3 +52,10 @@ cmake --build ..
 ```powershell
 ./Debug/client.exe <ip_addr> <port>
 ```
+
+## Start unit tests
+
+
+```shell
+cmake --build . --target my_tests
+```
