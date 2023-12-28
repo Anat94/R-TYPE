@@ -6,13 +6,14 @@
 */
 
 #ifndef COLLISIONSYSTEM_HPP_
-#define COLLISIONSYSTEM_HPP_
-#include "Systems.hpp"
-#include "../Events.hpp"
+    #define COLLISIONSYSTEM_HPP_
+    #include "Systems.hpp"
+    #include "../Registry.hpp"
+    #include "../Events.hpp"
 
 class CollisionSystem {
     public:
-        CollisionSystem(rtype::event::EventListener *listener) : _listener(listener) {};
+        CollisionSystem(EventListener *listener) : _listener(listener) {};
 
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos) {
             for (auto &&[first_ent_idx, d1, p1] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
@@ -28,7 +29,7 @@ class CollisionSystem {
                         p2->y <= p1->y &&
                         (p2->x + 100) >= p1->x &&
                         (p2->y + 100) >= p1->y)) {
-                            rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                            CollisionEvent* new_event = new CollisionEvent(second_ent_idx, first_ent_idx);
                         if (_listener->hasEvent(new_event)) {
                             second_ent_idx++;
                             delete new_event;
@@ -42,7 +43,7 @@ class CollisionSystem {
             }
         };
     private:
-        rtype::event::EventListener *_listener;
+        EventListener *_listener;
 };
 
 #endif /* !COLLISIONSYSTEM_HPP_ */

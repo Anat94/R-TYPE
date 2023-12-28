@@ -14,10 +14,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <vector>
-#include "../Ecs/Events.hpp"
-#include "../Errors.hpp"
 #include <queue>
 #include <mutex>
+#include "../Ecs/Events.hpp"
+#include "../Errors.hpp"
 #define MAX_BUF_SIZE 11024
 
 using boost::asio::ip::udp;
@@ -81,11 +81,11 @@ class Client {
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
     private:
-        std::string _username;
         //Content for network
         boost::asio::io_context _io_context;
-        udp::endpoint _server_endpoint;
         udp::socket _socket;
+        udp::endpoint _server_endpoint;
+        std::string _username;
         EventMessage _send_structure;
         SnapshotPosition _recieve_structure;
         std::array<char, 1024> _receiveBuffer;

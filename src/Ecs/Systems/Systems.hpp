@@ -6,9 +6,19 @@
 */
 
 #ifndef SYSTEMS_HPP_
-#define SYSTEMS_HPP_
-#include "../ZipperIterator.hpp"
-#include "../Registry.hpp"
+    #define SYSTEMS_HPP_
+    
+    #if not defined(ZIPPERITERATOR_HPP)
+        #include "../ZipperIterator.hpp"
+    #endif
+
+    #if not defined(REGISTRY_HPP_)
+        #include "../Registry.hpp"
+    #endif
+
+    #if not defined(EVENT_HPP_)
+        #include "../Events.hpp"
+    #endif
 
 class ISystems {
     public:

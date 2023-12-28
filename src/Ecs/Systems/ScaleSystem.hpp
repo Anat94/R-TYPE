@@ -9,7 +9,7 @@
 #define SCALESYSTEM_HPP_
 #include "Systems.hpp"
 
-class ScaleSystem {
+class ScaleSystem : public ISystems {
     public:
         ScaleSystem() {};
 

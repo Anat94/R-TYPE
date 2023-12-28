@@ -34,10 +34,10 @@ int main(int argc, char** argv) {
             if (_state == SUCCES)
                 return 0;
         }
-    } catch (ArgumentError e) {
+    } catch (const ArgumentError &e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
-    } catch (SFMLError e) {
+    } catch (const SFMLError &e) {
         std::cerr << "Sfml error: " << e.what() << std::endl;
         return 84;
     }

@@ -7,13 +7,13 @@
 
 #include "Events.hpp"
 
-bool rtype::event::EventListener::addEvent(rtype::event::IEvent *event)
+bool EventListener::addEvent(IEvent *event)
 {
     _events.push(event);
     return true;
 }
 
-bool rtype::event::EventListener::popEvent()
+bool EventListener::popEvent()
 {
     if (!_events.empty()) {
         IEvent* event = _events.front();
@@ -25,12 +25,12 @@ bool rtype::event::EventListener::popEvent()
         return false;
 }
 
-void rtype::event::EventListener::addRegistry(registry &reg)
+void EventListener::addRegistry(registry &reg)
 {
     _reg = &reg;
 }
 
-bool rtype::event::EventListener::hasEvent(rtype::event::IEvent *event)
+bool EventListener::hasEvent(IEvent *event)
 {
     const std::type_info& eventType = typeid(*(event));
     std::queue<IEvent*> tempQueue = _events;
@@ -44,7 +44,7 @@ bool rtype::event::EventListener::hasEvent(rtype::event::IEvent *event)
     return false;
 }
 
-void rtype::event::UpdatePositionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
 
@@ -58,7 +58,7 @@ void rtype::event::UpdatePositionEvent::handleEvent(registry &r, rtype::event::E
 }
 
 
-void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
         auto &player1_h = r.get_components<component::Health>()[_ents.first];
@@ -71,7 +71,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
             && player2_d.has_value()) {
             player1_h->_health -= player2_d->_damage;
             if (player1_h->_health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
+                DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -79,7 +79,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
             }
             player2_p->_pierce -= 1;
             if (player2_p->_pierce <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, -1);
+                DeathEvent *new_event = new DeathEvent(_ents.second, -1);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -103,7 +103,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
             && player1_p.has_value() && player1_d.has_value()) {
             player2_h->_health -= player1_d->_damage;
             if (player2_h->_health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, player1_hurt->_sender);
+                DeathEvent *new_event = new DeathEvent(_ents.second, player1_hurt->_sender);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -111,7 +111,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
             }
             player1_p->_pierce -= 1;
             if (player1_p->_pierce <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, -1);
+                DeathEvent *new_event = new DeathEvent(_ents.first, -1);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -125,7 +125,7 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
     }
 }
 
-void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
     //! remove player
     try {
@@ -167,12 +167,12 @@ void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListe
     }
 }
 
-void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // Todo: ping all other to connect new player
 }
 
-void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
 

@@ -11,12 +11,15 @@
 #include <sstream>
 #include <iomanip>
 #include "../Ecs/ZipperIterator.hpp"
-#include "../Ecs/Events.hpp"
 #include "Client.hpp"
+#include "../Ecs/Systems/DrawSystem.hpp"
+#include "../Ecs/Systems/RotationSystem.hpp"
+#include "../Ecs/Systems/PositionSystem.hpp"
+#include "../Ecs/Systems/ScaleSystem.hpp"
 
 bool can_read = true;
 std::mutex mtx;
-rtype::event::EventListener listener;
+EventListener listener;
 
 auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
     for (auto &&[_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
@@ -49,7 +52,7 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
                 if (content.event->key.code == sf::Keyboard::Right)
                     v->_dx = 30;
                 if (content.event->key.code == sf::Keyboard::Space)
-                    listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
+                    listener.addEvent(new ShootEvent(first_ent_idx, -1));
             }
         }
     }
@@ -100,7 +103,7 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
                 p2->y <= p1->y &&
                 (p2->x + 100) >= p1->x &&
                 (p2->y + 100) >= p1->y)) {
-                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                    CollisionEvent* new_event = new CollisionEvent(second_ent_idx, first_ent_idx);
                 if (listener.hasEvent(new_event)) {
                     second_ent_idx++;
                     delete new_event;
@@ -160,7 +163,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
             std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
-    } catch (std::exception ex) {
+    } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
     return snapshot->packet_id;
@@ -203,7 +206,6 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::Velocity>();
     _ecs.register_component<component::Drawable>();
     _ecs.register_component<component::Rotation>();
-    _ecs.register_component<component::PlayMusic>();
     _ecs.register_component<component::ResetOnMove>();
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::Controllable>();
@@ -243,13 +245,20 @@ Client::Client(std::string ip, int port, std::string username)
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
     // Define the component
-    _ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    _ecs.add_system<component::Position, component::Velocity>(position_system);
-    _ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
-    _ecs.add_system<component::Drawable, component::Position>(collision_system);
-    _ecs.add_system<component::Drawable, component::Scale>(scale_system);
-    _ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
-    _ecs.add_system<component::Drawable, component::Position>(draw_system);
+    // _ecs.add_system<component::Velocity, component::Controllable>(control_system);
+    // _ecs.add_system<component::Position, component::Velocity>(position_system);
+    // _ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
+    // _ecs.add_system<component::Drawable, component::Position>(collision_system);
+
+    // _ecs.add_system<component::Drawable, component::Position>(draw_system);
+    DrawSystem draw_sys(&_window);
+    _ecs.add_system<component::Drawable, component::Position>(draw_sys);
+    // _ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
+    RotationSystem rot_sys;
+    _ecs.add_system<component::Drawable, component::Rotation>(rot_sys);
+    // _ecs.add_system<component::Drawable, component::Scale>(scale_system);
+    ScaleSystem sca_sys;
+    _ecs.add_system<component::Drawable, component::Scale>(sca_sys);
     //Define the gameplay
     _score = 0;
     _lives = 0; // player1.value()._health;
@@ -380,9 +389,8 @@ int Client::run()
         _lives_text.setPosition(1750, 10);
         _window.clear();
         manageEvent();
-        component::DrawableContent content = component::DrawableContent(_window, _event);
         while (listener.popEvent());
-        _ecs.run_systems(content);
+        _ecs.run_systems();
         // send_datas();
         // receive_datas();
         displayTexts();

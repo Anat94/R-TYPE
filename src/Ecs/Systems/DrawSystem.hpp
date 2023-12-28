@@ -6,8 +6,8 @@
 */
 
 #ifndef DRAWSYSTEM_HPP_
-#define DRAWSYSTEM_HPP_
-#include "Systems.hpp"
+    #define DRAWSYSTEM_HPP_
+    #include "Systems.hpp"
 
 class DrawSystem : public ISystems {
     public:
@@ -18,6 +18,7 @@ class DrawSystem : public ISystems {
                     d->_sprite.setPosition(p->x, p->y);
                     _window->draw(d->_sprite);
                 }
+                std::cout << "Made a tour" << std::endl;
             }
         };
     private:
