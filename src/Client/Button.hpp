@@ -8,8 +8,11 @@
 #ifndef BUTTON_HPP_
     #define BUTTON_HPP_
     #include <SFML/Graphics.hpp>
+    #include "Systems.hpp"
+    #include "../Registry.hpp"
+    #include "../Events.hpp"
 
-class Button {
+class ButtonSysrem : public ISystems {
     public:
         Button(float x, float y, float width, float height, sf::Font& font, std::string text, sf::Color textColor, sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor);
 
