@@ -14,7 +14,7 @@
 #include "Client.hpp"
 #include "../Ecs/Systems/DrawSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
-#include "../Ecs/Systems/PositionSystem.hpp"
+#include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
 
 bool can_read = true;
@@ -87,35 +87,31 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
     can_read = true;
 };
 
-
-auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
-{
-    for (auto &&[first_ent_idx, d1, p1] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-        if (!d1.has_value() || !p1.has_value()) continue;
-        for (auto &&[second_ent_idx, d2, p2] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-            if (first_ent_idx == second_ent_idx)
-                continue;
-            if ((p1->x <= p2->x &&
-                p1->y <= p2->y &&
-                (p1->x + 100) >= p2->x &&
-                (p1->y + 100) >= p2->y) ||
-                (p2->x <= p1->x &&
-                p2->y <= p1->y &&
-                (p2->x + 100) >= p1->x &&
-                (p2->y + 100) >= p1->y)) {
-                    CollisionEvent* new_event = new CollisionEvent(second_ent_idx, first_ent_idx);
-                if (listener.hasEvent(new_event)) {
-                    second_ent_idx++;
-                    delete new_event;
-                    continue;
-                } else
-                    listener.addEvent(new_event);
-            } else {
-
-            }
-        }
-    }
-};
+// auto collision_system = [](sparse_array<component::Hitbox> &hit, sparse_array<component::Position> &pos, component::DrawableContent& _)
+// {
+//     int first_ent_idx = 0;
+//     for (auto &&[h1, p1] : zipper<sparse_array<component::Hitbox>, sparse_array<component::Position>>(hit, pos)) {
+//         if (!h1.has_value() || !p1.has_value()) continue;
+//         int second_ent_idx = 0;
+//         for (auto &&[h2, p2] : zipper<sparse_array<component::Hitbox>, sparse_array<component::Position>>(hit, pos)) {
+//             if (first_ent_idx == second_ent_idx || !h2.has_value() || !p2.has_value() || *h1 == *h2) {
+//                 second_ent_idx++;
+//                 continue;
+//             }
+//             auto temp_h1 = h1->update(*p1);
+//             auto temp_h2 = h2->update(*p2);
+//             if (temp_h1.isTouching(temp_h2) || temp_h2.isTouching(temp_h1)) {
+//                 CollisionEvent* new_event = new CollisionEvent(first_ent_idx + 1, second_ent_idx);
+//                 if (listener.hasEvent(new_event)) {
+//                     second_ent_idx++;
+//                     delete new_event;
+//                     continue;
+//                 } else
+//                     listener.addEvent(new_event);
+//             }
+//         }
+//     }
+// };
 
 std::vector<char> Client::recieve_raw_data_from_client()
 {
@@ -143,15 +139,16 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         entity_t real_entity = snapshot->entity + 1;
         if (real_entity > 0 && pos[real_entity].has_value()) {
             std::cout << "UPDATED PLAYER\n";
-            std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
-            pos[real_entity].value().x = snapshot->data.x;
-            pos[real_entity].value().y = snapshot->data.y;
+            std::cout << _recieve_structure.data.x << std::endl;
+            pos[real_entity]->x = _recieve_structure.data.x;
+            pos[real_entity]->y = _recieve_structure.data.y;
         } else {
             std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
             // std::cout << _recieve_structure.entity << std::endl;
             // std::cout << new_player << std::endl;
-            _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
+            std::cout << _recieve_structure.data.x << std::endl;
+            _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             // _ecs.add_component(new_player, component::Controllable());
@@ -201,6 +198,7 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::Damage>();
     _ecs.register_component<component::Health>();
     _ecs.register_component<component::Pierce>();
+    _ecs.register_component<component::Hitbox>();
     _ecs.register_component<component::Heading>();
     _ecs.register_component<component::Position>();
     _ecs.register_component<component::Velocity>();
@@ -212,8 +210,8 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::HurtsOnCollision>();
     //Define the entities
     _background = _ecs.spawn_entity();
-    // _player = _ecs.spawn_entity();
-    // _enemy = _ecs.spawn_entity();
+    _player = _ecs.spawn_entity();
+    _enemy = _ecs.spawn_entity();
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg"));
@@ -259,6 +257,8 @@ Client::Client(std::string ip, int port, std::string username)
     // _ecs.add_system<component::Drawable, component::Scale>(scale_system);
     ScaleSystem sca_sys;
     _ecs.add_system<component::Drawable, component::Scale>(sca_sys);
+    ControlSystem ctrl_sys(&listener, &_event);
+    _ecs.add_system<component::Velocity, component::Controllable>(ctrl_sys);
     //Define the gameplay
     _score = 0;
     _lives = 0; // player1.value()._health;
@@ -296,6 +296,11 @@ void Client::send_to_server(const T& structure) {
     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
+// template <typename T>
+// void Client::send_datas(const T& structure) {
+//     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
+// }
+
 void Client::receive_datas() {
     std::cout << "START RECIEVE";
     _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
@@ -310,30 +315,28 @@ void Client::displayTexts()
     _window.draw(_level_text);
 }
 
-void Client::manageEvent()
+int Client::manageEvent()
 {
-    sf::Event evt;
-    while (_window.pollEvent(evt)) {
-        if (evt.type == sf::Event::Closed) {
+    while (_window.pollEvent(_event)) {
+        if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
-            send_to_server<EventMessage>(_send_structure);
-            _window.close();
-            std::exit(0);
+            // send_datas<data_struct>(_send_structure);
+            return 1;
         }
-        if (std::find(eventsToPrint.begin(), eventsToPrint.end(), evt.type) != eventsToPrint.end()) {
+        if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
-            _send_structure.event = evt;
-            send_to_server<EventMessage>(_send_structure);
-            _event = evt;
-            return;
+            _send_structure.event = _event;
+            // send_datas<data_struct>(_send_structure);
+            _event = _event;
+            return 0;
         }
-        if (evt.type == sf::Event::KeyPressed)
-            if (evt.key.code == sf::Keyboard::Escape) {
+        if (_event.type == sf::Event::KeyPressed)
+            if (_event.key.code == sf::Keyboard::Escape) {
                 saveHighScore();
-                _window.close();
-                std::exit(0);
+                return 1;
             }
     }
+    return 0;
 }
 
 void Client::saveHighScore()
@@ -398,4 +401,5 @@ int Client::run()
     }
     saveHighScore();
     _window.close();
+    return 0;
 }

@@ -20,11 +20,11 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
     if (event.key.code == sf::Keyboard::Right)
         return {30, 0};
     if (event.key.code == sf::Keyboard::Space)
-        _listener.addEvent(new rtype::event::ShootEvent(entity, -1));
+        _listener.addEvent(new ShootEvent(entity, -1));
     return {0, 0};
 }
 
-Server::Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
+Server::Server(boost::asio::io_service &service, int port, registry &ecs, EventListener &listener): _service(service), _socket(service, udp::endpoint(udp::v4(), port)), _ecs(ecs), _listener(listener), _send_thread(&Server::sendPositionPackagesPeriodically, this)
 {
     _tpool.emplace_back([this, &service]() { service.run(); });
     recieve_from_client();
@@ -131,7 +131,7 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
         return;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-    _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+    _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
     send_position_snapshots_for_all_players();
 }
 

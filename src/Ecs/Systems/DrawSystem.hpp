@@ -18,7 +18,6 @@ class DrawSystem : public ISystems {
                     d->_sprite.setPosition(p->x, p->y);
                     _window->draw(d->_sprite);
                 }
-                std::cout << "Made a tour" << std::endl;
             }
         };
     private:

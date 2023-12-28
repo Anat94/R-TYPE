@@ -38,6 +38,13 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+struct data_struct {
+    int id;
+    sf::Event event;
+    int package_id;
+
+};
+
 struct ConfirmationMessage: public BaseMessage {
     int packet_id;
 };
@@ -56,14 +63,16 @@ enum Stage {
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
-        Client(std::string ip, int port, std::string _username);
+        Client(std::string ip, int port, std::string _username = "");
         ~Client();
         int run();
         template <typename T>
         void send_to_server(const T& structure);
+        // template <typename T>
+        // void send_datas(const T& structure);
 
-        template <typename T>
-        void receive_datas(T& structure);
+        // template <typename T>
+        // void receive_datas(T& structure);
         void receive_datas();
         void displayTexts();
 
@@ -72,7 +81,8 @@ class Client {
         void decreaseLives() { _lives--; }
         void increaseLives() { _lives++; }
         void setLevel(int level) { _level = level; }
-        void manageEvent();
+        bool hasPendingMessages() const;
+        int manageEvent();
         void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
@@ -82,11 +92,12 @@ class Client {
 
     private:
         //Content for network
+        EventMessage _send_structure;
         boost::asio::io_context _io_context;
         udp::socket _socket;
         udp::endpoint _server_endpoint;
         std::string _username;
-        EventMessage _send_structure;
+        //Content for network
         SnapshotPosition _recieve_structure;
         std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {

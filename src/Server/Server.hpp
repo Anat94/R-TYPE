@@ -8,8 +8,6 @@
 #ifndef SERVER_HPP
     #define SERVER_HPP
     #define MAX_BUF_SIZE 11024
-    #include "../Ecs/Events.hpp"
-    #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
     #include <thread>
     #include <chrono>
@@ -19,6 +17,13 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
+    #include "../Ecs/Systems/CollisionSystem.hpp"
+    #include "../Ecs/Systems/ControlSystem.hpp"
+    #include "../Ecs/Systems/PositionSystem.hpp"
+    #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
+
 
 using boost::asio::ip::udp;
 
@@ -49,7 +54,7 @@ struct EventMessage: public BaseMessage {
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(boost::asio::io_service &service, int port, registry &ecs, rtype::event::EventListener &listener);
+        Server(boost::asio::io_service &service, int port, registry &ecs, EventListener &listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -73,7 +78,7 @@ class Server {
         std::vector<std::thread> _tpool;
         udp::socket _socket;
         registry &_ecs;
-        rtype::event::EventListener &_listener;
+        EventListener &_listener;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {1, &Server::recieve_client_event},
@@ -81,7 +86,7 @@ class Server {
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm}
         };
-
+        sf::Event _event;
         std::thread _send_thread;
 };
 
