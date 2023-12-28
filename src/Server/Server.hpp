@@ -12,7 +12,7 @@
     #include <thread>
     #include <chrono>
     #include <array>
-    #include <boost/asio.hpp>
+    #include <asio.hpp>
     #include <SFML/Window.hpp>
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
@@ -23,9 +23,9 @@
     #include "../Ecs/Systems/ControlSystem.hpp"
     #include "../Ecs/Systems/PositionSystem.hpp"
     #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
+    #include <sqlite3.h>
 
-
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
@@ -51,10 +51,15 @@ struct EventMessage: public BaseMessage {
     int packet_id;
 };
 
+struct Friendship {
+    std::string name;
+    std::string id;
+};
+
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(boost::asio::io_service &service, int port, registry &ecs, EventListener &listener);
+        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -69,16 +74,29 @@ class Server {
         template <typename T>
         void send_data_to_all_clients(T& structure);
         void sendPositionPackagesPeriodically();
-
+        void connectToDB();
+        void getHighScore();
+        void addHighScore(std::string name, int score);
+        bool IsNameInBdd(std::string name);
+        void signUp(std::string name, std::string password);
+        bool checkIfUserExist(std::string name, std::string password);
+        std::string makePersonnalID();
+        void signIn(std::string name, std::string password);
+        void addFriend(std::string name, std::string friendName);
+        bool checkIfFriendshipExist(std::string name, std::string friendId);
+        void removeFriend(std::string name, std::string friendName);
+        void displayFriends(std::string name);
+        Friendship getFriendsData(std::string id);
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::array<char, 1024> _buf;
-        boost::asio::io_service::work _service;
+        // asio::io_service &_service;
+        asio::io_context &_service;
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
-        udp::socket _socket;
         registry &_ecs;
         EventListener &_listener;
+        asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {1, &Server::recieve_client_event},
@@ -88,6 +106,9 @@ class Server {
         };
         sf::Event _event;
         std::thread _send_thread;
+        sqlite3 *_db;
+        int _highScore = 0;
+        std::string _nameForHighScore = "";
 };
 
 #endif // SERVER_HPP

@@ -9,7 +9,7 @@
 #define CLIENT_HPP
 
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -20,7 +20,7 @@
 #include "../Errors.hpp"
 #define MAX_BUF_SIZE 11024
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;

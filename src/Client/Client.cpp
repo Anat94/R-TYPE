@@ -116,7 +116,7 @@ auto draw_system = [](sparse_array<component::Drawable> &dra, sparse_array<compo
 std::vector<char> Client::recieve_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
-    size_t bytesRead = _socket.receive_from(boost::asio::buffer(receivedData), _server_endpoint);
+    size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _server_endpoint);
 
     receivedData.resize(bytesRead);
     return receivedData;
@@ -187,7 +187,7 @@ void Client::receive()
 Client::Client(std::string ip, int port, std::string username)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
-      _server_endpoint(udp::endpoint(boost::asio::ip::address::from_string(ip), port)),
+      _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _username(username)
 {
     _send_structure.id = 2;
@@ -293,7 +293,7 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 
 template <typename T>
 void Client::send_to_server(const T& structure) {
-    _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
+    _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
 // template <typename T>
@@ -303,7 +303,7 @@ void Client::send_to_server(const T& structure) {
 
 void Client::receive_datas() {
     std::cout << "START RECIEVE";
-    _socket.receive_from(boost::asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
+    _socket.receive_from(asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
     std::cout << "RECIEVED\n";
     receive_datas();
 }
