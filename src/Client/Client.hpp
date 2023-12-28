@@ -20,7 +20,7 @@
 #include "../Errors.hpp"
 #define MAX_BUF_SIZE 11024
 
-using asio::ip::udp;
+using boost::asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
