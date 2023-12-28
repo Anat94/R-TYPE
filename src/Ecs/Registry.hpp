@@ -21,7 +21,7 @@
     #include "../Errors.hpp"
     #include "Systems/Systems.hpp"
 
-using asio::ip::udp;
+using boost::asio::ip::udp;
 
 using entity_t = size_t;
 
