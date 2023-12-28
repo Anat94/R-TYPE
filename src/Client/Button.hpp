@@ -8,14 +8,17 @@
 #ifndef BUTTON_HPP_
     #define BUTTON_HPP_
     #include <SFML/Graphics.hpp>
-    #include "Systems.hpp"
-    #include "../Registry.hpp"
-    #include "../Events.hpp"
+    //#include "Systems.hpp"
+    //#include "../Registry.hpp"
+    //#include "../Events.hpp"
 
-class ButtonSysrem : public ISystems {
+//public ISystems
+
+class Button {
     public:
         Button(float x, float y, float width, float height, sf::Font& font, std::string text, sf::Color textColor, sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor);
 
+        /*
         void operator()(sparse_array<component::Hitbox> &dra, sparse_array<component::Position> &pos) {
             for (auto &&[first_ent_idx, h1, p1] : zipper<sparse_array<component::Hitbox>, sparse_array<component::Position>>(dra, pos)) {
                 if (!h1.has_value() || !p1.has_value()) continue;
@@ -36,6 +39,7 @@ class ButtonSysrem : public ISystems {
                 }
             }
         };
+        */
 
         ~Button();
         void update(const sf::Vector2f& mousePos);
@@ -45,7 +49,7 @@ class ButtonSysrem : public ISystems {
         
 
     private:
-        EventListener *_listener;
+        //EventListener *_listener;
         sf::RectangleShape shape;
         sf::Text text;
         sf::Color textColor;
