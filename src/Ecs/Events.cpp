@@ -221,3 +221,13 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
         //? ignore -> shooter not a player for some reason ???
     }
 }
+
+void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
+{
+    // lance la fonction qui est passer en seconde dans _ents
+}
+
+void HoverBtnEvent::handleEvent(registry &r, EventListener &listener)
+{
+    // chnage la couleur du bouton
+}

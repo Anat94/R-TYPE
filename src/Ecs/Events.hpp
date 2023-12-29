@@ -257,6 +257,41 @@ class ShootEvent : public AEvent {
         void handleEvent(registry &r, EventListener &listener);
 };
 
+class HoverBtnEvent : public AEvent {
+    /**
+     * @brief Construct a new Click button Event object
+     * 
+     * @param btn the entity id that shot in the event
+     */
+    HoverBtnEvent(entity_t btn) { _ents = {btn}; };
+
+    /**
+     * @brief Handles the event based on the registry objects
+     * 
+     * @param r the registry_t object used to store the game engine resources
+     * @param listener the event listener used to create new events if needed
+     */
+    void handleEvent(registry &r, EventListener &listener);
+}
+
+class ClickBtnEvent : public AEvent {
+    /**
+     * @brief Construct a new Click button Event object
+     * 
+     * @param btn the entity id that shot in the event
+     * @param function function that will be executed when the button is clicked
+     */
+    ClickBtnEvent(entity_t btn, void (*function)()) { _ents = {btn, function}; };
+
+    /**
+     * @brief Handles the event based on the registry objects
+     * 
+     * @param r the registry_t object used to store the game engine resources
+     * @param listener the event listener used to create new events if needed
+     */
+    void handleEvent(registry &r, EventListener &listener);
+}
+
 /**
  * @brief Namespace for the project
  * 

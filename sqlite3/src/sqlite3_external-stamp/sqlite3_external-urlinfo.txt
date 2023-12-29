@@ -3,9 +3,9 @@
 # No other meaning or use of this file is supported.
 
 method=url
-command=/usr/bin/cmake;-P;/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src/sqlite3_external-stamp/download-sqlite3_external.cmake;COMMAND;/usr/bin/cmake;-P;/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src/sqlite3_external-stamp/verify-sqlite3_external.cmake;COMMAND;/usr/bin/cmake;-P;/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src/sqlite3_external-stamp/extract-sqlite3_external.cmake
-source_dir=/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src/sqlite3_external
-work_dir=/home/anatole/delivery/Tek3/R-TYPE/sqlite3/src
+command=/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake;-P;/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src/sqlite3_external-stamp/download-sqlite3_external.cmake;COMMAND;/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake;-P;/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src/sqlite3_external-stamp/verify-sqlite3_external.cmake;COMMAND;/home/noah/.local/lib/python3.10/site-packages/cmake/data/bin/cmake;-P;/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src/sqlite3_external-stamp/extract-sqlite3_external.cmake
+source_dir=/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src/sqlite3_external
+work_dir=/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src
 url(s)=https://www.sqlite.org/2023/sqlite-autoconf-3440200.tar.gz
 hash=
 no_extract=
