@@ -5,6 +5,7 @@ project(R-type
         DESCRIPTION "r type project"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_INSTALL_MESSAGE LAZY)
 enable_testing()
 
 # Install asio

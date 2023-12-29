@@ -7,6 +7,22 @@
 
 #ifndef SPARSEARRAY_TPP
     #define SPARSEARRAY_TPP
+    #pragma warning(disable: 4668)
+    #pragma warning(disable: 4626)
+    #pragma warning(disable: 4625)
+    #pragma warning(disable: 4820)
+#pragma warning(disable: 5031)
+#pragma warning(disable: 4365)
+#pragma warning(disable: 5027)
+#pragma warning(disable: 4514)
+#pragma warning(disable: 4464)
+#pragma warning(disable: 5026)
+#pragma warning(disable: 4457)
+#pragma warning(disable: 5262)
+#pragma warning(disable: 5204)
+#pragma warning(disable: 4355)
+#pragma warning(disable: 5220)
+#pragma warning(disable: 5039)
 
 template <typename Component>
 inline sparse_array<Component>::sparse_array(const sparse_array &other) : _data(other._data) {}
