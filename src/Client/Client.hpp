@@ -130,6 +130,7 @@ class Client {
         entity_t _player;
         entity_t _background;
         entity_t _enemy;
+        entity_t _btn_play;
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;

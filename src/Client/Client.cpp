@@ -208,10 +208,20 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::Controllable>();
     _ecs.register_component<component::HurtsOnCollision>();
+    _ecs.register_component<component::Button>();
+
     //Define the entities
     _background = _ecs.spawn_entity();
     _player = _ecs.spawn_entity();
     _enemy = _ecs.spawn_entity();
+
+
+
+    _btn_play = _ecs.spawn_entity();
+
+    _ecs.add_component(_btn_play, component::Button());
+
+
     // Define the components for background
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg"));
