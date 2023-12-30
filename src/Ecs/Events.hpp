@@ -8,10 +8,9 @@
 #ifndef EVENT_HPP_
     #define EVENT_HPP_
     #include <queue>
+    #include "./Registry.hpp"
 
-    #if not defined(REGISTRY_HPP_)
-        #include "Registry.hpp"
-    #endif
+class registry;
 
 class EventListener;
 
@@ -263,7 +262,7 @@ class HoverBtnEvent : public AEvent {
      * 
      * @param btn the entity id that shot in the event
      */
-    HoverBtnEvent(entity_t btn) { _ents = {btn}; };
+    HoverBtnEvent(entity_t btn) { _ents = {btn, -1}; };
 
     /**
      * @brief Handles the event based on the registry objects
@@ -272,7 +271,7 @@ class HoverBtnEvent : public AEvent {
      * @param listener the event listener used to create new events if needed
      */
     void handleEvent(registry &r, EventListener &listener);
-}
+};
 
 class ClickBtnEvent : public AEvent {
     /**
@@ -281,7 +280,7 @@ class ClickBtnEvent : public AEvent {
      * @param btn the entity id that shot in the event
      * @param function function that will be executed when the button is clicked
      */
-    ClickBtnEvent(entity_t btn, void (*function)()) { _ents = {btn, function}; };
+    ClickBtnEvent(entity_t btn) { _ents = {btn, -1}; };
 
     /**
      * @brief Handles the event based on the registry objects
@@ -290,7 +289,7 @@ class ClickBtnEvent : public AEvent {
      * @param listener the event listener used to create new events if needed
      */
     void handleEvent(registry &r, EventListener &listener);
-}
+};
 
 /**
  * @brief Namespace for the project

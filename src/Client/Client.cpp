@@ -298,7 +298,7 @@ void Client::send_to_server(const T& structure) {
 
 // template <typename T>
 // void Client::send_datas(const T& structure) {
-//     _socket.send_to(boost::asio::buffer(&structure, sizeof(structure)), _server_endpoint);
+//     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 // }
 
 void Client::receive_datas() {
@@ -391,7 +391,8 @@ int Client::run()
         _lives_text.setString("Health: " + std::to_string(_lives));
         _lives_text.setPosition(1750, 10);
         _window.clear();
-        manageEvent();
+        if (manageEvent())
+            break;
         while (listener.popEvent());
         _ecs.run_systems();
         // send_datas();

@@ -15,13 +15,13 @@
     #include <any>
     #include <SFML/Graphics.hpp>
     #include <SFML/Audio.hpp>
-    #include <boost/asio.hpp>
+    #include <asio.hpp>
     #include "SparseArray.hpp"
     #include "Components.hpp"
     #include "../Errors.hpp"
     #include "Systems/Systems.hpp"
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 using entity_t = size_t;
 

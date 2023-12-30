@@ -1,1 +1,0 @@
-cmd='/mnt/c/Users/PC Noah/OneDrive/Bureau/Epitech Projects/rtype/sqlite3/src/sqlite3_external/configure'

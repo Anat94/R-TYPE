@@ -25,7 +25,7 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
 }
 
 
-Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event::EventListener& listener)
+Server::Server(asio::io_context& service, int port, registry& ecs, EventListener& listener)
     : _service(service),
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),

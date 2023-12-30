@@ -20,7 +20,7 @@
 #include "../Errors.hpp"
 #define MAX_BUF_SIZE 11024
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
@@ -93,7 +93,7 @@ class Client {
     private:
         //Content for network
         EventMessage _send_structure;
-        boost::asio::io_context _io_context;
+        asio::io_context _io_context;
         udp::socket _socket;
         udp::endpoint _server_endpoint;
         std::string _username;

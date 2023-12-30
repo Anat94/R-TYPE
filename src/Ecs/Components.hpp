@@ -8,11 +8,11 @@
 #ifndef COMPONENTS_HPP_
     #define COMPONENTS_HPP_
     #include <SFML/Graphics.hpp>
-    #include <boost/asio.hpp>
+    #include <asio.hpp>
     #include <SFML/Audio.hpp>
     #include "../Errors.hpp"
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 using entity_t = size_t;
 
 namespace component {
