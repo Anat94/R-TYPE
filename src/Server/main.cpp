@@ -12,7 +12,7 @@
 
 using asio::ip::udp;
 
-rtype::event::EventListener listener;
+EventListener listener;
 
 int error_handling(int nb_args)
 {
@@ -53,7 +53,7 @@ auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<co
                 if (content.event->key.code == sf::Keyboard::Right)
                     v->_dx = 30;
                 if (content.event->key.code == sf::Keyboard::Space)
-                    listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
+                    listener.addEvent(new ShootEvent(first_ent_idx, -1));
             }
         }
     }
@@ -88,7 +88,7 @@ auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<
                 p2->y <= p1->y &&
                 (p2->x + 100) >= p1->x &&
                 (p2->y + 100) >= p1->y)) {
-                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
+                    CollisionEvent* new_event = new CollisionEvent(second_ent_idx, first_ent_idx);
                 if (listener.hasEvent(new_event)) {
                     second_ent_idx++;
                     delete new_event;
@@ -130,6 +130,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Score>();
     ecs.register_component<component::Damage>();
     ecs.register_component<component::Health>();
+    ecs.register_component<component::Hitbox>();
     ecs.register_component<component::Pierce>();
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Position>();
@@ -162,20 +163,25 @@ int main(int argc, char *argv[]) {
 
     listener.addRegistry(ecs);
 
-    ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    ecs.add_system<component::Position, component::Velocity>(position_system);
-    ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
-    ecs.add_system<component::Drawable, component::Position>(collision_system);
-    ecs.add_system<component::Drawable, component::Scale>(scale_system);
-    ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
+    // ecs.add_system<component::Velocity, component::Controllable>(control_system);
+    // ecs.add_system<component::Position, component::Velocity>(position_system);
+    PositionSystem pos_sys;
+    ecs.add_system<component::Position, component::Velocity>(pos_sys);
+    // ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
+    ResetOnMoveSystem rom_sys;
+    ecs.add_system<component::Velocity, component::ResetOnMove>(rom_sys);
+    // ecs.add_system<component::Drawable, component::Position>(collision_system);
+    CollisionSystem col_sys(&listener);
+    ecs.add_system<component::Hitbox, component::Position>(col_sys);
+    // ecs.add_system<component::Drawable, component::Scale>(scale_system);
+    // ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 
     error_handling(argc);
     std::thread serverThread([&]() {
         runServer(argv[1], ecs);
     });
     while (true) {
-        component::DrawableContent content = component::DrawableContent(event);
-        ecs.run_systems(content);
+        ecs.run_systems();
         while (listener.popEvent());
     }
     return 0;

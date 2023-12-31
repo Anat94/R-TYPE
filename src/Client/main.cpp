@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
                 Menu menu;
                 _state = menu.run();
                 tmp_username = menu.getUsername();
-                std::cout << "1username: " << tmp_username << std::endl;
+                std::cout << "username: " << tmp_username << std::endl;
             } else if (_state == GAME) {
                 Client client(argv[1], atoi(argv[2]), tmp_username);
                 return client.run();
@@ -34,10 +34,10 @@ int main(int argc, char** argv) {
             if (_state == SUCCES)
                 return 0;
         }
-    } catch (ArgumentError e) {
+    } catch (const ArgumentError &e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
-    } catch (SFMLError e) {
+    } catch (const SFMLError &e) {
         std::cerr << "Sfml error: " << e.what() << std::endl;
         return 84;
     }

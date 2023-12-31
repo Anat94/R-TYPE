@@ -8,8 +8,6 @@
 #ifndef SERVER_HPP
     #define SERVER_HPP
     #define MAX_BUF_SIZE 11024
-    #include "../Ecs/Events.hpp"
-    #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
     #include <thread>
     #include <chrono>
@@ -19,6 +17,12 @@
     #include <SFML/Graphics.hpp>
     #include <SFML/System.hpp>
     #include <functional>
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
+    #include "../Ecs/Systems/CollisionSystem.hpp"
+    #include "../Ecs/Systems/ControlSystem.hpp"
+    #include "../Ecs/Systems/PositionSystem.hpp"
+    #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
     #include <sqlite3.h>
 
 using asio::ip::udp;
@@ -55,7 +59,7 @@ struct Friendship {
 class Server {
     typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(asio::io_context& service, int port, registry& ecs, rtype::event::EventListener& listener);
+        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -91,7 +95,7 @@ class Server {
         udp::endpoint _remote_endpoint;
         std::vector<std::thread> _tpool;
         registry &_ecs;
-        rtype::event::EventListener &_listener;
+        EventListener &_listener;
         asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
@@ -100,7 +104,7 @@ class Server {
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm}
         };
-
+        sf::Event _event;
         std::thread _send_thread;
         sqlite3 *_db;
         int _highScore = 0;
