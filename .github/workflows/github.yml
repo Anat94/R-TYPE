@@ -28,14 +28,8 @@ jobs:
       - name: LINUX - Launch cmake
         run: cmake .
 
-      - name: Install Criterion
-        run: ./criterion.sh
-
       - name: LINUX - Launch tests
-        working-directory: ./src/Ecs/tests
-        run: |
-         g++ TestSparseArray.cpp TestZipperIterator.cpp -lcriterion
-         ./a.out
+        run: cmake --build . --target my_tests
 
   windows:
     runs-on: windows-latest

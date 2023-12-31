@@ -85,6 +85,7 @@ void Server::connectToDB() {
     } else {
         fprintf(stderr, "Opened database successfully\n");
     }
+    printf("Opened database successfully\n");
     // std::string sql12 = "DELETE FROM FRIENDS";
     // char *zErrMsg = 0;
     // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
