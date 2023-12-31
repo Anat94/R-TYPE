@@ -52,6 +52,7 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 
         player1_pla.value().x += _pos.first;
         player1_pla.value().y += _pos.second;
+        std::cout << "updated position: x: " << player1_pla.value().x << ", y: " << player1_pla.value().y << std::endl;
     } catch (const std::exception &e) {
         e.what();
     }

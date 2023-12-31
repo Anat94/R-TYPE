@@ -165,14 +165,14 @@ int main(int argc, char *argv[]) {
 
     // ecs.add_system<component::Velocity, component::Controllable>(control_system);
     // ecs.add_system<component::Position, component::Velocity>(position_system);
-    PositionSystem pos_sys;
-    ecs.add_system<component::Position, component::Velocity>(pos_sys);
+    PositionSystem *pos_sys = new PositionSystem();
+    ecs.add_system<component::Position, component::Velocity>(*pos_sys);
     // ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
-    ResetOnMoveSystem rom_sys;
-    ecs.add_system<component::Velocity, component::ResetOnMove>(rom_sys);
+    ResetOnMoveSystem *rom_sys = new ResetOnMoveSystem();
+    ecs.add_system<component::Velocity, component::ResetOnMove>(*rom_sys);
     // ecs.add_system<component::Drawable, component::Position>(collision_system);
-    CollisionSystem col_sys(&listener);
-    ecs.add_system<component::Hitbox, component::Position>(col_sys);
+    CollisionSystem *col_sys = new CollisionSystem(&listener);
+    ecs.add_system<component::Hitbox, component::Position>(*col_sys);
     // ecs.add_system<component::Drawable, component::Scale>(scale_system);
     // ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 

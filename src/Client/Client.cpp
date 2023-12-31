@@ -16,6 +16,7 @@
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
+#include "../Ecs/Systems/ButtonSystem.hpp"
 
 bool can_read = true;
 std::mutex mtx;
@@ -132,23 +133,23 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
     while (!can_read)
         continue;
     try {
+        entity_t real_entity = snapshot->entity + 2;
         // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << servEntities[j].value().entity << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == _recieve_structure.entity) ? servEntities[j].value().entity : real_entity;
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
         // }
-        entity_t real_entity = snapshot->entity + 1;
         if (real_entity > 0 && pos[real_entity].has_value()) {
             std::cout << "UPDATED PLAYER\n";
-            std::cout << _recieve_structure.data.x << std::endl;
-            pos[real_entity]->x = _recieve_structure.data.x;
-            pos[real_entity]->y = _recieve_structure.data.y;
+            std::cout << snapshot->data.x << std::endl;
+            pos[real_entity]->x = snapshot->data.x;
+            pos[real_entity]->y = snapshot->data.y;
         } else {
             std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
             // std::cout << _recieve_structure.entity << std::endl;
             // std::cout << new_player << std::endl;
             std::cout << _recieve_structure.data.x << std::endl;
-            _ecs.add_component(new_player, component::Position(_recieve_structure.data.x,  _recieve_structure.data.y));
+            _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             // _ecs.add_component(new_player, component::Controllable());
@@ -157,7 +158,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Scale(0.1f));
             _ecs.add_component(new_player, component::Rotation(90));
             // _ecs.add_component(new_player, component::Player(100, 20));
-            _ecs.add_component(new_player, component::ServerEntity(_recieve_structure.entity));
+            _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
             std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
     } catch (const std::exception &ex) {
@@ -169,6 +170,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
 void Client::receive()
 {
     std::vector<char> server_msg = recieve_raw_data_from_client();
+    std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -177,7 +179,6 @@ void Client::receive()
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
     ConfirmationMessage to_send;
-    std::cout << "RECEIVED PACKET NUMBER:" << packet_id << std::endl;
     to_send.id = 5;
     to_send.packet_id = packet_id;
     send_to_server(to_send);
@@ -212,14 +213,14 @@ Client::Client(std::string ip, int port, std::string username)
 
     //Define the entities
     _background = _ecs.spawn_entity();
-    _player = _ecs.spawn_entity();
-    _enemy = _ecs.spawn_entity();
+    // _player = _ecs.spawn_entity();
+    // _enemy = _ecs.spawn_entity();
 
 
 
     _btn_play = _ecs.spawn_entity();
 
-    _ecs.add_component(_btn_play, component::Button());
+    // _ecs.add_component(_btn_play, component::Button());
 
 
     // Define the components for background
@@ -259,16 +260,16 @@ Client::Client(std::string ip, int port, std::string username)
     // _ecs.add_system<component::Drawable, component::Position>(collision_system);
 
     // _ecs.add_system<component::Drawable, component::Position>(draw_system);
-    DrawSystem draw_sys(&_window);
-    _ecs.add_system<component::Drawable, component::Position>(draw_sys);
+    DrawSystem *draw_sys = new DrawSystem(&_window);
+    _ecs.add_system<component::Drawable, component::Position>(*draw_sys);
     // _ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
-    RotationSystem rot_sys;
-    _ecs.add_system<component::Drawable, component::Rotation>(rot_sys);
+    RotationSystem *rot_sys = new RotationSystem();
+    _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
     // _ecs.add_system<component::Drawable, component::Scale>(scale_system);
-    ScaleSystem sca_sys;
-    _ecs.add_system<component::Drawable, component::Scale>(sca_sys);
-    ControlSystem ctrl_sys(&listener, &_event);
-    _ecs.add_system<component::Velocity, component::Controllable>(ctrl_sys);
+    ScaleSystem *sca_sys = new ScaleSystem();
+    _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
+    ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
+    _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
     //Define the gameplay
     _score = 0;
     _lives = 0; // player1.value()._health;
@@ -336,7 +337,7 @@ int Client::manageEvent()
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
             _send_structure.event = _event;
-            // send_datas<data_struct>(_send_structure);
+            send_to_server(_send_structure);
             _event = _event;
             return 0;
         }
