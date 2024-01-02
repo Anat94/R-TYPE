@@ -70,7 +70,14 @@ namespace component {
      * 
      */
     struct Button {
-
+        sf::RectangleShape shape;
+        sf::Text text;
+        sf::Color textColor;
+        sf::Color idleColor;
+        sf::Color hoverColor;
+        sf::Color activeColor;
+        
+        Button(float x, float y, float width, float height, sf::Font& font, std::string text, sf::Color textColor, sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor) {}
     };
 
     /**
