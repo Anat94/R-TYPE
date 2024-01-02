@@ -102,6 +102,11 @@ inline typename sparse_array<Component>::const_iterator sparse_array<Component>:
     return _data.cend();
 }
 
+template <typename Component>
+void sparse_array<Component>::resize(size_type new_size) {
+    _data.resize(new_size);
+}
+
 template<class Component>
 inline typename sparse_array<Component>::size_type sparse_array<Component>::size() const
 {

@@ -163,6 +163,8 @@ class Client {
         std::map<int16_t, messageParserHandle> _messageParser = {
             {4, &Client::recieve_position_snapshot_update}
         };
+        sf::Vector2i _mouse_position;
+        sf::Text _mouse_position_text;
 };
 
 #endif // CLIENT_HPP

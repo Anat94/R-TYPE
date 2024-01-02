@@ -16,6 +16,7 @@ class ControlSystem : public ISystems {
         ControlSystem(EventListener *listener, sf::Event *event) : _listener(listener), _event(event) {};
 
         void operator()(sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con) {
+            std::cout << "Control system" << std::endl;
             for (auto &&[idx, v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
                 if (c.has_value() && v.has_value()) {
                     if (_event->type == sf::Event::KeyPressed) {
