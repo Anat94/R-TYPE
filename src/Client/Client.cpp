@@ -158,6 +158,8 @@ Client::Client(std::string ip, int port, std::string username)
     _lives_text.setPosition(1750, 10);
     _level_text = sf::Text("Level: " + std::to_string(_level), _font, 30);
     _level_text.setPosition(950, 10);
+    _mouse_position_text = sf::Text("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y), _font, 20);
+    _mouse_position_text.setPosition(10, 970);
 }
 
 Client::~Client()
@@ -194,6 +196,7 @@ void Client::displayTexts()
     _window.draw(_score_text);
     _window.draw(_lives_text);
     _window.draw(_level_text);
+    _window.draw(_mouse_position_text);
 }
 
 int Client::manageEvent()
@@ -269,6 +272,8 @@ int Client::run()
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
     while (true) {
+        _mouse_position = sf::Mouse::getPosition(_window);
+        _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
         // auto &player1_h = _ecs.get_components<component::Health>()[_player];
         // auto &player1_s = _ecs.get_components<component::Score>()[_player];
         _window.clear();
