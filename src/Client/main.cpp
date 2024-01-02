@@ -4,7 +4,22 @@
 ** File description:
 ** main
 */
-
+#pragma warning(disable: 4668)
+#pragma warning(disable: 4626)
+#pragma warning(disable: 4625)
+#pragma warning(disable: 4820)
+#pragma warning(disable: 5031)
+#pragma warning(disable: 4365)
+#pragma warning(disable: 5027)
+#pragma warning(disable: 4514)
+#pragma warning(disable: 4464)
+#pragma warning(disable: 5026)
+#pragma warning(disable: 4457)
+#pragma warning(disable: 5262)
+#pragma warning(disable: 5204)
+#pragma warning(disable: 4355)
+#pragma warning(disable: 5220)
+#pragma warning(disable: 5039)
 #include <iostream>
 #include <asio.hpp>
 #include "../Errors.hpp"
@@ -26,7 +41,7 @@ int main(int argc, char** argv) {
                 Menu menu;
                 _state = menu.run();
                 tmp_username = menu.getUsername();
-                std::cout << "1username: " << tmp_username << std::endl;
+                std::cout << "username: " << tmp_username << std::endl;
             } else if (_state == GAME) {
                 Client client(argv[1], atoi(argv[2]), tmp_username);
                 return client.run();
@@ -34,10 +49,10 @@ int main(int argc, char** argv) {
             if (_state == SUCCES)
                 return 0;
         }
-    } catch (ArgumentError e) {
+    } catch (const ArgumentError &e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
-    } catch (SFMLError e) {
+    } catch (const SFMLError &e) {
         std::cerr << "Sfml error: " << e.what() << std::endl;
         return 84;
     }

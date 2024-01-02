@@ -24,6 +24,7 @@ jobs:
           sudo apt-get install libmongoc-1.0-0
           sudo apt-get install libbson-1.0
           sudo apt-get install libasio-dev
+          sudo apt-get install libxcursor-dev
 
       - name: LINUX - Launch cmake
         run: cmake .
@@ -38,3 +39,6 @@ jobs:
 
       - name: Windows - Launch cmake
         run: cmake .
+
+      - name: WINOWS -  Launch tests
+        run: cmake --build . --target my_tests

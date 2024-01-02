@@ -11,6 +11,7 @@ bool can_mod = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
 {
+    std::cout << "CODE: " << event.key.code << " !!!!\n";
     if (event.key.code == sf::Keyboard::Up)
         return {0, -30};
     if (event.key.code == sf::Keyboard::Down)
@@ -20,11 +21,12 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::E
     if (event.key.code == sf::Keyboard::Right)
         return {30, 0};
     if (event.key.code == sf::Keyboard::Space)
-        _listener.addEvent(new rtype::event::ShootEvent(entity, -1));
+        _listener.addEvent(new ShootEvent(entity, -1));
     return {0, 0};
 }
 
-Server::Server(asio::io_context& service, int port, registry& ecs, rtype::event::EventListener& listener)
+
+Server::Server(asio::io_context& service, int port, registry& ecs, EventListener& listener)
     : _service(service),
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
@@ -110,6 +112,7 @@ void Server::send_position_snapshots_for_all_players()
     sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
+            // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
             SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0);
             send_data_to_all_clients<SnapshotPosition>(snap_p);
         }
@@ -154,7 +157,7 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
         return;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-    _listener.addEvent(new rtype::event::UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+    _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
     send_position_snapshots_for_all_players();
 }
 

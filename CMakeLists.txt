@@ -5,6 +5,7 @@ project(R-type
         DESCRIPTION "r type project"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_INSTALL_MESSAGE LAZY)
 enable_testing()
 
 # Install asio
@@ -85,7 +86,7 @@ endif()
 
 # Install sfml
 
-set(SFML_VERSION "2.5.1")
+set(SFML_VERSION "2.6.1")
 
 FetchContent_Declare(
     sfml
@@ -99,6 +100,7 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
+
 # INSTALL SQLITE3
 
 include(ExternalProject)
@@ -111,18 +113,13 @@ if (UNIX)
                 BUILD_COMMAND make
                 INSTALL_COMMAND ""
         )
-else()
-        ExternalProject_Add(
-                sqlite3_external
-                URL https://www.sqlite.org/2023/sqlite-amalgamation-3440200.zip
-                PREFIX ${CMAKE_BINARY_DIR}/sqlite3
-                CONFIGURE_COMMAND ""
-                BUILD_COMMAND ""
-                INSTALL_COMMAND ""
-        )
+        ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
+        include_directories(${SOURCE_DIR})
+elseif(WIN32)
+        include_directories(sqlite_windows)
+        add_library(sqlite3 STATIC sqlite_windows/sqlite3.c sqlite_windows/sqlite3.h sqlite_windows/sqlite3ext.h)
+        # add_executable(sqlite sqlite_windows/sqlite3.c sqlite_windows/shell.c sqlite_windows/sqlite3.h sqlite_windows/sqlite3ext.h)
 endif()
-ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
-include_directories(${SOURCE_DIR})
 
 # INSTALL GOOGLETESTS
 
@@ -152,6 +149,8 @@ endif()
 
 # COMPILATION FOR SERVER
 
+# message("COMPILING SERVER")
+
 add_executable(server
         src/Ecs/Events.cpp
         src/Server/Server.cpp
@@ -163,19 +162,34 @@ if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
 target_compile_options(server PRIVATE -ldl)
-add_dependencies(server sqlite3_external)
-ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
+if (UNIX)
+        add_dependencies(server sqlite3_external)
+endif()
+# add_dependencies(server sqlite)
+# ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
 target_include_directories(server PRIVATE ${BINARY_DIR})
-
-target_link_libraries(server
-    PRIVATE
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-        asio
-        ${BINARY_DIR}/.libs/libsqlite3.so
-)
+target_include_directories(server PRIVATE _deps/sfml-src/include)
+if (UNIX)
+        target_link_libraries(server
+        PRIVATE
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                asio
+                ${BINARY_DIR}/.libs/libsqlite3.so
+        )
+elseif(WIN32)
+        target_link_libraries(server
+        PRIVATE
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                asio
+                sqlite3
+        )
+endif()
 
 target_compile_features(server PRIVATE cxx_std_20)
 
@@ -186,12 +200,14 @@ add_library(ecs STATIC
         )
 target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
+target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 
 # COMPILATION FOR CLIENT
 
 include_directories(include src src/Client)
 
 add_executable(client
+                src/Ecs/Events.cpp
                 src/Client/Menu.cpp
                 src/Client/Client.cpp
                 src/Client/Game.cpp
@@ -199,7 +215,8 @@ add_executable(client
                 src/Client/Button.cpp
                 )
 target_include_directories(client PRIVATE cxx_std_20)
-target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
+target_include_directories(client PRIVATE _deps/sfml-src/include)
+# target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -218,18 +235,27 @@ add_executable(my_tests
         tests/TestZipperIterator.cpp
 )
 
-target_link_libraries(my_tests
-    PRIVATE
-        ecs
-        asio
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-        gtest
-        gmock
-        gmock_main
-        ${BINARY_DIR}/.libs/libsqlite3.so
-)
-
+if (UNIX)
+        target_link_libraries(my_tests
+        PRIVATE
+                ecs
+                gtest
+                gmock
+                gmock_main
+        )
+elseif(WIN32)
+        target_link_libraries(my_tests
+        PRIVATE
+                ecs
+                asio
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                gtest
+                gmock
+                gmock_main
+                sqlite3
+        )
+endif()
 add_test(NAME my_tests COMMAND tests)
