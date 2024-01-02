@@ -51,8 +51,8 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
     if (server_msg.size() < sizeof(SnapshotPosition))
         return -1;
     SnapshotPosition *snapshot = reinterpret_cast<SnapshotPosition *>(server_msg.data());
-    sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
-    sparse_array<component::ServerEntity> servEntities = _ecs.get_components<component::ServerEntity>();
+    sparse_array<component::Position> &pos = _ecs.get_components<component::Position>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -77,6 +77,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
             _ecs.add_component(new_player, component::Scale(0.1f));
             _ecs.add_component(new_player, component::Rotation(90));
+            _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
             std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
@@ -140,7 +141,6 @@ Client::Client(std::string ip, int port, std::string username)
     ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
     _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
     ScaleSystem *sca_sys = new ScaleSystem;
-
     _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
     RotationSystem *rot_sys = new RotationSystem;
     _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
@@ -282,7 +282,6 @@ int Client::run()
         while (listener.popEvent());
         std::cout << "Here" << std::endl;
         _ecs.run_systems();
-        // receive_datas();
         std::cout << " 1 tour done" << std::endl;
         displayTexts();
         _window.display();
