@@ -1,6 +1,4 @@
 # # Define the project
-# Anatole si tu continues de travailler sur des DBs CMakeLists.txt et High score t'auras échec à R-Type
-# - Edouard et Antoine
 
 cmake_minimum_required(VERSION 3.5)
 project(R-type
@@ -115,21 +113,13 @@ if (UNIX)
                 BUILD_COMMAND make
                 INSTALL_COMMAND ""
         )
+        ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
+        include_directories(${SOURCE_DIR})
 elseif(WIN32)
-        ExternalProject_Add(
-                sqlite3_external
-                URL https://www.sqlite.org/2023/sqlite-amalgamation-3440200.zip
-                PREFIX ${CMAKE_BINARY_DIR}/sqlite3
-                CONFIGURE_COMMAND ""
-                BUILD_COMMAND ""
-                INSTALL_COMMAND ""
-        )
-        include_directories(${CMAKE_SOURCE_DIR}/src)
-        add_library(sqlite3 STATIC sqlite3/src/sqlite3_external/sqlite3.c sqlite3/src/sqlite3_external/sqlite3.h sqlite3/src/sqlite3_external/sqlite3ext.h)
-        add_executable(sqlite sqlite3/src/sqlite3_external/sqlite3.c sqlite3/src/sqlite3_external/shell.c sqlite3/src/sqlite3_external/sqlite3.h sqlite3/src/sqlite3_external/sqlite3ext.h)
+        include_directories(sqlite_windows)
+        add_library(sqlite3 STATIC sqlite_windows/sqlite3.c sqlite_windows/sqlite3.h sqlite_windows/sqlite3ext.h)
+        # add_executable(sqlite sqlite_windows/sqlite3.c sqlite_windows/shell.c sqlite_windows/sqlite3.h sqlite_windows/sqlite3ext.h)
 endif()
-ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
-include_directories(${SOURCE_DIR})
 
 # INSTALL GOOGLETESTS
 
@@ -172,8 +162,11 @@ if (UNIX)
         set(CMAKE_CXX_FLAGS "-pthread -ldl")
 endif()
 target_compile_options(server PRIVATE -ldl)
-add_dependencies(server sqlite3_external)
-ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
+if (UNIX)
+        add_dependencies(server sqlite3_external)
+endif()
+# add_dependencies(server sqlite)
+# ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
 target_include_directories(server PRIVATE ${BINARY_DIR})
 target_include_directories(server PRIVATE _deps/sfml-src/include)
 if (UNIX)
