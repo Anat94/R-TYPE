@@ -1,4 +1,6 @@
 # # Define the project
+# Anatole si tu continues de travailler sur des DBs CMakeLists.txt et High score t'auras échec à R-Type
+# - Edouard et Antoine
 
 cmake_minimum_required(VERSION 3.5)
 project(R-type
