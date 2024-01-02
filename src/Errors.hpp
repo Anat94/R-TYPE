@@ -7,22 +7,22 @@
 
 #ifndef ERRORS_HPP
 #define ERRORS_HPP
-#pragma warning(disable: 4668)
-#pragma warning(disable: 4626)
-#pragma warning(disable: 4625)
-#pragma warning(disable: 4820)
-#pragma warning(disable: 5031)
-#pragma warning(disable: 4365)
-#pragma warning(disable: 5027)
-#pragma warning(disable: 4514)
-#pragma warning(disable: 4464)
-#pragma warning(disable: 5026)
-#pragma warning(disable: 4457)
-#pragma warning(disable: 5262)
-#pragma warning(disable: 5204)
-#pragma warning(disable: 4355)
-#pragma warning(disable: 5220)
-#pragma warning(disable: 5039)
+//#pragma warning(disable: 4668)
+//#pragma warning(disable: 4626)
+//#pragma warning(disable: 4625)
+//#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
 #include <iostream>
 #include <asio.hpp>
 
