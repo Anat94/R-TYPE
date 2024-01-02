@@ -11,6 +11,7 @@ bool can_mod = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
 {
+    std::cout << "CODE: " << event.key.code << " !!!!\n";
     if (event.key.code == sf::Keyboard::Up)
         return {0, -30};
     if (event.key.code == sf::Keyboard::Down)
@@ -111,6 +112,7 @@ void Server::send_position_snapshots_for_all_players()
     sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
+            // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
             SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0);
             send_data_to_all_clients<SnapshotPosition>(snap_p);
         }

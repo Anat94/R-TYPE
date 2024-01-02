@@ -7,6 +7,22 @@
 
 #ifndef SPARSEARRAY_TPP
     #define SPARSEARRAY_TPP
+    #pragma warning(disable: 4668)
+    #pragma warning(disable: 4626)
+    #pragma warning(disable: 4625)
+    #pragma warning(disable: 4820)
+#pragma warning(disable: 5031)
+#pragma warning(disable: 4365)
+#pragma warning(disable: 5027)
+#pragma warning(disable: 4514)
+#pragma warning(disable: 4464)
+#pragma warning(disable: 5026)
+#pragma warning(disable: 4457)
+#pragma warning(disable: 5262)
+#pragma warning(disable: 5204)
+#pragma warning(disable: 4355)
+#pragma warning(disable: 5220)
+#pragma warning(disable: 5039)
 
 template <typename Component>
 inline sparse_array<Component>::sparse_array(const sparse_array &other) : _data(other._data) {}
@@ -97,23 +113,23 @@ inline typename sparse_array<Component>::size_type sparse_array<Component>::size
     return _data.size();
 }
 
-template<class Component>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, const Component &value)
-{
-    if (pos >= _data.size())
-        _data.resize(pos + 1);
-    _data[pos] = value;
-    return _data[pos];
-}
+// template<class Component>
+// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, const Component &value)
+// {
+//     if (pos >= _data.size())
+//         _data.resize(pos + 1);
+//     _data[pos] = value;
+//     return _data[pos];
+// }
 
-template<class Component>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, Component &&value)
-{
-    if (pos >= _data.size())
-        _data.resize(pos + 1);
-    _data[pos] = std::move(value);
-    return _data[pos];
-}
+// template<class Component>
+// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, Component &&value)
+// {
+//     if (pos >= _data.size())
+//         _data.resize(pos + 1);
+//     _data[pos] = std::move(value);
+//     return _data[pos];
+// }
 
 template<class Component>
 inline void sparse_array<Component>::erase(size_type pos)
@@ -132,17 +148,6 @@ inline typename sparse_array<Component>::size_type sparse_array<Component>::get_
             return i;
     }
     return static_cast<size_type>(-1);
-}
-
-template<class Component>
-template <class ...Params>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::emplace_at(sparse_array<Component>::size_type pos, Params &&... params)
-{
-    if (pos >= _data.size()) {
-        _data.resize(pos + 1);
-    }
-    new (&_data[pos]) Component(std::forward<Params>(params)...);
-    return _data[pos];
 }
 
 #endif // SPARSEARRAY_TPP

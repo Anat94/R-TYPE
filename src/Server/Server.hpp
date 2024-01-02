@@ -8,6 +8,24 @@
 #ifndef SERVER_HPP
     #define SERVER_HPP
     #define MAX_BUF_SIZE 11024
+    #pragma warning(disable: 4668)
+    #pragma warning(disable: 4626)
+    #pragma warning(disable: 4625)
+    #pragma warning(disable: 4820)
+#pragma warning(disable: 5031)
+#pragma warning(disable: 4365)
+#pragma warning(disable: 5027)
+#pragma warning(disable: 4514)
+#pragma warning(disable: 4464)
+#pragma warning(disable: 5026)
+#pragma warning(disable: 4457)
+#pragma warning(disable: 5262)
+#pragma warning(disable: 5204)
+#pragma warning(disable: 4355)
+#pragma warning(disable: 5220)
+#pragma warning(disable: 5039)
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
     #include <thread>
     #include <chrono>
@@ -29,26 +47,25 @@ using asio::ip::udp;
 
 struct BaseMessage {
     int16_t id;
+    int packet_id;
 };
 
 struct ConfirmationMessage: public BaseMessage {
-    int packet_id;
 };
 
 struct SnapshotPosition: public BaseMessage {
     entity_t entity;
     component::Position data;
-    int packet_id;
 
     SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
-    entity(entity_),  data(data_), packet_id(packet_id_) {
+    entity(entity_),  data(data_) {
         id = id_;
+        packet_id = packet_id_;
     };
 };
 
 struct EventMessage: public BaseMessage {
     sf::Event event;
-    int packet_id;
 };
 
 struct Friendship {
