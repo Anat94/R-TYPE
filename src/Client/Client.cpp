@@ -118,14 +118,15 @@ Client::Client(std::string ip, int port, std::string username)
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
-    ControlSystem ctrl_sys(&listener, &_event);
-    _ecs.add_system<component::Velocity, component::Controllable>(ctrl_sys);
-    ScaleSystem sca_sys;
-    _ecs.add_system<component::Drawable, component::Scale>(sca_sys);
-    RotationSystem rot_sys;
-    _ecs.add_system<component::Drawable, component::Rotation>(rot_sys);
-    DrawSystem draw_sys(&_window);
-    _ecs.add_system<component::Drawable, component::Position>(draw_sys);
+    ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
+    _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
+    ScaleSystem *sca_sys = new ScaleSystem;
+
+    _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
+    RotationSystem *rot_sys = new RotationSystem;
+    _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
+    DrawSystem *draw_sys = new DrawSystem(&_window);
+    _ecs.add_system<component::Drawable, component::Position>(*draw_sys);
     _score = 0;
     _lives = 0;
     _level = 1;
