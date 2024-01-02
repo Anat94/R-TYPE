@@ -83,10 +83,26 @@ class sparse_array {
         const_iterator end() const;
         const_iterator cend() const;
         size_type size() const;
-        reference_type insert_at(size_type pos, Component const &);
-        reference_type insert_at(size_type pos, Component &&);
+        reference_type insert_at(size_type pos, const Component &value) {
+            if (pos >= _data.size())
+                _data.resize(pos + 1);
+            _data[pos] = value;
+            return _data[pos];
+        }
+        reference_type insert_at(size_type pos, Component &&value) {
+            if (pos >= _data.size())
+                _data.resize(pos + 1);
+            _data[pos] = std::move(value);
+            return _data[pos];
+        }
         template <class ...Params>
-        reference_type emplace_at(size_type pos, Params &&...params);
+        reference_type emplace_at(size_type pos, Params &&...params) {
+            if (pos >= _data.size()) {
+                _data.resize(pos + 1);
+            }
+            new (&_data[pos]) Component(std::forward<Params>(params)...);
+            return _data[pos];
+        }
         void erase(size_type pos);
         size_type get_index(value_type const&) const;
     private:

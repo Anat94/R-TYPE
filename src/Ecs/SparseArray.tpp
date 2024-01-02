@@ -108,23 +108,23 @@ inline typename sparse_array<Component>::size_type sparse_array<Component>::size
     return _data.size();
 }
 
-template<class Component>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, const Component &value)
-{
-    if (pos >= _data.size())
-        _data.resize(pos + 1);
-    _data[pos] = value;
-    return _data[pos];
-}
+// template<class Component>
+// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, const Component &value)
+// {
+//     if (pos >= _data.size())
+//         _data.resize(pos + 1);
+//     _data[pos] = value;
+//     return _data[pos];
+// }
 
-template<class Component>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, Component &&value)
-{
-    if (pos >= _data.size())
-        _data.resize(pos + 1);
-    _data[pos] = std::move(value);
-    return _data[pos];
-}
+// template<class Component>
+// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, Component &&value)
+// {
+//     if (pos >= _data.size())
+//         _data.resize(pos + 1);
+//     _data[pos] = std::move(value);
+//     return _data[pos];
+// }
 
 template<class Component>
 inline void sparse_array<Component>::erase(size_type pos)
@@ -143,17 +143,6 @@ inline typename sparse_array<Component>::size_type sparse_array<Component>::get_
             return i;
     }
     return static_cast<size_type>(-1);
-}
-
-template<class Component>
-template <class ...Params>
-inline typename sparse_array<Component>::reference_type &sparse_array<Component>::emplace_at(sparse_array<Component>::size_type pos, Params &&... params)
-{
-    if (pos >= _data.size()) {
-        _data.resize(pos + 1);
-    }
-    new (&_data[pos]) Component(std::forward<Params>(params)...);
-    return _data[pos];
 }
 
 #endif // SPARSEARRAY_TPP

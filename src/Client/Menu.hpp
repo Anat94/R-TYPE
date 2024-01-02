@@ -26,12 +26,12 @@
     #include <SFML/Graphics.hpp>
     #include "Button.hpp"
 
-enum state {
-    MENU,
-    GAME,
-    END,
-    ERROR,
-    SUCCES,
+const enum state {
+    MENU = 5,
+    GAME = 1,
+    END = 2,
+    ERRORS = 0,
+    SUCCES = 4
 };
 
 class Menu {

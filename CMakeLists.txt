@@ -86,7 +86,7 @@ endif()
 
 # Install sfml
 
-set(SFML_VERSION "2.5.1")
+set(SFML_VERSION "2.6.1")
 
 FetchContent_Declare(
     sfml
@@ -99,6 +99,7 @@ if(NOT sfml_POPULATED)
     FetchContent_Populate(sfml)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
+
 
 # INSTALL SQLITE3
 
@@ -153,6 +154,8 @@ endif()
 
 # COMPILATION FOR SERVER
 
+# message("COMPILING SERVER")
+
 add_executable(server
         src/Ecs/Events.cpp
         src/Server/Server.cpp
@@ -167,6 +170,7 @@ target_compile_options(server PRIVATE -ldl)
 add_dependencies(server sqlite3_external)
 ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
 target_include_directories(server PRIVATE ${BINARY_DIR})
+target_include_directories(server PRIVATE _deps/sfml-src/include)
 
 target_link_libraries(server
     PRIVATE
@@ -187,12 +191,14 @@ add_library(ecs STATIC
         )
 target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
+target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 
 # COMPILATION FOR CLIENT
 
 include_directories(include src src/Client)
 
 add_executable(client
+                src/Ecs/Events.cpp
                 src/Client/Menu.cpp
                 src/Client/Client.cpp
                 src/Client/Game.cpp
@@ -200,7 +206,8 @@ add_executable(client
                 src/Client/Button.cpp
                 )
 target_include_directories(client PRIVATE cxx_std_20)
-target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
+target_include_directories(client PRIVATE _deps/sfml-src/include)
+# target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
 target_link_libraries(client
     PRIVATE
         sfml-audio
