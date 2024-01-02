@@ -113,7 +113,7 @@ if (UNIX)
                 BUILD_COMMAND make
                 INSTALL_COMMAND ""
         )
-else()
+elseif(WIN32)
         ExternalProject_Add(
                 sqlite3_external
                 URL https://www.sqlite.org/2023/sqlite-amalgamation-3440200.zip
@@ -122,6 +122,9 @@ else()
                 BUILD_COMMAND ""
                 INSTALL_COMMAND ""
         )
+        include_directories(${CMAKE_SOURCE_DIR}/src)
+        add_library(sqlite3 STATIC sqlite3/src/sqlite3_external/sqlite3.c sqlite3/src/sqlite3_external/sqlite3.h sqlite3/src/sqlite3_external/sqlite3ext.h)
+        add_executable(sqlite sqlite3/src/sqlite3_external/sqlite3.c sqlite3/src/sqlite3_external/shell.c sqlite3/src/sqlite3_external/sqlite3.h sqlite3/src/sqlite3_external/sqlite3ext.h)
 endif()
 ExternalProject_Get_Property(sqlite3_external SOURCE_DIR)
 include_directories(${SOURCE_DIR})
@@ -171,16 +174,27 @@ add_dependencies(server sqlite3_external)
 ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
 target_include_directories(server PRIVATE ${BINARY_DIR})
 target_include_directories(server PRIVATE _deps/sfml-src/include)
-
-target_link_libraries(server
-    PRIVATE
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-        asio
-        ${BINARY_DIR}/.libs/libsqlite3.so
-)
+if (UNIX)
+        target_link_libraries(server
+        PRIVATE
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                asio
+                ${BINARY_DIR}/.libs/libsqlite3.so
+        )
+elseif(WIN32)
+        target_link_libraries(server
+        PRIVATE
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                asio
+                sqlite3
+        )
+endif()
 
 target_compile_features(server PRIVATE cxx_std_20)
 
@@ -226,18 +240,33 @@ add_executable(my_tests
         tests/TestZipperIterator.cpp
 )
 
-target_link_libraries(my_tests
-    PRIVATE
-        ecs
-        asio
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-        gtest
-        gmock
-        gmock_main
-        ${BINARY_DIR}/.libs/libsqlite3.so
-)
-
+if (UNIX)
+        target_link_libraries(my_tests
+        PRIVATE
+                ecs
+                asio
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                gtest
+                gmock
+                gmock_main
+                ${BINARY_DIR}/.libs/libsqlite3.so
+        )
+elseif(WIN32)
+        target_link_libraries(my_tests
+        PRIVATE
+                ecs
+                asio
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+                gtest
+                gmock
+                gmock_main
+                sqlite3
+        )
+endif()
 add_test(NAME my_tests COMMAND tests)
