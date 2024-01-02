@@ -239,29 +239,17 @@ if (UNIX)
         target_link_libraries(my_tests
         PRIVATE
                 ecs
-                asio
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
                 gtest
                 gmock
                 gmock_main
-                ${BINARY_DIR}/.libs/libsqlite3.so
         )
 elseif(WIN32)
         target_link_libraries(my_tests
         PRIVATE
                 ecs
-                asio
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
                 gtest
                 gmock
                 gmock_main
-                sqlite3
         )
 endif()
 add_test(NAME my_tests COMMAND tests)
