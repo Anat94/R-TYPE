@@ -19,5 +19,7 @@ Debug
 *.smn
 asio*
 .github
+db.txt
 my_tests
-sqlite3
+sqlite3/
+lib/
