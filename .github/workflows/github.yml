@@ -39,3 +39,6 @@ jobs:
 
       - name: Windows - Launch cmake
         run: cmake .
+
+      - name: WINOWS -  Launch tests
+        run: cmake --build . --target my_tests
