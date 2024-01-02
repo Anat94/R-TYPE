@@ -8,8 +8,8 @@
 #ifndef REGISTRY_HPP_
     #define REGISTRY_HPP_
     #include <unordered_map>
-    #include <functional>
     #include <typeindex>
+    #include <functional>
     #include <typeinfo>
     #include <iostream>
     #include <any>

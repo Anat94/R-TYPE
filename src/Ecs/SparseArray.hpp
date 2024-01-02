@@ -66,6 +66,7 @@ class sparse_array {
         iterator end();
         const_iterator end() const;
         const_iterator cend() const;
+        void resize(size_type new_size);
         size_type size() const;
         reference_type insert_at(size_type pos, Component const &);
         reference_type insert_at(size_type pos, Component &&);
