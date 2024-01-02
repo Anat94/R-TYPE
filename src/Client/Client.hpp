@@ -65,7 +65,7 @@ struct ConfirmationMessage: public BaseMessage {
 };
 
 struct EventMessage: public BaseMessage {
-    sf::Event event;
+    int event;
 };
 
 enum Stage {
