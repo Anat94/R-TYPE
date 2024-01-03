@@ -34,8 +34,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 1.0.1
-          release_name: Release ${{ github.ref }}
+          tag_name: 1.0.${{ github.run_number }}
+          release_name: v1.0.${{ github.run_number }}
           body: |
             Automated release from GitHub Actions
           draft: false
