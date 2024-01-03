@@ -25,9 +25,6 @@ jobs:
       - name: Calculate run number
         id: calc
         run: echo "::set-output name=run_number::$((${{ github.run_number }} - 132))"
-      - name: Build executable
-        run: |
-          cmake . && cmake --build .
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
