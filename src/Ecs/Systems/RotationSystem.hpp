@@ -14,6 +14,7 @@ class RotationSystem : public ISystems {
         RotationSystem() {};
 
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot) {
+            std::cout << "Rotation system" << std::endl;
             for (auto &&[_, d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
                 if (d.has_value() && r.has_value())
                     d->_sprite.setRotation(r->_degrees);

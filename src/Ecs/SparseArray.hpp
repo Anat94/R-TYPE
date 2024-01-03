@@ -7,22 +7,22 @@
 
 #ifndef SPARSEARRAY_HPP
     #define SPARSEARRAY_HPP
-    #pragma warning(disable: 4668)
-    #pragma warning(disable: 4626)
-    #pragma warning(disable: 4625)
-    #pragma warning(disable: 4820)
-#pragma warning(disable: 5031)
-#pragma warning(disable: 4365)
-#pragma warning(disable: 5027)
-#pragma warning(disable: 4514)
-#pragma warning(disable: 4464)
-#pragma warning(disable: 5026)
-#pragma warning(disable: 4457)
-#pragma warning(disable: 5262)
-#pragma warning(disable: 5204)
-#pragma warning(disable: 4355)
-#pragma warning(disable: 5220)
-#pragma warning(disable: 5039)
+    //#pragma warning(disable: 4668)
+    //#pragma warning(disable: 4626)
+    //#pragma warning(disable: 4625)
+    //#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
     #include <vector>
     #include <memory>
     #include <optional>
@@ -82,6 +82,7 @@ class sparse_array {
         iterator end();
         const_iterator end() const;
         const_iterator cend() const;
+        void resize(size_type new_size);
         size_type size() const;
         reference_type insert_at(size_type pos, const Component &value) {
             if (pos >= _data.size())

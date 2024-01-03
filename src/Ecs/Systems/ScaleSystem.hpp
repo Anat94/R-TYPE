@@ -14,6 +14,7 @@ class ScaleSystem : public ISystems {
         ScaleSystem() {};
 
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca) {
+            std::cout << "Scale system" << std::endl;
             for (auto &&[_, d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
                 if (d.has_value() && s.has_value())
                     d->_sprite.setScale(s->_scale.first, s->_scale.second);

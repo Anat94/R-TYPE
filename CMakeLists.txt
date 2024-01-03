@@ -166,7 +166,9 @@ if (UNIX)
         add_dependencies(server sqlite3_external)
 endif()
 # add_dependencies(server sqlite)
-# ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
+if (UNIX)
+        ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
+endif()
 target_include_directories(server PRIVATE ${BINARY_DIR})
 target_include_directories(server PRIVATE _deps/sfml-src/include)
 if (UNIX)
@@ -239,15 +241,9 @@ if (UNIX)
         target_link_libraries(my_tests
         PRIVATE
                 ecs
-                asio
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
                 gtest
                 gmock
                 gmock_main
-                ${BINARY_DIR}/.libs/libsqlite3.so
         )
 elseif(WIN32)
         target_link_libraries(my_tests
