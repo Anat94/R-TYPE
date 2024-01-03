@@ -6,21 +6,22 @@
 */
 
 #include "Server.hpp"
+#include "KeyEventMapping.hpp"
 
 bool can_mod = true;
 
-std::pair<int, int> Server::get_position_change_for_event(entity_t entity, sf::Event event)
+std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
-    std::cout << "CODE: " << event.key.code << " !!!!\n";
-    if (event.key.code == sf::Keyboard::Up)
+    std::cout << "CODE: " << event << " !!!!\n";
+    if (event == KeyIds["Up"])
         return {0, -30};
-    if (event.key.code == sf::Keyboard::Down)
+    if (event == KeyIds["Down"])
         return {0, 30};
-    if (event.key.code == sf::Keyboard::Left)
+    if (event == KeyIds["Left"])
         return {-30, 0};
-    if (event.key.code == sf::Keyboard::Right)
+    if (event == KeyIds["Right"])
         return {30, 0};
-    if (event.key.code == sf::Keyboard::Space)
+    if (event == KeyIds["Space"])
         _listener.addEvent(new ShootEvent(entity, -1));
     return {0, 0};
 }
@@ -157,6 +158,7 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
         return;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
+    std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
     send_position_snapshots_for_all_players();
 }

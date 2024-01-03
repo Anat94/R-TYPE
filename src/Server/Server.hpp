@@ -31,9 +31,6 @@
     #include <chrono>
     #include <array>
     #include <asio.hpp>
-    #include <SFML/Window.hpp>
-    #include <SFML/Graphics.hpp>
-    #include <SFML/System.hpp>
     #include <functional>
     #include "../Ecs/Events.hpp"
     #include "../Ecs/ZipperIterator.hpp"
@@ -65,7 +62,7 @@ struct SnapshotPosition: public BaseMessage {
 };
 
 struct EventMessage: public BaseMessage {
-    sf::Event event;
+    int event;
 };
 
 struct Friendship {
@@ -83,7 +80,7 @@ class Server {
         entity_t connect_player(udp::endpoint player_endpoint);
         void send_position_snapshots_for_all_players();
         std::vector<char> recieve_raw_data_from_client();
-        std::pair<int, int> get_position_change_for_event(entity_t entity, sf::Event event);
+        std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
         void recieve_client_event(std::vector<char> &, entity_t);
         void recieve_connection_event(std::vector<char> &, entity_t);
         void recieve_disconnection_event(std::vector<char> &, entity_t);
@@ -121,7 +118,7 @@ class Server {
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm}
         };
-        sf::Event _event;
+        std::string _event;
         std::thread _send_thread;
         sqlite3 *_db;
         int _highScore = 0;
