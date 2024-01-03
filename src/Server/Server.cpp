@@ -78,6 +78,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
+    _ecs.add_component(new_player, component::Drawable(""));
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Scale(0.1));
     _ecs.add_component(new_player, component::Rotation(90));
@@ -85,6 +86,8 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
     std::cout << "New player connected !" << std::endl;
+    auto all_players = _ecs.get_components<component::Endpoint>();
+    send_entity_drawable_to_all_players(new_player);
     return new_player;
 }
 
@@ -118,6 +121,15 @@ void Server::send_position_snapshots_for_all_players()
             send_data_to_all_clients<SnapshotPosition>(snap_p);
         }
     }
+}
+
+void Server::send_entity_drawable_to_all_players(entity_t entity)
+{
+    sparse_array<component::Position> drawables = _ecs.get_components<component::Position>();
+    component::Drawable drawable = drawables[entity];
+    DrawableSnapshot to_send(6, entity, drawable, 0);
+    _drawable_packages.push_back(to_send);
+    send_data_to_all_clients<DrawableSnapshot>(to_send);
 }
 
 void Server::recieve_from_client()
@@ -193,11 +205,34 @@ void Server::send_data_to_all_clients(T& structure) {
     }
 }
 
+template <typename T>
+void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
+    auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
+    if (!endpoint.has_value()) {
+        std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+        return;
+    }
+    structure.packet_id = _packet_id;
+    _packet_id += 1;
+    while (!can_mod) continue;
+    if (dynamic_cast<BaseMessage *>(&structure) != nullptr) {
+        _position_packages.push_back(&structure);
+    }
+    _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
+}
+
 void Server::sendPositionPackagesPeriodically() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
         can_mod = false;
         for (auto& snapshot : _position_packages) {
+            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+            for (size_t i = 0; i < all_endpoints.size(); i++) {
+                if (all_endpoints[i].has_value())
+                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            }
+        }
+        for (auto& snapshot : _drawable_packages) {
             sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
             for (size_t i = 0; i < all_endpoints.size(); i++) {
                 if (all_endpoints[i].has_value())

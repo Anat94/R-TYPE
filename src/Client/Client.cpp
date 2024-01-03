@@ -75,7 +75,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
             _ecs.add_component(new_player, component::Scale(0.1f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
@@ -86,6 +85,15 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         std::cout << ex.what() << std::endl;
     }
     return snapshot->packet_id;
+}
+
+int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(DrawableSnapshot))
+        return -1;
+    DrawableSnapshot *snapshot = reinterpret_cast<DrawableSnapshot *>(server_msg.data());
+    std::cout << snapshot->data._path << std::endl;
+    // _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
 }
 
 void Client::receive()
