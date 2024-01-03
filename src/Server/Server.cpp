@@ -88,7 +88,14 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     std::cout << "New player connected !" << std::endl;
     auto all_players = _ecs.get_components<component::Endpoint>();
     send_entity_drawable_to_all_players(new_player);
+    send_highscore_to_specific_client(new_player);
     return new_player;
+}
+
+void Server::send_highscore_to_specific_client(entity_t new_player)
+{
+    HighScoreMessage highscoreMsg = getHighScore();
+    send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
 }
 
 std::map<entity_t, std::pair<float, float>> convert_to_map(sparse_array<component::Position> pos)
@@ -172,6 +179,13 @@ void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) 
         ),
         _drawable_packages.end()
     );
+    _highscore_packages.erase(
+        std::remove_if(_highscore_packages.begin(), _highscore_packages.end(), [id](const HighScoreMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _highscore_packages.end()
+    );
 }
 
 void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
@@ -235,6 +249,13 @@ void Server::sendPositionPackagesPeriodically() {
             }
         }
         for (auto& snapshot : _drawable_packages) {
+            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+            for (size_t i = 0; i < all_endpoints.size(); i++) {
+                if (all_endpoints[i].has_value())
+                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            }
+        }
+        for (auto& snapshot : _highscore_packages) {
             sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
             for (size_t i = 0; i < all_endpoints.size(); i++) {
                 if (all_endpoints[i].has_value())

@@ -81,6 +81,35 @@ struct EventMessage: public BaseMessage {
     int event;
 };
 
+struct HighScoreMessage: public BaseMessage {
+    int score1;
+    char name1[20];
+    int score2;
+    char name2[20];
+    int score3;
+    char name3[20];
+    HighScoreMessage(int16_t id_, std::string name1_, std::string name2_, std::string name3_,int score1_, int score2_, int score3_, int packet_id_):
+        score1(score1_), score2(score2_), score3(score3_) {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < name1_.size(); i++) {
+                name1[i] = name1_[i];
+            }
+            name1[i] = '\0';
+            i = 0;
+            for (; i < name2_.size(); i++) {
+                name2[i] = name2_[i];
+            }
+            name2[i] = '\0';
+            i = 0;
+            for (; i < name3_.size(); i++) {
+                name3[i] = name3_[i];
+            }
+            name3[i] = '\0';
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
@@ -108,7 +137,7 @@ class Server {
         void send_data_to_client_by_entity(T& structure, entity_t entity);
         void sendPositionPackagesPeriodically();
         void connectToDB();
-        void getHighScore();
+        HighScoreMessage getHighScore();
         void addHighScore(std::string name, int score);
         bool IsNameInBdd(std::string name);
         void signUp(std::string name, std::string password);
@@ -120,8 +149,10 @@ class Server {
         void removeFriend(std::string name, std::string friendName);
         void displayFriends(std::string name);
         Friendship getFriendsData(std::string id);
+        void send_highscore_to_specific_client(entity_t);
     private:
         std::vector<SnapshotPosition> _position_packages;
+        std::vector<HighScoreMessage> _highscore_packages;
         std::vector<DrawableSnapshot> _drawable_packages;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
@@ -136,7 +167,7 @@ class Server {
             {1, &Server::recieve_client_event},
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
-            {5, &Server::recieve_packet_confirm}
+            {5, &Server::recieve_packet_confirm},
         };
         std::string _event;
         std::thread _send_thread;

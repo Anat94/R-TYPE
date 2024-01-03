@@ -414,10 +414,10 @@ namespace component {
             return (x >= _top_left.x && y >= _top_left.y && x <= _bottom_right.x && y <= _bottom_right.y);
         };
         friend std::ostream& operator<<(std::ostream& os, const Hitbox& hitbox) {
-            os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
-            os << "Top Right: (" << hitbox._top_right.x << ", " << hitbox._top_right.y << "), ";
-            os << "Bottom Left: (" << hitbox._bottom_left.x << ", " << hitbox._bottom_left.y << "), ";
-            os << "Bottom Right: (" << hitbox._bottom_right.x << ", " << hitbox._bottom_right.y << ")";
+            // os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
+            // os << "Top Right: (" << hitbox._top_right.x << ", " << hitbox._top_right.y << "), ";
+            // os << "Bottom Left: (" << hitbox._bottom_left.x << ", " << hitbox._bottom_left.y << "), ";
+            // os << "Bottom Right: (" << hitbox._bottom_right.x << ", " << hitbox._bottom_right.y << ")";
             return os;
         };
         bool operator==(const Hitbox& other) const {

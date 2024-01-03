@@ -54,6 +54,39 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+struct data_struct {
+    int id;
+    sf::Event event;
+    int package_id;
+
+};
+
+struct ConfirmationMessage: public BaseMessage {
+};
+
+struct EventMessage: public BaseMessage {
+    int event;
+};
+
+struct HighScoreMessage: public BaseMessage {
+    int score1;
+    char name1[20];
+    int score2;
+    char name2[20];
+    int score3;
+    char name3[20];
+    HighScoreMessage(int16_t id_, std::string name1_, int score1_, int packet_id_):
+        score1(score1_) {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < name1_.size(); i++) {
+                name1[i] = name1_[i];
+            }
+            name1[i] = '\0';
+        };
+};
+
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
     char data[1024];
@@ -70,31 +103,39 @@ struct DrawableSnapshot: public BaseMessage {
     };
 };
 
-struct data_struct {
-    int id;
-    sf::Event event;
-    int package_id;
-
-};
-
-struct ConfirmationMessage: public BaseMessage {
-};
-
-struct EventMessage: public BaseMessage {
-    int event;
-};
-
 enum Stage {
     ONE,
     TWO,
     THREE,
 };
 
+enum inGameState {
+    INGAME,
+    INGAMEMENU,
+};
+
+struct Trophy {
+    sf::Sprite sprite;
+    sf::Texture texture;
+};
+
+struct HighScoreDisplay {
+    sf::Text title;
+    sf::Text name1;
+    sf::Text score1;
+    sf::Text name2;
+    sf::Text score2;
+    sf::Text name3;
+    sf::Text score3;
+    Trophy trophy1;
+    Trophy trophy2;
+};
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
         Client(std::string ip, int port, std::string _username = "");
         ~Client();
+
         int run();
         template <typename T>
         void send_to_server(const T& structure);
@@ -113,13 +154,13 @@ class Client {
         void setLevel(int level) { _level = level; }
         bool hasPendingMessages() const;
         int manageEvent();
-        void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
-        int recieve_drawable_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
-
+        int recieve_high_score(std::vector<char> &server_msg);
+        int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
+        void displayScoreBoardMenu();
 
     private:
         //Content for network
@@ -179,10 +220,13 @@ class Client {
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {4, &Client::recieve_position_snapshot_update},
-            {6, &Client::recieve_drawable_snapshot_update}
+            {6, &Client::recieve_drawable_snapshot_update},
+            {7, &Client::recieve_high_score}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
+        HighScoreDisplay _highScoreDisplay;
+        inGameState _state;
 };
 
 #endif // CLIENT_HPP
