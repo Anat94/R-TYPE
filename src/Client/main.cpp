@@ -36,10 +36,14 @@ int main(int argc, char** argv) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
         enum state _state = MENU;
+        printf("avant while\n");
         while (_state != END) {
             if (_state == MENU) {
+                printf("avant avant menu\n");
                 Menu menu;
+                printf("avant menu\n");
                 _state = menu.run();
+                printf("apres menu\n");
                 tmp_username = menu.getUsername();
                 std::cout << "username: " << tmp_username << std::endl;
             } else if (_state == GAME) {

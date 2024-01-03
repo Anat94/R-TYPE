@@ -205,18 +205,18 @@ target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 # COMPILATION FOR CLIENT
 
 include_directories(include src src/Client)
-
 add_executable(client
-                src/Ecs/Events.cpp
-                src/Client/Menu.cpp
-                src/Client/Client.cpp
-                src/Client/Game.cpp
-                src/Client/main.cpp
-                src/Client/Button.cpp
-                )
+        src/Ecs/Events.cpp
+        src/Client/Menu.cpp
+        src/Client/Client.cpp
+        src/Client/Game.cpp
+        src/Client/main.cpp
+        src/Client/Button.cpp
+)
 target_include_directories(client PRIVATE cxx_std_20)
 target_include_directories(client PRIVATE _deps/sfml-src/include)
 # target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
+set(BUILD_SHARED_LIBS FALSE)
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -265,3 +265,60 @@ elseif(WIN32)
         )
 endif()
 add_test(NAME my_tests COMMAND tests)
+
+
+# COPY ALL LIBRARY TO THE BUILD OUTPOUT
+if (WIN32)
+        message("COPYING LIBRARIES")
+        message(${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-audio-d-2.dll)
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-audio-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-graphics-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-network-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-system-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-window-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET my_tests POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/bin/Debug/gmock_maind.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET my_tests POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/bin/Debug/gmockd.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET my_tests POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/bin/Debug/gtest_maind.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET my_tests POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/bin/Debug/gtestd.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/src/Client/assets
+                ${CMAKE_SOURCE_DIR}/Debug/assets
+        )
+endif()
