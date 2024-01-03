@@ -109,11 +109,33 @@ enum Stage {
     THREE,
 };
 
+enum inGameState {
+    INGAME,
+    INGAMEMENU,
+};
+
+struct Trophy {
+    sf::Sprite sprite;
+    sf::Texture texture;
+};
+
+struct HighScoreDisplay {
+    sf::Text title;
+    sf::Text name1;
+    sf::Text score1;
+    sf::Text name2;
+    sf::Text score2;
+    sf::Text name3;
+    sf::Text score3;
+    Trophy trophy1;
+    Trophy trophy2;
+};
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
         Client(std::string ip, int port, std::string _username = "");
         ~Client();
+
         int run();
         template <typename T>
         void send_to_server(const T& structure);
@@ -132,13 +154,13 @@ class Client {
         void setLevel(int level) { _level = level; }
         bool hasPendingMessages() const;
         int manageEvent();
-        void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
+        void displayScoreBoardMenu();
 
     private:
         //Content for network
@@ -203,6 +225,8 @@ class Client {
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
+        HighScoreDisplay _highScoreDisplay;
+        inGameState _state;
 };
 
 #endif // CLIENT_HPP

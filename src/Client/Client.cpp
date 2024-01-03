@@ -54,9 +54,12 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
     HighScoreMessage *snapshot = reinterpret_cast<HighScoreMessage *>(server_msg.data());
     while (!can_read)
         continue;
-    std::cout << "High score1: " <<  snapshot->name1 << " - " << snapshot->score1 << std::endl;
-    std::cout << "High score2: " <<  snapshot->name2 << " - " << snapshot->score2 << std::endl;
-    std::cout << "High score3: " <<  snapshot->name3 << " - " << snapshot->score3 << std::endl;
+    _highScoreDisplay.name1.setString(snapshot->name1);
+    _highScoreDisplay.name2.setString(snapshot->name2);
+    _highScoreDisplay.name3.setString(snapshot->name3);
+    _highScoreDisplay.score1.setString(std::to_string(snapshot->score1));
+    _highScoreDisplay.score2.setString(std::to_string(snapshot->score2));
+    _highScoreDisplay.score3.setString(std::to_string(snapshot->score3));
     return snapshot->packet_id;
 
 }
@@ -209,6 +212,29 @@ Client::Client(std::string ip, int port, std::string username)
     _level_text.setPosition(950, 10);
     _mouse_position_text = sf::Text("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y), _font, 20);
     _mouse_position_text.setPosition(10, 970);
+    _highScoreDisplay.name1 = sf::Text("Name1", _font, 30);
+    _highScoreDisplay.name2 = sf::Text("Name2", _font, 30);
+    _highScoreDisplay.name3 = sf::Text("Name3", _font, 30);
+    _highScoreDisplay.score1 = sf::Text("Score1", _font, 30);
+    _highScoreDisplay.score2 = sf::Text("Score2", _font, 30);
+    _highScoreDisplay.score3 = sf::Text("Score3", _font, 30);
+    _highScoreDisplay.title = sf::Text("Score Board", _font, 60);
+    _highScoreDisplay.trophy1.sprite = sf::Sprite();
+    _highScoreDisplay.trophy1.texture.loadFromFile("./assets/trophy.png");
+    _highScoreDisplay.trophy1.sprite.setTexture(_highScoreDisplay.trophy1.texture);
+    _highScoreDisplay.trophy1.sprite.setPosition(150, 200);
+    _highScoreDisplay.trophy2.sprite = sf::Sprite();
+    _highScoreDisplay.trophy2.texture.loadFromFile("./assets/trophy.png");
+    _highScoreDisplay.trophy2.sprite.setTexture(_highScoreDisplay.trophy2.texture);
+    _highScoreDisplay.trophy2.sprite.setPosition(1250, 200);
+    _highScoreDisplay.name1.setPosition(750, 400);
+    _highScoreDisplay.name2.setPosition(750, 500);
+    _highScoreDisplay.name3.setPosition(750, 600);
+    _highScoreDisplay.score1.setPosition(1050, 400);
+    _highScoreDisplay.score2.setPosition(1050, 500);
+    _highScoreDisplay.score3.setPosition(1050, 600);
+    _highScoreDisplay.title.setPosition(750, 200);
+    _state = INGAME;
 }
 
 Client::~Client()
@@ -251,10 +277,17 @@ void Client::displayTexts()
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
+        printf("je suis avt avt menu\n");
         if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
             send_to_server<EventMessage>(_send_structure);
             return 1;
+        }
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Escape) {
+                _state = (_state == INGAME) ? (INGAMEMENU) : (INGAME);
+                return 0;
+            }
         }
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
@@ -266,51 +299,23 @@ int Client::manageEvent()
             _event = _event;
             return 0;
         }
-        if (_event.type == sf::Event::KeyPressed)
-            if (_event.key.code == sf::Keyboard::Escape) {
-                saveHighScore();
-                return 1;
-            }
     }
     return 0;
 }
 
-void Client::saveHighScore()
+void Client::displayScoreBoardMenu()
 {
-    try {
-
-        std::ifstream myFile("db.txt");
-        if (!myFile.is_open()) {
-            throw std::runtime_error("Failed to open file for writing.");
-        }
-        int lastScore = 0;
-        std::string firstLine;
-        if (std::getline(myFile, firstLine)) {
-            std::cout << firstLine << std::endl;
-            size_t colonPos = firstLine.find(':');
-            std::string score = firstLine.substr(colonPos + 1);
-            score.erase(0, score.find_first_not_of(" "));
-            score.erase(score.find_last_not_of(" ") + 1);
-            lastScore = std::stoi(score);
-        } else {
-            throw std::runtime_error("Failed to read the first line from the file.");
-        }
-
-        myFile.close();
-        std::fstream file("db.txt");
-        if (!file.is_open()) {
-            throw std::runtime_error("Failed to open file for writing.");
-        }
-        if (lastScore <= _score)
-            file << _username << ": "<< _score << std::endl;
-
-        if (file.fail()) {
-            throw std::runtime_error("Failed to write to the file.");
-        }
-    } catch (const std::exception& e) {
-        std::cout << "An error occurred: " << e.what() << std::endl;
-    }
+    _window.draw(_highScoreDisplay.trophy1.sprite);
+    _window.draw(_highScoreDisplay.title);
+    _window.draw(_highScoreDisplay.trophy2.sprite);
+    _window.draw(_highScoreDisplay.name1);
+    _window.draw(_highScoreDisplay.name2);
+    _window.draw(_highScoreDisplay.name3);
+    _window.draw(_highScoreDisplay.score1);
+    _window.draw(_highScoreDisplay.score2);
+    _window.draw(_highScoreDisplay.score3);
 }
+
 
 int Client::run()
 {
@@ -326,15 +331,18 @@ int Client::run()
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
-        _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
         if (manageEvent())
             break;
-        while (listener.popEvent());
-        _ecs.run_systems();
-        displayTexts();
+        if (_state == INGAMEMENU)
+            displayScoreBoardMenu();
+        else if (_state == INGAME) {
+            _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
+            while (listener.popEvent());
+            _ecs.run_systems();
+            displayTexts();
+        }
         _window.display();
     }
-    saveHighScore();
     _window.close();
     return 0;
 }
