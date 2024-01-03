@@ -54,6 +54,22 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+struct DrawableSnapshot: public BaseMessage {
+    entity_t entity;
+    char data[1024];
+
+    DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
+    entity(entity_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            data[i] = path[i];
+        }
+        data[i] = '\0';
+    };
+};
+
 struct data_struct {
     int id;
     sf::Event event;
@@ -100,6 +116,7 @@ class Client {
         void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
+        int recieve_drawable_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
 
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
@@ -161,7 +178,8 @@ class Client {
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {4, &Client::recieve_position_snapshot_update}
+            {4, &Client::recieve_position_snapshot_update},
+            {6, &Client::recieve_drawable_snapshot_update}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
