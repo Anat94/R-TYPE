@@ -234,15 +234,6 @@ namespace component {
     */
     struct Drawable {
         /**
-         * @brief Texture of the sprite
-        */
-        sf::Texture _texture;
-        /**
-         * @brief Sprite to be printed on screen
-         * 
-         */
-        sf::Sprite _sprite;
-        /**
          * @brief path to the image file
          * 
          */
@@ -254,15 +245,6 @@ namespace component {
          */
         Drawable(const std::string &path_to_texture) {
             _path = path_to_texture;
-        };
-        /**
-         * @brief set the texture to the sprite
-         * 
-         */
-        void set() {
-            if (!_texture.loadFromFile(_path))
-                throw SFMLError("Could not load sprite");
-            _sprite.setTexture(_texture);
         };
     };
 
@@ -428,6 +410,9 @@ namespace component {
             new_one._bottom_right.y += pos.y;
             return new_one;
         };
+        bool contains(int x, int y) {
+            return (x >= _top_left.x && y >= _top_left.y && x <= _bottom_right.x && y <= _bottom_right.y);
+        };
         friend std::ostream& operator<<(std::ostream& os, const Hitbox& hitbox) {
             os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
             os << "Top Right: (" << hitbox._top_right.x << ", " << hitbox._top_right.y << "), ";
@@ -441,6 +426,24 @@ namespace component {
                  _bottom_left == other._bottom_left &&
                  _bottom_right == other._bottom_right;
         };
+    };
+
+    /**
+     * @brief Clickable structure to store if an entity is clickable, and if yes its status
+     * 
+     */
+    struct Clickable {
+        /**
+         * @brief the status of the entity
+         * 
+         */
+        std::string _status;
+        /**
+         * @brief Construct a new Clickable object
+         * 
+         * @param status the status to be set
+         */
+        Clickable(const std::string& status = "idle") : _status(status) {};
     };
 };
 

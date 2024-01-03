@@ -78,6 +78,8 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Scale(0.1f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
+            _ecs.add_component(new_player, component::Clickable());
+            _ecs.add_component(new_player, component::Hitbox(component::Position(snapshot->data.x,  snapshot->data.y), component::Position(snapshot->data.x + 32,  snapshot->data.y + 32)));
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
             std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
@@ -124,6 +126,7 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::Velocity>();
     _ecs.register_component<component::Drawable>();
     _ecs.register_component<component::Rotation>();
+    _ecs.register_component<component::Clickable>();
     _ecs.register_component<component::ResetOnMove>();
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::Controllable>();
@@ -138,14 +141,14 @@ Client::Client(std::string ip, int port, std::string username)
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
-    ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
-    _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
-    ScaleSystem *sca_sys = new ScaleSystem;
-    _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
-    RotationSystem *rot_sys = new RotationSystem;
-    _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
-    DrawSystem *draw_sys = new DrawSystem(&_window);
-    _ecs.add_system<component::Drawable, component::Position>(*draw_sys);
+    // ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
+    // _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
+    // ScaleSystem *sca_sys = new ScaleSystem;
+    // _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
+    // RotationSystem *rot_sys = new RotationSystem;
+    // _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
+    DrawSystem *draw_sys = new DrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
     _score = 0;
     _lives = 0;
     _level = 1;
@@ -273,16 +276,12 @@ int Client::run()
     _lives_text.setPosition(1750, 10);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
-        _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
-        // auto &player1_h = _ecs.get_components<component::Health>()[_player];
-        // auto &player1_s = _ecs.get_components<component::Score>()[_player];
         _window.clear();
+        _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
         if (manageEvent())
             break;
         while (listener.popEvent());
-        std::cout << "Here" << std::endl;
         _ecs.run_systems();
-        std::cout << " 1 tour done" << std::endl;
         displayTexts();
         _window.display();
     }
