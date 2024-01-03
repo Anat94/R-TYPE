@@ -93,9 +93,32 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
         return -1;
+
+    std::cout << server_msg.data() << ", " << sizeof(DrawableSnapshot) << std::endl;
     DrawableSnapshot *snapshot = reinterpret_cast<DrawableSnapshot *>(server_msg.data());
-    std::cout << snapshot->data._path << std::endl;
-    // _ecs.add_component(new_player, component::Drawable("src/Client/assets/ship.png"));
+    std::cout << snapshot->data << std::endl;
+    sparse_array<component::Drawable> &drawables = _ecs.get_components<component::Drawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            std::cout << "UPDATED PLAYER SPRITE\n";
+            drawables[real_entity]->_path = std::string(snapshot->data);
+        } else {
+            std::cout << "CREATED PLAYER SPRITE\n";
+            std::cout << _recieve_structure.data.x << std::endl;
+            _ecs.add_component(real_entity, component::Drawable(std::string(snapshot->data)));
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
 }
 
 void Client::receive()

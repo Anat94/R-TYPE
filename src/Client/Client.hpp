@@ -56,12 +56,17 @@ struct SnapshotPosition: public BaseMessage {
 
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
-    component::Drawable data;
+    char data[1024];
 
     DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
-    entity(entity_),  data(path) {
+    entity(entity_) {
+        int i = 0;
         id = id_;
         packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            data[i] = path[i];
+        }
+        data[i] = '\0';
     };
 };
 
