@@ -61,6 +61,22 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+struct DrawableSnapshot: public BaseMessage {
+    entity_t entity;
+    char data[1024];
+
+    DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
+    entity(entity_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            data[i] = path[i];
+        }
+        data[i] = '\0';
+    };
+};
+
 struct EventMessage: public BaseMessage {
     int event;
 };
@@ -93,6 +109,7 @@ class Server {
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
         void send_position_snapshots_for_all_players();
+        void send_entity_drawable_to_all_players(entity_t entity);
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
         void recieve_client_event(std::vector<char> &, entity_t);
@@ -101,6 +118,8 @@ class Server {
         void recieve_packet_confirm(std::vector<char> &, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
+        template <typename T>
+        void send_data_to_client_by_entity(T& structure, entity_t entity);
         void sendPositionPackagesPeriodically();
         void connectToDB();
         void getHighScore();
@@ -117,6 +136,7 @@ class Server {
         Friendship getFriendsData(std::string id);
     private:
         std::vector<SnapshotPosition> _position_packages;
+        std::vector<DrawableSnapshot> _drawable_packages;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
