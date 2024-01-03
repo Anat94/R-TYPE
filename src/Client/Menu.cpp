@@ -29,7 +29,7 @@
 Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, sf::Color::White, sf::Color::Red, sf::Color::Blue)
 {
     _window.create(sf::VideoMode(800, 600), "Menu");
-    _font.loadFromFile("src/Client/assets/font.ttf");
+    _font.loadFromFile("./assets/font.ttf");
 
     std::ifstream myFile("db.txt");
     if (!myFile.is_open()) {

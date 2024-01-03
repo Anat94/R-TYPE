@@ -166,8 +166,8 @@ Client::Client(std::string ip, int port, std::string username)
     _background = _ecs.spawn_entity();
     _btn_play = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
-    _ecs.add_component(_background, component::Drawable("src/Client/assets/background.jpg"));
-    if (!_music.openFromFile("src/Client/assets/game_music.ogg"))
+    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
+    if (!_music.openFromFile("./assets/game_music.ogg"))
         throw SFMLError("Music not found");
 
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
@@ -185,7 +185,7 @@ Client::Client(std::string ip, int port, std::string username)
     _lives = 0;
     _level = 1;
     _font = sf::Font();
-    if (!_font.loadFromFile("src/Client/assets/font.ttf"))
+    if (!_font.loadFromFile("./assets/font.ttf"))
         throw SFMLError("Font not found");
     _score_text = sf::Text("Score: " + std::to_string(_score), _font, 30);
     _score_text.setPosition(10, 10);
