@@ -32,7 +32,7 @@ Game::~Game()
 
 void Game::initParalaxBackground() {
     sf::Texture texture;
-    if (!texture.loadFromFile("src/Client/assets/background.png")) {
+    if (!texture.loadFromFile("./assets/background.png")) {
         std::cout << "Error loading background" << std::endl;
     }
     _spriteBackground.scale(2, 2);
