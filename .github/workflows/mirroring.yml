@@ -1,9 +1,6 @@
-name: mirroring
+name: on_pr_merged
 
-on:
-  pull_request:
-    types:
-      - closed
+on: [pull_request, push]
 
 jobs:
   mirroring:
@@ -19,3 +16,24 @@ jobs:
             git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-anatole.babin.git
           ssh_private_key:
             ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
+  release:
+    # if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Calculate run number
+        id: calc
+        run: echo "::set-output name=run_number::$((${{ github.run_number }} - 140))"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 1.0.${{ steps.calc.outputs.run_number }}
+          release_name: v1.0.${{ steps.calc.outputs.run_number }}
+          body: |
+            Automated release from GitHub Actions
+          draft: false
+          prerelease: false
