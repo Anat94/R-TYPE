@@ -277,11 +277,11 @@ if (WIN32)
                 ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-graphics-d-2.dll
                 ${CMAKE_SOURCE_DIR}/Debug
         )
-        add_custom_command(TARGET client POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-network-d-2.dll
-                ${CMAKE_SOURCE_DIR}/Debug
-        )
+        # add_custom_command(TARGET client POST_BUILD
+        #         COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        #         ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-network-d-2.dll
+        #         ${CMAKE_SOURCE_DIR}/Debug
+        # )
         add_custom_command(TARGET client POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-system-d-2.dll
