@@ -32,6 +32,7 @@
 #include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
 #include "../Ecs/Systems/ButtonSystem.hpp"
+#include "../KeyEventMapping.hpp"
 
 bool can_read = true;
 std::mutex mtx;
@@ -212,7 +213,10 @@ int Client::manageEvent()
         }
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
-            _send_structure.event = _event;
+            if (SFMLKeys.find(_event.key.code) != SFMLKeys.end())
+                _send_structure.event = KeyIds[SFMLKeys[_event.key.code]];
+            else
+                _send_structure.event = -1;
             send_to_server(_send_structure);
             _event = _event;
             return 0;
