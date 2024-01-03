@@ -54,8 +54,9 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
     HighScoreMessage *snapshot = reinterpret_cast<HighScoreMessage *>(server_msg.data());
     while (!can_read)
         continue;
-    std::cout << "High score: " << snapshot->score1 << std::endl;
-    std::cout << "High score: " << snapshot->name1 << std::endl;
+    std::cout << "High score1: " <<  snapshot->name1 << " - " << snapshot->score1 << std::endl;
+    std::cout << "High score2: " <<  snapshot->name2 << " - " << snapshot->score2 << std::endl;
+    std::cout << "High score3: " <<  snapshot->name3 << " - " << snapshot->score3 << std::endl;
     return snapshot->packet_id;
 
 }

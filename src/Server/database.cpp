@@ -41,7 +41,7 @@ static int callbackGetHighScore(void* data, int argc, char** argv, char** azColN
     return 0;
 }
 
-void Server::getHighScore() {
+HighScoreMessage Server::getHighScore() {
     const std::string tableName = "HighScore";
     std::string sql = "SELECT * FROM " + tableName + " ORDER BY score DESC LIMIT 3;";
     char *zErrMsg = 0;
@@ -52,9 +52,10 @@ void Server::getHighScore() {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
-    for (const auto& highScore : results) {
-        std::cout << "Name: " << highScore.name << ", Score: " << highScore.score << std::endl;
-    }
+    HighScoreMessage highscoreMsg(7, results[0].name, results[1].name, results[2].name, results[0].score, results[1].score, results[2].score, _packet_id);
+    _packet_id += 1;
+    _highscore_packages.push_back(highscoreMsg);
+    return highscoreMsg;
 }
 
 void Server::addHighScore(std::string name, int score) {

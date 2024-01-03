@@ -68,6 +68,41 @@ struct EventMessage: public BaseMessage {
     int event;
 };
 
+struct HighScoreMessage: public BaseMessage {
+    int score1;
+    char name1[20];
+    int score2;
+    char name2[20];
+    int score3;
+    char name3[20];
+    HighScoreMessage(int16_t id_, std::string name1_, int score1_, int packet_id_):
+        score1(score1_) {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < name1_.size(); i++) {
+                name1[i] = name1_[i];
+            }
+            name1[i] = '\0';
+        };
+};
+
+struct DrawableSnapshot: public BaseMessage {
+    entity_t entity;
+    char data[1024];
+
+    DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
+    entity(entity_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            data[i] = path[i];
+        }
+        data[i] = '\0';
+    };
+};
+
 enum Stage {
     ONE,
     TWO,
@@ -101,7 +136,8 @@ class Client {
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
-
+        int recieve_high_score(std::vector<char> &server_msg);
+        int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
 
     private:
@@ -161,7 +197,9 @@ class Client {
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {4, &Client::recieve_position_snapshot_update}
+            {4, &Client::recieve_position_snapshot_update},
+            {6, &Client::recieve_drawable_snapshot_update},
+            {7, &Client::recieve_high_score}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
