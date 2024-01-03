@@ -65,6 +65,20 @@ struct EventMessage: public BaseMessage {
     int event;
 };
 
+struct HighScoreMessage: public BaseMessage {
+    int score1;
+    char name1[20];
+    int score2;
+    char name2[20];
+    int score3;
+    char name3[20];
+    HighScoreMessage(int16_t id_, std::string name1_, int score1_, int packet_id_):
+        score1(score1_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
@@ -116,7 +130,7 @@ class Server {
             {1, &Server::recieve_client_event},
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
-            {5, &Server::recieve_packet_confirm}
+            {5, &Server::recieve_packet_confirm},
         };
         std::string _event;
         std::thread _send_thread;

@@ -85,6 +85,8 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
     std::cout << "New player connected !" << std::endl;
+    HighScoreMessage highscoreMsg(0, std::string("admin"), 0, 0);
+    send_data_to_all_clients<HighScoreMessage>(highscoreMsg);
     return new_player;
 }
 

@@ -54,6 +54,21 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+struct HighScoreMessage: public BaseMessage {
+    int score1;
+    char name1[20];
+    int score2;
+    char name2[20];
+    int score3;
+    char name3[20];
+    HighScoreMessage(int16_t id_, std::string name1_, int score1_, int packet_id_):
+        score1(score1_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
+
 struct data_struct {
     int id;
     sf::Event event;
@@ -100,6 +115,7 @@ class Client {
         void saveHighScore();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
+        int recieve_high_score(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
 
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
@@ -161,7 +177,8 @@ class Client {
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {4, &Client::recieve_position_snapshot_update}
+            {4, &Client::recieve_position_snapshot_update},
+            {7, &Client::recieve_high_score}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

@@ -47,6 +47,19 @@ std::vector<char> Client::recieve_raw_data_from_client()
     return receivedData;
 }
 
+int Client::recieve_high_score(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(HighScoreMessage))
+        return -1;
+    HighScoreMessage *snapshot = reinterpret_cast<HighScoreMessage *>(server_msg.data());
+    while (!can_read)
+        continue;
+    std::cout << "High score: " << snapshot->score1 << std::endl;
+    std::cout << "High score: " << snapshot->name1 << std::endl;
+    return snapshot->packet_id;
+
+}
+
 int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
