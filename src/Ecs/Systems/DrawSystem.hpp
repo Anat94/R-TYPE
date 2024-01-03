@@ -34,7 +34,6 @@ class DrawSystem : public ISystems {
                     _toDraw[dra[i]->_path].second->setPosition(pos[i]->x, pos[i]->y);
                     if (hit[i].has_value() && cli[i].has_value()) {
                         auto new_hit = hit[i]->update(*pos[i]);
-                        // std::cout << "Checking for collision between:" << new_hit << " and " << _mousePos->x << ", " << _mousePos->y << std::endl;
                         if (new_hit.contains(_mousePos->x, _mousePos->y)) {
                             std::cout << "Collision detected" << std::endl;
                             _toDraw[dra[i]->_path].second->setScale(0.3f, 0.3f);
