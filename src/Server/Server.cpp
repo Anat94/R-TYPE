@@ -88,8 +88,23 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     std::cout << "New player connected !" << std::endl;
     auto all_players = _ecs.get_components<component::Endpoint>();
     send_entity_drawable_to_all_players(new_player);
+    send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
     return new_player;
+}
+
+void Server::send_all_entity_drawables_to_specific_player(entity_t player)
+{
+    auto drawables = _ecs.get_components<component::Drawable>();
+
+    for (int i = 0; i < drawables.size(); ++i) {
+        if (!drawables[i].has_value())
+            continue;
+        DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
+        _packet_id += 1;
+        _drawable_packages.push_back(to_send);
+        send_data_to_client_by_entity(to_send, player);
+    }
 }
 
 void Server::send_highscore_to_specific_client(entity_t new_player)

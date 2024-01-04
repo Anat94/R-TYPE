@@ -150,6 +150,7 @@ class Server {
         void displayFriends(std::string name);
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
+        void send_all_entity_drawables_to_specific_player(entity_t player);
     private:
         std::vector<SnapshotPosition> _position_packages;
         std::vector<HighScoreMessage> _highscore_packages;
