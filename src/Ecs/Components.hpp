@@ -459,13 +459,60 @@ namespace component {
      * 
      */
     struct AnimatedDrawable {
+        /**
+         * @brief path to the spritesheet
+         * 
+         */
         std::string _path;
+        /**
+         * @brief set of numbers representing the amount of sprites to animate in the spritesheet
+         * 
+         * @param[in] _nbSprites A pair of integers specifying the number of sprites in the spritesheet.
+         *                      It follows the format {x, y} where:
+         *                      - x: number of sprites in a row
+         *                      - y: number of rows (not used currently)
+         * 
+         * (ex: {5, 1} for 5 sprites on 1 line)
+         * ! The second argument is not used yet !
+         */
         std::pair<int, int> _nbSprites;
+        /**
+         * @brief set of numbers representing the size of the sprites to load
+         * 
+         * (ex: {32, 14} for a 32x14 sprite)
+         * 
+         */
         std::pair<int, int> _spriteSize;
+        /**
+         * @brief set of numbers representing the size of the gapes between sprites
+         * 
+         * (ex: {3, 1} for a 3x1 gap)
+         * 
+         */
         std::pair<int, int> _gaps;
+        /**
+         * @brief set of numbers representing the size of the offset of the first sprite
+         * 
+         */
         std::pair<int, int> _firstOffset;
+        /**
+         * @brief set of numbers representing the indexes of the animation
+         * 
+         * (ex: {2, 0} to start with the 3rd sprite)
+         * ! The second argument is not used yet !
+         */
         std::pair<int, int> _currentIdx;
+        /**
+         * @brief the current animation name
+         * 
+         * (ex: "idle")
+         * 
+         */
         std::string _state;
+        /**
+         * @brief animations of the current AnimatedDrawable object
+         * 
+         */
         animation_t _anims;
         /**
          * @brief Construct a new Animated Drawable object
@@ -486,6 +533,13 @@ namespace component {
             std::pair<int, int> curretnIdx = {0, 0}
         ) :
             _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), _state("idle") {};
+        /**
+         * @brief Adds an animation to the animation list
+         * 
+         * @param state the name of the animation / state of the entity
+         * @param indexes the sprites concerned by the animation (sorted for use)
+         * @param reset to know if the animation reset when finished or not
+         */
         void addAnimation(const std::string &state, std::pair<int, int> indexes, bool reset)
         {
             _anims.emplace(state, std::make_pair(reset, indexes));
