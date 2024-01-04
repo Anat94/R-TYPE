@@ -211,7 +211,6 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
-    send_position_snapshots_for_all_players();
 }
 
 void Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
@@ -253,30 +252,37 @@ void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
 }
 
 void Server::sendPositionPackagesPeriodically() {
+    int counter = 0;
+
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        can_mod = false;
-        for (auto& snapshot : _position_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        if (counter >= 20) {
+            can_mod = false;
+            for (auto& snapshot : _position_packages) {
+                sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+                for (size_t i = 0; i < all_endpoints.size(); i++) {
+                    if (all_endpoints[i].has_value())
+                        _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+                }
             }
-        }
-        for (auto& snapshot : _drawable_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            for (auto& snapshot : _drawable_packages) {
+                sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+                for (size_t i = 0; i < all_endpoints.size(); i++) {
+                    if (all_endpoints[i].has_value())
+                        _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+                }
             }
-        }
-        for (auto& snapshot : _highscore_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+            for (auto& snapshot : _highscore_packages) {
+                sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+                for (size_t i = 0; i < all_endpoints.size(); i++) {
+                    if (all_endpoints[i].has_value())
+                        _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
+                }
             }
+            can_mod = true;
+            counter = 0;
         }
-        can_mod = true;
+        send_position_snapshots_for_all_players();
+        ++counter;
     }
 }
