@@ -18,29 +18,29 @@ jobs:
             git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-anatole.babin.git
           ssh_private_key:
             ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Install dependencies
-      run: |
-        sudo apt-get install libsfml-dev
-        sudo apt-get install libboost-all-dev
-        sudo apt-get install libx11-dev libxrandr-dev
-        sudo apt-get install libudev-dev
-        sudo apt-get install libopenal-dev
-        sudo apt-get install libvorbis-dev
-        sudo apt-get install libflac-dev
-        sudo apt-get install libmongoc-1.0-0
-        sudo apt-get install libbson-1.0
-        sudo apt-get install libasio-dev
-        sudo apt-get install libxcursor-dev
-    - name: Build
-      run: |
-        mkdir build && cd build && cmake .. && cmake --build  .
+  # build-linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v3
+  #   - name: Install dependencies
+  #     run: |
+  #       sudo apt-get install libsfml-dev
+  #       sudo apt-get install libboost-all-dev
+  #       sudo apt-get install libx11-dev libxrandr-dev
+  #       sudo apt-get install libudev-dev
+  #       sudo apt-get install libopenal-dev
+  #       sudo apt-get install libvorbis-dev
+  #       sudo apt-get install libflac-dev
+  #       sudo apt-get install libmongoc-1.0-0
+  #       sudo apt-get install libbson-1.0
+  #       sudo apt-get install libasio-dev
+  #       sudo apt-get install libxcursor-dev
+  #   - name: Build
+  #     run: |
+  #       mkdir build && cd build && cmake .. && cmake --build  .
   create-release:
-    needs: [build-linux]
+    # needs: [build-linux]
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
@@ -60,5 +60,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: db/
-          asset_name: db
+          asset_name: rtype.db
           asset_content_type: application/zip
