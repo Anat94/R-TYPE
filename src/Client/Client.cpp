@@ -194,16 +194,20 @@ Client::Client(std::string ip, int port, std::string username)
     listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
     // _player = _ecs.spawn_entity();
     // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
     // _ecs.add_component(_player, component::Scale(5.0f));
-    // _ecs.add_component(_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3}, {2, 0}));
+    // _ecs.add_component(_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3}, {0, 0}));
     // _enemy = _ecs.spawn_entity();
     // _ecs.add_component(_enemy, component::Position(200.0f, 300.0f));
     // _ecs.add_component(_enemy, component::Scale(5.0f));
-    // _ecs.add_component(_enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {2, 0}));
+    // _ecs.add_component(_enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+    // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[_enemy];
+    // tmp->addAnimation("idle", {0, 4}, false);
+    // tmp->addAnimation("move up", {2, 4}, false);
+    // tmp->addAnimation("move down", {2, 0}, true);
     _score = 0;
     _lives = 0;
     _level = 1;
@@ -283,7 +287,6 @@ void Client::displayTexts()
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
-        printf("je suis avt avt menu\n");
         if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
             send_to_server<EventMessage>(_send_structure);
