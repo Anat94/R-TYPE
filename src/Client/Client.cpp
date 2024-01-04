@@ -81,14 +81,14 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
         // }
         if (real_entity > 0 && pos[real_entity].has_value()) {
-            std::cout << "UPDATED PLAYER\n";
-            std::cout << snapshot->data.x << std::endl;
+            // std::cout << "UPDATED PLAYER\n";
+            // std::cout << snapshot->data.x << std::endl;
             pos[real_entity]->x = snapshot->data.x;
             pos[real_entity]->y = snapshot->data.y;
         } else {
-            std::cout << "CREATED PLAYER\n";
+            // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
-            std::cout << _recieve_structure.data.x << std::endl;
+            // std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
@@ -99,7 +99,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Clickable());
             _ecs.add_component(new_player, component::Hitbox(component::Position(snapshot->data.x,  snapshot->data.y), component::Position(snapshot->data.x + 32,  snapshot->data.y + 32)));
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
-            std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+            // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -107,14 +107,39 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+int Client::recieve_login_response(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(LoginResponse))
+        return -1;
+    LoginResponse *login = reinterpret_cast<LoginResponse *>(server_msg.data());
+    if (login->response == true && login->logintype == 1) {
+        std::cout << "Connected" << std::endl;
+        // _state = GAME;
+        return login->packet_id;
+    } else if (login->response == false  && login->logintype == 1) {
+        std::cout << "Wrong credentials" << std::endl;
+        // _state = MENU;
+        return login->packet_id;
+    } else if (login->response == true && login->logintype == 0) {
+        std::cout << "Registered" << std::endl;
+        // _state = GAME;
+        return login->packet_id;
+    } else if (login->response == false && login->logintype == 0) {
+        std::cout << "An error occured whil registring" << std::endl;
+        // _state = GAME;
+        return login->packet_id;
+    }
+    return -1;
+}
+
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
         return -1;
 
-    std::cout << server_msg.data() << ", " << sizeof(DrawableSnapshot) << std::endl;
+    // std::cout << server_msg.data() << ", " << sizeof(DrawableSnapshot) << std::endl;
     DrawableSnapshot *snapshot = reinterpret_cast<DrawableSnapshot *>(server_msg.data());
-    std::cout << snapshot->data << std::endl;
+    // std::cout << snapshot->data << std::endl;
     sparse_array<component::Drawable> &drawables = _ecs.get_components<component::Drawable>();
     sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
@@ -126,11 +151,11 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
         //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
         // }
         if (real_entity > 0 && drawables[real_entity].has_value()) {
-            std::cout << "UPDATED PLAYER SPRITE\n";
+            // std::cout << "UPDATED PLAYER SPRITE\n";
             drawables[real_entity]->_path = std::string(snapshot->data);
         } else {
-            std::cout << "CREATED PLAYER SPRITE\n";
-            std::cout << _recieve_structure.data.x << std::endl;
+            // std::cout << "CREATED PLAYER SPRITE\n";
+            // std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(real_entity, component::Drawable(std::string(snapshot->data)));
         }
     } catch (const std::exception &ex) {
@@ -142,7 +167,7 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 void Client::receive()
 {
     std::vector<char> server_msg = recieve_raw_data_from_client();
-    std::cout << "recieved raw" << std::endl;
+    // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -270,9 +295,9 @@ void Client::send_to_server(const T& structure) {
 }
 
 void Client::receive_datas() {
-    std::cout << "START RECIEVE";
+    // std::cout << "START RECIEVE";
     _socket.receive_from(asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
-    std::cout << "RECIEVED\n";
+    // std::cout << "RECIEVED\n";
     receive_datas();
 }
 
@@ -337,6 +362,9 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
+    LoginMessage login(6, "test", "test", 0, _packet_id); // 0 == signup & 1 == signin
+    _packet_id += 1;
+    send_to_server<LoginMessage>(login);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
