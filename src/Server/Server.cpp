@@ -32,7 +32,7 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
       _listener(listener),
-      _send_thread(&Server::sendPositionPackagesPeriodically, this)
+      _send_thread(&Server::sendPositionpacketsPeriodically, this)
 {
     _tpool.emplace_back([this, &service]() {
         service.run();
@@ -88,25 +88,29 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     std::cout << "New player connected !" << std::endl;
     auto all_players = _ecs.get_components<component::Endpoint>();
     send_entity_drawable_to_all_players(new_player);
+    send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
     return new_player;
+}
+
+void Server::send_all_entity_drawables_to_specific_player(entity_t player)
+{
+    auto drawables = _ecs.get_components<component::Drawable>();
+
+    for (int i = 0; i < drawables.size(); ++i) {
+        if (!drawables[i].has_value())
+            continue;
+        DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
+        _packet_id += 1;
+        _drawable_packets.push_back(to_send);
+        send_data_to_client_by_entity(to_send, player);
+    }
 }
 
 void Server::send_highscore_to_specific_client(entity_t new_player)
 {
     HighScoreMessage highscoreMsg = getHighScore();
     send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
-}
-
-std::map<entity_t, std::pair<float, float>> convert_to_map(sparse_array<component::Position> pos)
-{
-    std::map<entity_t, std::pair<float, float>> res = {};
-    for (int i = 0; i < pos.size(); i++) {
-        if (pos[i].has_value()) {
-            res[i] = std::make_pair(pos[i].value().x, pos[i].value().y);
-        }
-    }
-    return res;
 }
 
 std::vector<char> Server::recieve_raw_data_from_client()
@@ -125,7 +129,7 @@ void Server::send_position_snapshots_for_all_players()
         if (pos[i].has_value()) {
             // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
             SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), _packet_id);
-            _position_packages.push_back(snap_p);
+            _position_packets.push_back(snap_p);
             _packet_id += 1;
             send_data_to_all_clients<SnapshotPosition>(snap_p);
         }
@@ -138,7 +142,7 @@ void Server::send_entity_drawable_to_all_players(entity_t entity)
     component::Drawable drawable = drawables[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, _packet_id);
     _packet_id += 1;
-    _drawable_packages.push_back(to_send);
+    _drawable_packets.push_back(to_send);
     send_data_to_all_clients<DrawableSnapshot>(to_send);
 }
 
@@ -165,26 +169,26 @@ void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) 
     int id = confirmMsg->packet_id;
 
     while (!can_mod) continue;
-    _position_packages.erase(
-        std::remove_if(_position_packages.begin(), _position_packages.end(), [id](const SnapshotPosition& snapshot) {
+    _position_packets.erase(
+        std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
             return snapshot.packet_id == id;
         }
         ),
-        _position_packages.end()
+        _position_packets.end()
     );
-    _drawable_packages.erase(
-        std::remove_if(_drawable_packages.begin(), _drawable_packages.end(), [id](const DrawableSnapshot& snapshot) {
+    _drawable_packets.erase(
+        std::remove_if(_drawable_packets.begin(), _drawable_packets.end(), [id](const DrawableSnapshot& snapshot) {
             return snapshot.packet_id == id;
         }
         ),
-        _drawable_packages.end()
+        _drawable_packets.end()
     );
-    _highscore_packages.erase(
-        std::remove_if(_highscore_packages.begin(), _highscore_packages.end(), [id](const HighScoreMessage& snapshot) {
+    _highscore_packets.erase(
+        std::remove_if(_highscore_packets.begin(), _highscore_packets.end(), [id](const HighScoreMessage& snapshot) {
             return snapshot.packet_id == id;
         }
         ),
-        _highscore_packages.end()
+        _highscore_packets.end()
     );
 }
 
@@ -196,7 +200,6 @@ void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
-    send_position_snapshots_for_all_players();
 }
 
 void Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
@@ -237,31 +240,31 @@ void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
 }
 
-void Server::sendPositionPackagesPeriodically() {
+template <typename T>
+void Server::resend_packets(std::vector<T> &packets) {
+    for (auto& packet : packets) {
+        sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+        for (size_t i = 0; i < all_endpoints.size(); i++) {
+            if (all_endpoints[i].has_value())
+                _socket.send_to(asio::buffer(&packet, sizeof(packet)), all_endpoints[i].value()._endpoint);
+        }
+    }
+}
+
+void Server::sendPositionpacketsPeriodically() {
+    int counter = 0;
+
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        can_mod = false;
-        for (auto& snapshot : _position_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
-            }
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        if (counter >= 20) {
+            can_mod = false;
+            resend_packets<SnapshotPosition>(_position_packets);
+            resend_packets<DrawableSnapshot>(_drawable_packets);
+            resend_packets<HighScoreMessage>(_highscore_packets);
+            can_mod = true;
+            counter = 0;
         }
-        for (auto& snapshot : _drawable_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
-            }
-        }
-        for (auto& snapshot : _highscore_packages) {
-            sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
-            for (size_t i = 0; i < all_endpoints.size(); i++) {
-                if (all_endpoints[i].has_value())
-                    _socket.send_to(asio::buffer(&snapshot, sizeof(snapshot)), all_endpoints[i].value()._endpoint);
-            }
-        }
-        can_mod = true;
+        send_position_snapshots_for_all_players();
+        ++counter;
     }
 }

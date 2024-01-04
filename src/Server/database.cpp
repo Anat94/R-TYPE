@@ -54,7 +54,7 @@ HighScoreMessage Server::getHighScore() {
     }
     HighScoreMessage highscoreMsg(7, results[0].name, results[1].name, results[2].name, results[0].score, results[1].score, results[2].score, _packet_id);
     _packet_id += 1;
-    _highscore_packages.push_back(highscoreMsg);
+    _highscore_packets.push_back(highscoreMsg);
     return highscoreMsg;
 }
 
