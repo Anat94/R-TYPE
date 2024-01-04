@@ -45,7 +45,7 @@ jobs:
     - name: Package code
       run: |
         cd build/
-        cpack -G TGZ
+        sudo cpack -G TGZ
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
