@@ -90,8 +90,9 @@ struct HighScoreMessage: public BaseMessage {
 struct LoginMessage: public BaseMessage {
     char username[20];
     char password[20];
-    LoginMessage(int16_t id_, std::string username_, std::string password_, int packet_id_):
-        username(), password() {
+    int logintype;
+    LoginMessage(int16_t id_, std::string username_, std::string password_, int type_, int packet_id_):
+        username(), password(), logintype(type_) {
             int i = 0;
             id = id_;
             packet_id = packet_id_;
@@ -109,8 +110,9 @@ struct LoginMessage: public BaseMessage {
 
 struct LoginResponse: public BaseMessage {
     bool response;
-    LoginResponse(int16_t id_, bool success_, int packet_id_):
-        response(success_) {
+    int logintype;
+    LoginResponse(int16_t id_, bool success_, int type_, int packet_id_):
+        response(success_), logintype(type_) {
             id = id_;
             packet_id = packet_id_;
         };

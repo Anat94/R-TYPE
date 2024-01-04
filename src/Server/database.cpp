@@ -134,11 +134,11 @@ bool Server::checkIfUserExist(std::string name, std::string password) {
     }
 }
 
-void Server::signUp(std::string name, std::string password) {
+bool Server::signUp(std::string name, std::string password) {
     const std::string tableName = "USERS";
     if (checkIfUserExist(name, password) == true) {
         std::cout << "User already exist" << std::endl;
-        return;
+        return false;
     }
     std::string sql = "INSERT INTO " + tableName + " (id, name, password) VALUES ('" + makePersonnalID() +"', '" + name + "', '" + password + "');";
     char *zErrMsg = 0;
@@ -148,6 +148,7 @@ void Server::signUp(std::string name, std::string password) {
         sqlite3_free(zErrMsg);
     } else {
         fprintf(stdout, "Records created successfully\n");
+        return true;
     }
 }
 

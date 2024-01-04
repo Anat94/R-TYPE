@@ -113,8 +113,9 @@ struct HighScoreMessage: public BaseMessage {
 struct LoginMessage: public BaseMessage {
     char username[20];
     char password[20];
-    LoginMessage(int16_t id_, std::string username_, std::string password_, int packet_id_):
-        username(), password() {
+    int logintype;
+    LoginMessage(int16_t id_, std::string username_, std::string password_, int type_, int packet_id_):
+        username(), password(), logintype(type_) {
             int i = 0;
             id = id_;
             packet_id = packet_id_;
@@ -131,8 +132,9 @@ struct LoginMessage: public BaseMessage {
 
 struct LoginResponse: public BaseMessage {
     bool response;
-    LoginResponse(int16_t id_, bool success_, int packet_id_):
-        response(success_) {
+    int logintype;
+    LoginResponse(int16_t id_, bool success_, int _type, int packet_id_):
+        response(success_), logintype(_type) {
             id = id_;
             packet_id = packet_id_;
         };
@@ -169,7 +171,7 @@ class Server {
         HighScoreMessage getHighScore();
         void addHighScore(std::string name, int score);
         bool IsNameInBdd(std::string name);
-        void signUp(std::string name, std::string password);
+        bool signUp(std::string name, std::string password);
         bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();
         bool signIn(std::string name, std::string password);

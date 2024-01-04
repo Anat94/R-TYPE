@@ -224,8 +224,12 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
     while (!can_read)
         continue;
-    bool response = signIn(snapshot->username, snapshot->password);
-    LoginResponse resp(8, response, _packet_id);
+    bool response = true;
+    if (snapshot->logintype == 0)
+        response = signUp(snapshot->username, snapshot->password);
+    else if (snapshot->logintype == 1)
+        response = signIn(snapshot->username, snapshot->password);
+    LoginResponse resp(8, response, snapshot->logintype, _packet_id);
     send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
     _packet_id += 1;
     return 0;

@@ -112,13 +112,21 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     if (server_msg.size() < sizeof(LoginResponse))
         return -1;
     LoginResponse *login = reinterpret_cast<LoginResponse *>(server_msg.data());
-    if (login->response == true) {
+    if (login->response == true && login->logintype == 1) {
         std::cout << "Connected" << std::endl;
         // _state = GAME;
         return login->packet_id;
-    } else if (login->response == false) {
+    } else if (login->response == false  && login->logintype == 1) {
         std::cout << "Wrong credentials" << std::endl;
         // _state = MENU;
+        return login->packet_id;
+    } else if (login->response == true && login->logintype == 0) {
+        std::cout << "Registered" << std::endl;
+        // _state = GAME;
+        return login->packet_id;
+    } else if (login->response == false && login->logintype == 0) {
+        std::cout << "An error occured whil registring" << std::endl;
+        // _state = GAME;
         return login->packet_id;
     }
     return -1;
@@ -350,7 +358,7 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    LoginMessage login(6, "Anatole", "Anatole", _packet_id);
+    LoginMessage login(6, "test", "test", 0, _packet_id); // 0 == signup & 1 == signin
     _packet_id += 1;
     send_to_server<LoginMessage>(login);
     while (true) {
