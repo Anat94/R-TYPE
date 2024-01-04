@@ -135,7 +135,7 @@ class Server {
         void send_data_to_all_clients(T& structure);
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity);
-        void sendPositionPackagesPeriodically();
+        void sendPositionpacketsPeriodically();
         void connectToDB();
         HighScoreMessage getHighScore();
         void addHighScore(std::string name, int score);
@@ -151,10 +151,12 @@ class Server {
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
+        template <typename T>
+        void resend_packets(std::vector<T> &);
     private:
-        std::vector<SnapshotPosition> _position_packages;
-        std::vector<HighScoreMessage> _highscore_packages;
-        std::vector<DrawableSnapshot> _drawable_packages;
+        std::vector<SnapshotPosition> _position_packets;
+        std::vector<HighScoreMessage> _highscore_packets;
+        std::vector<DrawableSnapshot> _drawable_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
