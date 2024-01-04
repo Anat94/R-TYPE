@@ -2,19 +2,19 @@
 ** EPITECH PROJECT, 2023
 ** R-Type
 ** File description:
-** DrawSystem
+** SFMLDrawSystem
 */
 
-#ifndef DRAWSYSTEM_HPP_
-    #define DRAWSYSTEM_HPP_
+#ifndef SFMLDRAWSYSTEM_HPP_
+    #define SFMLDRAWSYSTEM_HPP_
     #include <vector>
     #include <memory>
     #include <unordered_map>
     #include "Systems.hpp"
 
-class DrawSystem : public ISystems {
+class SFMLDrawSystem : public ISystems {
     public:
-        DrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
+        SFMLDrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
 
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Clickable> &cli, sparse_array<component::Hitbox> &hit) {
             for (size_t i = 0; i < dra.size(); ++i) {
@@ -35,7 +35,6 @@ class DrawSystem : public ISystems {
                     if (hit[i].has_value() && cli[i].has_value()) {
                         auto new_hit = hit[i]->update(*pos[i]);
                         if (new_hit.contains(_mousePos->x, _mousePos->y)) {
-                            std::cout << "Collision detected" << std::endl;
                             _toDraw[dra[i]->_path].second->setScale(0.3f, 0.3f);
                         } else
                             _toDraw[dra[i]->_path].second->setScale(0.1f, 0.1f);
@@ -50,4 +49,4 @@ class DrawSystem : public ISystems {
         std::unordered_map<std::string, std::pair<std::unique_ptr<sf::Texture>, std::unique_ptr<sf::Sprite>>> _toDraw;
 };
 
-#endif /* !DRAWSYSTEM_HPP_ */
+#endif /* !SFMLDRAWSYSTEM_HPP_ */

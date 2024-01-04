@@ -445,6 +445,38 @@ namespace component {
          */
         Clickable(const std::string& status = "idle") : _status(status) {};
     };
+
+    /**
+     * @brief AnimatedDrawable structure to animate sprites
+     * 
+     */
+    struct AnimatedDrawable {
+        std::pair<int, int> _firstOffset;
+        std::pair<int, int> _spriteSize;
+        std::pair<int, int> _gaps;
+        std::pair<int, int> _nbSprites;
+        std::pair<int, int> _currentIdx;
+        std::string _path;
+        /**
+         * @brief Construct a new Animated Drawable object
+         * 
+         * @param path path to the spritesheet
+         * @param nbSprites number of sprites to load (ex: {10, 1} for ten sprites on 1 line)
+         * @param spriteSize size of the sprites in the spritesheet (ex: {34, 12} for a 34 by 12 sprite)
+         * @param gaps size of the horizontal and vertical gaps in the spritesheet (ex: {1, 3} for a 1 pixel gap in the x-axis, and a 3 pixel gap in the y-axis)
+         * @param firstOffset size of the first offset of the sprite (ex: {101, 4} if the sprite you want start at 101 pixels in the x-axis, and 4 pixels in the y-axis)
+         * @param curretnIdx current index of the texture of the sprite (ex: {2, 0} to start at the third sprite of the spritesheet)
+         */
+        AnimatedDrawable(
+            const std::string &path,
+            std::pair<int, int> nbSprites,
+            std::pair<int, int> spriteSize,
+            std::pair<int, int> gaps,
+            std::pair<int, int> firstOffset = {0, 0},
+            std::pair<int, int> curretnIdx = {0, 0}
+        ) :
+            _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */

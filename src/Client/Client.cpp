@@ -27,7 +27,8 @@
 #include <iomanip>
 #include "../Ecs/ZipperIterator.hpp"
 #include "Client.hpp"
-#include "../Ecs/Systems/DrawSystem.hpp"
+#include "../Ecs/Systems/SFMLAnimatedDrawSystem.hpp"
+#include "../Ecs/Systems/SFMLDrawSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
@@ -168,17 +169,18 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::Score>();
     _ecs.register_component<component::Damage>();
     _ecs.register_component<component::Health>();
-    _ecs.register_component<component::Pierce>();
     _ecs.register_component<component::Hitbox>();
+    _ecs.register_component<component::Pierce>();
     _ecs.register_component<component::Heading>();
-    _ecs.register_component<component::Position>();
-    _ecs.register_component<component::Velocity>();
     _ecs.register_component<component::Drawable>();
+    _ecs.register_component<component::Position>();
     _ecs.register_component<component::Rotation>();
+    _ecs.register_component<component::Velocity>();
     _ecs.register_component<component::Clickable>();
+    _ecs.register_component<component::Controllable>();
     _ecs.register_component<component::ResetOnMove>();
     _ecs.register_component<component::ServerEntity>();
-    _ecs.register_component<component::Controllable>();
+    _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
     _background = _ecs.spawn_entity();
     _btn_play = _ecs.spawn_entity();
@@ -190,19 +192,23 @@ Client::Client(std::string ip, int port, std::string username)
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
     listener.addRegistry(_ecs);
-    // ControlSystem *ctrl_sys = new ControlSystem(&listener, &_event);
-    // _ecs.add_system<component::Velocity, component::Controllable>(*ctrl_sys);
-    // ScaleSystem *sca_sys = new ScaleSystem;
-    // _ecs.add_system<component::Drawable, component::Scale>(*sca_sys);
-    // RotationSystem *rot_sys = new RotationSystem;
-    // _ecs.add_system<component::Drawable, component::Rotation>(*rot_sys);
-    DrawSystem *draw_sys = new DrawSystem(&_window, &_mouse_position);
+    SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
+    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // _player = _ecs.spawn_entity();
+    // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
+    // _ecs.add_component(_player, component::Scale(5.0f));
+    // _ecs.add_component(_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3}, {2, 0}));
+    // _enemy = _ecs.spawn_entity();
+    // _ecs.add_component(_enemy, component::Position(200.0f, 300.0f));
+    // _ecs.add_component(_enemy, component::Scale(5.0f));
+    // _ecs.add_component(_enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {2, 0}));
     _score = 0;
     _lives = 0;
     _level = 1;
     _font = sf::Font();
-    if (!_font.loadFromFile("./assets/font.ttf"))
+    if (!_font.loadFromFile("src/Client/assets/font.ttf"))
         throw SFMLError("Font not found");
     _score_text = sf::Text("Score: " + std::to_string(_score), _font, 30);
     _score_text.setPosition(10, 10);
