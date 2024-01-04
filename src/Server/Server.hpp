@@ -110,13 +110,41 @@ struct HighScoreMessage: public BaseMessage {
         };
 };
 
+struct LoginMessage: public BaseMessage {
+    char username[20];
+    char password[20];
+    LoginMessage(int16_t id_, std::string username_, std::string password_, int packet_id_):
+        username(), password() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            for (; i < password_.size(); i++) {
+                password[i] = password_[i];
+            }
+            password[i] = '\0';
+        };
+};
+
+struct LoginResponse: public BaseMessage {
+    bool response;
+    LoginResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
 };
 
 class Server {
-    typedef void (Server::*messageParserHandle)(std::vector<char>&, entity_t);
+    typedef int (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
         Server(asio::io_context& service, int port, registry &ecs, EventListener &listener);
         ~Server();
@@ -127,10 +155,11 @@ class Server {
         void send_entity_drawable_to_all_players(entity_t entity);
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
-        void recieve_client_event(std::vector<char> &, entity_t);
-        void recieve_connection_event(std::vector<char> &, entity_t);
-        void recieve_disconnection_event(std::vector<char> &, entity_t);
-        void recieve_packet_confirm(std::vector<char> &, entity_t);
+        int recieve_client_event(std::vector<char> &, entity_t);
+        int recieve_connection_event(std::vector<char> &, entity_t);
+        int recieve_disconnection_event(std::vector<char> &, entity_t);
+        int recieve_packet_confirm(std::vector<char> &, entity_t);
+        int receive_login_event(std::vector<char> &, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
         template <typename T>
@@ -143,7 +172,7 @@ class Server {
         void signUp(std::string name, std::string password);
         bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();
-        void signIn(std::string name, std::string password);
+        bool signIn(std::string name, std::string password);
         void addFriend(std::string name, std::string friendName);
         bool checkIfFriendshipExist(std::string name, std::string friendId);
         void removeFriend(std::string name, std::string friendName);
@@ -171,6 +200,7 @@ class Server {
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm},
+            {6, &Server::receive_login_event}
         };
         std::string _event;
         std::thread _send_thread;

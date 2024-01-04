@@ -9,6 +9,7 @@
 #include "KeyEventMapping.hpp"
 
 bool can_mod = true;
+bool can_read = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
@@ -164,7 +165,7 @@ void Server::recieve_from_client()
     recieve_from_client();
 }
 
-void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
+int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
@@ -190,27 +191,44 @@ void Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) 
         ),
         _highscore_packets.end()
     );
+    return 0;
 }
 
-void Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(EventMessage))
-        return;
+        return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+    return 0;
 }
 
-void Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     static_cast<void>(client_msg);
     static_cast<void>(player_entity);
+    return 0;
 }
 
-void Server::recieve_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::recieve_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     _ecs.kill_entity(player_entity);
+    return 0;
+}
+
+int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_entity) {
+    if (client_msg.size() < sizeof(LoginMessage))
+        return -1;
+    LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
+    while (!can_read)
+        continue;
+    bool response = signIn(snapshot->username, snapshot->password);
+    LoginResponse resp(8, response, _packet_id);
+    send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
+    _packet_id += 1;
+    return 0;
 }
 
 Server::~Server() {
@@ -239,6 +257,7 @@ void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
     while (!can_mod) continue;
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
 }
+
 
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets) {

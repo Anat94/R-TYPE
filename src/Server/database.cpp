@@ -157,7 +157,9 @@ static int callbackSignIn(void *data, int argc, char** argv, char** azColName) {
     return 0;
 }
 
-void Server::signIn(std::string name, std::string password) {
+bool Server::signIn(std::string name, std::string password) {
+    std::cout << "username :" << name << std::endl;
+    std::cout << "password :" << password << std::endl;
     const std::string tableName = "USERS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "' AND password = '" + password + "';";
     char *zErrMsg = 0;
@@ -172,6 +174,7 @@ void Server::signIn(std::string name, std::string password) {
         std::cout << "User succesfully connected" << std::endl;
     else
         std::cout << "Bad credentials" << std::endl;
+    return userExists;
 }
 
 static int callbackCheckFriendship(void *data, int argc, char** argv, char** azColName) {
