@@ -18,43 +18,43 @@ jobs:
             git@github.com:EpitechPromo2026/B-CPP-500-PAR-5-2-rtype-anatole.babin.git
           ssh_private_key:
             ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
-  build-linux:
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Install dependencies
-      run: |
-        sudo apt-get install libsfml-dev
-        sudo apt-get install libboost-all-dev
-        sudo apt-get install libx11-dev libxrandr-dev
-        sudo apt-get install libudev-dev
-        sudo apt-get install libopenal-dev
-        sudo apt-get install libvorbis-dev
-        sudo apt-get install libflac-dev
-        sudo apt-get install libmongoc-1.0-0
-        sudo apt-get install libbson-1.0
-        sudo apt-get install libasio-dev
-        sudo apt-get install libxcursor-dev
+  # build-linux:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - name: Install dependencies
+  #     run: |
+  #       sudo apt-get install libsfml-dev
+  #       sudo apt-get install libboost-all-dev
+  #       sudo apt-get install libx11-dev libxrandr-dev
+  #       sudo apt-get install libudev-dev
+  #       sudo apt-get install libopenal-dev
+  #       sudo apt-get install libvorbis-dev
+  #       sudo apt-get install libflac-dev
+  #       sudo apt-get install libmongoc-1.0-0
+  #       sudo apt-get install libbson-1.0
+  #       sudo apt-get install libasio-dev
+  #       sudo apt-get install libxcursor-dev
 
-    - name: Checkout repository
-      uses: actions/checkout@v3
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v3
 
-    - name: Build
-      run: |
-        mkdir -p build; cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build  .
+  #   - name: Build
+  #     run: |
+  #       mkdir -p build; cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build  .
 
-    - name: Package code
-      run: |
-        cd build/
-        sudo cpack -G TGZ
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: Linux
-        path: |
-          ${{ github.workspace }}/build/R-Type-*-Linux.tar.gz
+  #   - name: Package code
+  #     run: |
+  #       cd build/
+  #       sudo cpack -G TGZ
+  #   - name: Upload Artifact
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: Linux
+  #       path: |
+  #         ${{ github.workspace }}/build/R-Type-*-Linux.tar.gz
 
   create-release:
-    needs: [build-linux]
+    # needs: [build-linux]
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
           body: v1.0.0
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            ${{ github.workspace }}/Linux/*.tar.gz
+            db/
   # build:
   #   runs-on: ubuntu-latest
 
