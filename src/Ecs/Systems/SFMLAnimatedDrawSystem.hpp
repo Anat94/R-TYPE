@@ -18,6 +18,7 @@ class SFMLAnimatedDrawSystem : public ISystems {
             float elapsedTick = _clock.getElapsedTime().asMilliseconds();
             for (size_t i = 0; i < ani.size(); ++i) {
                 if (ani[i].has_value() && _toDraw.find(i) == _toDraw.end()) {
+                    auto state = ani[i]->_state;
                     std::unique_ptr<sf::Texture> t = std::make_unique<sf::Texture>();
                     if (!t->loadFromFile(ani[i]->_path)) {
                         std::cout << "Error loading texture" << std::endl;
@@ -25,21 +26,23 @@ class SFMLAnimatedDrawSystem : public ISystems {
                     }
                     std::unique_ptr<sf::Sprite> s = std::make_unique<sf::Sprite>();
                     s->setTexture(*t);
-                    s->setTextureRect({ani[i]->_firstOffset.first, ani[i]->_firstOffset.second, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
+                    int offsetX = ani[i]->_firstOffset.first + ((ani[i]->_spriteSize.first + ani[i]->_gaps.first) * ani[i]->_anims[state].second.first);
+                    int offsetY = ani[i]->_firstOffset.second;
+                    s->setTextureRect({offsetX, offsetY, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
                     if (sca[i].has_value())
                         s->setScale(sca[i]->_scale.first, sca[i]->_scale.second);
-                    _toDraw.insert(std::make_pair(i, std::move(std::make_pair(ani[i]->_currentIdx, std::move(std::make_pair(std::move(t), std::move(s)))))));
+                    _toDraw.insert(std::make_pair(i, std::move(std::make_pair(std::move(ani[i]->_anims[state].second), std::move(std::make_pair(std::move(t), std::move(s)))))));
                 } else if (ani[i].has_value() && _toDraw.find(i) != _toDraw.end() && elapsedTick >= _threshold) {
+                    std::string state = ani[i]->_state;
                     auto &currentIdx = _toDraw[i].first;
-                    if ((currentIdx.first + 1) == ani[i]->_nbSprites.first) {
-                        _toDraw[i].second.second->setTextureRect({ani[i]->_firstOffset.first, ani[i]->_firstOffset.second, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
-                        currentIdx.first = 0;
-                    } else {
-                        currentIdx.first++;
-                        int offsetX = ani[i]->_firstOffset.first + ((ani[i]->_spriteSize.first + ani[i]->_gaps.first) * currentIdx.first);
-                        int offsetY = ani[i]->_firstOffset.second;
-                        _toDraw[i].second.second->setTextureRect({offsetX, offsetY, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
-                    }
+                    int offsetY = ani[i]->_firstOffset.second;
+                    if (currentIdx.first == ani[i]->_anims[state].second.second) {
+                        if (ani[i]->_anims[state].first)
+                            currentIdx.first = ani[i]->_anims[state].second.first;
+                    } else
+                        (ani[i]->_anims[state].second.second < ani[i]->_anims[state].second.first) ? currentIdx.first-- : currentIdx.first++;
+                    int offsetX = ani[i]->_firstOffset.first + ((ani[i]->_spriteSize.first + ani[i]->_gaps.first) * currentIdx.first);
+                    _toDraw[i].second.second->setTextureRect({offsetX, offsetY, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
                     _clock.restart();
                 }
             }

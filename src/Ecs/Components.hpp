@@ -8,12 +8,20 @@
 #ifndef COMPONENTS_HPP_
     #define COMPONENTS_HPP_
     #include <SFML/Graphics.hpp>
-    #include <asio.hpp>
     #include <SFML/Audio.hpp>
+    #include <unordered_map>
+    #include <asio.hpp>
     #include "../Errors.hpp"
 
 using asio::ip::udp;
 using entity_t = size_t;
+/**
+ * @brief Used to store the animation and the state of the animation.
+ * 
+ * (ex: animation["idle"].first for the base sprite index, and animation["idle"].second for the last sprite index)
+ * 
+ */
+using animation_t = std::unordered_map<std::string, std::pair<bool, std::pair<int, int>>>;
 
 namespace component {
     /**
@@ -451,12 +459,14 @@ namespace component {
      * 
      */
     struct AnimatedDrawable {
-        std::pair<int, int> _firstOffset;
+        std::string _path;
+        std::pair<int, int> _nbSprites;
         std::pair<int, int> _spriteSize;
         std::pair<int, int> _gaps;
-        std::pair<int, int> _nbSprites;
+        std::pair<int, int> _firstOffset;
         std::pair<int, int> _currentIdx;
-        std::string _path;
+        std::string _state;
+        animation_t _anims;
         /**
          * @brief Construct a new Animated Drawable object
          * 
@@ -475,7 +485,11 @@ namespace component {
             std::pair<int, int> firstOffset = {0, 0},
             std::pair<int, int> curretnIdx = {0, 0}
         ) :
-            _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx) {};
+            _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), _state("idle") {};
+        void addAnimation(const std::string &state, std::pair<int, int> indexes, bool reset)
+        {
+            _anims.emplace(state, std::make_pair(reset, indexes));
+        };
     };
 };
 
