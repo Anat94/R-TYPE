@@ -1,8 +1,9 @@
 name: Create Release
 
-on:
-  pull_request:
-    types: [closed]
+on: [push]
+  # pull_request:
+# 
+    # types: [closed]
 
 jobs:
   build:
