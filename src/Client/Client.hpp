@@ -144,6 +144,36 @@ struct FriendsResponse: public BaseMessage {
         };
 };
 
+struct AddFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct AddFriendsResponse: public BaseMessage {
+    bool response;
+    AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
     char data[1024];
@@ -218,6 +248,7 @@ class Client {
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         int receive_friends_reponse(std::vector<char> &server_msg);
+        int receive_add_friends_reponse(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
 
@@ -283,6 +314,7 @@ class Client {
             {7, &Client::recieve_high_score},
             {8, &Client::recieve_login_response},
             {9, &Client::receive_friends_reponse},
+            {10, &Client::receive_add_friends_reponse},
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

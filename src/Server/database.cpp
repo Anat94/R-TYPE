@@ -200,10 +200,10 @@ bool Server::checkIfFriendshipExist(std::string name, std::string friendId) {
         return false;
 }
 
-void Server::addFriend(std::string name, std::string friendId) {
+bool Server::addFriend(std::string name, std::string friendId) {
     if (checkIfFriendshipExist(name, friendId) == true) {
         std::cout << "Friendship already exist" << std::endl;
-        return;
+        return false;
     }
     const std::string tableName = "FRIENDS";
     std::string sql = "INSERT INTO " + tableName + "(name, friendID) VALUES ( '" + name +"', '" + friendId + "');";
@@ -214,6 +214,7 @@ void Server::addFriend(std::string name, std::string friendId) {
         sqlite3_free(zErrMsg);
     }
     std::cout << "Friend added" << std::endl;
+    return true;
 }
 
 void Server::removeFriend(std::string name, std::string friendName) {
@@ -261,7 +262,6 @@ static int callbackDisplayFriends(void *data, int argc, char** argv, char** azCo
 }
 
 std::vector<Friendship> Server::displayFriends(std::string name, entity_t player_entity) {
-    printf("Avant query\n");
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
     char *zErrMsg = 0;
@@ -272,7 +272,6 @@ std::vector<Friendship> Server::displayFriends(std::string name, entity_t player
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
-    printf("Apres query\n");
     for (const auto& friendData : friends) {
         std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
         FriendsResponse resp(9, friendData.name, _packet_id);

@@ -47,7 +47,9 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
         // addHighScore("Jacques", 90);
         // getHighScore();
         // addFriend("admin", "9AEPR4G1XK");
-        // addFriend("Anatole", "7GH8W64ZQX");
+        // addFriend("Anatole", "Pierre");
+        // addFriend("Anatole", "admin");
+        // addFriend("Jacques", "tests");
         // removeFriend("admin", "9AEPR4G1XK");
         // displayFriends("admin");
     } catch (const std::exception& e) {
@@ -236,23 +238,30 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
 
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
-    printf("Friendship\n");
     if (client_msg.size() < sizeof(FriendsMessage)) {
         printf("uy\n");
         return -1;
     }
-    printf("Friendship\n");
     FriendsMessage *snapshot = reinterpret_cast<FriendsMessage *>(client_msg.data());
-    printf("Friendship\n");
     while (!can_read)
         continue;
-    printf("Friendship\n");
     std::vector<Friendship> friends = displayFriends(snapshot->username, player_entity);
     _packet_id++;
-    printf("Friendship\n");
     return 0;
 }
 
+int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t player_entity)
+{
+    if (client_msg.size() < sizeof(AddFriendsMessage))
+        return -1;
+    AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
+    while (!can_read)
+        continue;
+    bool response = addFriend(snapshot->username, snapshot->friendName);
+    AddFriendsResponse resp(10, response, _packet_id);
+    send_data_to_client_by_entity<AddFriendsResponse>(resp, player_entity);
+    return 0;
+}
 
 Server::~Server() {
     if (_send_thread.joinable())

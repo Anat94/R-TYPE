@@ -154,6 +154,36 @@ struct FriendsMessage: public BaseMessage {
         };
 };
 
+struct AddFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct AddFriendsResponse: public BaseMessage {
+    bool response;
+    AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
@@ -189,6 +219,7 @@ class Server {
         int recieve_packet_confirm(std::vector<char> &, entity_t);
         int receive_login_event(std::vector<char> &, entity_t);
         int receive_friend_event(std::vector<char> &, entity_t);
+        int receive_add_friend_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
         template <typename T>
@@ -210,7 +241,7 @@ class Server {
         bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();
         bool signIn(std::string name, std::string password);
-        void addFriend(std::string name, std::string friendName);
+        bool addFriend(std::string name, std::string friendId);
         bool checkIfFriendshipExist(std::string name, std::string friendId);
         void removeFriend(std::string name, std::string friendName);
         std::vector<Friendship> displayFriends(std::string name, entity_t player_entity);
@@ -239,6 +270,7 @@ class Server {
             {5, &Server::recieve_packet_confirm},
             {6, &Server::receive_login_event},
             {7, &Server::receive_friend_event},
+            {8, &Server::receive_add_friend_event},
         };
         std::string _event;
         std::thread _send_thread;
