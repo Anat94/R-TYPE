@@ -204,6 +204,26 @@ struct RemoveFriendsResponse: public BaseMessage {
         };
 };
 
+struct ChatMessage: public BaseMessage {
+    char name[20];
+    char content[256];
+
+    ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < content_.size(); i++) {
+            content[i] = content_[i];
+        }
+        content[i] = '\0';
+        i = 0;
+        for (; i < name_.size(); i++) {
+            name[i] = name_[i];
+        }
+        name[i] = '\0';
+    };
+};
+
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
     char data[1024];
@@ -280,6 +300,7 @@ class Client {
         int receive_friends_reponse(std::vector<char> &server_msg);
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
+        int receive_chat_event(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
 
@@ -346,7 +367,8 @@ class Client {
             {8, &Client::recieve_login_response},
             {9, &Client::receive_friends_reponse},
             {10, &Client::receive_add_friends_reponse},
-            {11, &Client::receive_remove_friends_reponse}
+            {11, &Client::receive_remove_friends_reponse},
+            {12, &Client::receive_chat_event}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

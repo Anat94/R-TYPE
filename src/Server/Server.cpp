@@ -276,6 +276,18 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
+int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_entity)
+{
+    if (client_msg.size() < sizeof(ChatMessage))
+        return -1;
+    ChatMessage *snapshot = reinterpret_cast<ChatMessage *>(client_msg.data());
+    while (!can_read)
+        continue;
+    ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
+    send_data_to_all_clients_except_me<ChatMessage>(reponse);
+    return 0;
+}
+
 
 Server::~Server() {
     if (_send_thread.joinable())
@@ -293,16 +305,16 @@ void Server::send_data_to_all_clients(T& structure) {
     }
 }
 
-// template <typename T>
-// void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
-//     auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
-//     if (!endpoint.has_value()) {
-//         std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
-//         return;
-//     }
-//     while (!can_mod) continue;
-//     _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
-// }
+template <typename T>
+void Server::send_data_to_all_clients_except_me(T& structure) {
+    sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
+    for (size_t i = 0; i < all_endpoints.size(); i++) {
+        if (all_endpoints[i].has_value() && all_endpoints[i].value()._endpoint != _remote_endpoint) {
+            while (!can_mod) continue;
+            _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
+        }
+    }
+}
 
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets) {

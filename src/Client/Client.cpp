@@ -168,6 +168,14 @@ int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+int Client::receive_chat_event(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(ChatMessage))
+        return -1;
+    ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
+    std::cout << chat->name <<": " << chat->content << std::endl;
+    return chat->packet_id;
+}
+
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
@@ -407,9 +415,12 @@ int Client::run()
     // AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
     // _packet_id += 1;
     // send_to_server<AddFriendsMessage>(add);
-    RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
-    _packet_id += 1;
-    send_to_server<RemoveFriendsMessage>(remove);
+    // RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
+    // _packet_id += 1;
+    // send_to_server<RemoveFriendsMessage>(remove);
+    ChatMessage msg(10, "admin", "Hello World", _packet_id);
+    _packet_id +=1;
+    send_to_server<ChatMessage>(msg);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
