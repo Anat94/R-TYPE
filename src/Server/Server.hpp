@@ -140,9 +140,95 @@ struct LoginResponse: public BaseMessage {
         };
 };
 
+struct FriendsMessage: public BaseMessage {
+    char username[20];
+    FriendsMessage(int16_t id_, std::string username_, int packet_id_):
+        username() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+        };
+};
+
+struct AddFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct AddFriendsResponse: public BaseMessage {
+    bool response;
+    AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
+struct RemoveFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct RemoveFriendsResponse: public BaseMessage {
+    bool response;
+    RemoveFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
+};
+
+struct FriendsResponse: public BaseMessage {
+    char friends[20];
+    FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
+            id = id_;
+            int i = 0;
+            for (; i < friends_.size(); i++) {
+                friends[i] = friends_[i];
+            }
+            packet_id = packet_id_;
+        };
 };
 
 class Server {
@@ -162,10 +248,21 @@ class Server {
         int recieve_disconnection_event(std::vector<char> &, entity_t);
         int recieve_packet_confirm(std::vector<char> &, entity_t);
         int receive_login_event(std::vector<char> &, entity_t);
+        int receive_friend_event(std::vector<char> &, entity_t);
+        int receive_add_friend_event(std::vector<char>&, entity_t);
+        int receive_remove_friend_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
         template <typename T>
-        void send_data_to_client_by_entity(T& structure, entity_t entity);
+        void send_data_to_client_by_entity(T& structure, entity_t entity) {
+            auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
+            if (!endpoint.has_value()) {
+                std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+                return;
+            }
+            while (!can_mod) continue;
+            _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
+        }
         void sendPositionpacketsPeriodically();
         void connectToDB();
         HighScoreMessage getHighScore();
@@ -175,10 +272,10 @@ class Server {
         bool checkIfUserExist(std::string name, std::string password);
         std::string makePersonnalID();
         bool signIn(std::string name, std::string password);
-        void addFriend(std::string name, std::string friendName);
+        bool addFriend(std::string name, std::string friendId);
         bool checkIfFriendshipExist(std::string name, std::string friendId);
-        void removeFriend(std::string name, std::string friendName);
-        void displayFriends(std::string name);
+        bool removeFriend(std::string name, std::string friendName);
+        std::vector<Friendship> displayFriends(std::string name, entity_t player_entity);
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
@@ -202,13 +299,17 @@ class Server {
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm},
-            {6, &Server::receive_login_event}
+            {6, &Server::receive_login_event},
+            {7, &Server::receive_friend_event},
+            {8, &Server::receive_add_friend_event},
+            {9, &Server::receive_remove_friend_event},
         };
         std::string _event;
         std::thread _send_thread;
         sqlite3 *_db;
         int _highScore = 0;
         std::string _nameForHighScore = "";
+        bool can_mod = true;
 };
 
 #endif // SERVER_HPP
