@@ -13,9 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Archive asset content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: assets.zip
+        run:  |
+          zip -r assets.zip assets/*
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
