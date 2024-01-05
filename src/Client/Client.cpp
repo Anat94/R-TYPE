@@ -164,6 +164,62 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
+{
+    std::cout << "recieved animated drawable snapshot\n";
+    if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
+        return -1;
+    AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            // std::cout << "UPDATED PLAYER SPRITE\n";
+            drawables[real_entity]->_state = std::string(snapshot->_state);
+        } else {
+            _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
+            auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[_enemy];
+            for (int i = 0; i < snapshot->_anims.size(); i++) {
+                tmp->addAnimation(std::string(snapshot->_anims[i].first), snapshot->_anims[i].second.second, snapshot->_anims[i].second.first);
+            }
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
+        return -1;
+    AnimatedStateUpdateMessage *snapshot = reinterpret_cast<AnimatedStateUpdateMessage *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            drawables[real_entity]->_state = std::string(snapshot->state);
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
 void Client::receive()
 {
     std::vector<char> server_msg = recieve_raw_data_from_client();

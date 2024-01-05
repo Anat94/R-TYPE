@@ -15,7 +15,7 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
 {
     bool updated_drawable = false;
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
-    std::cout << "CODE: " << event << " !!!!\n";
+    std::string prev_state = animatedDrawable.value()._state;
     if (event == KeyIds["Up"]) {
         animatedDrawable.value()._state = "move up";
         updated_drawable = true;
@@ -26,8 +26,10 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
         updated_drawable = true;
         return {0, 30};
     }
-    if (!updated_drawable)
+    if (!updated_drawable) {}
         animatedDrawable.value()._state = "idle";
+    if (prev_state != animatedDrawable.value()._state)
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -103,7 +105,8 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Score());
     std::cout << "New player connected !" << std::endl;
     auto all_players = _ecs.get_components<component::Endpoint>();
-    send_entity_drawable_to_all_players(new_player);
+    send_animated_drawable_snapshots_for_specific_player(new_player);
+    send_animated_drawable_snapshot_to_all_players(new_player);
     send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
     return new_player;
@@ -151,13 +154,44 @@ void Server::send_position_snapshots_for_all_players()
     }
 }
 
-void Server::send_animated_drawable_snapshots_for_all_players()
+void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state)
+{
+    if (state.size() > 15) {
+        std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
+        return;
+    }
+    AnimatedStateUpdateMessage to_send(9, entity, state, 0);
+    send_data_to_all_clients(to_send, _animated_drawable_update_packets);
+}
+
+void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity)
+{
+    auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
+    if (animatedDrawable.has_value()) {
+        AnimatedDrawableSnapshot snap_ad(
+            9,
+            entity,
+            animatedDrawable.value()._path,
+            animatedDrawable.value()._nbSprites,
+            animatedDrawable.value()._spriteSize,
+            animatedDrawable.value()._gaps,
+            animatedDrawable.value()._firstOffset,
+            animatedDrawable.value()._currentIdx,
+            animatedDrawable.value()._anims,
+            animatedDrawable.value()._state,
+            0
+        );
+        send_data_to_all_clients(snap_ad, _animated_drawable_packets);
+    }
+}
+
+void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity)
 {
     sparse_array<component::AnimatedDrawable> animatedDrawables = _ecs.get_components<component::AnimatedDrawable>();
     for (size_t i = 0; i < animatedDrawables.size(); i++) {
         if (animatedDrawables[i].has_value()) {
             AnimatedDrawableSnapshot snap_ad(
-                8,
+                9,
                 i,
                 animatedDrawables[i].value()._path,
                 animatedDrawables[i].value()._nbSprites,
@@ -165,9 +199,13 @@ void Server::send_animated_drawable_snapshots_for_all_players()
                 animatedDrawables[i].value()._gaps,
                 animatedDrawables[i].value()._firstOffset,
                 animatedDrawables[i].value()._currentIdx,
-                0
+                animatedDrawables[i].value()._anims,
+                animatedDrawables[i].value()._state,
+                _packet_id
             );
-            send_data_to_all_clients<AnimatedDrawableSnapshot>(snap_ad, _animated_drawable_packets);
+            _packet_id++;
+            _animated_drawable_packets.push_back(snap_ad);
+            send_data_to_client_by_entity(snap_ad, entity);
         }
     }
 }
@@ -224,6 +262,20 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _highscore_packets.end()
     );
+    _animated_drawable_packets.erase(
+        std::remove_if(_animated_drawable_packets.begin(), _animated_drawable_packets.end(), [id](const AnimatedDrawableSnapshot& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _animated_drawable_packets.end()
+    );
+    _animated_drawable_update_packets.erase(
+        std::remove_if(_animated_drawable_update_packets.begin(), _animated_drawable_update_packets.end(), [id](const AnimatedStateUpdateMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _animated_drawable_update_packets.end()
+    );
     return 0;
 }
 
@@ -262,7 +314,7 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
         response = signUp(snapshot->username, snapshot->password);
     else if (snapshot->logintype == 1)
         response = signIn(snapshot->username, snapshot->password);
-    LoginResponse resp(8, response, snapshot->logintype, _packet_id);
+    LoginResponse resp(10, response, snapshot->logintype, _packet_id);
     send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
     _packet_id += 1;
     return 0;
@@ -315,13 +367,12 @@ void Server::sendPositionpacketsPeriodically() {
 
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        if (counter % 10) {
-            send_animated_drawable_snapshots_for_all_players();
-        }
         if (counter >= 20) {
             can_mod = false;
             resend_packets<SnapshotPosition>(_position_packets);
             resend_packets<DrawableSnapshot>(_drawable_packets);
+            resend_packets<AnimatedDrawableSnapshot>(_animated_drawable_packets);
+            resend_packets<AnimatedStateUpdateMessage>(_animated_drawable_update_packets);
             resend_packets<HighScoreMessage>(_highscore_packets);
             can_mod = true;
             counter = 0;

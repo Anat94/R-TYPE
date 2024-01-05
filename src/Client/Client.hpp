@@ -143,6 +143,9 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      * @brief path to the desired asset
     */
     char _path[256];
+    char _state[16];
+
+    std::array<std::pair<char[16], std::pair<bool, std::pair<int, int>>>, 5> _anims;
     /**
      * @brief number of sprites on the x & y axis
      * 
@@ -177,25 +180,85 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      */
     std::pair<int, int> _currentIdx;
 
-    AnimatedDrawableSnapshot(
-            int16_t id_,
-            entity_t entity_,
-            const std::string &path,
-            std::pair<int, int> nbSprites,
-            std::pair<int, int> spriteSize,
-            std::pair<int, int> gaps,
-            std::pair<int, int> firstOffset,
-            std::pair<int, int> curretnIdx,
-            int packet_id_
-        ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+    AnimatedDrawableSnapshot &operator=(const AnimatedDrawableSnapshot &snapshot) {
+        entity = snapshot.entity;
+        _currentIdx = snapshot._currentIdx;
+        _firstOffset = snapshot._firstOffset;
+        _gaps = snapshot._gaps;
+        _spriteSize = snapshot._spriteSize;
+        _nbSprites = snapshot._nbSprites;
+        for (int i = 0; i < snapshot._anims.size(); i++) {
+            int j = 0;
+            for (j = 0; snapshot._anims[i].first[j] != '\0'; j++) {
+                _anims[i].first[j] = snapshot._anims[i].first[j];
+            }
+            _anims[i].first[j] = '\0';
+            _anims[i].second = snapshot._anims[i].second;
+        }
         int i = 0;
+        for (i = 0; snapshot._state[i] != '\0'; i++) {
+            _state[i] = snapshot._state[i];
+        }
+        _state[i] = '\0';
+        for (i = 0; snapshot._path[i] != '\0'; i++) {
+            _path[i] = snapshot._path[i];
+        }
+        _path[i] = '\0';
+        return *this;
+    };
+    AnimatedDrawableSnapshot(
+        int16_t id_,
+        entity_t entity_,
+        const std::string &path,
+        std::pair<int, int> nbSprites,
+        std::pair<int, int> spriteSize,
+        std::pair<int, int> gaps,
+        std::pair<int, int> firstOffset,
+        std::pair<int, int> curretnIdx,
+        animation_t anims_,
+        const std::string &state,
+        int packet_id_
+    ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+        int i = 0;
+        int j = 0;
+
         id = id_;
         packet_id = packet_id_;
         for (; i < path.size(); i++) {
             _path[i] = path[i];
         }
         _path[i] = '\0';
+        for (i = 0; i < state.size(); i++) {
+            _state[i] = state[i];
+        }
+        _state[i] = '\0';
+        for (auto &anim: anims_) {
+            for (i = 0; i < anim.first.size(); i++) {
+                _anims[j].first[i] = anim.first[i];
+            }
+            _anims[j].second = anim.second;
+            ++j;
+        }
+        for (int k = j; k < _anims.size(); ++k)
+            _anims[k].first[0] = '\0';
     };
+};
+
+struct AnimatedStateUpdateMessage: public BaseMessage {
+    entity_t entity;
+    char state[16];
+
+    AnimatedStateUpdateMessage(int16_t id_, entity_t entity_, std::string state_, int packet_id_):
+        entity(entity_) {
+            int i = 0;
+            
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < state_.size(); i++) {
+                state[i] = state_[i];
+            }
+            state[i] = '\0';
+        };
 };
 
 enum Stage {
@@ -255,6 +318,8 @@ class Client {
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
+        int recieve_animated_drawable_snapshot(std::vector<char> &server_msg);
+        int recieve_animated_drawable_state_update(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
 
@@ -318,7 +383,9 @@ class Client {
             {4, &Client::recieve_position_snapshot_update},
             {6, &Client::recieve_drawable_snapshot_update},
             {7, &Client::recieve_high_score},
-            {8, &Client::recieve_login_response}
+            {8, &Client::recieve_login_response},
+            {9, &Client::recieve_animated_drawable_snapshot},
+            {10, &Client::recieve_animated_drawable_state_update}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

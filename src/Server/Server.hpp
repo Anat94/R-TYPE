@@ -86,6 +86,9 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      * @brief path to the desired asset
     */
     char _path[256];
+    char _state[16];
+
+    std::array<std::pair<char[16], std::pair<bool, std::pair<int, int>>>, 5> _anims;
     /**
      * @brief number of sprites on the x & y axis
      * 
@@ -120,25 +123,85 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      */
     std::pair<int, int> _currentIdx;
 
-    AnimatedDrawableSnapshot(
-            int16_t id_,
-            entity_t entity_,
-            const std::string &path,
-            std::pair<int, int> nbSprites,
-            std::pair<int, int> spriteSize,
-            std::pair<int, int> gaps,
-            std::pair<int, int> firstOffset,
-            std::pair<int, int> curretnIdx,
-            int packet_id_
-        ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+    AnimatedDrawableSnapshot &operator=(const AnimatedDrawableSnapshot &snapshot) {
+        entity = snapshot.entity;
+        _currentIdx = snapshot._currentIdx;
+        _firstOffset = snapshot._firstOffset;
+        _gaps = snapshot._gaps;
+        _spriteSize = snapshot._spriteSize;
+        _nbSprites = snapshot._nbSprites;
+        for (int i = 0; i < snapshot._anims.size(); i++) {
+            int j = 0;
+            for (j = 0; snapshot._anims[i].first[j] != '\0'; j++) {
+                _anims[i].first[j] = snapshot._anims[i].first[j];
+            }
+            _anims[i].first[j] = '\0';
+            _anims[i].second = snapshot._anims[i].second;
+        }
         int i = 0;
+        for (i = 0; snapshot._state[i] != '\0'; i++) {
+            _state[i] = snapshot._state[i];
+        }
+        _state[i] = '\0';
+        for (i = 0; snapshot._path[i] != '\0'; i++) {
+            _path[i] = snapshot._path[i];
+        }
+        _path[i] = '\0';
+        return *this;
+    };
+    AnimatedDrawableSnapshot(
+        int16_t id_,
+        entity_t entity_,
+        const std::string &path,
+        std::pair<int, int> nbSprites,
+        std::pair<int, int> spriteSize,
+        std::pair<int, int> gaps,
+        std::pair<int, int> firstOffset,
+        std::pair<int, int> curretnIdx,
+        animation_t anims_,
+        const std::string &state,
+        int packet_id_
+    ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+        int i = 0;
+        int j = 0;
+
         id = id_;
         packet_id = packet_id_;
         for (; i < path.size(); i++) {
             _path[i] = path[i];
         }
         _path[i] = '\0';
+        for (i = 0; i < state.size(); i++) {
+            _state[i] = state[i];
+        }
+        _state[i] = '\0';
+        for (auto &anim: anims_) {
+            for (i = 0; i < anim.first.size(); i++) {
+                _anims[j].first[i] = anim.first[i];
+            }
+            _anims[j].second = anim.second;
+            ++j;
+        }
+        for (int k = j; k < _anims.size(); ++k)
+            _anims[k].first[0] = '\0';
     };
+};
+
+struct AnimatedStateUpdateMessage: public BaseMessage {
+    entity_t entity;
+    char state[16];
+
+    AnimatedStateUpdateMessage(int16_t id_, entity_t entity_, std::string state_, int packet_id_):
+        entity(entity_) {
+            int i = 0;
+
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < state_.size(); i++) {
+                state[i] = state_[i];
+            }
+            state[i] = '\0';
+        };
 };
 
 struct EventMessage: public BaseMessage {
@@ -218,7 +281,9 @@ class Server {
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
         void send_position_snapshots_for_all_players();
-        void send_animated_drawable_snapshots_for_all_players();
+        void send_animated_drawable_snapshots_for_specific_player(entity_t entity);
+        void send_animated_drawable_snapshot_to_all_players(entity_t entity);
+        void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state);
         void send_entity_drawable_to_all_players(entity_t entity);
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
@@ -254,6 +319,7 @@ class Server {
         std::vector<HighScoreMessage> _highscore_packets;
         std::vector<DrawableSnapshot> _drawable_packets;
         std::vector<AnimatedDrawableSnapshot> _animated_drawable_packets;
+        std::vector<AnimatedStateUpdateMessage> _animated_drawable_update_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
