@@ -260,7 +260,7 @@ static int callbackDisplayFriends(void *data, int argc, char** argv, char** azCo
     return 0;
 }
 
-void Server::displayFriends(std::string name) {
+std::vector<Friendship> Server::displayFriends(std::string name, entity_t player_entity) {
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
     char *zErrMsg = 0;
@@ -272,6 +272,9 @@ void Server::displayFriends(std::string name) {
         sqlite3_free(zErrMsg);
     }
     for (const auto& friendData : friends) {
+        FriendsResponse resp(9, friendData.name, _packet_id);
+        send_data_to_client_by_entity<FriendsResponse>(resp, player_entity);
         std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
     }
+    return friends;
 }

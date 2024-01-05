@@ -132,6 +132,15 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     return -1;
 }
 
+int Client::receive_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(FriendsResponse))
+        return -1;
+    FriendsResponse *friends = reinterpret_cast<FriendsResponse *>(server_msg.data());
+    std::cout << friends->friends << std::endl;
+    friendLists.push_back(friends->friends);
+    return friends->packet_id;
+}
+
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
@@ -363,6 +372,7 @@ int Client::run()
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
     LoginMessage login(6, "test", "test", 0, _packet_id); // 0 == signup & 1 == signin
+    // FriendsMessage friendsmsg(7, "Anatole", _packet_id); // 0 == signup & 1 == signin
     _packet_id += 1;
     send_to_server<LoginMessage>(login);
     while (true) {

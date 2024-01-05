@@ -8,7 +8,6 @@
 #include "Server.hpp"
 #include "KeyEventMapping.hpp"
 
-bool can_mod = true;
 bool can_read = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
@@ -158,7 +157,7 @@ void Server::recieve_from_client()
     if (player_entity == -1) {
         player_entity = connect_player(_remote_endpoint);
     }
-    std::cout << "message id: " << baseMsg->id << std::endl;
+    // std::cout << "message id: " << baseMsg->id << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
@@ -235,6 +234,21 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     return 0;
 }
 
+int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
+{
+    printf("Friendship\n");
+    if (client_msg.size() < sizeof(LoginMessage))
+        return -1;
+    LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
+    while (!can_read)
+        continue;
+    std::vector<Friendship> friends = displayFriends(snapshot->username, player_entity);
+    _packet_id++;
+    printf("Friendship\n");
+    return 0;
+}
+
+
 Server::~Server() {
     if (_send_thread.joinable())
         _send_thread.join();
@@ -251,17 +265,16 @@ void Server::send_data_to_all_clients(T& structure) {
     }
 }
 
-template <typename T>
-void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
-    auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
-    if (!endpoint.has_value()) {
-        std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
-        return;
-    }
-    while (!can_mod) continue;
-    _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
-}
-
+// template <typename T>
+// void Server::send_data_to_client_by_entity(T& structure, entity_t entity) {
+//     auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
+//     if (!endpoint.has_value()) {
+//         std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+//         return;
+//     }
+//     while (!can_mod) continue;
+//     _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
+// }
 
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets) {

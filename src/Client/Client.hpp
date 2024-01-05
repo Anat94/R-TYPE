@@ -118,6 +118,29 @@ struct LoginResponse: public BaseMessage {
         };
 };
 
+struct FriendsMessage: public BaseMessage {
+    char username[20];
+    FriendsMessage(int16_t id_, std::string username_, int packet_id_):
+        username() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+        };
+};
+
+struct FriendsResponse: public BaseMessage {
+    std::string friends;
+    FriendsResponse(int16_t id_, std::string friends_, int packet_id_):
+        friends(friends_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
     char data[1024];
@@ -191,6 +214,7 @@ class Client {
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
+        int receive_friends_reponse(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
 
@@ -254,13 +278,15 @@ class Client {
             {4, &Client::recieve_position_snapshot_update},
             {6, &Client::recieve_drawable_snapshot_update},
             {7, &Client::recieve_high_score},
-            {8, &Client::recieve_login_response}
+            {8, &Client::recieve_login_response},
+            {9, &Client::receive_friends_reponse},
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
+        std::vector<std::string> friendLists;
 };
 
 #endif // CLIENT_HPP
