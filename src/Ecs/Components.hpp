@@ -545,6 +545,16 @@ namespace component {
             _anims.emplace(state, std::make_pair(reset, indexes));
         };
     };
+
+    /**
+     * @brief Text stucture to display on screen
+     * 
+     */
+    struct Text {
+        std::string _text;
+        int _size;
+        Text(const std::string &text, int size = 30) : _text(text), _size(size) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
