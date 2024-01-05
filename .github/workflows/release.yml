@@ -13,22 +13,25 @@ jobs:
     if: github.event_name == 'push'
     steps:
 
-
       - name: Checkout code
         uses: actions/checkout@v2
 
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: compiled-artifacts
-          path: .
-
-
-      - name: Archive assets and executables
-        run:  |
-          mv compiled-artifacts.zip assets.zip
-
+      - name: Move Linux executables
+        run: |
+          mkdir -p linux
+          cp client ./linux/
+          cp server ./linux/
+      
+      - name: Move Windows executables
+        run: |
+          mkdir -p windows
+          cp Debug/client ./windows/
+          cp Debug/server ./windows/
+      
+      - name: Archive the assets folder
+        run: |
+          zip -r assets.zip assets windows linux
 
       - name: Create Release
         id: create_release
@@ -60,9 +63,15 @@ jobs:
           asset_content_type: application/zip
 
 
-      # - name: Delete Source Code Archives
-      #   run: |
-      #     curl -XDELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-      #     https://api.github.com/repos/${{ github.repository }}/releases/assets/${{ github.run_number }} \
-      #     | jq . 
-      #   if: always()
+      - name: Delete Source Code Archives
+        run: |
+          ASSET_ID=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/${{ github.run_number }}/assets | jq -r '.[] | select(.name == "Source code (zip)" or .name == "Source code (tar.gz)") | .id')
+
+          if [ -n "$ASSET_ID" ]; then
+            for id in $ASSET_ID; do
+              curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/assets/$id"
+            done
+          fi
+

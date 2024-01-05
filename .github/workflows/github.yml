@@ -32,20 +32,6 @@ jobs:
       - name: LINUX - Launch tests
         run: cmake --build . --target my_tests
 
-      - name: Archive executables and assets
-        run: |
-          mkdir -p compiled_artifacts
-          cp assets/* compiled_artifacts/
-          cp client compiled_artifacts/
-          cp server compiled_artifacts/
-          zip -r compiled_artifacts.zip compiled_artifacts/*
-        
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: compiled-artifacts
-          path: compiled_artifacts.zip
-
   windows:
     runs-on: windows-latest
     steps:
@@ -56,17 +42,3 @@ jobs:
 
       - name: WINOWS -  Launch tests
         run: cmake --build . --target my_tests
-      
-      - name: Archive executables and assets
-        run: |
-          mkdir compiled_artifacts
-          copy assets\* compiled_artifacts\
-          copy Debug/client.exe compiled_artifacts\
-          copy Debug/server.exe compiled_artifacts\
-          zip -r compiled_artifacts.zip compiled_artifacts\*
-        
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: compiled-artifacts
-          path: compiled_artifacts.zip
