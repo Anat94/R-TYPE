@@ -12,11 +12,24 @@ jobs:
     needs: [linux, windows]
     if: github.event_name == 'push'
     steps:
+
+
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Archive asset content
+
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: compiled-artifacts
+          path: .
+
+
+      - name: Archive assets and executables
         run:  |
-          zip -r assets.zip assets/ client server
+          mv compiled-artifacts.zip assets.zip
+
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -33,6 +46,8 @@ jobs:
           prerelease: false
           asset_overwrite: false
           exclude_sources: true
+
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
@@ -43,9 +58,11 @@ jobs:
           asset_path: ./assets.zip
           asset_name: assets-v${{ github.run_number }}.zip
           asset_content_type: application/zip
-      - name: Delete Source Code Archives
-        run: |
-          curl -XDELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/releases/assets/${{ github.run_number }} \
-          | jq . 
-        if: always()
+
+
+      # - name: Delete Source Code Archives
+      #   run: |
+      #     curl -XDELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+      #     https://api.github.com/repos/${{ github.repository }}/releases/assets/${{ github.run_number }} \
+      #     | jq . 
+      #   if: always()
