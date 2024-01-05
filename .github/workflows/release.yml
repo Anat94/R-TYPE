@@ -12,10 +12,6 @@ jobs:
     needs: [linux, windows]
     steps:
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-
       - name: Move Linux executables
         run: |
           mkdir -p linux
