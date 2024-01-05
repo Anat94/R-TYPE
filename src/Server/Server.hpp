@@ -160,10 +160,13 @@ struct Friendship {
 };
 
 struct FriendsResponse: public BaseMessage {
-    std::string friends;
-    FriendsResponse(int16_t id_, std::string friends_, int packet_id_):
-        friends(friends_) {
+    char friends[20];
+    FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
             id = id_;
+            int i = 0;
+            for (; i < friends_.size(); i++) {
+                friends[i] = friends_[i];
+            }
             packet_id = packet_id_;
         };
 };

@@ -230,8 +230,8 @@ void Server::removeFriend(std::string name, std::string friendName) {
 
 static int callbackGetFriendsData(void *data, int argc, char** argv, char** azColName) {
     Friendship* myFriend = static_cast<Friendship*>(data);
-    myFriend->name = argv[0];
-    myFriend->id = argv[1];
+    myFriend->id = argv[0];
+    myFriend->name = argv[1];
     return 0;
 }
 
@@ -261,6 +261,7 @@ static int callbackDisplayFriends(void *data, int argc, char** argv, char** azCo
 }
 
 std::vector<Friendship> Server::displayFriends(std::string name, entity_t player_entity) {
+    printf("Avant query\n");
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
     char *zErrMsg = 0;
@@ -271,10 +272,11 @@ std::vector<Friendship> Server::displayFriends(std::string name, entity_t player
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+    printf("Apres query\n");
     for (const auto& friendData : friends) {
+        std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
         FriendsResponse resp(9, friendData.name, _packet_id);
         send_data_to_client_by_entity<FriendsResponse>(resp, player_entity);
-        std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
     }
     return friends;
 }

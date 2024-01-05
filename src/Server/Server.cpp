@@ -237,11 +237,16 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     printf("Friendship\n");
-    if (client_msg.size() < sizeof(LoginMessage))
+    if (client_msg.size() < sizeof(FriendsMessage)) {
+        printf("uy\n");
         return -1;
-    LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
+    }
+    printf("Friendship\n");
+    FriendsMessage *snapshot = reinterpret_cast<FriendsMessage *>(client_msg.data());
+    printf("Friendship\n");
     while (!can_read)
         continue;
+    printf("Friendship\n");
     std::vector<Friendship> friends = displayFriends(snapshot->username, player_entity);
     _packet_id++;
     printf("Friendship\n");
