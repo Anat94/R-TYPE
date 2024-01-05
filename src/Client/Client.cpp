@@ -28,6 +28,7 @@
 #include "../Ecs/ZipperIterator.hpp"
 #include "Client.hpp"
 #include "../Ecs/Systems/SFMLAnimatedDrawSystem.hpp"
+#include "../Ecs/Systems/SFMLTextDrawSystem.hpp"
 #include "../Ecs/Systems/SFMLDrawSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
@@ -234,6 +235,7 @@ Client::Client(std::string ip, int port, std::string username)
 {
     _send_structure.id = 2;
     send_to_server(_send_structure);
+    _ecs.register_component<component::Text>();
     _ecs.register_component<component::Scale>();
     _ecs.register_component<component::Score>();
     _ecs.register_component<component::Damage>();
@@ -263,8 +265,16 @@ Client::Client(std::string ip, int port, std::string username)
     listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
+    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
+    // entity_t tmp_text = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text, component::Text("my text to print"));
+    // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
+    // entity_t tmp_text_2 = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text_2, component::Text("my second text to print"));
+    // _ecs.add_component(tmp_text_2, component::Position(200.0f, 600.0f));
     // _player = _ecs.spawn_entity();
     // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
     // _ecs.add_component(_player, component::Scale(5.0f));
