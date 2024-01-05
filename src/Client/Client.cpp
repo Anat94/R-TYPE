@@ -132,6 +132,42 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     return -1;
 }
 
+int Client::receive_friends_reponse(std::vector<char> &server_msg) {
+    printf("receive_friends_reponse\n");
+    if (server_msg.size() < sizeof(FriendsResponse))
+        return -1;
+    printf("receive_friends_reponse\n");
+    FriendsResponse *friends = reinterpret_cast<FriendsResponse *>(server_msg.data());
+    printf("receive_friends_reponse\n");
+    std::cout << friends->friends << std::endl;
+    printf("receive_friends_reponse\n");
+    friendLists.push_back(friends->friends);
+    printf("receive_friends_reponse\n");
+    return friends->packet_id;
+}
+
+int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(AddFriendsResponse))
+        return -1;
+    AddFriendsResponse *friends = reinterpret_cast<AddFriendsResponse *>(server_msg.data());
+    if (friends->response == true)
+        std::cout << "Friend added" << std::endl;
+    else
+        std::cout << "An error occured while adding friend" << std::endl;
+    return friends->packet_id;
+}
+
+int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(RemoveFriendsResponse))
+        return -1;
+    RemoveFriendsResponse *friends = reinterpret_cast<RemoveFriendsResponse *>(server_msg.data());
+    if (friends->response == true)
+        std::cout << "Friend removed" << std::endl;
+    else
+        std::cout << "An error occured while removing friend" << std::endl;
+    return friends->packet_id;
+}
+
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
@@ -362,9 +398,18 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    LoginMessage login(6, "test", "test", 0, _packet_id); // 0 == signup & 1 == signin
+    // LoginMessage login(6, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
+    // _packet_id += 1;
+    // send_to_server<LoginMessage>(login);
+    // FriendsMessage friendsmsg(7, "admin", _packet_id);
+    // _packet_id += 1;
+    // send_to_server<FriendsMessage>(friendsmsg);
+    // AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
+    // _packet_id += 1;
+    // send_to_server<AddFriendsMessage>(add);
+    RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
     _packet_id += 1;
-    send_to_server<LoginMessage>(login);
+    send_to_server<RemoveFriendsMessage>(remove);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
