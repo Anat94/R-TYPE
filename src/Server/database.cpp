@@ -217,7 +217,7 @@ bool Server::addFriend(std::string name, std::string friendId) {
     return true;
 }
 
-void Server::removeFriend(std::string name, std::string friendName) {
+bool Server::removeFriend(std::string name, std::string friendName) {
     const std::string tableName = "FRIENDS";
     std::string sql = "DELETE FROM " + tableName + " WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
     char *zErrMsg = 0;
@@ -225,8 +225,9 @@ void Server::removeFriend(std::string name, std::string friendName) {
     if (rc != SQLITE_OK) {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
+        return false;
     }
-    std::cout << "Friend removed" << std::endl;
+    return true;
 }
 
 static int callbackGetFriendsData(void *data, int argc, char** argv, char** azColName) {

@@ -157,6 +157,17 @@ int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(RemoveFriendsResponse))
+        return -1;
+    RemoveFriendsResponse *friends = reinterpret_cast<RemoveFriendsResponse *>(server_msg.data());
+    if (friends->response == true)
+        std::cout << "Friend removed" << std::endl;
+    else
+        std::cout << "An error occured while removing friend" << std::endl;
+    return friends->packet_id;
+}
+
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
@@ -393,9 +404,12 @@ int Client::run()
     // FriendsMessage friendsmsg(7, "admin", _packet_id);
     // _packet_id += 1;
     // send_to_server<FriendsMessage>(friendsmsg);
-    AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
+    // AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
+    // _packet_id += 1;
+    // send_to_server<AddFriendsMessage>(add);
+    RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
     _packet_id += 1;
-    send_to_server<AddFriendsMessage>(add);
+    send_to_server<RemoveFriendsMessage>(remove);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();

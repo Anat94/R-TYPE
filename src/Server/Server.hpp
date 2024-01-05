@@ -184,6 +184,36 @@ struct AddFriendsResponse: public BaseMessage {
         };
 };
 
+struct RemoveFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct RemoveFriendsResponse: public BaseMessage {
+    bool response;
+    RemoveFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
 struct Friendship {
     std::string name;
     std::string id;
@@ -220,6 +250,7 @@ class Server {
         int receive_login_event(std::vector<char> &, entity_t);
         int receive_friend_event(std::vector<char> &, entity_t);
         int receive_add_friend_event(std::vector<char>&, entity_t);
+        int receive_remove_friend_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
         template <typename T>
@@ -243,7 +274,7 @@ class Server {
         bool signIn(std::string name, std::string password);
         bool addFriend(std::string name, std::string friendId);
         bool checkIfFriendshipExist(std::string name, std::string friendId);
-        void removeFriend(std::string name, std::string friendName);
+        bool removeFriend(std::string name, std::string friendName);
         std::vector<Friendship> displayFriends(std::string name, entity_t player_entity);
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
@@ -271,6 +302,7 @@ class Server {
             {6, &Server::receive_login_event},
             {7, &Server::receive_friend_event},
             {8, &Server::receive_add_friend_event},
+            {9, &Server::receive_remove_friend_event},
         };
         std::string _event;
         std::thread _send_thread;

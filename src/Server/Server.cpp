@@ -263,6 +263,20 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
     return 0;
 }
 
+int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t player_entity)
+{
+    if (client_msg.size() < sizeof(RemoveFriendsMessage))
+        return -1;
+    RemoveFriendsMessage *snapshot = reinterpret_cast<RemoveFriendsMessage *>(client_msg.data());
+    while (!can_read)
+        continue;
+    bool response = removeFriend(snapshot->username, snapshot->friendName);
+    RemoveFriendsResponse resp(11, response, _packet_id);
+    send_data_to_client_by_entity<RemoveFriendsResponse>(resp, player_entity);
+    return 0;
+}
+
+
 Server::~Server() {
     if (_send_thread.joinable())
         _send_thread.join();
