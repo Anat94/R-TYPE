@@ -41,6 +41,12 @@ jobs:
           asset_path: ./assets.zip
           asset_name: assets-v${{ github.run_number }}.zip
           asset_content_type: application/zip
+      - name: Delete Source Code Archives
+        run: |
+          curl -XDELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/assets/${{ github.run_number }} \
+          | jq . 
+        if: always()
 
 # jobs:
 #     release:
