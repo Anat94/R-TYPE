@@ -231,6 +231,26 @@ struct FriendsResponse: public BaseMessage {
         };
 };
 
+struct ChatMessage: public BaseMessage {
+    char name[20];
+    char content[256];
+
+    ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < content_.size(); i++) {
+            content[i] = content_[i];
+        }
+        content[i] = '\0';
+        i = 0;
+        for (; i < name_.size(); i++) {
+            name[i] = name_[i];
+        }
+        name[i] = '\0';
+    };
+};
+
 class Server {
     typedef int (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
@@ -251,8 +271,11 @@ class Server {
         int receive_friend_event(std::vector<char> &, entity_t);
         int receive_add_friend_event(std::vector<char>&, entity_t);
         int receive_remove_friend_event(std::vector<char>&, entity_t);
+        int receive_chat_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure);
+        template <typename T>
+        void send_data_to_all_clients_except_me(T& structure);
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
             auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
@@ -303,6 +326,7 @@ class Server {
             {7, &Server::receive_friend_event},
             {8, &Server::receive_add_friend_event},
             {9, &Server::receive_remove_friend_event},
+            {10, &Server::receive_chat_event},
         };
         std::string _event;
         std::thread _send_thread;
