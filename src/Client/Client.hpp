@@ -134,6 +134,70 @@ struct DrawableSnapshot: public BaseMessage {
     };
 };
 
+struct AnimatedDrawableSnapshot: public BaseMessage {
+    /**
+     * @brief entity to update the DrawableSnapshot for
+     */
+    entity_t entity;
+    /**
+     * @brief path to the desired asset
+    */
+    char _path[256];
+    /**
+     * @brief number of sprites on the x & y axis
+     * 
+     * (ex: {3, 4} for a 3 Sprites per line & 4 lines)
+     * 
+     */
+    std::pair<int, int> _nbSprites;
+    /**
+     * @brief set of numbers representing the size of the sprites to load
+     * 
+     * (ex: {32, 14} for a 32x14 sprite)
+     * 
+     */
+    std::pair<int, int> _spriteSize;
+    /**
+     * @brief set of numbers representing the size of the gapes between sprites
+     * 
+     * (ex: {3, 1} for a 3x1 gap)
+     * 
+     */
+    std::pair<int, int> _gaps;
+    /**
+     * @brief set of numbers representing the size of the offset of the first sprite
+     * 
+     */
+    std::pair<int, int> _firstOffset;
+    /**
+     * @brief set of numbers representing the indexes of the animation
+     * 
+     * (ex: {2, 0} to start with the 3rd sprite)
+     * ! The second argument is not used yet !
+     */
+    std::pair<int, int> _currentIdx;
+
+    AnimatedDrawableSnapshot(
+            int16_t id_,
+            entity_t entity_,
+            const std::string &path,
+            std::pair<int, int> nbSprites,
+            std::pair<int, int> spriteSize,
+            std::pair<int, int> gaps,
+            std::pair<int, int> firstOffset,
+            std::pair<int, int> curretnIdx,
+            int packet_id_
+        ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            _path[i] = path[i];
+        }
+        _path[i] = '\0';
+    };
+};
+
 enum Stage {
     ONE,
     TWO,

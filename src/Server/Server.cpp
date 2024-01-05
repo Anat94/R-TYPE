@@ -13,11 +13,21 @@ bool can_read = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
+    bool updated_drawable = false;
+    auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
     std::cout << "CODE: " << event << " !!!!\n";
-    if (event == KeyIds["Up"])
+    if (event == KeyIds["Up"]) {
+        animatedDrawable.value()._state = "move up";
+        updated_drawable = true;
         return {0, -30};
-    if (event == KeyIds["Down"])
+    }
+    if (event == KeyIds["Down"]) {
+        animatedDrawable.value()._state = "move down";
+        updated_drawable = true;
         return {0, 30};
+    }
+    if (!updated_drawable)
+        animatedDrawable.value()._state = "idle";
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -79,7 +89,12 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
-    _ecs.add_component(new_player, component::Drawable("temp/assets/textures/sprites/r-typesheet42.gif"));
+    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+    auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
+    tmp->addAnimation("idle", {2, 2}, false);
+    tmp->addAnimation("move up", {2, 4}, false);
+    tmp->addAnimation("move down", {2, 0}, false);
+    tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Scale(0.1));
     _ecs.add_component(new_player, component::Rotation(90));
@@ -129,10 +144,30 @@ void Server::send_position_snapshots_for_all_players()
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
             // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
-            SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), _packet_id);
-            _position_packets.push_back(snap_p);
-            _packet_id += 1;
-            send_data_to_all_clients<SnapshotPosition>(snap_p);
+            SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0);
+
+            send_data_to_all_clients<SnapshotPosition>(snap_p, _position_packets);
+        }
+    }
+}
+
+void Server::send_animated_drawable_snapshots_for_all_players()
+{
+    sparse_array<component::AnimatedDrawable> animatedDrawables = _ecs.get_components<component::AnimatedDrawable>();
+    for (size_t i = 0; i < animatedDrawables.size(); i++) {
+        if (animatedDrawables[i].has_value()) {
+            AnimatedDrawableSnapshot snap_ad(
+                8,
+                i,
+                animatedDrawables[i].value()._path,
+                animatedDrawables[i].value()._nbSprites,
+                animatedDrawables[i].value()._spriteSize,
+                animatedDrawables[i].value()._gaps,
+                animatedDrawables[i].value()._firstOffset,
+                animatedDrawables[i].value()._currentIdx,
+                0
+            );
+            send_data_to_all_clients<AnimatedDrawableSnapshot>(snap_ad, _animated_drawable_packets);
         }
     }
 }
@@ -141,10 +176,8 @@ void Server::send_entity_drawable_to_all_players(entity_t entity)
 {
     sparse_array<component::Drawable> drawables = _ecs.get_components<component::Drawable>();
     component::Drawable drawable = drawables[entity].value();
-    DrawableSnapshot to_send(6, entity, drawable._path, _packet_id);
-    _packet_id += 1;
-    _drawable_packets.push_back(to_send);
-    send_data_to_all_clients<DrawableSnapshot>(to_send);
+    DrawableSnapshot to_send(6, entity, drawable._path, 0);
+    send_data_to_all_clients<DrawableSnapshot>(to_send, _drawable_packets);
 }
 
 void Server::recieve_from_client()
@@ -241,11 +274,14 @@ Server::~Server() {
 }
 
 template <typename T>
-void Server::send_data_to_all_clients(T& structure) {
+void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send) {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value()) {
             while (!can_mod) continue;
+            structure.packet_id = _packet_id;
+            _packet_id += 1;
+            packets_to_send.push_back(structure);
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
@@ -279,6 +315,9 @@ void Server::sendPositionpacketsPeriodically() {
 
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        if (counter % 10) {
+            send_animated_drawable_snapshots_for_all_players();
+        }
         if (counter >= 20) {
             can_mod = false;
             resend_packets<SnapshotPosition>(_position_packets);
