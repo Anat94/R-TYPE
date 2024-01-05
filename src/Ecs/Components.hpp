@@ -8,12 +8,20 @@
 #ifndef COMPONENTS_HPP_
     #define COMPONENTS_HPP_
     #include <SFML/Graphics.hpp>
-    #include <asio.hpp>
     #include <SFML/Audio.hpp>
+    #include <unordered_map>
+    #include <asio.hpp>
     #include "../Errors.hpp"
 
 using asio::ip::udp;
 using entity_t = size_t;
+/**
+ * @brief Used to store the animation and the state of the animation.
+ * 
+ * (ex: animation["idle"].first for the base sprite index, and animation["idle"].second for the last sprite index)
+ * 
+ */
+using animation_t = std::unordered_map<std::string, std::pair<bool, std::pair<int, int>>>;
 
 namespace component {
     /**
@@ -451,12 +459,61 @@ namespace component {
      * 
      */
     struct AnimatedDrawable {
-        std::pair<int, int> _firstOffset;
-        std::pair<int, int> _spriteSize;
-        std::pair<int, int> _gaps;
-        std::pair<int, int> _nbSprites;
-        std::pair<int, int> _currentIdx;
+        /**
+         * @brief path to the spritesheet
+         * 
+         */
         std::string _path;
+        /**
+         * @brief set of numbers representing the amount of sprites to animate in the spritesheet
+         * 
+         * @param[in] _nbSprites A pair of integers specifying the number of sprites in the spritesheet.
+         *                      It follows the format {x, y} where:
+         *                      - x: number of sprites in a row
+         *                      - y: number of rows (not used currently)
+         * 
+         * (ex: {5, 1} for 5 sprites on 1 line)
+         * ! The second argument is not used yet !
+         */
+        std::pair<int, int> _nbSprites;
+        /**
+         * @brief set of numbers representing the size of the sprites to load
+         * 
+         * (ex: {32, 14} for a 32x14 sprite)
+         * 
+         */
+        std::pair<int, int> _spriteSize;
+        /**
+         * @brief set of numbers representing the size of the gapes between sprites
+         * 
+         * (ex: {3, 1} for a 3x1 gap)
+         * 
+         */
+        std::pair<int, int> _gaps;
+        /**
+         * @brief set of numbers representing the size of the offset of the first sprite
+         * 
+         */
+        std::pair<int, int> _firstOffset;
+        /**
+         * @brief set of numbers representing the indexes of the animation
+         * 
+         * (ex: {2, 0} to start with the 3rd sprite)
+         * ! The second argument is not used yet !
+         */
+        std::pair<int, int> _currentIdx;
+        /**
+         * @brief the current animation name
+         * 
+         * (ex: "idle")
+         * 
+         */
+        std::string _state;
+        /**
+         * @brief animations of the current AnimatedDrawable object
+         * 
+         */
+        animation_t _anims;
         /**
          * @brief Construct a new Animated Drawable object
          * 
@@ -475,7 +532,18 @@ namespace component {
             std::pair<int, int> firstOffset = {0, 0},
             std::pair<int, int> curretnIdx = {0, 0}
         ) :
-            _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx) {};
+            _path(path), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), _state("idle") {};
+        /**
+         * @brief Adds an animation to the animation list
+         * 
+         * @param state the name of the animation / state of the entity
+         * @param indexes the sprites concerned by the animation (sorted for use)
+         * @param reset to know if the animation reset when finished or not
+         */
+        void addAnimation(const std::string &state, std::pair<int, int> indexes, bool reset)
+        {
+            _anims.emplace(state, std::make_pair(reset, indexes));
+        };
     };
 };
 
