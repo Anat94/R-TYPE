@@ -61,8 +61,8 @@ jobs:
         run: |
           mkdir compiled_artifacts
           copy assets\* compiled_artifacts\
-          copy client.exe compiled_artifacts\
-          copy server.exe compiled_artifacts\
+          copy Debug/client.exe compiled_artifacts\
+          copy Debug/server.exe compiled_artifacts\
           zip -r compiled_artifacts.zip compiled_artifacts\*
         
       - name: Upload artifacts
