@@ -160,7 +160,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
         return;
     }
     std::cout << "sending update\n";
-    AnimatedStateUpdateMessage to_send(10, entity, state, 0);
+    AnimatedStateUpdateMessage to_send(14, entity, state, 0);
     send_data_to_all_clients(to_send, _animated_drawable_update_packets);
 }
 
@@ -169,7 +169,7 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity)
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
     if (animatedDrawable.has_value()) {
         AnimatedDrawableSnapshot snap_ad(
-            9,
+            13,
             entity,
             animatedDrawable.value()._path,
             animatedDrawable.value()._nbSprites,
@@ -191,7 +191,7 @@ void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entit
     for (size_t i = 0; i < animatedDrawables.size(); i++) {
         if (animatedDrawables[i].has_value()) {
             AnimatedDrawableSnapshot snap_ad(
-                9,
+                13,
                 i,
                 animatedDrawables[i].value()._path,
                 animatedDrawables[i].value()._nbSprites,

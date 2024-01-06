@@ -324,8 +324,8 @@ Client::Client(std::string ip, int port, std::string username)
     listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
     // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
     // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
     // entity_t tmp_text = _ecs.spawn_entity();
