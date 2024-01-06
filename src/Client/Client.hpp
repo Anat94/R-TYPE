@@ -249,6 +249,7 @@ enum Stage {
 enum inGameState {
     INGAME,
     INGAMEMENU,
+    CHAT
 };
 
 struct Trophy {
@@ -376,6 +377,10 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
+        sf::RectangleShape _rectangle;
+        std::vector<std::string> _chat;
+        std::vector<sf::Text> _chatText;
+        sf::Text _chatTitle;
 };
 
 #endif // CLIENT_HPP

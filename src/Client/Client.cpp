@@ -174,6 +174,13 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
         return -1;
     ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
     std::cout << chat->name <<": " << chat->content << std::endl;
+    _chat.push_back(std::string(chat->name) + ": " + std::string(chat->content));
+    sf::Text tmp;
+    tmp.setString(std::string(chat->name) + ":    " + std::string(chat->content));
+    tmp.setFont(_font);
+    tmp.setCharacterSize(20);
+    tmp.setPosition(30, 150 + (_chatText.size() - 1) * 30);
+    _chatText.push_back(tmp);
     return chat->packet_id;
 }
 
@@ -267,8 +274,8 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
     // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
     // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
-    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
-    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
+    SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
+    _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
     // entity_t tmp_text = _ecs.spawn_entity();
     // _ecs.add_component(tmp_text, component::Text("my text to print"));
     // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
@@ -324,6 +331,11 @@ Client::Client(std::string ip, int port, std::string username)
     _highScoreDisplay.score3.setPosition(1050, 600);
     _highScoreDisplay.title.setPosition(750, 200);
     _state = INGAME;
+    _rectangle = sf::RectangleShape(sf::Vector2f(400, 1100));
+    _rectangle.setPosition(0.0, 0.0);
+    _rectangle.setFillColor(sf::Color::Black);
+    _chatTitle  = sf::Text("Chat", _font, 30);
+    _chatTitle.setPosition(150, 50);
 }
 
 Client::~Client()
@@ -374,6 +386,10 @@ int Client::manageEvent()
         if (_event.type == sf::Event::KeyPressed) {
             if (_event.key.code == sf::Keyboard::Escape) {
                 _state = (_state == INGAME) ? (INGAMEMENU) : (INGAME);
+                return 0;
+            }
+            if (_event.key.code == sf::Keyboard::T) {
+                _state = (_state == INGAME) ?  CHAT : (INGAME);
                 return 0;
             }
         }
@@ -438,11 +454,18 @@ int Client::run()
             break;
         if (_state == INGAMEMENU)
             displayScoreBoardMenu();
-        else if (_state == INGAME) {
+        else if (_state == INGAME || _state == CHAT) {
             _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
             while (listener.popEvent());
             _ecs.run_systems();
             displayTexts();
+            if (_state == CHAT) {
+                _window.draw(_rectangle);
+                _window.draw(_chatTitle);
+                for (int i = 0; i < _chat.size(); i++) {
+                    _window.draw(_chatText[i]);
+                }
+            }
         }
         _window.display();
     }
