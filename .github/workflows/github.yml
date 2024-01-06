@@ -54,24 +54,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: [linux, windows]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # - name: Move Linux executables
-      #   run: |
-      #     ls -a .
-
-      #     # mkdir -p linux
-      #     # cp client ./linux/
-      #     # cp server ./linux/
+      - name: Move Linux executables
+        run: |
+          mkdir -p linux
+          cp client ./linux/
+          cp server ./linux/
       
-      # - name: Move Windows executables
-      #   run: |
-      #     mkdir -p windows
-      #     cp Debug/client ./windows/
-      #     cp Debug/server ./windows/
+      - name: Move Windows executables
+        run: |
+          mkdir -p windows
+          cp Debug/client ./windows/
+          cp Debug/server ./windows/
       
       - name: Archive the assets folder
         run: |
-          ls -a
           zip -r assets.zip assets windows linux
 
       - name: Create Release
