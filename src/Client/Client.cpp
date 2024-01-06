@@ -28,6 +28,7 @@
 #include "../Ecs/ZipperIterator.hpp"
 #include "Client.hpp"
 #include "../Ecs/Systems/SFMLAnimatedDrawSystem.hpp"
+#include "../Ecs/Systems/SFMLTextDrawSystem.hpp"
 #include "../Ecs/Systems/SFMLDrawSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
@@ -130,6 +131,50 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
         return login->packet_id;
     }
     return -1;
+}
+
+int Client::receive_friends_reponse(std::vector<char> &server_msg) {
+    printf("receive_friends_reponse\n");
+    if (server_msg.size() < sizeof(FriendsResponse))
+        return -1;
+    printf("receive_friends_reponse\n");
+    FriendsResponse *friends = reinterpret_cast<FriendsResponse *>(server_msg.data());
+    printf("receive_friends_reponse\n");
+    std::cout << friends->friends << std::endl;
+    printf("receive_friends_reponse\n");
+    friendLists.push_back(friends->friends);
+    printf("receive_friends_reponse\n");
+    return friends->packet_id;
+}
+
+int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(AddFriendsResponse))
+        return -1;
+    AddFriendsResponse *friends = reinterpret_cast<AddFriendsResponse *>(server_msg.data());
+    if (friends->response == true)
+        std::cout << "Friend added" << std::endl;
+    else
+        std::cout << "An error occured while adding friend" << std::endl;
+    return friends->packet_id;
+}
+
+int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(RemoveFriendsResponse))
+        return -1;
+    RemoveFriendsResponse *friends = reinterpret_cast<RemoveFriendsResponse *>(server_msg.data());
+    if (friends->response == true)
+        std::cout << "Friend removed" << std::endl;
+    else
+        std::cout << "An error occured while removing friend" << std::endl;
+    return friends->packet_id;
+}
+
+int Client::receive_chat_event(std::vector<char> &server_msg) {
+    if (server_msg.size() < sizeof(ChatMessage))
+        return -1;
+    ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
+    std::cout << chat->name <<": " << chat->content << std::endl;
+    return chat->packet_id;
 }
 
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
@@ -249,6 +294,7 @@ Client::Client(std::string ip, int port, std::string username)
 {
     _send_structure.id = 2;
     send_to_server(_send_structure);
+    _ecs.register_component<component::Text>();
     _ecs.register_component<component::Scale>();
     _ecs.register_component<component::Score>();
     _ecs.register_component<component::Damage>();
@@ -278,8 +324,16 @@ Client::Client(std::string ip, int port, std::string username)
     listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
+    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
+    // entity_t tmp_text = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text, component::Text("my text to print"));
+    // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
+    // entity_t tmp_text_2 = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text_2, component::Text("my second text to print"));
+    // _ecs.add_component(tmp_text_2, component::Position(200.0f, 600.0f));
     // _player = _ecs.spawn_entity();
     // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
     // _ecs.add_component(_player, component::Scale(5.0f));
@@ -421,9 +475,21 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    LoginMessage login(6, "test", "test", 0, _packet_id); // 0 == signup & 1 == signin
-    _packet_id += 1;
-    send_to_server<LoginMessage>(login);
+    // LoginMessage login(6, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
+    // _packet_id += 1;
+    // send_to_server<LoginMessage>(login);
+    // FriendsMessage friendsmsg(7, "admin", _packet_id);
+    // _packet_id += 1;
+    // send_to_server<FriendsMessage>(friendsmsg);
+    // AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
+    // _packet_id += 1;
+    // send_to_server<AddFriendsMessage>(add);
+    // RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
+    // _packet_id += 1;
+    // send_to_server<RemoveFriendsMessage>(remove);
+    ChatMessage msg(10, "admin", "Hello World", _packet_id);
+    _packet_id +=1;
+    send_to_server<ChatMessage>(msg);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();

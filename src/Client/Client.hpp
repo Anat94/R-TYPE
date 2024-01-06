@@ -118,6 +118,112 @@ struct LoginResponse: public BaseMessage {
         };
 };
 
+struct FriendsMessage: public BaseMessage {
+    char username[20];
+    FriendsMessage(int16_t id_, std::string username_, int packet_id_):
+        username() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+        };
+};
+
+struct FriendsResponse: public BaseMessage {
+    char friends[20];
+    FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
+            id = id_;
+            int i = 0;
+            for (; i < friends_.size(); i++) {
+                friends[i] = friends_[i];
+            }
+            packet_id = packet_id_;
+        };
+};
+
+struct AddFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct AddFriendsResponse: public BaseMessage {
+    bool response;
+    AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
+struct RemoveFriendsMessage: public BaseMessage {
+    char username[20];
+    char friendName[20];
+
+    RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
+        username(), friendName() {
+            int i = 0;
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < username_.size(); i++) {
+                username[i] = username_[i];
+            }
+            username[i] = '\0';
+            i = 0;
+            for (; i < username_.size(); i++) {
+                friendName[i] = friendName_[i];
+            }
+            friendName[i] = '\0';
+        };
+};
+
+struct RemoveFriendsResponse: public BaseMessage {
+    bool response;
+    RemoveFriendsResponse(int16_t id_, bool success_, int packet_id_):
+        response(success_) {
+            id = id_;
+            packet_id = packet_id_;
+        };
+};
+
+struct ChatMessage: public BaseMessage {
+    char name[20];
+    char content[256];
+
+    ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
+        int i = 0;
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < content_.size(); i++) {
+            content[i] = content_[i];
+        }
+        content[i] = '\0';
+        i = 0;
+        for (; i < name_.size(); i++) {
+            name[i] = name_[i];
+        }
+        name[i] = '\0';
+    };
+};
+
 struct DrawableSnapshot: public BaseMessage {
     entity_t entity;
     char data[1024];
@@ -320,6 +426,10 @@ class Client {
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         int recieve_animated_drawable_snapshot(std::vector<char> &server_msg);
         int recieve_animated_drawable_state_update(std::vector<char> &server_msg);
+        int receive_friends_reponse(std::vector<char> &server_msg);
+        int receive_add_friends_reponse(std::vector<char> &server_msg);
+        int receive_remove_friends_reponse(std::vector<char> &server_msg);
+        int receive_chat_event(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
 
@@ -384,14 +494,19 @@ class Client {
             {6, &Client::recieve_drawable_snapshot_update},
             {7, &Client::recieve_high_score},
             {8, &Client::recieve_login_response},
-            {9, &Client::recieve_animated_drawable_snapshot},
-            {10, &Client::recieve_animated_drawable_state_update}
+            {9, &Client::receive_friends_reponse},
+            {10, &Client::receive_add_friends_reponse},
+            {11, &Client::receive_remove_friends_reponse},
+            {12, &Client::receive_chat_event},
+            {13, &Client::recieve_animated_drawable_snapshot},
+            {14, &Client::recieve_animated_drawable_state_update}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
+        std::vector<std::string> friendLists;
 };
 
 #endif // CLIENT_HPP
