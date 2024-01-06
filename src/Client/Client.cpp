@@ -93,7 +93,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Scale(8.5f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
@@ -185,8 +185,10 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
             drawables[real_entity]->_state = std::string(snapshot->_state);
         } else {
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
-            auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[_enemy];
+            auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
             for (int i = 0; i < snapshot->_anims.size(); i++) {
+                if (snapshot->_anims[i].first[0] == '\0')
+                    continue;
                 tmp->addAnimation(std::string(snapshot->_anims[i].first), snapshot->_anims[i].second.second, snapshot->_anims[i].second.first);
             }
         }
@@ -213,6 +215,7 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
         // }
         if (real_entity > 0 && drawables[real_entity].has_value()) {
             drawables[real_entity]->_state = std::string(snapshot->state);
+            std::cout << drawables[real_entity]->_state << std::endl;
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;

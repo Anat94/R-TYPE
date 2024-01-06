@@ -13,22 +13,20 @@ bool can_read = true;
 
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
-    bool updated_drawable = false;
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
-    std::string prev_state = animatedDrawable.value()._state;
+    std::string prevState = animatedDrawable.value()._state;
     if (event == KeyIds["Up"]) {
         animatedDrawable.value()._state = "move up";
-        updated_drawable = true;
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, -30};
     }
     if (event == KeyIds["Down"]) {
         animatedDrawable.value()._state = "move down";
-        updated_drawable = true;
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, 30};
     }
-    if (!updated_drawable) {}
-        animatedDrawable.value()._state = "idle";
-    if (prev_state != animatedDrawable.value()._state)
+    animatedDrawable.value()._state = "idle";
+    if (prevState != animatedDrawable.value()._state)
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
     if (event == KeyIds["Left"])
         return {-30, 0};
@@ -160,7 +158,8 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
         std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
         return;
     }
-    AnimatedStateUpdateMessage to_send(9, entity, state, 0);
+    std::cout << "sending update\n";
+    AnimatedStateUpdateMessage to_send(10, entity, state, 0);
     send_data_to_all_clients(to_send, _animated_drawable_update_packets);
 }
 
@@ -314,7 +313,7 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
         response = signUp(snapshot->username, snapshot->password);
     else if (snapshot->logintype == 1)
         response = signIn(snapshot->username, snapshot->password);
-    LoginResponse resp(10, response, snapshot->logintype, _packet_id);
+    LoginResponse resp(8, response, snapshot->logintype, _packet_id);
     send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
     _packet_id += 1;
     return 0;
@@ -364,7 +363,6 @@ void Server::resend_packets(std::vector<T> &packets) {
 
 void Server::sendPositionpacketsPeriodically() {
     int counter = 0;
-
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         if (counter >= 20) {
