@@ -336,6 +336,15 @@ Client::Client(std::string ip, int port, std::string username)
     _rectangle.setFillColor(sf::Color::Black);
     _chatTitle  = sf::Text("Chat", _font, 30);
     _chatTitle.setPosition(150, 50);
+    _inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
+    _inputBox.setPosition(25.0, 900.0);
+    _inputBox.setFillColor(sf::Color::White);
+    _input = std::string("");
+    _chatTextInput.setString(_input);
+    _chatTextInput.setFont(_font);
+    _chatTextInput.setCharacterSize(20);
+    _chatTextInput.setPosition(50, 900);
+    _chatTextInput.setFillColor(sf::Color::Black);
 }
 
 Client::~Client()
@@ -388,8 +397,15 @@ int Client::manageEvent()
                 _state = (_state == INGAME) ? (INGAMEMENU) : (INGAME);
                 return 0;
             }
-            if (_event.key.code == sf::Keyboard::T) {
+            if (_event.key.code == sf::Keyboard::Tab) {
                 _state = (_state == INGAME) ?  CHAT : (INGAME);
+                return 0;
+            }
+            if (_event.key.code == sf::Keyboard::Enter) {
+                ChatMessage msg(10, _username, _input, _packet_id);
+                _packet_id++;
+                send_to_server(msg);
+                _input = "";
                 return 0;
             }
         }
@@ -403,6 +419,9 @@ int Client::manageEvent()
             _event = _event;
             return 0;
         }
+        // if (_state == CHAT) {
+        //     handleInput(_event);
+        // }
     }
     return 0;
 }
@@ -420,6 +439,24 @@ void Client::displayScoreBoardMenu()
     _window.draw(_highScoreDisplay.score3);
 }
 
+void Client::handleInput(sf::Event& event) {
+    printf("handleInput1\n");
+    if (event.type == sf::Event::TextEntered ) {
+    printf("handleInput2\n");
+        if (event.text.unicode < 128) {
+    printf("handleInput3\n");
+            if (event.text.unicode == '\b' && _input.size() > 0) {
+    printf("handleInput4\n");
+                _input.erase(_input.size() - 1, 1);
+            } else if (event.text.unicode != '\b') {
+    printf("handleInput5\n");
+                _input += event.text.unicode;
+            }
+    printf("handleInput6 %s\n", _input.c_str());
+            _chatTextInput.setString(_input);
+        }
+    }
+}
 
 int Client::run()
 {
@@ -462,8 +499,14 @@ int Client::run()
             if (_state == CHAT) {
                 _window.draw(_rectangle);
                 _window.draw(_chatTitle);
+                _window.draw(_inputBox);
+                _window.draw(_chatTextInput);
                 for (int i = 0; i < _chat.size(); i++) {
                     _window.draw(_chatText[i]);
+                }
+                if (clock.getElapsedTime().asSeconds() >= 0.1f) {
+                    handleInput(_event);
+                    clock.restart();
                 }
             }
         }

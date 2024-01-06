@@ -304,7 +304,7 @@ class Client {
         int receive_chat_event(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
-
+        void handleInput(sf::Event &event);
     private:
         //Content for network
         EventMessage _send_structure;
@@ -381,6 +381,11 @@ class Client {
         std::vector<std::string> _chat;
         std::vector<sf::Text> _chatText;
         sf::Text _chatTitle;
+        sf::RectangleShape _inputBox;
+        bool canSend = false;
+        std::string _input;
+        sf::Text _chatTextInput;
+        sf::Clock clock;
 };
 
 #endif // CLIENT_HPP

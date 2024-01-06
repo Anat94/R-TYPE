@@ -284,7 +284,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     while (!can_read)
         continue;
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    send_data_to_all_clients_except_me<ChatMessage>(reponse);
+    send_data_to_all_clients<ChatMessage>(reponse);
     return 0;
 }
 
