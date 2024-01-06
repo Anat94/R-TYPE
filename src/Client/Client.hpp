@@ -268,6 +268,18 @@ struct HighScoreDisplay {
     Trophy trophy1;
     Trophy trophy2;
 };
+
+struct ChatEntity {
+    sf::RectangleShape _rectangle;
+    std::vector<std::string> _chat;
+    std::vector<sf::Text> _chatText;
+    sf::Text _chatTitle;
+    sf::RectangleShape _inputBox;
+    std::string _input;
+    sf::Text _chatTextInput;
+    sf::Clock _clock;
+};
+
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
@@ -377,15 +389,7 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
-        sf::RectangleShape _rectangle;
-        std::vector<std::string> _chat;
-        std::vector<sf::Text> _chatText;
-        sf::Text _chatTitle;
-        sf::RectangleShape _inputBox;
-        bool canSend = false;
-        std::string _input;
-        sf::Text _chatTextInput;
-        sf::Clock clock;
+        ChatEntity _chatEntity;
 };
 
 #endif // CLIENT_HPP

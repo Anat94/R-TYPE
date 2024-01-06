@@ -174,13 +174,13 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
         return -1;
     ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
     std::cout << chat->name <<": " << chat->content << std::endl;
-    _chat.push_back(std::string(chat->name) + ": " + std::string(chat->content));
+    _chatEntity._chat.push_back(std::string(chat->name) + ": " + std::string(chat->content));
     sf::Text tmp;
     tmp.setString(std::string(chat->name) + ":    " + std::string(chat->content));
     tmp.setFont(_font);
     tmp.setCharacterSize(20);
-    tmp.setPosition(30, 150 + (_chatText.size() - 1) * 30);
-    _chatText.push_back(tmp);
+    tmp.setPosition(30, 150 + (_chatEntity._chatText.size() - 1) * 30);
+    _chatEntity._chatText.push_back(tmp);
     return chat->packet_id;
 }
 
@@ -331,20 +331,20 @@ Client::Client(std::string ip, int port, std::string username)
     _highScoreDisplay.score3.setPosition(1050, 600);
     _highScoreDisplay.title.setPosition(750, 200);
     _state = INGAME;
-    _rectangle = sf::RectangleShape(sf::Vector2f(400, 1100));
-    _rectangle.setPosition(0.0, 0.0);
-    _rectangle.setFillColor(sf::Color::Black);
-    _chatTitle  = sf::Text("Chat", _font, 30);
-    _chatTitle.setPosition(150, 50);
-    _inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
-    _inputBox.setPosition(25.0, 900.0);
-    _inputBox.setFillColor(sf::Color::White);
-    _input = std::string("");
-    _chatTextInput.setString(_input);
-    _chatTextInput.setFont(_font);
-    _chatTextInput.setCharacterSize(20);
-    _chatTextInput.setPosition(50, 900);
-    _chatTextInput.setFillColor(sf::Color::Black);
+    _chatEntity._rectangle = sf::RectangleShape(sf::Vector2f(400, 1100));
+    _chatEntity._rectangle.setPosition(0.0, 0.0);
+    _chatEntity._rectangle.setFillColor(sf::Color::Black);
+    _chatEntity._chatTitle  = sf::Text("Chat", _font, 30);
+    _chatEntity._chatTitle.setPosition(150, 50);
+    _chatEntity._inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
+    _chatEntity._inputBox.setPosition(25.0, 900.0);
+    _chatEntity._inputBox.setFillColor(sf::Color::White);
+    _chatEntity._input = std::string("");
+    _chatEntity._chatTextInput.setString(_chatEntity._input);
+    _chatEntity._chatTextInput.setFont(_font);
+    _chatEntity._chatTextInput.setCharacterSize(20);
+    _chatEntity._chatTextInput.setPosition(50, 900);
+    _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
 }
 
 Client::~Client()
@@ -402,10 +402,10 @@ int Client::manageEvent()
                 return 0;
             }
             if (_event.key.code == sf::Keyboard::Enter) {
-                ChatMessage msg(10, _username, _input, _packet_id);
+                ChatMessage msg(10, _username, _chatEntity._input, _packet_id);
                 _packet_id++;
                 send_to_server(msg);
-                _input = "";
+                _chatEntity._input = "";
                 return 0;
             }
         }
@@ -419,9 +419,6 @@ int Client::manageEvent()
             _event = _event;
             return 0;
         }
-        // if (_state == CHAT) {
-        //     handleInput(_event);
-        // }
     }
     return 0;
 }
@@ -440,20 +437,14 @@ void Client::displayScoreBoardMenu()
 }
 
 void Client::handleInput(sf::Event& event) {
-    printf("handleInput1\n");
     if (event.type == sf::Event::TextEntered ) {
-    printf("handleInput2\n");
         if (event.text.unicode < 128) {
-    printf("handleInput3\n");
-            if (event.text.unicode == '\b' && _input.size() > 0) {
-    printf("handleInput4\n");
-                _input.erase(_input.size() - 1, 1);
+            if (event.text.unicode == '\b' && _chatEntity._input.size() > 0) {
+                _chatEntity._input.erase(_chatEntity._input.size() - 1, 1);
             } else if (event.text.unicode != '\b') {
-    printf("handleInput5\n");
-                _input += event.text.unicode;
+                _chatEntity._input += event.text.unicode;
             }
-    printf("handleInput6 %s\n", _input.c_str());
-            _chatTextInput.setString(_input);
+            _chatEntity._chatTextInput.setString(_chatEntity._input);
         }
     }
 }
@@ -497,16 +488,16 @@ int Client::run()
             _ecs.run_systems();
             displayTexts();
             if (_state == CHAT) {
-                _window.draw(_rectangle);
-                _window.draw(_chatTitle);
-                _window.draw(_inputBox);
-                _window.draw(_chatTextInput);
-                for (int i = 0; i < _chat.size(); i++) {
-                    _window.draw(_chatText[i]);
+                _window.draw(_chatEntity._rectangle);
+                _window.draw(_chatEntity._chatTitle);
+                _window.draw(_chatEntity._inputBox);
+                _window.draw(_chatEntity._chatTextInput);
+                for (int i = 0; i < _chatEntity._chat.size(); i++) {
+                    _window.draw(_chatEntity._chatText[i]);
                 }
-                if (clock.getElapsedTime().asSeconds() >= 0.1f) {
+                if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
                     handleInput(_event);
-                    clock.restart();
+                    _chatEntity._clock.restart();
                 }
             }
         }
