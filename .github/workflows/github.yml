@@ -51,9 +51,11 @@ jobs:
 
       - name: Move Linux executables
         run: |
-          mkdir -p linux
-          cp client ./linux/
-          cp server ./linux/
+          ls -R
+
+          # mkdir -p linux
+          # cp client ./linux/
+          # cp server ./linux/
       
       - name: Move Windows executables
         run: |
