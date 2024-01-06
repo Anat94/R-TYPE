@@ -55,19 +55,19 @@ jobs:
     needs: [linux, windows]
     steps:
 
-      - name: Move Linux executables
-        run: |
-          ls -a .
+      # - name: Move Linux executables
+      #   run: |
+      #     ls -a .
 
-          # mkdir -p linux
-          # cp client ./linux/
-          # cp server ./linux/
+      #     # mkdir -p linux
+      #     # cp client ./linux/
+      #     # cp server ./linux/
       
-      - name: Move Windows executables
-        run: |
-          mkdir -p windows
-          cp Debug/client ./windows/
-          cp Debug/server ./windows/
+      # - name: Move Windows executables
+      #   run: |
+      #     mkdir -p windows
+      #     cp Debug/client ./windows/
+      #     cp Debug/server ./windows/
       
       - name: Archive the assets folder
         run: |
