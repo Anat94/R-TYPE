@@ -86,6 +86,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             pos[real_entity]->x = snapshot->data.x;
             pos[real_entity]->y = snapshot->data.y;
+            std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         } else {
             // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
@@ -278,7 +279,9 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    mtx.unlock();
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;

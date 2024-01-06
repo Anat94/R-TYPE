@@ -29,6 +29,7 @@
     #include <iostream>
     #include <thread>
     #include <chrono>
+    #include <mutex>
     #include <array>
     #include <asio.hpp>
     #include <functional>
@@ -466,6 +467,9 @@ class Server {
         int _highScore = 0;
         std::string _nameForHighScore = "";
         bool can_mod = true;
+        bool can_send = true;
+        bool can_read = true;
+        std::mutex mtx;
 };
 
 #endif // SERVER_HPP

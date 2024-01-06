@@ -119,5 +119,7 @@ int main(int argc, char *argv[]) {
         ecs.run_systems();
         while (listener.popEvent());
     }
+    serverThread.joinable();
+    serverThread.join();
     return 0;
 }

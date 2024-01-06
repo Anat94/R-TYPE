@@ -507,6 +507,7 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
+        std::mutex mtx;
 };
 
 #endif // CLIENT_HPP

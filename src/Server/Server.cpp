@@ -8,8 +8,6 @@
 #include "Server.hpp"
 #include "KeyEventMapping.hpp"
 
-bool can_read = true;
-
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
@@ -85,7 +83,10 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
+    _ecs.mtx.lock();
+    can_send = false;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
+    can_send = true;
     _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
@@ -102,12 +103,25 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Health(100));
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
+
+    entity_t enemy = _ecs.spawn_entity();
+
+    can_send = false;
+    _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
+    can_send = true;
+    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-0.0003f, 0.0f));
+    _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
+
+    auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
+    tmp1->addAnimation("idle", {0, 7}, true);
+    tmp1->_state = "idle";
+
     std::cout << "New player connected !" << std::endl;
-    auto all_players = _ecs.get_components<component::Endpoint>();
     send_animated_drawable_snapshots_for_specific_player(new_player);
     send_animated_drawable_snapshot_to_all_players(new_player);
     send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
+    _ecs.mtx.unlock();
     return new_player;
 }
 
@@ -142,6 +156,7 @@ std::vector<char> Server::recieve_raw_data_from_client()
 
 void Server::send_position_snapshots_for_all_players()
 {
+    while (!can_send) continue;
     sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
@@ -287,6 +302,7 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+    _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
     return 0;
 }
 
@@ -372,7 +388,6 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     return 0;
 }
 
-
 Server::~Server() {
     if (_send_thread.joinable())
         _send_thread.join();
@@ -418,6 +433,7 @@ void Server::sendPositionpacketsPeriodically() {
     int counter = 0;
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::lock_guard<std::mutex> lock(mtx);
         if (counter >= 20) {
             can_mod = false;
             resend_packets<SnapshotPosition>(_position_packets);
