@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::ServerEntity>();
     ecs.register_component<component::Controllable>();
     ecs.register_component<component::HurtsOnCollision>();
+    ecs.register_component<component::AnimatedDrawable>();
     ecs.register_component<component::Endpoint>();
 
     // entity_t entity1 = ecs.spawn_entity();
@@ -118,5 +119,7 @@ int main(int argc, char *argv[]) {
         ecs.run_systems();
         while (listener.popEvent());
     }
+    serverThread.joinable();
+    serverThread.join();
     return 0;
 }

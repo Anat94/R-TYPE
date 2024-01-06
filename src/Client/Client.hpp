@@ -240,6 +240,133 @@ struct DrawableSnapshot: public BaseMessage {
     };
 };
 
+struct AnimatedDrawableSnapshot: public BaseMessage {
+    /**
+     * @brief entity to update the DrawableSnapshot for
+     */
+    entity_t entity;
+    /**
+     * @brief path to the desired asset
+    */
+    char _path[256];
+    char _state[16];
+
+    std::array<std::pair<char[16], std::pair<bool, std::pair<int, int>>>, 5> _anims;
+    /**
+     * @brief number of sprites on the x & y axis
+     * 
+     * (ex: {3, 4} for a 3 Sprites per line & 4 lines)
+     * 
+     */
+    std::pair<int, int> _nbSprites;
+    /**
+     * @brief set of numbers representing the size of the sprites to load
+     * 
+     * (ex: {32, 14} for a 32x14 sprite)
+     * 
+     */
+    std::pair<int, int> _spriteSize;
+    /**
+     * @brief set of numbers representing the size of the gapes between sprites
+     * 
+     * (ex: {3, 1} for a 3x1 gap)
+     * 
+     */
+    std::pair<int, int> _gaps;
+    /**
+     * @brief set of numbers representing the size of the offset of the first sprite
+     * 
+     */
+    std::pair<int, int> _firstOffset;
+    /**
+     * @brief set of numbers representing the indexes of the animation
+     * 
+     * (ex: {2, 0} to start with the 3rd sprite)
+     * ! The second argument is not used yet !
+     */
+    std::pair<int, int> _currentIdx;
+
+    AnimatedDrawableSnapshot &operator=(const AnimatedDrawableSnapshot &snapshot) {
+        entity = snapshot.entity;
+        _currentIdx = snapshot._currentIdx;
+        _firstOffset = snapshot._firstOffset;
+        _gaps = snapshot._gaps;
+        _spriteSize = snapshot._spriteSize;
+        _nbSprites = snapshot._nbSprites;
+        for (int i = 0; i < snapshot._anims.size(); i++) {
+            int j = 0;
+            for (j = 0; snapshot._anims[i].first[j] != '\0'; j++) {
+                _anims[i].first[j] = snapshot._anims[i].first[j];
+            }
+            _anims[i].first[j] = '\0';
+            _anims[i].second = snapshot._anims[i].second;
+        }
+        int i = 0;
+        for (i = 0; snapshot._state[i] != '\0'; i++) {
+            _state[i] = snapshot._state[i];
+        }
+        _state[i] = '\0';
+        for (i = 0; snapshot._path[i] != '\0'; i++) {
+            _path[i] = snapshot._path[i];
+        }
+        _path[i] = '\0';
+        return *this;
+    };
+    AnimatedDrawableSnapshot(
+        int16_t id_,
+        entity_t entity_,
+        const std::string &path,
+        std::pair<int, int> nbSprites,
+        std::pair<int, int> spriteSize,
+        std::pair<int, int> gaps,
+        std::pair<int, int> firstOffset,
+        std::pair<int, int> curretnIdx,
+        animation_t anims_,
+        const std::string &state,
+        int packet_id_
+    ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+        int i = 0;
+        int j = 0;
+
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < path.size(); i++) {
+            _path[i] = path[i];
+        }
+        _path[i] = '\0';
+        for (i = 0; i < state.size(); i++) {
+            _state[i] = state[i];
+        }
+        _state[i] = '\0';
+        for (auto &anim: anims_) {
+            for (i = 0; i < anim.first.size(); i++) {
+                _anims[j].first[i] = anim.first[i];
+            }
+            _anims[j].second = anim.second;
+            ++j;
+        }
+        for (int k = j; k < _anims.size(); ++k)
+            _anims[k].first[0] = '\0';
+    };
+};
+
+struct AnimatedStateUpdateMessage: public BaseMessage {
+    entity_t entity;
+    char state[16];
+
+    AnimatedStateUpdateMessage(int16_t id_, entity_t entity_, std::string state_, int packet_id_):
+        entity(entity_) {
+            int i = 0;
+            
+            id = id_;
+            packet_id = packet_id_;
+            for (; i < state_.size(); i++) {
+                state[i] = state_[i];
+            }
+            state[i] = '\0';
+        };
+};
+
 enum Stage {
     ONE,
     TWO,
@@ -297,6 +424,8 @@ class Client {
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
+        int recieve_animated_drawable_snapshot(std::vector<char> &server_msg);
+        int recieve_animated_drawable_state_update(std::vector<char> &server_msg);
         int receive_friends_reponse(std::vector<char> &server_msg);
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
@@ -368,7 +497,9 @@ class Client {
             {9, &Client::receive_friends_reponse},
             {10, &Client::receive_add_friends_reponse},
             {11, &Client::receive_remove_friends_reponse},
-            {12, &Client::receive_chat_event}
+            {12, &Client::receive_chat_event},
+            {13, &Client::recieve_animated_drawable_snapshot},
+            {14, &Client::recieve_animated_drawable_state_update}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
@@ -376,6 +507,7 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
+        std::mutex mtx;
 };
 
 #endif // CLIENT_HPP

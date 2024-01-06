@@ -249,6 +249,30 @@ class UpdatePositionEvent : public AEvent {
         std::pair<int, int> _pos;
 };
 
+class PositionStayInWindowBounds : public AEvent {
+    public:
+        /**
+         * @brief Construct a new Collision Event object
+         * 
+         * @param to_move entity id to move
+         * @param windowBounds window to keep the entity in
+         */
+        PositionStayInWindowBounds(entity_t to_move, std::vector<int> windowBounds) { _ents = {to_move, -1}; _windowBounds = windowBounds; };
+        /**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+        void handleEvent(registry &r, EventListener &listener);
+    private:
+        /**
+         * @brief position to move entity by
+         * 
+         */
+        std::vector<int> _windowBounds;
+};
+
 /**
  * @brief Shoot event class
  * 
