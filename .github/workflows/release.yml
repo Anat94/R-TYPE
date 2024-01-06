@@ -6,6 +6,12 @@ on: [push]
     # types: [closed]
 
 jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Release Workflow
+        run: echo "Starting Release Workflow"
+
   build:
     name: Create Release
     runs-on: ubuntu-latest
