@@ -51,7 +51,7 @@ jobs:
 
       - name: Move Linux executables
         run: |
-          ls -R
+          ls -R ./
 
           # mkdir -p linux
           # cp client ./linux/
