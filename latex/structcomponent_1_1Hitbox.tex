@@ -1,0 +1,144 @@
+\doxysection{component\+::Hitbox Struct Reference}
+\hypertarget{structcomponent_1_1Hitbox}{}\label{structcomponent_1_1Hitbox}\index{component::Hitbox@{component::Hitbox}}
+
+
+\doxylink{structcomponent_1_1Hitbox}{Hitbox} structure to store the hitbox of an entity.  
+
+
+
+
+{\ttfamily \#include $<$Components.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcomponent_1_1Hitbox_a017ae9b1c71e48d72d10c71b3d98eb45}{Hitbox}} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&top\+\_\+left, const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&top\+\_\+right, const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&bottom\+\_\+left, const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&bottom\+\_\+right)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{structcomponent_1_1Hitbox}{Hitbox} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcomponent_1_1Hitbox_a5d64fd9db5c740db9b850bfec5ab2ccf}{Hitbox}} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&top\+\_\+left, const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&bottom\+\_\+right)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{structcomponent_1_1Hitbox}{Hitbox} object. Construct. \end{DoxyCompactList}\item 
+\Hypertarget{structcomponent_1_1Hitbox_ac124a03e974676d5c345664d5acd527c}\label{structcomponent_1_1Hitbox_ac124a03e974676d5c345664d5acd527c} 
+bool {\bfseries is\+Overlap} (float p1, float q1, float p2, float q2)
+\item 
+\Hypertarget{structcomponent_1_1Hitbox_a0332985b8b75dfad439ae7206ee0312f}\label{structcomponent_1_1Hitbox_a0332985b8b75dfad439ae7206ee0312f} 
+bool {\bfseries is\+Touching} (const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&other)
+\item 
+\Hypertarget{structcomponent_1_1Hitbox_a9e136fde585adad7582054c14b8f9d5e}\label{structcomponent_1_1Hitbox_a9e136fde585adad7582054c14b8f9d5e} 
+\mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} {\bfseries update} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&pos)
+\item 
+\Hypertarget{structcomponent_1_1Hitbox_a97fa0c48a382b47da1ab6e0d09499763}\label{structcomponent_1_1Hitbox_a97fa0c48a382b47da1ab6e0d09499763} 
+bool {\bfseries contains} (int x, int y)
+\item 
+\Hypertarget{structcomponent_1_1Hitbox_aa865af3d69cb71fea151fe422707a5a8}\label{structcomponent_1_1Hitbox_aa865af3d69cb71fea151fe422707a5a8} 
+bool {\bfseries operator==} (const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&other) const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcomponent_1_1Position}{Position}} \mbox{\hyperlink{structcomponent_1_1Hitbox_a92920177909f8e432676184c3a7331dc}{\+\_\+top\+\_\+left}}
+\begin{DoxyCompactList}\small\item\em the top left position of the hitbox \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcomponent_1_1Position}{Position}} \mbox{\hyperlink{structcomponent_1_1Hitbox_a51f47310cde79f86475966208b48fe51}{\+\_\+top\+\_\+right}}
+\begin{DoxyCompactList}\small\item\em the top right position of the hitbox \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcomponent_1_1Position}{Position}} \mbox{\hyperlink{structcomponent_1_1Hitbox_a1776ef218bbcce565775e0bca6c2935c}{\+\_\+bottom\+\_\+left}}
+\begin{DoxyCompactList}\small\item\em the bottom left position of the hitbox \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcomponent_1_1Position}{Position}} \mbox{\hyperlink{structcomponent_1_1Hitbox_a3471e2f7f5a7b4116d0468c1a76b8a00}{\+\_\+bottom\+\_\+right}}
+\begin{DoxyCompactList}\small\item\em the bottom right position of the hitbox \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structcomponent_1_1Hitbox_a24489670c8f93eae53babbd970187da3}\label{structcomponent_1_1Hitbox_a24489670c8f93eae53babbd970187da3} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&hitbox)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{structcomponent_1_1Hitbox}{Hitbox} structure to store the hitbox of an entity. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcomponent_1_1Hitbox_a017ae9b1c71e48d72d10c71b3d98eb45}\label{structcomponent_1_1Hitbox_a017ae9b1c71e48d72d10c71b3d98eb45} 
+\index{component::Hitbox@{component::Hitbox}!Hitbox@{Hitbox}}
+\index{Hitbox@{Hitbox}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{Hitbox()}{Hitbox()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily component\+::\+Hitbox\+::\+Hitbox (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{top\+\_\+left,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{top\+\_\+right,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{bottom\+\_\+left,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{bottom\+\_\+right }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \doxylink{structcomponent_1_1Hitbox}{Hitbox} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em top\+\_\+left} & the top left position of the hitbox to be set \\
+\hline
+{\em top\+\_\+right} & the top right position of the hitbox to be set \\
+\hline
+{\em bottom\+\_\+left} & the bottom left position of the hitbox to be set \\
+\hline
+{\em bottom\+\_\+right} & the bottom right position of the hitbox to be set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structcomponent_1_1Hitbox_a5d64fd9db5c740db9b850bfec5ab2ccf}\label{structcomponent_1_1Hitbox_a5d64fd9db5c740db9b850bfec5ab2ccf} 
+\index{component::Hitbox@{component::Hitbox}!Hitbox@{Hitbox}}
+\index{Hitbox@{Hitbox}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{Hitbox()}{Hitbox()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily component\+::\+Hitbox\+::\+Hitbox (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{top\+\_\+left,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{bottom\+\_\+right }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \doxylink{structcomponent_1_1Hitbox}{Hitbox} object. Construct. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em top\+\_\+left} & the top left position of the hitbox to be set \\
+\hline
+{\em bottom\+\_\+right} & the bottom right position of the hitbox to be set \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcomponent_1_1Hitbox_a1776ef218bbcce565775e0bca6c2935c}\label{structcomponent_1_1Hitbox_a1776ef218bbcce565775e0bca6c2935c} 
+\index{component::Hitbox@{component::Hitbox}!\_bottom\_left@{\_bottom\_left}}
+\index{\_bottom\_left@{\_bottom\_left}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{\_bottom\_left}{\_bottom\_left}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcomponent_1_1Position}{Position}} component\+::\+Hitbox\+::\+\_\+bottom\+\_\+left}
+
+
+
+the bottom left position of the hitbox 
+
+\Hypertarget{structcomponent_1_1Hitbox_a3471e2f7f5a7b4116d0468c1a76b8a00}\label{structcomponent_1_1Hitbox_a3471e2f7f5a7b4116d0468c1a76b8a00} 
+\index{component::Hitbox@{component::Hitbox}!\_bottom\_right@{\_bottom\_right}}
+\index{\_bottom\_right@{\_bottom\_right}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{\_bottom\_right}{\_bottom\_right}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcomponent_1_1Position}{Position}} component\+::\+Hitbox\+::\+\_\+bottom\+\_\+right}
+
+
+
+the bottom right position of the hitbox 
+
+\Hypertarget{structcomponent_1_1Hitbox_a92920177909f8e432676184c3a7331dc}\label{structcomponent_1_1Hitbox_a92920177909f8e432676184c3a7331dc} 
+\index{component::Hitbox@{component::Hitbox}!\_top\_left@{\_top\_left}}
+\index{\_top\_left@{\_top\_left}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{\_top\_left}{\_top\_left}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcomponent_1_1Position}{Position}} component\+::\+Hitbox\+::\+\_\+top\+\_\+left}
+
+
+
+the top left position of the hitbox 
+
+\Hypertarget{structcomponent_1_1Hitbox_a51f47310cde79f86475966208b48fe51}\label{structcomponent_1_1Hitbox_a51f47310cde79f86475966208b48fe51} 
+\index{component::Hitbox@{component::Hitbox}!\_top\_right@{\_top\_right}}
+\index{\_top\_right@{\_top\_right}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{\_top\_right}{\_top\_right}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcomponent_1_1Position}{Position}} component\+::\+Hitbox\+::\+\_\+top\+\_\+right}
+
+
+
+the top right position of the hitbox 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Components.\+hpp\end{DoxyCompactItemize}

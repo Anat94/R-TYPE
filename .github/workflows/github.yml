@@ -31,7 +31,7 @@ jobs:
 
       - name: LINUX - Launch tests
         run: cmake --build . --target my_tests
-      
+
       - name: Archive Linux Executables
         uses: actions/upload-artifact@v2
         with:
@@ -50,7 +50,7 @@ jobs:
 
       - name: WINOWS -  Launch tests
         run: cmake --build . --target my_tests
-      
+
       - name: Archive Windows Executables
         uses: actions/upload-artifact@v2
         with:
@@ -58,7 +58,7 @@ jobs:
           path: |
             Debug/client.exe
             Debug/server.exe
-  
+
   build:
     name: Create Release
     runs-on: ubuntu-latest
@@ -84,12 +84,12 @@ jobs:
           ls -a build/linux_executables # Verify the presence of the executables
           mkdir -p linux
           cp build/linux_executables/* ./linux/
-      
+
       - name: Move Windows executables
         run: |
           mkdir -p windows
           cp build/windows_executables/* ./windows/
-      
+
       - name: Archive the assets folder
         run: |
           zip -r assets.zip assets windows linux
@@ -122,3 +122,19 @@ jobs:
           asset_path: ./assets.zip
           asset_name: assets-v${{ github.run_number }}.zip
           asset_content_type: application/zip
+
+  deploy_doxygen:
+    runs-on: ubuntu-latest
+    needs: [linux, windows]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt-get install doxygen
+          sudo apt-get install graphviz
+
+      - name: Deploy Doxygen
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html

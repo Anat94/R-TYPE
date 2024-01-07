@@ -1,9 +1,8 @@
 name: Create Release
 
-on: [push]
-  # pull_request:
-# 
-    # types: [closed]
+on:
+  pull_request:
+    types: [closed]
 
 jobs:
   start:
@@ -23,13 +22,13 @@ jobs:
           mkdir -p linux
           cp client ./linux/
           cp server ./linux/
-      
+
       - name: Move Windows executables
         run: |
           mkdir -p windows
           cp Debug/client ./windows/
           cp Debug/server ./windows/
-      
+
       - name: Archive the assets folder
         run: |
           zip -r assets.zip assets windows linux

@@ -1,0 +1,208 @@
+\doxysection{Client.\+hpp}
+\hypertarget{Client_8hpp_source}{}\label{Client_8hpp_source}\index{src/Client/Client.hpp@{src/Client/Client.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/TYPE}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Client.hpp}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ CLIENT\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ CLIENT\_HPP}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <asio.hpp>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ <SFML/Window.hpp>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <SFML/System.hpp>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#include\ "{}../Ecs/Events.hpp"{}}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ "{}../Errors.hpp"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ "{}../Network.hpp"{}}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdata__struct}{data\_struct}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ id;}
+\DoxyCodeLine{00040\ \ \ \ \ sf::Event\ event;}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ package\_id;}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{keyword}{enum}\ Stage\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ ONE,}
+\DoxyCodeLine{00047\ \ \ \ \ TWO,}
+\DoxyCodeLine{00048\ \ \ \ \ THREE,}
+\DoxyCodeLine{00049\ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{enum}\ inGameState\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ INGAME,}
+\DoxyCodeLine{00053\ \ \ \ \ INGAMEMENU,}
+\DoxyCodeLine{00054\ \ \ \ \ CHAT}
+\DoxyCodeLine{00055\ \};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structTrophy}{Trophy}}\ \{}
+\DoxyCodeLine{00058\ \ \ \ \ sf::Sprite\ sprite;}
+\DoxyCodeLine{00059\ \ \ \ \ sf::Texture\ texture;}
+\DoxyCodeLine{00060\ \};}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structHighScoreDisplay}{HighScoreDisplay}}\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ sf::Text\ title;}
+\DoxyCodeLine{00064\ \ \ \ \ sf::Text\ name1;}
+\DoxyCodeLine{00065\ \ \ \ \ sf::Text\ score1;}
+\DoxyCodeLine{00066\ \ \ \ \ sf::Text\ name2;}
+\DoxyCodeLine{00067\ \ \ \ \ sf::Text\ score2;}
+\DoxyCodeLine{00068\ \ \ \ \ sf::Text\ name3;}
+\DoxyCodeLine{00069\ \ \ \ \ sf::Text\ score3;}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{structTrophy}{Trophy}}\ trophy1;}
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{structTrophy}{Trophy}}\ trophy2;}
+\DoxyCodeLine{00072\ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structChatEntity}{ChatEntity}}\ \{}
+\DoxyCodeLine{00075\ \ \ \ \ sf::RectangleShape\ \_rectangle;}
+\DoxyCodeLine{00076\ \ \ \ \ std::vector<std::string>\ \_chat;}
+\DoxyCodeLine{00077\ \ \ \ \ std::vector<sf::Text>\ \_chatText;}
+\DoxyCodeLine{00078\ \ \ \ \ sf::Text\ \_chatTitle;}
+\DoxyCodeLine{00079\ \ \ \ \ sf::RectangleShape\ \_inputBox;}
+\DoxyCodeLine{00080\ \ \ \ \ std::string\ \_input;}
+\DoxyCodeLine{00081\ \ \ \ \ sf::Text\ \_chatTextInput;}
+\DoxyCodeLine{00082\ \ \ \ \ sf::Clock\ \_clock;}
+\DoxyCodeLine{00083\ \};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classClient}{Client}}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keyword}{typedef}\ int\ (\mbox{\hyperlink{classClient}{Client}}::*messageParserHandle)(std::vector<char>\&);}
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classClient}{Client}}(std::string\ ip,\ \textcolor{keywordtype}{int}\ port,\ std::string\ \_username\ =\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classClient}{\string~Client}}();}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ run();}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_to\_server(\textcolor{keyword}{const}\ T\&\ structure);}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ template\ <typename\ T>}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ void\ send\_datas(const\ T\&\ structure);}}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ template\ <typename\ T>}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ void\ receive\_datas(T\&\ structure);}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ receive\_datas();}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ displayTexts();}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ addLevel()\ \{\ \_level++;\ \}}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ addScore()\ \{\ \_score++;\ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ decreaseLives()\ \{\ \_lives-\/-\/;\ \}}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ increaseLives()\ \{\ \_lives++;\ \}}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setLevel(\textcolor{keywordtype}{int}\ level)\ \{\ \_level\ =\ level;\ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPendingMessages()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ manageEvent();}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ receive();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_position\_snapshot\_update(std::vector<char>\ \&);}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::vector<char>\ recieve\_raw\_data\_from\_client();}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_high\_score(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_login\_response(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_drawable\_snapshot\_update(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_animated\_drawable\_snapshot(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_animated\_drawable\_state\_update(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_friends\_reponse(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_add\_friends\_reponse(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_remove\_friends\_reponse(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_chat\_event(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ createEnemy(std::pair<float,\ float>\ pos,\ std::pair<float,\ float>\ vel,\ \textcolor{keyword}{const}\ std::string\ \&path\_to\_texture,\ std::pair<float,\ float>\ scale,\ \textcolor{keywordtype}{int}\ health,\ \textcolor{keywordtype}{int}\ damage);}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ displayScoreBoardMenu();}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ handleInput(sf::Event\ \&event);}
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ network}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structEventMessage}{EventMessage}}\ \_send\_structure;}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ asio::io\_context\ \_io\_context;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ udp::socket\ \_socket;}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ udp::endpoint\ \_server\_endpoint;}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ std::string\ \_username;}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ network}}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSnapshotPosition}{SnapshotPosition}}\ \_recieve\_structure;}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ std::array<char,\ 1024>\ \_receiveBuffer;}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ std::vector<sf::Event::EventType>\ eventsToPrint\ =\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::Closed,}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::Resized,}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::LostFocus,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::GainedFocus,}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TextEntered,}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::KeyPressed,}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::KeyReleased,}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseWheelMoved,}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseWheelScrolled,}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseButtonPressed,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseButtonReleased,}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//sf::Event::MouseMoved,}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sf::Event::MouseEntered,}}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sf::Event::MouseLeft,}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickButtonPressed,}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickButtonReleased,}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickMoved,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickConnected,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickDisconnected,}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchBegan,}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchMoved,}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchEnded,}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::SensorChanged}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ ECS}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classregistry}{registry}}\ \_ecs;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ entity\_t\ \_player;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ entity\_t\ \_background;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ entity\_t\ \_enemy;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ entity\_t\ \_btn\_play;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ SFML}}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ sf::RenderWindow\ \_window;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ sf::Event\ \_event;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ sf::Font\ \_font;}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ sf::Music\ \_music;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ gameplay}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_score;}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_lives;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_level;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ sf::Text\ \_score\_text;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ sf::Text\ \_lives\_text;}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ sf::Text\ \_level\_text;}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ Stage\ \_stage;}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ content\ for\ enemys}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ std::queue<entity\_t>\ \_enemiesQueue;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ std::map<int16\_t,\ messageParserHandle>\ \_messageParser\ =\ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \{4,\ \&Client::recieve\_position\_snapshot\_update\},}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \{6,\ \&Client::recieve\_drawable\_snapshot\_update\},}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \{7,\ \&Client::recieve\_high\_score\},}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \{8,\ \&Client::recieve\_login\_response\},}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \{9,\ \&Client::receive\_friends\_reponse\},}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \{10,\ \&Client::receive\_add\_friends\_reponse\},}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \{11,\ \&Client::receive\_remove\_friends\_reponse\},}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \{12,\ \&Client::receive\_chat\_event\},}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \{13,\ \&Client::recieve\_animated\_drawable\_snapshot\},}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \{14,\ \&Client::recieve\_animated\_drawable\_state\_update\}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ sf::Vector2i\ \_mouse\_position;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ sf::Text\ \_mouse\_position\_text;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structHighScoreDisplay}{HighScoreDisplay}}\ \_highScoreDisplay;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ inGameState\ \_state;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_packet\_id\ =\ 0;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ std::vector<std::string>\ friendLists;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structChatEntity}{ChatEntity}}\ \_chatEntity;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ std::mutex\ mtx;}
+\DoxyCodeLine{00200\ \};}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CLIENT\_HPP}}
+
+\end{DoxyCode}
