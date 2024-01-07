@@ -122,16 +122,3 @@ jobs:
           asset_path: ./assets.zip
           asset_name: assets-v${{ github.run_number }}.zip
           asset_content_type: application/zip
-
-
-      - name: Delete Source Code Archives
-        run: |
-          ASSET_ID=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/releases/${{ github.run_number }}/assets | jq -r '.[] | select(.name == "Source code (zip)" or .name == "Source code (tar.gz)") | .id')
-
-          if [ -n "$ASSET_ID" ]; then
-            for id in $ASSET_ID; do
-              curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/assets/$id"
-            done
-          fi
