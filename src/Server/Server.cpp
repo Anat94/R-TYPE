@@ -552,25 +552,25 @@ void Server::sendPositionpacketsPeriodically() {
                     send_scale_to_all_players(i);
             }
         }
-        // auto tmp2 = _ecs.get_components<component::Position>();
-        // for (size_t i = 0; i < entitiesAlive.size(); ++i) {
-        //     if (!tmp2[entitiesAlive[i]].has_value()) {
-        //         send_death_event_to_all_players(entitiesAlive[i]);
-        //         entity_t ent = entitiesAlive[i];
-        //         entitiesAlive.erase(
-        //         std::remove_if(entitiesAlive.begin(), entitiesAlive.end(), [ent](const entity_t& entity) {
-        //                 return entity == ent;
-        //             }
-        //             ),
-        //             entitiesAlive.end()
-        //         );
-        //     }
-        // }
-        // for (size_t i = 0; i < tmp2.size(); ++i) {
-        //     if (tmp2[i].has_value() && std::find(entitiesAlive.begin(), entitiesAlive.end(), i) == entitiesAlive.end()) {
-        //         entitiesAlive.push_back(i);
-        //     }
-        // }
+        auto tmp2 = _ecs.get_components<component::Position>();
+        for (size_t i = 0; i < entitiesAlive.size(); ++i) {
+            if (!tmp2[entitiesAlive[i]].has_value()) {
+                send_death_event_to_all_players(entitiesAlive[i]);
+                entity_t ent = entitiesAlive[i];
+                entitiesAlive.erase(
+                std::remove_if(entitiesAlive.begin(), entitiesAlive.end(), [ent](const entity_t& entity) {
+                        return entity == ent;
+                    }
+                    ),
+                    entitiesAlive.end()
+                );
+            }
+        }
+        for (size_t i = 0; i < tmp2.size(); ++i) {
+            if (tmp2[i].has_value() && std::find(entitiesAlive.begin(), entitiesAlive.end(), i) == entitiesAlive.end()) {
+                entitiesAlive.push_back(i);
+            }
+        }
         // std::cout << "FINISHED LOOP 2nd THREAD\n";
         send_position_snapshots_for_all_players();
         ++counter;
