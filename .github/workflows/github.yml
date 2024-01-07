@@ -36,7 +36,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux-executables
-          path: build/linux_executables
+          path: |
+            client
+            server
 
   windows:
     runs-on: windows-latest
@@ -53,7 +55,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: windows-executables
-          path: build/windows_executables
+          path: |
+            Debug/client.exe
+            Debug/server.exe
   
   build:
     name: Create Release
