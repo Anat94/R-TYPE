@@ -67,24 +67,24 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: linux-executables
-          path: path/to/save/linux/executables
+          path: build/linux_executables
 
       - name: Download Windows Executables
         uses: actions/download-artifact@v2
         with:
           name: windows-executables
-          path: path/to/save/windows/executables
+          path: build/windows_executables
 
       - name: Move Linux executables
         run: |
-          ls -a path/to/save/linux/executables # Verify the presence of the executables
+          ls -a build/linux_executables # Verify the presence of the executables
           mkdir -p linux
-          cp path/to/save/linux/executables/* ./linux/
+          cp build/linux_executables/* ./linux/
       
       - name: Move Windows executables
         run: |
           mkdir -p windows
-          cp path/to/save/windows/executables/* ./windows/
+          cp build/windows_executables/* ./windows/
       
       - name: Archive the assets folder
         run: |
