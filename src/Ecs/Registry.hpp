@@ -189,9 +189,11 @@ class registry {
             while (!can_run_updates) continue;
             can_run_updates = false;
             mtx.lock();
+            // std::cout << "handling systems\n";
             for (auto& system : systems) {
                 system(*this);
             }
+            // std::cout << "finished handling systems\n";
             mtx.unlock();
             can_run_updates = true;
         }

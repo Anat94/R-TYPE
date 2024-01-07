@@ -109,7 +109,9 @@ class Client {
         int manageEvent();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
+        int recieve_scale_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
+        int recieve_death_event(std::vector<char> &server_msg);
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
@@ -188,7 +190,9 @@ class Client {
             {11, &Client::receive_remove_friends_reponse},
             {12, &Client::receive_chat_event},
             {13, &Client::recieve_animated_drawable_snapshot},
-            {14, &Client::recieve_animated_drawable_state_update}
+            {14, &Client::recieve_animated_drawable_state_update},
+            {15, &Client::recieve_scale_snapshot_update},
+            {16, &Client::recieve_death_event}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

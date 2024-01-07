@@ -21,9 +21,7 @@ class CollisionSystem : public ISystems {
                 for (auto &&[second_ent_idx, h2, p2] : zipper<sparse_array<component::Hitbox>, sparse_array<component::Position>>(dra, pos)) {
                     if (first_ent_idx == second_ent_idx || !h2.has_value() || !p2.has_value() || *h1 == *h2)
                         continue;
-                    auto temp_h1 = h1->update(*p1);
-                    auto temp_h2 = h2->update(*p2);
-                    if (temp_h1.isTouching(temp_h2) || temp_h2.isTouching(temp_h1)) {
+                    if (h1->isTouching(*p1, *p2, *h2) || h2->isTouching(*p2, *p1, *h1)) {
                         CollisionEvent* new_event = new CollisionEvent(first_ent_idx + 1, second_ent_idx);
                         if (_listener->hasEvent(new_event)) {
                             second_ent_idx++;

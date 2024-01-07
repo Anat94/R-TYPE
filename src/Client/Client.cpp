@@ -66,13 +66,31 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
 
 }
 
+int Client::recieve_death_event(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(DeathEventMessage))
+        return -1;
+    DeathEventMessage *snapshot = reinterpret_cast<DeathEventMessage *>(server_msg.data());
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    std::cout << "recieved death event !!!!\n";
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        listener.addEvent(new DeathEvent(real_entity, -1));
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
 int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
         return -1;
     SnapshotPosition *snapshot = reinterpret_cast<SnapshotPosition *>(server_msg.data());
     sparse_array<component::Position> &pos = _ecs.get_components<component::Position>();
-    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -104,13 +122,39 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Scale(8.5f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
-            _ecs.add_component(new_player, component::Hitbox(component::Position(snapshot->data.x,  snapshot->data.y), component::Position(snapshot->data.x + 32,  snapshot->data.y + 32)));
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
             // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(ScaleSnapshot))
+        return -1;
+    ScaleSnapshot *snapshot = reinterpret_cast<ScaleSnapshot *>(server_msg.data());
+    sparse_array<component::Scale> &scale = _ecs.get_components<component::Scale>();
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        if (real_entity > 0 && scale[real_entity].has_value()) {
+            while (!_ecs.can_run_updates) continue;
+            _ecs.can_run_updates = false;
+            _ecs.mtx.lock();
+            scale[real_entity]->_scale.first = snapshot->data._scale.first;
+            scale[real_entity]->_scale.second = snapshot->data._scale.second;
+            _ecs.mtx.unlock();
+            _ecs.can_run_updates = true;
+        } else {
+            _ecs.add_component(real_entity, component::Scale(snapshot->data));
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -203,7 +247,7 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     DrawableSnapshot *snapshot = reinterpret_cast<DrawableSnapshot *>(server_msg.data());
     // std::cout << snapshot->data << std::endl;
     sparse_array<component::Drawable> &drawables = _ecs.get_components<component::Drawable>();
-    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -233,7 +277,7 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
         return -1;
     AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
     sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
-    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -248,7 +292,7 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
         } else {
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
             auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
-            for (int i = 0; i < snapshot->_anims.size(); i++) {
+            for (size_t i = 0; i < snapshot->_anims.size(); i++) {
                 if (snapshot->_anims[i].first[0] == '\0')
                     continue;
                 tmp->addAnimation(std::string(snapshot->_anims[i].first), snapshot->_anims[i].second.second, snapshot->_anims[i].second.first);
@@ -563,7 +607,7 @@ int Client::run()
                 _window.draw(_chatEntity._chatTitle);
                 _window.draw(_chatEntity._inputBox);
                 _window.draw(_chatEntity._chatTextInput);
-                for (int i = 0; i < _chatEntity._chat.size(); i++) {
+                for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
                     _window.draw(_chatEntity._chatText[i]);
                 }
                 if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
