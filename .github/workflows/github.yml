@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux-executables
-          path: path/to/linux/executables
+          path: build/linux_executables
 
   windows:
     runs-on: windows-latest
@@ -48,6 +48,12 @@ jobs:
 
       - name: WINOWS -  Launch tests
         run: cmake --build . --target my_tests
+      
+      - name: Archive Windows Executables
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-executables
+          path: build/windows_executables
   
   build:
     name: Create Release
@@ -57,18 +63,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Download Linux Executables
+        uses: actions/download-artifact@v2
+        with:
+          name: linux-executables
+          path: path/to/save/linux/executables
+
+      - name: Download Windows Executables
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-executables
+          path: path/to/save/windows/executables
+
       - name: Move Linux executables
         run: |
-          ls -a
+          ls -a path/to/save/linux/executables # Verify the presence of the executables
           mkdir -p linux
-          cp client ./linux/
-          cp server ./linux/
+          cp path/to/save/linux/executables/* ./linux/
       
       - name: Move Windows executables
         run: |
           mkdir -p windows
-          cp Debug/client ./windows/
-          cp Debug/server ./windows/
+          cp path/to/save/windows/executables/* ./windows/
       
       - name: Archive the assets folder
         run: |
