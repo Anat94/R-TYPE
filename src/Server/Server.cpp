@@ -13,16 +13,16 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
     std::string prevState = animatedDrawable.value()._state;
     if (event == KeyIds["Up"]) {
-        animatedDrawable.value()._state = "move up";
-        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
+        // animatedDrawable.value()._state = "move up";
+        // send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, -30};
     }
     if (event == KeyIds["Down"]) {
-        animatedDrawable.value()._state = "move down";
-        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
+        // animatedDrawable.value()._state = "move down";
+        // send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, 30};
     }
-    animatedDrawable.value()._state = "idle";
+    // animatedDrawable.value()._state = "idle";
     if (prevState != animatedDrawable.value()._state)
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
     if (event == KeyIds["Left"])
@@ -33,7 +33,6 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
         _listener.addEvent(new ShootEvent(entity, -1));
     return {0, 0};
 }
-
 
 Server::Server(asio::io_context& service, int port, registry& ecs, EventListener& listener)
     : _service(service),
@@ -87,18 +86,18 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     can_send = false;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
     can_send = true;
-    _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
     _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+    _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 8.5, 14 * 8.5)));
     auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
     tmp->addAnimation("idle", {2, 2}, false);
     tmp->addAnimation("move up", {2, 4}, false);
     tmp->addAnimation("move down", {2, 0}, false);
     tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
-    _ecs.add_component(new_player, component::Scale(0.1));
+    _ecs.add_component(new_player, component::Scale(8.5f));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
     _ecs.add_component(new_player, component::Damage(20));
@@ -109,7 +108,8 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     can_send = false;
     _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
     can_send = true;
-    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-0.0003f, 0.0f));
+    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-8.0f, 0.0f));
+    _ecs.add_component<component::Scale>(enemy, component::Scale(6.0f));
     _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
 
     auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
@@ -121,8 +121,34 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     send_animated_drawable_snapshot_to_all_players(new_player);
     send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
+    send_all_scale_to_player(new_player);
+    send_scale_to_all_players(new_player);
     _ecs.mtx.unlock();
     return new_player;
+}
+
+void Server::send_all_scale_to_player(entity_t entity)
+{
+    auto scale = _ecs.get_components<component::Scale>();
+
+    for (int i = 0; i < scale.size(); ++i) {
+        if (!scale[i].has_value())
+            continue;
+        ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
+        _packet_id++;
+        _scale_packets.push_back(to_send);
+        send_data_to_client_by_entity(to_send, entity);
+    }
+}
+
+void Server::send_scale_to_all_players(entity_t entity)
+{
+    auto scale = _ecs.get_components<component::Scale>()[entity];
+
+    if (!scale.has_value())
+        return;
+    ScaleSnapshot to_send(15, entity, *scale, 0);
+    send_data_to_all_clients(to_send, _scale_packets);
 }
 
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
@@ -157,15 +183,25 @@ std::vector<char> Server::recieve_raw_data_from_client()
 void Server::send_position_snapshots_for_all_players()
 {
     while (!can_send) continue;
-    sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
+    while (!_ecs.can_run_updates) continue;
+    // std::cout << "SENDING TO ALL PLAYERS\n";
+    _ecs.can_run_updates = false;
+    _ecs.mtx.lock();
+    std::vector<SnapshotPosition> to_send = {};
+    sparse_array<component::Position> &pos = _ecs.get_components<component::Position>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
             // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
-            SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0);
+            to_send.push_back(SnapshotPosition(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0));
 
-            send_data_to_all_clients<SnapshotPosition>(snap_p, _position_packets);
         }
     }
+    for (SnapshotPosition &pos: to_send) {
+        send_data_to_all_clients<SnapshotPosition>(pos, _position_packets);
+    }
+    _ecs.mtx.unlock();
+    _ecs.can_run_updates = true;
+    // std::cout << "DONE SENDING TO ALL PLAYERS\n";
 }
 
 void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state)
@@ -174,7 +210,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
         std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
         return;
     }
-    std::cout << "sending update\n";
+    // std::cout << "sending update\n";
     AnimatedStateUpdateMessage to_send(14, entity, state, 0);
     send_data_to_all_clients(to_send, _animated_drawable_update_packets);
 }
@@ -196,6 +232,7 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity)
             animatedDrawable.value()._state,
             0
         );
+        while (!can_send) continue;
         send_data_to_all_clients(snap_ad, _animated_drawable_packets);
     }
 }
@@ -233,11 +270,18 @@ void Server::send_entity_drawable_to_all_players(entity_t entity)
     send_data_to_all_clients<DrawableSnapshot>(to_send, _drawable_packets);
 }
 
+void Server::send_death_event_to_all_players(entity_t entity)
+{
+    DeathEventMessage evt(16, entity, 0);
+    send_data_to_all_clients(evt, _death_packets);
+}
+
 void Server::recieve_from_client()
 {
     std::vector<char> client_msg = recieve_raw_data_from_client();
+    // std::cout << "STARTING RECIEVING\n";
     if (client_msg.size() < sizeof(BaseMessage))
-        return;
+        recieve_from_client();
     entity_t player_entity = get_player_entity_from_connection_address(_remote_endpoint);
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(client_msg.data());
 
@@ -248,6 +292,7 @@ void Server::recieve_from_client()
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
+    // std::cout << "FINISHED RECIEVING\n";
     recieve_from_client();
 }
 
@@ -298,6 +343,20 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _chat_packets.end()
     );
+    _scale_packets.erase(
+        std::remove_if(_scale_packets.begin(), _scale_packets.end(), [id](const ScaleSnapshot& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _scale_packets.end()
+    );
+    _death_packets.erase(
+        std::remove_if(_death_packets.begin(), _death_packets.end(), [id](const DeathEventMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _death_packets.end()
+    );
     
     return 0;
 }
@@ -307,10 +366,16 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
-    std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-    std::cout << "event recieved: " << event->event << std::endl;
-    _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
-    _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
+    // std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
+    // std::cout << "event recieved: " << event->event << std::endl;
+    while (!_ecs.can_run_updates) continue;
+    _ecs.can_run_updates = false;
+    std::pair<int, int> to_move = get_position_change_for_event(player_entity, event->event);
+    if (to_move.first != 0 || to_move.second != 0) {
+        _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+        _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
+    }
+    _ecs.can_run_updates = true;
     return 0;
 }
 
@@ -403,6 +468,9 @@ Server::~Server() {
 
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send) {
+    // std::cout << "GONNA SEND TO ALL\n";
+    while (!can_send) continue;
+    can_send = false;
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value()) {
@@ -413,10 +481,14 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
+    can_send = true;
+    // std::cout << "FINISHED SENDING TO ALL\n";
 }
 
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure) {
+    while (!can_send) continue;
+    can_send = false;
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value() && all_endpoints[i].value()._endpoint != _remote_endpoint) {
@@ -424,6 +496,7 @@ void Server::send_data_to_all_clients_except_me(T& structure) {
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
+    can_send = true;
 }
 
 template <typename T>
@@ -439,19 +512,66 @@ void Server::resend_packets(std::vector<T> &packets) {
 
 void Server::sendPositionpacketsPeriodically() {
     int counter = 0;
+    std::vector<entity_t> animatedDrawableRegistered = {};
+    std::vector<entity_t> entitiesAlive = {};
+    std::vector<entity_t> scalesRegistered = {};
     while (true) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::lock_guard<std::mutex> lock(mtx);
-        if (counter >= 20) {
+        if (counter >= 10) {
+            while (!can_send) continue;
             can_mod = false;
+            // std::cout << "resending packets\n";
             resend_packets<SnapshotPosition>(_position_packets);
             resend_packets<DrawableSnapshot>(_drawable_packets);
             resend_packets<AnimatedDrawableSnapshot>(_animated_drawable_packets);
             resend_packets<AnimatedStateUpdateMessage>(_animated_drawable_update_packets);
             resend_packets<HighScoreMessage>(_highscore_packets);
+            resend_packets<ScaleSnapshot>(_scale_packets);
+            resend_packets<DeathEventMessage>(_death_packets);
+            // std::cout << "finished resending packets\n";
             can_mod = true;
             counter = 0;
         }
+        // std::cout << "STARTED LOOP 2nd THREAD\n";
+        auto tmp = _ecs.get_components<component::AnimatedDrawable>();
+        for (size_t i = 0; i < tmp.size(); ++i) {
+            if (tmp[i].has_value() && std::find(animatedDrawableRegistered.begin(), animatedDrawableRegistered.end(), i) == animatedDrawableRegistered.end()) {
+                auto &endpoint = _ecs.get_components<component::Endpoint>()[i];
+                animatedDrawableRegistered.push_back(i);
+                if (!endpoint.has_value())
+                    send_animated_drawable_snapshot_to_all_players(i);
+            }
+        }
+        auto tmp1 = _ecs.get_components<component::Scale>();
+        for (size_t i = 0; i < tmp1.size(); ++i) {
+            if (tmp1[i].has_value() && std::find(scalesRegistered.begin(), scalesRegistered.end(), i) == scalesRegistered.end()) {
+                auto &endpoint = _ecs.get_components<component::Endpoint>()[i];
+                scalesRegistered.push_back(i);
+                if (!endpoint.has_value())
+                    send_scale_to_all_players(i);
+            }
+        }
+        auto tmp2 = _ecs.get_components<component::Position>();
+        for (size_t i = 0; i < entitiesAlive.size(); ++i) {
+            if (!tmp2[entitiesAlive[i]].has_value()) {
+                send_death_event_to_all_players(entitiesAlive[i]);
+                entity_t ent = entitiesAlive[i];
+                entitiesAlive.erase(
+                std::remove_if(entitiesAlive.begin(), entitiesAlive.end(), [ent](const entity_t& entity) {
+                        return entity == ent;
+                    }
+                    ),
+                    entitiesAlive.end()
+                );
+            }
+        }
+        for (size_t i = 0; i < tmp2.size(); ++i) {
+            if (tmp2[i].has_value() && std::find(entitiesAlive.begin(), entitiesAlive.end(), i) == entitiesAlive.end()) {
+                entitiesAlive.push_back(i);
+            }
+        }
+        // std::cout << "FINISHED LOOP 2nd THREAD\n";
         send_position_snapshots_for_all_players();
         ++counter;
     }

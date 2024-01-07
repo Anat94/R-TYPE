@@ -6,34 +6,35 @@
 */
 
 #ifndef CLIENT_HPP
-#define CLIENT_HPP
-//#pragma warning(disable: 4668)
-//#pragma warning(disable: 4626)
-//#pragma warning(disable: 4625)
-//#pragma warning(disable: 4820)
-//#pragma warning(disable: 5031)
-//#pragma warning(disable: 4365)
-//#pragma warning(disable: 5027)
-//#pragma warning(disable: 4514)
-//#pragma warning(disable: 4464)
-//#pragma warning(disable: 5026)
-//#pragma warning(disable: 4457)
-//#pragma warning(disable: 5262)
-//#pragma warning(disable: 5204)
-//#pragma warning(disable: 4355)
-//#pragma warning(disable: 5220)
-//#pragma warning(disable: 5039)
-#include <iostream>
-#include <asio.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <vector>
-#include <queue>
-#include <mutex>
-#include "../Ecs/Events.hpp"
-#include "../Errors.hpp"
-#include "../Network.hpp"
+    #define CLIENT_HPP
+    //#pragma warning(disable: 4668)
+    //#pragma warning(disable: 4626)
+    //#pragma warning(disable: 4625)
+    //#pragma warning(disable: 4820)
+    //#pragma warning(disable: 5031)
+    //#pragma warning(disable: 4365)
+    //#pragma warning(disable: 5027)
+    //#pragma warning(disable: 4514)
+    //#pragma warning(disable: 4464)
+    //#pragma warning(disable: 5026)
+    //#pragma warning(disable: 4457)
+    //#pragma warning(disable: 5262)
+    //#pragma warning(disable: 5204)
+    //#pragma warning(disable: 4355)
+    //#pragma warning(disable: 5220)
+    //#pragma warning(disable: 5039)
+    #define MAX_POSITION_MOVE_THRESHOLD 100
+    #include <iostream>
+    #include <asio.hpp>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
+    #include <SFML/System.hpp>
+    #include <vector>
+    #include <queue>
+    #include <mutex>
+    #include "../Ecs/Events.hpp"
+    #include "../Errors.hpp"
+    #include "../Network.hpp"
 
 struct data_struct {
     int id;
@@ -108,7 +109,9 @@ class Client {
         int manageEvent();
         void receive();
         int recieve_position_snapshot_update(std::vector<char> &);
+        int recieve_scale_snapshot_update(std::vector<char> &);
         std::vector<char> recieve_raw_data_from_client();
+        int recieve_death_event(std::vector<char> &server_msg);
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
@@ -187,7 +190,9 @@ class Client {
             {11, &Client::receive_remove_friends_reponse},
             {12, &Client::receive_chat_event},
             {13, &Client::recieve_animated_drawable_snapshot},
-            {14, &Client::recieve_animated_drawable_state_update}
+            {14, &Client::recieve_animated_drawable_state_update},
+            {15, &Client::recieve_scale_snapshot_update},
+            {16, &Client::recieve_death_event}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;

@@ -24,6 +24,7 @@
 #include <asio.hpp>
 #include "Server.hpp"
 #include "../Errors.hpp"
+#include "../Ecs/Systems/KillWhenOutOfBounds.hpp"
 
 using asio::ip::udp;
 
@@ -103,11 +104,13 @@ int main(int argc, char *argv[]) {
     PositionSystem *pos_sys = new PositionSystem();
     ecs.add_system<component::Position, component::Velocity>(*pos_sys);
     // ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
-    ResetOnMoveSystem *rom_sys = new ResetOnMoveSystem();
-    ecs.add_system<component::Velocity, component::ResetOnMove>(*rom_sys);
+    // ResetOnMoveSystem *rom_sys = new ResetOnMoveSystem();
+    // ecs.add_system<component::Velocity, component::ResetOnMove>(*rom_sys);
     // ecs.add_system<component::Drawable, component::Position>(collision_system);
-    CollisionSystem *col_sys = new CollisionSystem(&listener);
-    ecs.add_system<component::Hitbox, component::Position>(*col_sys);
+    // CollisionSystem *col_sys = new CollisionSystem(&listener);
+    // ecs.add_system<component::Hitbox, component::Position>(*col_sys);
+    KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
+    ecs.add_system<component::Position, component::Velocity>(*kill_sys);
     // ecs.add_system<component::Drawable, component::Scale>(scale_system);
     // ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 

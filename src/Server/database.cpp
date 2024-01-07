@@ -150,6 +150,7 @@ bool Server::signUp(std::string name, std::string password) {
         fprintf(stdout, "Records created successfully\n");
         return true;
     }
+    return false;
 }
 
 static int callbackSignIn(void *data, int argc, char** argv, char** azColName) {
