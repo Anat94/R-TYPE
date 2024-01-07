@@ -99,6 +99,8 @@ class Client {
         int recieve_high_score(std::vector<char> &server_msg);
         int recieve_login_response(std::vector<char> &server_msg);
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
+        int recieve_animated_drawable_snapshot(std::vector<char> &server_msg);
+        int recieve_animated_drawable_state_update(std::vector<char> &server_msg);
         int receive_friends_reponse(std::vector<char> &server_msg);
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
@@ -170,7 +172,9 @@ class Client {
             {9, &Client::receive_friends_reponse},
             {10, &Client::receive_add_friends_reponse},
             {11, &Client::receive_remove_friends_reponse},
-            {12, &Client::receive_chat_event}
+            {12, &Client::receive_chat_event},
+            {13, &Client::recieve_animated_drawable_snapshot},
+            {14, &Client::recieve_animated_drawable_state_update}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
@@ -178,6 +182,7 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
+        std::mutex mtx;
 };
 
 #endif // CLIENT_HPP

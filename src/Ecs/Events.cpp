@@ -58,6 +58,23 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listener)
+{
+    try {
+        auto &pos = r.get_components<component::Position>()[_ents.first];
+
+        if (pos->x < _windowBounds[0])
+            pos->x = _windowBounds[0];
+        if (pos->x > _windowBounds[1])
+            pos->x = _windowBounds[1];
+        if (pos->y < _windowBounds[2])
+            pos->y = _windowBounds[2];
+        if (pos->y > _windowBounds[3])
+            pos->y = _windowBounds[3];
+    } catch (const std::exception &e) {
+        e.what();
+    }
+}
 
 void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 {

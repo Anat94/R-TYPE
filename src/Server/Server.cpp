@@ -8,15 +8,23 @@
 #include "Server.hpp"
 #include "KeyEventMapping.hpp"
 
-bool can_read = true;
-
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
-    std::cout << "CODE: " << event << " !!!!\n";
-    if (event == KeyIds["Up"])
+    auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
+    std::string prevState = animatedDrawable.value()._state;
+    if (event == KeyIds["Up"]) {
+        animatedDrawable.value()._state = "move up";
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, -30};
-    if (event == KeyIds["Down"])
+    }
+    if (event == KeyIds["Down"]) {
+        animatedDrawable.value()._state = "move down";
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
         return {0, 30};
+    }
+    animatedDrawable.value()._state = "idle";
+    if (prevState != animatedDrawable.value()._state)
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -75,23 +83,45 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
+    _ecs.mtx.lock();
+    can_send = false;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
+    can_send = true;
     _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
-    _ecs.add_component(new_player, component::Drawable("temp/assets/textures/sprites/r-typesheet42.gif"));
+    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+    auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
+    tmp->addAnimation("idle", {2, 2}, false);
+    tmp->addAnimation("move up", {2, 4}, false);
+    tmp->addAnimation("move down", {2, 0}, false);
+    tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Scale(0.1));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
+
+    entity_t enemy = _ecs.spawn_entity();
+
+    can_send = false;
+    _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
+    can_send = true;
+    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-0.0003f, 0.0f));
+    _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
+
+    auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
+    tmp1->addAnimation("idle", {0, 7}, true);
+    tmp1->_state = "idle";
+
     std::cout << "New player connected !" << std::endl;
-    auto all_players = _ecs.get_components<component::Endpoint>();
-    send_entity_drawable_to_all_players(new_player);
+    send_animated_drawable_snapshots_for_specific_player(new_player);
+    send_animated_drawable_snapshot_to_all_players(new_player);
     send_all_entity_drawables_to_specific_player(new_player);
     send_highscore_to_specific_client(new_player);
+    _ecs.mtx.unlock();
     return new_player;
 }
 
@@ -126,14 +156,71 @@ std::vector<char> Server::recieve_raw_data_from_client()
 
 void Server::send_position_snapshots_for_all_players()
 {
+    while (!can_send) continue;
     sparse_array<component::Position> pos = _ecs.get_components<component::Position>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
             // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
-            SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), _packet_id);
-            _position_packets.push_back(snap_p);
-            _packet_id += 1;
-            send_data_to_all_clients<SnapshotPosition>(snap_p);
+            SnapshotPosition snap_p(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0);
+
+            send_data_to_all_clients<SnapshotPosition>(snap_p, _position_packets);
+        }
+    }
+}
+
+void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state)
+{
+    if (state.size() > 15) {
+        std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
+        return;
+    }
+    std::cout << "sending update\n";
+    AnimatedStateUpdateMessage to_send(14, entity, state, 0);
+    send_data_to_all_clients(to_send, _animated_drawable_update_packets);
+}
+
+void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity)
+{
+    auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
+    if (animatedDrawable.has_value()) {
+        AnimatedDrawableSnapshot snap_ad(
+            13,
+            entity,
+            animatedDrawable.value()._path,
+            animatedDrawable.value()._nbSprites,
+            animatedDrawable.value()._spriteSize,
+            animatedDrawable.value()._gaps,
+            animatedDrawable.value()._firstOffset,
+            animatedDrawable.value()._currentIdx,
+            animatedDrawable.value()._anims,
+            animatedDrawable.value()._state,
+            0
+        );
+        send_data_to_all_clients(snap_ad, _animated_drawable_packets);
+    }
+}
+
+void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity)
+{
+    sparse_array<component::AnimatedDrawable> animatedDrawables = _ecs.get_components<component::AnimatedDrawable>();
+    for (size_t i = 0; i < animatedDrawables.size(); i++) {
+        if (animatedDrawables[i].has_value()) {
+            AnimatedDrawableSnapshot snap_ad(
+                13,
+                i,
+                animatedDrawables[i].value()._path,
+                animatedDrawables[i].value()._nbSprites,
+                animatedDrawables[i].value()._spriteSize,
+                animatedDrawables[i].value()._gaps,
+                animatedDrawables[i].value()._firstOffset,
+                animatedDrawables[i].value()._currentIdx,
+                animatedDrawables[i].value()._anims,
+                animatedDrawables[i].value()._state,
+                _packet_id
+            );
+            _packet_id++;
+            _animated_drawable_packets.push_back(snap_ad);
+            send_data_to_client_by_entity(snap_ad, entity);
         }
     }
 }
@@ -142,10 +229,8 @@ void Server::send_entity_drawable_to_all_players(entity_t entity)
 {
     sparse_array<component::Drawable> drawables = _ecs.get_components<component::Drawable>();
     component::Drawable drawable = drawables[entity].value();
-    DrawableSnapshot to_send(6, entity, drawable._path, _packet_id);
-    _packet_id += 1;
-    _drawable_packets.push_back(to_send);
-    send_data_to_all_clients<DrawableSnapshot>(to_send);
+    DrawableSnapshot to_send(6, entity, drawable._path, 0);
+    send_data_to_all_clients<DrawableSnapshot>(to_send, _drawable_packets);
 }
 
 void Server::recieve_from_client()
@@ -192,6 +277,20 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _highscore_packets.end()
     );
+    _animated_drawable_packets.erase(
+        std::remove_if(_animated_drawable_packets.begin(), _animated_drawable_packets.end(), [id](const AnimatedDrawableSnapshot& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _animated_drawable_packets.end()
+    );
+    _animated_drawable_update_packets.erase(
+        std::remove_if(_animated_drawable_update_packets.begin(), _animated_drawable_update_packets.end(), [id](const AnimatedStateUpdateMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _animated_drawable_update_packets.end()
+    );
     return 0;
 }
 
@@ -203,6 +302,7 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
     std::cout << "event recieved: " << event->event << std::endl;
     _listener.addEvent(new UpdatePositionEvent(player_entity, get_position_change_for_event(player_entity, event->event)));
+    _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
     return 0;
 }
 
@@ -288,18 +388,20 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     return 0;
 }
 
-
 Server::~Server() {
     if (_send_thread.joinable())
         _send_thread.join();
 }
 
 template <typename T>
-void Server::send_data_to_all_clients(T& structure) {
+void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send) {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < all_endpoints.size(); i++) {
         if (all_endpoints[i].has_value()) {
             while (!can_mod) continue;
+            structure.packet_id = _packet_id;
+            _packet_id += 1;
+            packets_to_send.push_back(structure);
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), all_endpoints[i].value()._endpoint);
         }
     }
@@ -329,13 +431,15 @@ void Server::resend_packets(std::vector<T> &packets) {
 
 void Server::sendPositionpacketsPeriodically() {
     int counter = 0;
-
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::lock_guard<std::mutex> lock(mtx);
         if (counter >= 20) {
             can_mod = false;
             resend_packets<SnapshotPosition>(_position_packets);
             resend_packets<DrawableSnapshot>(_drawable_packets);
+            resend_packets<AnimatedDrawableSnapshot>(_animated_drawable_packets);
+            resend_packets<AnimatedStateUpdateMessage>(_animated_drawable_update_packets);
             resend_packets<HighScoreMessage>(_highscore_packets);
             can_mod = true;
             counter = 0;
