@@ -108,6 +108,11 @@ class Server {
         std::vector<DrawableSnapshot> _drawable_packets;
         std::vector<AnimatedDrawableSnapshot> _animated_drawable_packets;
         std::vector<AnimatedStateUpdateMessage> _animated_drawable_update_packets;
+        std::vector<LoginResponse> _login_response_packets;
+        std::vector<AddFriendsResponse> _add_friend_response_packets;
+        std::vector<RemoveFriendsResponse> _remove_friend_response_packets;
+        std::vector<FriendsResponse> _friends_response_packets;
+        std::vector<ChatMessage> _chat_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;

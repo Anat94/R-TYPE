@@ -291,6 +291,14 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _animated_drawable_update_packets.end()
     );
+    _chat_packets.erase(
+        std::remove_if(_chat_packets.begin(), _chat_packets.end(), [id](const ChatMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _chat_packets.end()
+    );
+    
     return 0;
 }
 
@@ -384,7 +392,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     while (!can_read)
         continue;
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    send_data_to_all_clients_except_me<ChatMessage>(reponse);
+    send_data_to_all_clients<ChatMessage>(reponse, _chat_packets);
     return 0;
 }
 

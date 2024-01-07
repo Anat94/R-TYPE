@@ -51,6 +51,7 @@ enum Stage {
 enum inGameState {
     INGAME,
     INGAMEMENU,
+    CHAT
 };
 
 struct Trophy {
@@ -69,6 +70,18 @@ struct HighScoreDisplay {
     Trophy trophy1;
     Trophy trophy2;
 };
+
+struct ChatEntity {
+    sf::RectangleShape _rectangle;
+    std::vector<std::string> _chat;
+    std::vector<sf::Text> _chatText;
+    sf::Text _chatTitle;
+    sf::RectangleShape _inputBox;
+    std::string _input;
+    sf::Text _chatTextInput;
+    sf::Clock _clock;
+};
+
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
@@ -107,7 +120,7 @@ class Client {
         int receive_chat_event(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
-
+        void handleInput(sf::Event &event);
     private:
         //Content for network
         EventMessage _send_structure;
@@ -182,6 +195,7 @@ class Client {
         inGameState _state;
         int _packet_id = 0;
         std::vector<std::string> friendLists;
+        ChatEntity _chatEntity;
         std::mutex mtx;
 };
 
