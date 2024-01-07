@@ -93,13 +93,13 @@ namespace component {
         std::function<void()> _function;
         int _width;
         int _height;
-        int _scale;
+        float _scale;
         /**
          * @brief Construct a new Button object
          * 
          * @param function the function to be set
          */
-        Button(std::function<void()> function, int width, int height, int scale) : _function(function), _width(width), _height(height), _scale(scale) {}
+        Button(std::function<void()> function, int width, int height, float scale) : _function(function), _width(width), _height(height), _scale(scale) {}
     };
 
     /**
