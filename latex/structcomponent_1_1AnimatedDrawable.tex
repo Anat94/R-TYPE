@@ -1,0 +1,189 @@
+\doxysection{component\+::Animated\+Drawable Struct Reference}
+\hypertarget{structcomponent_1_1AnimatedDrawable}{}\label{structcomponent_1_1AnimatedDrawable}\index{component::AnimatedDrawable@{component::AnimatedDrawable}}
+
+
+\doxylink{structcomponent_1_1AnimatedDrawable}{Animated\+Drawable} structure to animate sprites.  
+
+
+
+
+{\ttfamily \#include $<$Components.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a56295226aa1248b5654f4fdaecd9941a}{Animated\+Drawable}} (const std\+::string \&path, std\+::pair$<$ int, int $>$ nb\+Sprites, std\+::pair$<$ int, int $>$ sprite\+Size, std\+::pair$<$ int, int $>$ gaps, std\+::pair$<$ int, int $>$ first\+Offset=\{0, 0\}, std\+::pair$<$ int, int $>$ curretn\+Idx=\{0, 0\})
+\begin{DoxyCompactList}\small\item\em Construct a new Animated \doxylink{structcomponent_1_1Drawable}{Drawable} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_abfa2f801fa6249ca633d6377982659bf}{add\+Animation}} (const std\+::string \&state, std\+::pair$<$ int, int $>$ indexes, bool reset)
+\begin{DoxyCompactList}\small\item\em Adds an animation to the animation list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a3188a3bfc925c7bbce3f07fc6db9edc5}{\+\_\+path}}
+\begin{DoxyCompactList}\small\item\em path to the spritesheet \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a974d948e252ccfe776c84c49d595bdb7}{\+\_\+nb\+Sprites}}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the amount of sprites to animate in the spritesheet \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aa106749e0fd24a305f71eb703b49df11}{\+\_\+sprite\+Size}}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the sprites to load \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aedeb7be63da0681478dfdec4bbad891c}{\+\_\+gaps}}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the gapes between sprites \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a7388fc252d3767e83fc98ac9108ab59a}{\+\_\+first\+Offset}}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the offset of the first sprite \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_afe324a8d1b69ad74be699cd198a6c619}{\+\_\+current\+Idx}}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the indexes of the animation \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_ac3261b49b0a472cbcf7292344da3d66d}{\+\_\+state}}
+\begin{DoxyCompactList}\small\item\em the current animation name \end{DoxyCompactList}\item 
+animation\+\_\+t \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a6008add7d6ee2d3a19d0d94ce1dcb623}{\+\_\+anims}}
+\begin{DoxyCompactList}\small\item\em animations of the current \doxylink{structcomponent_1_1AnimatedDrawable}{Animated\+Drawable} object \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{structcomponent_1_1AnimatedDrawable}{Animated\+Drawable} structure to animate sprites. 
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structcomponent_1_1AnimatedDrawable_a56295226aa1248b5654f4fdaecd9941a}\label{structcomponent_1_1AnimatedDrawable_a56295226aa1248b5654f4fdaecd9941a} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!AnimatedDrawable@{AnimatedDrawable}}
+\index{AnimatedDrawable@{AnimatedDrawable}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{AnimatedDrawable()}{AnimatedDrawable()}}
+{\footnotesize\ttfamily component\+::\+Animated\+Drawable\+::\+Animated\+Drawable (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{std\+::pair$<$ int, int $>$}]{nb\+Sprites,  }\item[{std\+::pair$<$ int, int $>$}]{sprite\+Size,  }\item[{std\+::pair$<$ int, int $>$}]{gaps,  }\item[{std\+::pair$<$ int, int $>$}]{first\+Offset = {\ttfamily \{0,~0\}},  }\item[{std\+::pair$<$ int, int $>$}]{curretn\+Idx = {\ttfamily \{0,~0\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Animated \doxylink{structcomponent_1_1Drawable}{Drawable} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & path to the spritesheet \\
+\hline
+{\em nb\+Sprites} & number of sprites to load (ex\+: \{10, 1\} for ten sprites on 1 line) \\
+\hline
+{\em sprite\+Size} & size of the sprites in the spritesheet (ex\+: \{34, 12\} for a 34 by 12 sprite) \\
+\hline
+{\em gaps} & size of the horizontal and vertical gaps in the spritesheet (ex\+: \{1, 3\} for a 1 pixel gap in the x-\/axis, and a 3 pixel gap in the y-\/axis) \\
+\hline
+{\em first\+Offset} & size of the first offset of the sprite (ex\+: \{101, 4\} if the sprite you want start at 101 pixels in the x-\/axis, and 4 pixels in the y-\/axis) \\
+\hline
+{\em curretn\+Idx} & current index of the texture of the sprite (ex\+: \{2, 0\} to start at the third sprite of the spritesheet) \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structcomponent_1_1AnimatedDrawable_abfa2f801fa6249ca633d6377982659bf}\label{structcomponent_1_1AnimatedDrawable_abfa2f801fa6249ca633d6377982659bf} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!addAnimation@{addAnimation}}
+\index{addAnimation@{addAnimation}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{addAnimation()}{addAnimation()}}
+{\footnotesize\ttfamily void component\+::\+Animated\+Drawable\+::add\+Animation (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{state,  }\item[{std\+::pair$<$ int, int $>$}]{indexes,  }\item[{bool}]{reset }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds an animation to the animation list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & the name of the animation / state of the entity \\
+\hline
+{\em indexes} & the sprites concerned by the animation (sorted for use) \\
+\hline
+{\em reset} & to know if the animation reset when finished or not \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structcomponent_1_1AnimatedDrawable_a6008add7d6ee2d3a19d0d94ce1dcb623}\label{structcomponent_1_1AnimatedDrawable_a6008add7d6ee2d3a19d0d94ce1dcb623} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_anims@{\_anims}}
+\index{\_anims@{\_anims}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_anims}{\_anims}}
+{\footnotesize\ttfamily animation\+\_\+t component\+::\+Animated\+Drawable\+::\+\_\+anims}
+
+
+
+animations of the current \doxylink{structcomponent_1_1AnimatedDrawable}{Animated\+Drawable} object 
+
+\Hypertarget{structcomponent_1_1AnimatedDrawable_afe324a8d1b69ad74be699cd198a6c619}\label{structcomponent_1_1AnimatedDrawable_afe324a8d1b69ad74be699cd198a6c619} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_currentIdx@{\_currentIdx}}
+\index{\_currentIdx@{\_currentIdx}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_currentIdx}{\_currentIdx}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ component\+::\+Animated\+Drawable\+::\+\_\+current\+Idx}
+
+
+
+set of numbers representing the indexes of the animation 
+
+(ex\+: \{2, 0\} to start with the 3rd sprite) ! The second argument is not used yet ! \Hypertarget{structcomponent_1_1AnimatedDrawable_a7388fc252d3767e83fc98ac9108ab59a}\label{structcomponent_1_1AnimatedDrawable_a7388fc252d3767e83fc98ac9108ab59a} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_firstOffset@{\_firstOffset}}
+\index{\_firstOffset@{\_firstOffset}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_firstOffset}{\_firstOffset}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ component\+::\+Animated\+Drawable\+::\+\_\+first\+Offset}
+
+
+
+set of numbers representing the size of the offset of the first sprite 
+
+\Hypertarget{structcomponent_1_1AnimatedDrawable_aedeb7be63da0681478dfdec4bbad891c}\label{structcomponent_1_1AnimatedDrawable_aedeb7be63da0681478dfdec4bbad891c} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_gaps@{\_gaps}}
+\index{\_gaps@{\_gaps}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_gaps}{\_gaps}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ component\+::\+Animated\+Drawable\+::\+\_\+gaps}
+
+
+
+set of numbers representing the size of the gapes between sprites 
+
+(ex\+: \{3, 1\} for a 3x1 gap) \Hypertarget{structcomponent_1_1AnimatedDrawable_a974d948e252ccfe776c84c49d595bdb7}\label{structcomponent_1_1AnimatedDrawable_a974d948e252ccfe776c84c49d595bdb7} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_nbSprites@{\_nbSprites}}
+\index{\_nbSprites@{\_nbSprites}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_nbSprites}{\_nbSprites}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ component\+::\+Animated\+Drawable\+::\+\_\+nb\+Sprites}
+
+
+
+set of numbers representing the amount of sprites to animate in the spritesheet 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em \+\_\+nb\+Sprites} & A pair of integers specifying the number of sprites in the spritesheet. It follows the format \{x, y\} where\+:
+\begin{DoxyItemize}
+\item x\+: number of sprites in a row
+\item y\+: number of rows (not used currently)
+\end{DoxyItemize}\\
+\hline
+\end{DoxyParams}
+(ex\+: \{5, 1\} for 5 sprites on 1 line) ! The second argument is not used yet ! \Hypertarget{structcomponent_1_1AnimatedDrawable_a3188a3bfc925c7bbce3f07fc6db9edc5}\label{structcomponent_1_1AnimatedDrawable_a3188a3bfc925c7bbce3f07fc6db9edc5} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_path@{\_path}}
+\index{\_path@{\_path}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_path}{\_path}}
+{\footnotesize\ttfamily std\+::string component\+::\+Animated\+Drawable\+::\+\_\+path}
+
+
+
+path to the spritesheet 
+
+\Hypertarget{structcomponent_1_1AnimatedDrawable_aa106749e0fd24a305f71eb703b49df11}\label{structcomponent_1_1AnimatedDrawable_aa106749e0fd24a305f71eb703b49df11} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_spriteSize@{\_spriteSize}}
+\index{\_spriteSize@{\_spriteSize}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_spriteSize}{\_spriteSize}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ component\+::\+Animated\+Drawable\+::\+\_\+sprite\+Size}
+
+
+
+set of numbers representing the size of the sprites to load 
+
+(ex\+: \{32, 14\} for a 32x14 sprite) \Hypertarget{structcomponent_1_1AnimatedDrawable_ac3261b49b0a472cbcf7292344da3d66d}\label{structcomponent_1_1AnimatedDrawable_ac3261b49b0a472cbcf7292344da3d66d} 
+\index{component::AnimatedDrawable@{component::AnimatedDrawable}!\_state@{\_state}}
+\index{\_state@{\_state}!component::AnimatedDrawable@{component::AnimatedDrawable}}
+\doxysubsubsection{\texorpdfstring{\_state}{\_state}}
+{\footnotesize\ttfamily std\+::string component\+::\+Animated\+Drawable\+::\+\_\+state}
+
+
+
+the current animation name 
+
+(ex\+: \"{}idle\"{}) 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Components.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,94 @@
+\doxysection{Sparse\+Array.\+hpp}
+\hypertarget{SparseArray_8hpp_source}{}\label{SparseArray_8hpp_source}\index{src/Ecs/SparseArray.hpp@{src/Ecs/SparseArray.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Rtype}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ SparseArray}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ SPARSEARRAY\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ SPARSEARRAY\_HPP}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ <vector>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <memory>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <optional>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ <algorithm>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <utility>}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ Component>\ \textcolor{comment}{//\ Type\ of\ the\ value\ you\ want\ to\ store\ in\ the\ \`{}sparse\_array`\ class.}}
+\DoxyCodeLine{00036\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_ab7403a6f935fa66034cce5bdcf49a9fc}{value\_type}}\ =\ std::optional<Component>;}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_ae00c5b30838e89f0d368d55e0ba6a54d}{reference\_type}}\ =\ \mbox{\hyperlink{classsparse__array_ab7403a6f935fa66034cce5bdcf49a9fc}{value\_type}}\ \&;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_a373bf1a871a33e79a21da15acf3652f8}{const\_reference\_type}}\ =\ \mbox{\hyperlink{classsparse__array_ab7403a6f935fa66034cce5bdcf49a9fc}{value\_type}}\ \textcolor{keyword}{const}\ \&;}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_a5f747e93a9406474b106bde9c66f01b7}{container\_t}}\ =\ std::vector<value\_type>;}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ =\ \textcolor{keyword}{typename}\ container\_t::size\_type;}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_a1293c5b64d77bb97ed87e57c6276925e}{iterator}}\ =\ \textcolor{keyword}{typename}\ container\_t::iterator;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classsparse__array_a9beecc69673481f79844336194dfc1a2}{const\_iterator}}\ =\ \textcolor{keyword}{typename}\ container\_t::const\_iterator;}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a9437af3619227d4ab973cad2f6bfa818}{sparse\_array}}()\ \ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a2530f93c4d5c88e06ba6c69b4e04ca40}{sparse\_array}}(\mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \textcolor{keyword}{const}\ \&other);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_abce5f36fcd9fba0ef3ce5280cbe241db}{sparse\_array}}(\mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \&\&other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a462f64cc46c81b54e7c7d1181f7b889f}{\string~sparse\_array}}()\ \ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \&\mbox{\hyperlink{classsparse__array_a22f7112eb9f0bf3d6f756ef14abd698a}{operator=}}(\mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \textcolor{keyword}{const}\ \&other);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \&\mbox{\hyperlink{classsparse__array_aadb8fc0433c146fd3d0f7309672b458d}{operator=}}(\mbox{\hyperlink{classsparse__array}{sparse\_array}}\ \&\&other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_ae00c5b30838e89f0d368d55e0ba6a54d}{reference\_type}}\ \mbox{\hyperlink{classsparse__array_a4aa1f2fae14ff1cecdc6e42ded260cad}{operator[]}}(\textcolor{keywordtype}{size\_t}\ idx);}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a373bf1a871a33e79a21da15acf3652f8}{const\_reference\_type}}\ \mbox{\hyperlink{classsparse__array_a1d66e1a1e11a9bcef70425c3c09eb6b4}{operator[]}}(\textcolor{keywordtype}{size\_t}\ idx)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a1293c5b64d77bb97ed87e57c6276925e}{iterator}}\ begin();}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a9beecc69673481f79844336194dfc1a2}{const\_iterator}}\ begin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a9beecc69673481f79844336194dfc1a2}{const\_iterator}}\ cbegin()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a1293c5b64d77bb97ed87e57c6276925e}{iterator}}\ end();}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a9beecc69673481f79844336194dfc1a2}{const\_iterator}}\ end()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a9beecc69673481f79844336194dfc1a2}{const\_iterator}}\ cend()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ resize(\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ new\_size);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ size()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_ae00c5b30838e89f0d368d55e0ba6a54d}{reference\_type}}\ insert\_at(\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ pos,\ \textcolor{keyword}{const}\ Component\ \&value)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ \_data.size())}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_data.resize(pos\ +\ 1);}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \ \ \ \ \_data[pos]\ =\ value;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_data[pos];}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_ae00c5b30838e89f0d368d55e0ba6a54d}{reference\_type}}\ insert\_at(\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ pos,\ Component\ \&\&value)\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ \_data.size())}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_data.resize(pos\ +\ 1);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \_data[pos]\ =\ std::move(value);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_data[pos];}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class\ }...Params>}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_ae00c5b30838e89f0d368d55e0ba6a54d}{reference\_type}}\ emplace\_at(\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ pos,\ Params\ \&\&...params)\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ \_data.size())\ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_data.resize(pos\ +\ 1);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (\&\_data[pos])\ Component(std::forward<Params>(params)...);}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_data[pos];}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ erase(\mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ pos);}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_af1468a11a30a58090580d1fb399e3cc0}{size\_type}}\ get\_index(\mbox{\hyperlink{classsparse__array_ab7403a6f935fa66034cce5bdcf49a9fc}{value\_type}}\ \textcolor{keyword}{const}\&)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classsparse__array_a5f747e93a9406474b106bde9c66f01b7}{container\_t}}\ \_data;}
+\DoxyCodeLine{00111\ \};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#include\ "{}SparseArray.tpp"{}}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SPARSEARRAY\_HPP}}
+
+\end{DoxyCode}
