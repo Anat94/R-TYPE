@@ -1,0 +1,92 @@
+\doxysection{Client Class Reference}
+\hypertarget{classClient}{}\label{classClient}\index{Client@{Client}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classClient_a7bab516216e26a0b7d9c9307584f7392}\label{classClient_a7bab516216e26a0b7d9c9307584f7392} 
+{\bfseries Client} (std\+::string ip, int port, std\+::string \+\_\+username=\"{}\"{})
+\item 
+\Hypertarget{classClient_a168399eeddbdde9a219278158914b9d2}\label{classClient_a168399eeddbdde9a219278158914b9d2} 
+int {\bfseries run} ()
+\item 
+\Hypertarget{classClient_ad56b05fc35da53496f318c7bdd96ebed}\label{classClient_ad56b05fc35da53496f318c7bdd96ebed} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+to\+\_\+server} (const T \&structure)
+\item 
+\Hypertarget{classClient_afff638ebfd56ee7ab56f9dc1b886e1d8}\label{classClient_afff638ebfd56ee7ab56f9dc1b886e1d8} 
+void {\bfseries receive\+\_\+datas} ()
+\item 
+\Hypertarget{classClient_a85e60f733164296d0c545597f0bd08be}\label{classClient_a85e60f733164296d0c545597f0bd08be} 
+void {\bfseries display\+Texts} ()
+\item 
+\Hypertarget{classClient_a8463da33234bc2c3e3715b786f4cf627}\label{classClient_a8463da33234bc2c3e3715b786f4cf627} 
+void {\bfseries add\+Level} ()
+\item 
+\Hypertarget{classClient_a81779397297d815088996c7372bfe026}\label{classClient_a81779397297d815088996c7372bfe026} 
+void {\bfseries add\+Score} ()
+\item 
+\Hypertarget{classClient_ae31980599eef0c42f08d9755e08a4760}\label{classClient_ae31980599eef0c42f08d9755e08a4760} 
+void {\bfseries decrease\+Lives} ()
+\item 
+\Hypertarget{classClient_ae06feaf173c523966b816bb505f4ca0d}\label{classClient_ae06feaf173c523966b816bb505f4ca0d} 
+void {\bfseries increase\+Lives} ()
+\item 
+\Hypertarget{classClient_aeb5979840f6a1769353f31f7bea764b1}\label{classClient_aeb5979840f6a1769353f31f7bea764b1} 
+void {\bfseries set\+Level} (int level)
+\item 
+\Hypertarget{classClient_a9118f130db1b0c82bf04bf7f4084f890}\label{classClient_a9118f130db1b0c82bf04bf7f4084f890} 
+bool {\bfseries has\+Pending\+Messages} () const
+\item 
+\Hypertarget{classClient_a84ca2859e7ccceb8abd0858da4674e1d}\label{classClient_a84ca2859e7ccceb8abd0858da4674e1d} 
+int {\bfseries manage\+Event} ()
+\item 
+\Hypertarget{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}\label{classClient_a1cbd83a26acc32a68d35f4b94bc9af68} 
+void {\bfseries receive} ()
+\item 
+\Hypertarget{classClient_a032ed6a2fcf928be70d7d9c1105f5c51}\label{classClient_a032ed6a2fcf928be70d7d9c1105f5c51} 
+int {\bfseries recieve\+\_\+position\+\_\+snapshot\+\_\+update} (std\+::vector$<$ char $>$ \&)
+\item 
+\Hypertarget{classClient_aa5d7751a9e4bb5361fd276db0ec21586}\label{classClient_aa5d7751a9e4bb5361fd276db0ec21586} 
+std\+::vector$<$ char $>$ {\bfseries recieve\+\_\+raw\+\_\+data\+\_\+from\+\_\+client} ()
+\item 
+\Hypertarget{classClient_ae477e4a3770f26a5426e73f327c7a2b4}\label{classClient_ae477e4a3770f26a5426e73f327c7a2b4} 
+int {\bfseries recieve\+\_\+high\+\_\+score} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a6bc12b7b5d0de32d3841ecfafc9d2a8e}\label{classClient_a6bc12b7b5d0de32d3841ecfafc9d2a8e} 
+int {\bfseries recieve\+\_\+login\+\_\+response} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a36df43e7557fc6e2661781f8df22e211}\label{classClient_a36df43e7557fc6e2661781f8df22e211} 
+int {\bfseries recieve\+\_\+drawable\+\_\+snapshot\+\_\+update} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a4284cf0e5c6e44fd1790f6930a458ec3}\label{classClient_a4284cf0e5c6e44fd1790f6930a458ec3} 
+int {\bfseries recieve\+\_\+animated\+\_\+drawable\+\_\+snapshot} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a2f407d03e59101b31af4aafae01428ed}\label{classClient_a2f407d03e59101b31af4aafae01428ed} 
+int {\bfseries recieve\+\_\+animated\+\_\+drawable\+\_\+state\+\_\+update} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_ac3f7b703cb03d9785f557147ef8bf244}\label{classClient_ac3f7b703cb03d9785f557147ef8bf244} 
+int {\bfseries receive\+\_\+friends\+\_\+reponse} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_afef9c25e48c1816a4626697f6c88f91f}\label{classClient_afef9c25e48c1816a4626697f6c88f91f} 
+int {\bfseries receive\+\_\+add\+\_\+friends\+\_\+reponse} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}\label{classClient_a3ba457d759cff151c353f4e6fe2ac0b9} 
+int {\bfseries receive\+\_\+remove\+\_\+friends\+\_\+reponse} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a14c553437a24bc81a743ac3ffac7ce7a}\label{classClient_a14c553437a24bc81a743ac3ffac7ce7a} 
+int {\bfseries receive\+\_\+chat\+\_\+event} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\item 
+\Hypertarget{classClient_a29eadc05eecb345c418b20a5a589f15f}\label{classClient_a29eadc05eecb345c418b20a5a589f15f} 
+void {\bfseries create\+Enemy} (std\+::pair$<$ float, float $>$ pos, std\+::pair$<$ float, float $>$ vel, const std\+::string \&path\+\_\+to\+\_\+texture, std\+::pair$<$ float, float $>$ scale, int health, int damage)
+\item 
+\Hypertarget{classClient_a1a37e6650eef7546f32d52b06776770c}\label{classClient_a1a37e6650eef7546f32d52b06776770c} 
+void {\bfseries display\+Score\+Board\+Menu} ()
+\item 
+\Hypertarget{classClient_ad47257b87ca02f998b8056843172e190}\label{classClient_ad47257b87ca02f998b8056843172e190} 
+void {\bfseries handle\+Input} (sf\+::\+Event \&event)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Client/Client.\+hpp\item 
+src/\+Client/Client.\+cpp\end{DoxyCompactItemize}

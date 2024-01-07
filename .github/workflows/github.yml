@@ -53,9 +53,6 @@ jobs:
           sudo apt-get install doxygen
           sudo apt-get install graphviz
 
-      # - name: Generate Doxygen
-      #   run: cmake --build . --target doxygen
-
       - name: Deploy Doxygen
         uses: peaceiris/actions-gh-pages@v3
         with:

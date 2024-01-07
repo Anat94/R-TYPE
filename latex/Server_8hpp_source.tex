@@ -1,0 +1,153 @@
+\doxysection{Server.\+hpp}
+\hypertarget{Server_8hpp_source}{}\label{Server_8hpp_source}\index{src/Server/Server.hpp@{src/Server/Server.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ rtype}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ main}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ SERVER\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ SERVER\_HPP}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Events.hpp"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/ZipperIterator.hpp"{}}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#include\ <thread>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ <chrono>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <mutex>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#include\ <array>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#include\ <asio.hpp>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \#include\ <functional>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Events.hpp"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/ZipperIterator.hpp"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Systems/CollisionSystem.hpp"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Systems/ControlSystem.hpp"{}}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Systems/PositionSystem.hpp"{}}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Systems/ResetOnMoveSystem.hpp"{}}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\ \ \ \ \#include\ <sqlite3.h>}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Network.hpp"{}}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structFriendship}{Friendship}}\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ std::string\ name;}
+\DoxyCodeLine{00046\ \ \ \ \ std::string\ id;}
+\DoxyCodeLine{00047\ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classServer}{Server}}\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{typedef}\ int\ (\mbox{\hyperlink{classServer}{Server}}::*messageParserHandle)(std::vector<char>\&,\ entity\_t);}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classServer}{Server}}(asio::io\_context\&\ service,\ \textcolor{keywordtype}{int}\ port,\ \mbox{\hyperlink{classregistry}{registry}}\ \&ecs,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classServer}{\string~Server}}();}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ recieve\_from\_client();}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ entity\_t\ get\_player\_entity\_from\_connection\_address(udp::endpoint);}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ entity\_t\ connect\_player(udp::endpoint\ player\_endpoint);}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_position\_snapshots\_for\_all\_players();}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_animated\_drawable\_snapshots\_for\_specific\_player(entity\_t\ entity);}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_animated\_drawable\_snapshot\_to\_all\_players(entity\_t\ entity);}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_animated\_drawable\_update\_to\_all\_clients(entity\_t\ entity,\ std::string\ state);}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_entity\_drawable\_to\_all\_players(entity\_t\ entity);}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::vector<char>\ recieve\_raw\_data\_from\_client();}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ get\_position\_change\_for\_event(entity\_t\ entity,\ \textcolor{keywordtype}{int}\ event);}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_client\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_connection\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_disconnection\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_packet\_confirm(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_login\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_friend\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_add\_friend\_event(std::vector<char>\&,\ entity\_t);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_remove\_friend\_event(std::vector<char>\&,\ entity\_t);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_chat\_event(std::vector<char>\&,\ entity\_t);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_data\_to\_all\_clients(T\&\ structure,\ std::vector<T>\&\ packets\_to\_send);}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_data\_to\_all\_clients\_except\_me(T\&\ structure);}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_data\_to\_client\_by\_entity(T\&\ structure,\ entity\_t\ entity)\ \{}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ endpoint\ =\ \_ecs.\mbox{\hyperlink{classregistry_a3866ee276a5a1d78d00cd403e8e8c7d9}{get\_components}}<\mbox{\hyperlink{structcomponent_1_1Endpoint}{component::Endpoint}}>()[entity];}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!endpoint.has\_value())\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}INVALID\ ENDPOINT\ FOR\ ENTITY:\ "{}}\ <<\ entity\ <<\ std::endl;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!can\_mod)\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \_socket.send\_to(asio::buffer(\&structure,\ \textcolor{keyword}{sizeof}(structure)),\ endpoint-\/>\_endpoint);}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ sendPositionpacketsPeriodically();}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ connectToDB();}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structHighScoreMessage}{HighScoreMessage}}\ getHighScore();}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ addHighScore(std::string\ name,\ \textcolor{keywordtype}{int}\ score);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ IsNameInBdd(std::string\ name);}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ signUp(std::string\ name,\ std::string\ password);}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ checkIfUserExist(std::string\ name,\ std::string\ password);}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ std::string\ makePersonnalID();}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ signIn(std::string\ name,\ std::string\ password);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ addFriend(std::string\ name,\ std::string\ friendId);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ checkIfFriendshipExist(std::string\ name,\ std::string\ friendId);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ removeFriend(std::string\ name,\ std::string\ friendName);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ std::vector<Friendship>\ displayFriends(std::string\ name,\ entity\_t\ player\_entity);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structFriendship}{Friendship}}\ getFriendsData(std::string\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_highscore\_to\_specific\_client(entity\_t);}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_all\_entity\_drawables\_to\_specific\_player(entity\_t\ player);}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ resend\_packets(std::vector<T>\ \&);}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ std::vector<SnapshotPosition>\ \_position\_packets;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ std::vector<HighScoreMessage>\ \_highscore\_packets;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ std::vector<DrawableSnapshot>\ \_drawable\_packets;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ std::vector<AnimatedDrawableSnapshot>\ \_animated\_drawable\_packets;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ std::vector<AnimatedStateUpdateMessage>\ \_animated\_drawable\_update\_packets;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ std::vector<LoginResponse>\ \_login\_response\_packets;}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ std::vector<AddFriendsResponse>\ \_add\_friend\_response\_packets;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ std::vector<RemoveFriendsResponse>\ \_remove\_friend\_response\_packets;}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ std::vector<FriendsResponse>\ \_friends\_response\_packets;}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ std::vector<ChatMessage>\ \_chat\_packets;}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ std::array<char,\ 1024>\ \_buf;}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ asio::io\_service\ \&\_service;}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ asio::io\_context\ \&\_service;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ udp::endpoint\ \_remote\_endpoint;}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ std::vector<std::thread>\ \_tpool;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classregistry}{registry}}\ \&\_ecs;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&\_listener;}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ asio::ip::udp::socket\ \_socket;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_packet\_id\ =\ 0;}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ std::map<int16\_t,\ messageParserHandle>\ \_messageParser\ =\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \{1,\ \&Server::recieve\_client\_event\},}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \{2,\ \&Server::recieve\_connection\_event\},}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \{3,\ \&Server::recieve\_disconnection\_event\},}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \{5,\ \&Server::recieve\_packet\_confirm\},}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \{6,\ \&Server::receive\_login\_event\},}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \{7,\ \&Server::receive\_friend\_event\},}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \{8,\ \&Server::receive\_add\_friend\_event\},}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \{9,\ \&Server::receive\_remove\_friend\_event\},}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \{10,\ \&Server::receive\_chat\_event\},}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ std::string\ \_event;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ std::thread\ \_send\_thread;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ sqlite3\ *\_db;}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_highScore\ =\ 0;}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ std::string\ \_nameForHighScore\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ can\_mod\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ can\_send\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ can\_read\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ std::mutex\ mtx;}
+\DoxyCodeLine{00145\ \};}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ SERVER\_HPP}}
+
+\end{DoxyCode}
