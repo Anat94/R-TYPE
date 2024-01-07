@@ -78,22 +78,28 @@ namespace component {
      * 
      */
     struct Button {
-        // sf::RectangleShape shape;
-        sf::Font font;
-        sf::Text text;
-        std::string strText;
-        sf::Color textColor;
-        sf::Color idleColor;
-        sf::Color hoverColor;
-        sf::Color activeColor;
-        float height;
-        float width;
-        float x;
-        float y;
-        
-        Button(float x_, float y_, float width_, float height_, sf::Font& font_, std::string text_, sf::Color textColor_, sf::Color idleColor_, sf::Color hoverColor_, sf::Color activeColor_):
-            x(x_), y(y_), width(width_), height(height_), font(font_), strText(text_), textColor(textColor_), idleColor(idleColor_), hoverColor(hoverColor_), activeColor(activeColor_)
-        {}
+        /**
+         * @brief Position constructor
+         * 
+         * @param function to execute
+         * 
+         * @param _width width of the button
+         * 
+         * @param _height height of the button
+         * 
+         * @param _scale scale of the button
+         * 
+        */
+        std::function<void()> _function;
+        int _width;
+        int _height;
+        int _scale;
+        /**
+         * @brief Construct a new Button object
+         * 
+         * @param function the function to be set
+         */
+        Button(std::function<void()> function, int width, int height, int scale) : _function(function), _width(width), _height(height), _scale(scale) {}
     };
 
     /**

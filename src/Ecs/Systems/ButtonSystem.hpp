@@ -13,42 +13,36 @@
 
 class ButtonSystem : public ISystems {
     public:
-        ButtonSystem(EventListener *listener, sf::RenderWindow &window) : _listener(listener), _window(window) {};
+        ButtonSystem(sf::Vector2i *mousePos) : _mousePos{mousePos} {};
 
         void operator()(sparse_array<component::Button> &buttons, sparse_array<component::Position> &positions) {
-            sf::Vector2i mousePosition = sf::Mouse::getPosition(_window);
 
             for (auto &&[entity, button, position] : zipper<sparse_array<component::Button>, sparse_array<component::Position>>(buttons, positions)) {
                 if (!button.has_value() || !position.has_value()) continue;
-
+                //std::cout << "buttonsystem" << std::endl;
                 sf::Vector2f buttonPos = sf::Vector2f(position->x, position->y);
-                sf::Vector2f buttonSize = sf::Vector2f(button->width, button->height);
+                float buttonWidth = button->_width;
+                float buttonHeight = button->_height;
+                float buttonScale = button->_scale;
 
-                sf::FloatRect buttonBounds(buttonPos, buttonSize);
+                //buttonWidth *= buttonScale;
+                //buttonHeight *= buttonScale;
 
-                bool isMouseHover = buttonBounds.contains(static_cast<sf::Vector2f>(mousePosition));
-
-
-                // ajouter dans event.hpp hoverEvent et CLickEvent
-                if (isMouseHover && !_hovered[entity]) {
-                    _hovered[entity] = true;
-                    //HoverEvent *hoverEvent = new HoverEvent(entity);
-                    //_listener->addEvent(hoverEvent);
-                } else if (!isMouseHover && _hovered[entity]) {
-                    _hovered[entity] = false;
-                    //UnhoverEvent *unhoverEvent = new UnhoverEvent(entity);
-                    //_listener->addEvent(unhoverEvent);
-                }
-
-                if (isMouseHover && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    //ClickEvent *clickEvent = new ClickEvent(entity);
-                    //_listener->addEvent(clickEvent);
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    std::cout << "buttonWidth: " << buttonWidth << std::endl;
+                    std::cout << "buttonHeight: " << buttonHeight << std::endl;
+                    std::cout << "mousepos x: " << _mousePos->x << " mousepos y: " << _mousePos->y << std::endl;
+                    std::cout << "buttonPos x: " << buttonPos.x << " buttonPos y: " << buttonPos.y << std::endl;
+                    
+                    if (_mousePos->x >= buttonPos.x && _mousePos->x <= (buttonPos.x + buttonWidth) && _mousePos->y >= buttonPos.y && _mousePos->y <= (buttonPos.y + buttonHeight)) {
+                        std::cout << "buttoooooooooon" << std::endl;
+                        button->_function();
+                    }
                 }
             }
         };
     private:
-        EventListener *_listener;
-        sf::RenderWindow &_window;
+        sf::Vector2i *_mousePos;
         std::unordered_map<entity_t, bool> _hovered;
 };
 
