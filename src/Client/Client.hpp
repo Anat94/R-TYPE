@@ -6,34 +6,35 @@
 */
 
 #ifndef CLIENT_HPP
-#define CLIENT_HPP
-//#pragma warning(disable: 4668)
-//#pragma warning(disable: 4626)
-//#pragma warning(disable: 4625)
-//#pragma warning(disable: 4820)
-//#pragma warning(disable: 5031)
-//#pragma warning(disable: 4365)
-//#pragma warning(disable: 5027)
-//#pragma warning(disable: 4514)
-//#pragma warning(disable: 4464)
-//#pragma warning(disable: 5026)
-//#pragma warning(disable: 4457)
-//#pragma warning(disable: 5262)
-//#pragma warning(disable: 5204)
-//#pragma warning(disable: 4355)
-//#pragma warning(disable: 5220)
-//#pragma warning(disable: 5039)
-#include <iostream>
-#include <asio.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <vector>
-#include <queue>
-#include <mutex>
-#include "../Ecs/Events.hpp"
-#include "../Errors.hpp"
-#include "../Network.hpp"
+    #define CLIENT_HPP
+    //#pragma warning(disable: 4668)
+    //#pragma warning(disable: 4626)
+    //#pragma warning(disable: 4625)
+    //#pragma warning(disable: 4820)
+    //#pragma warning(disable: 5031)
+    //#pragma warning(disable: 4365)
+    //#pragma warning(disable: 5027)
+    //#pragma warning(disable: 4514)
+    //#pragma warning(disable: 4464)
+    //#pragma warning(disable: 5026)
+    //#pragma warning(disable: 4457)
+    //#pragma warning(disable: 5262)
+    //#pragma warning(disable: 5204)
+    //#pragma warning(disable: 4355)
+    //#pragma warning(disable: 5220)
+    //#pragma warning(disable: 5039)
+    #define MAX_POSITION_MOVE_THRESHOLD 100
+    #include <iostream>
+    #include <asio.hpp>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
+    #include <SFML/System.hpp>
+    #include <vector>
+    #include <queue>
+    #include <mutex>
+    #include "../Ecs/Events.hpp"
+    #include "../Errors.hpp"
+    #include "../Network.hpp"
 
 struct data_struct {
     int id;

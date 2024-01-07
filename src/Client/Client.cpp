@@ -84,9 +84,18 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         if (real_entity > 0 && pos[real_entity].has_value()) {
             // std::cout << "UPDATED PLAYER\n";
             // std::cout << snapshot->data.x << std::endl;
-            pos[real_entity]->x = snapshot->data.x;
-            pos[real_entity]->y = snapshot->data.y;
+            while (!_ecs.can_run_updates) continue;
+            _ecs.can_run_updates = false;
+            _ecs.mtx.lock();
+            std::cout << "UPDATING POS\n";
+            if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
+                std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
+                pos[real_entity]->x = snapshot->data.x;
+                pos[real_entity]->y = snapshot->data.y;
+            }
             std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+            _ecs.mtx.unlock();
+            _ecs.can_run_updates = true;
         } else {
             // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();

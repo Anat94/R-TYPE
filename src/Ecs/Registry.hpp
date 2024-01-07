@@ -32,7 +32,8 @@ using entity_t = size_t;
 */
 class registry {
     public:
-    std::mutex mtx;
+        std::mutex mtx;
+        bool can_run_updates = true;
         /**
          * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
          *
@@ -185,11 +186,14 @@ class registry {
          * 
         */
         void run_systems() {
+            while (!can_run_updates) continue;
+            can_run_updates = false;
             mtx.lock();
             for (auto& system : systems) {
                 system(*this);
             }
             mtx.unlock();
+            can_run_updates = true;
         }
 
     private:
