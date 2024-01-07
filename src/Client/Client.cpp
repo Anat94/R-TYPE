@@ -86,6 +86,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             pos[real_entity]->x = snapshot->data.x;
             pos[real_entity]->y = snapshot->data.y;
+            std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         } else {
             // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
@@ -94,7 +95,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Scale(8.5f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
@@ -216,6 +217,65 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
+{
+    std::cout << "recieved animated drawable snapshot\n";
+    if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
+        return -1;
+    AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            // std::cout << "UPDATED PLAYER SPRITE\n";
+            drawables[real_entity]->_state = std::string(snapshot->_state);
+        } else {
+            _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
+            auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
+            for (int i = 0; i < snapshot->_anims.size(); i++) {
+                if (snapshot->_anims[i].first[0] == '\0')
+                    continue;
+                tmp->addAnimation(std::string(snapshot->_anims[i].first), snapshot->_anims[i].second.second, snapshot->_anims[i].second.first);
+            }
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
+        return -1;
+    AnimatedStateUpdateMessage *snapshot = reinterpret_cast<AnimatedStateUpdateMessage *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            drawables[real_entity]->_state = std::string(snapshot->state);
+            std::cout << drawables[real_entity]->_state << std::endl;
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
 void Client::receive()
 {
     std::vector<char> server_msg = recieve_raw_data_from_client();
@@ -226,7 +286,9 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    mtx.unlock();
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;
@@ -272,10 +334,10 @@ Client::Client(std::string ip, int port, std::string username)
     listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    // SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    // _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
-    SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
-    _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
+    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
+    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
     // entity_t tmp_text = _ecs.spawn_entity();
     // _ecs.add_component(tmp_text, component::Text("my text to print"));
     // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));

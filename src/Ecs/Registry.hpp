@@ -12,6 +12,7 @@
     #include <functional>
     #include <typeinfo>
     #include <iostream>
+    #include <mutex>
     #include <any>
     #include <SFML/Graphics.hpp>
     #include <SFML/Audio.hpp>
@@ -31,6 +32,7 @@ using entity_t = size_t;
 */
 class registry {
     public:
+    std::mutex mtx;
         /**
          * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template
          *
@@ -183,9 +185,11 @@ class registry {
          * 
         */
         void run_systems() {
+            mtx.lock();
             for (auto& system : systems) {
                 system(*this);
             }
+            mtx.unlock();
         }
 
     private:
