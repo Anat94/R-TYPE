@@ -28,6 +28,7 @@
 #include "../Ecs/ZipperIterator.hpp"
 #include "Client.hpp"
 #include "../Ecs/Systems/SFMLAnimatedDrawSystem.hpp"
+#include "../Ecs/Systems/SFMLTextDrawSystem.hpp"
 #include "../Ecs/Systems/SFMLDrawSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
@@ -85,6 +86,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             pos[real_entity]->x = snapshot->data.x;
             pos[real_entity]->y = snapshot->data.y;
+            std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         } else {
             // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
@@ -93,7 +95,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
             _ecs.add_component(new_player, component::Heading());
-            _ecs.add_component(new_player, component::Scale(0.1f));
+            _ecs.add_component(new_player, component::Scale(8.5f));
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
@@ -173,6 +175,13 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
         return -1;
     ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
     std::cout << chat->name <<": " << chat->content << std::endl;
+    _chatEntity._chat.push_back(std::string(chat->name) + ": " + std::string(chat->content));
+    sf::Text tmp;
+    tmp.setString(std::string(chat->name) + ":    " + std::string(chat->content));
+    tmp.setFont(_font);
+    tmp.setCharacterSize(20);
+    tmp.setPosition(30, 150 + (_chatEntity._chatText.size() - 1) * 30);
+    _chatEntity._chatText.push_back(tmp);
     return chat->packet_id;
 }
 
@@ -208,6 +217,65 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
+{
+    std::cout << "recieved animated drawable snapshot\n";
+    if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
+        return -1;
+    AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            // std::cout << "UPDATED PLAYER SPRITE\n";
+            drawables[real_entity]->_state = std::string(snapshot->_state);
+        } else {
+            _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
+            auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
+            for (int i = 0; i < snapshot->_anims.size(); i++) {
+                if (snapshot->_anims[i].first[0] == '\0')
+                    continue;
+                tmp->addAnimation(std::string(snapshot->_anims[i].first), snapshot->_anims[i].second.second, snapshot->_anims[i].second.first);
+            }
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
+        return -1;
+    AnimatedStateUpdateMessage *snapshot = reinterpret_cast<AnimatedStateUpdateMessage *>(server_msg.data());
+    sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
+    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    while (!can_read)
+        continue;
+    try {
+        entity_t real_entity = snapshot->entity + 2;
+        // for (size_t j = 0; j < servEntities.size(); j++) {
+        //     std::cout << "j is: " << j << std::endl;
+        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
+        // }
+        if (real_entity > 0 && drawables[real_entity].has_value()) {
+            drawables[real_entity]->_state = std::string(snapshot->state);
+            std::cout << drawables[real_entity]->_state << std::endl;
+        }
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
 void Client::receive()
 {
     std::vector<char> server_msg = recieve_raw_data_from_client();
@@ -218,7 +286,9 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    mtx.unlock();
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;
@@ -234,6 +304,7 @@ Client::Client(std::string ip, int port, std::string username)
 {
     _send_structure.id = 2;
     send_to_server(_send_structure);
+    _ecs.register_component<component::Text>();
     _ecs.register_component<component::Scale>();
     _ecs.register_component<component::Score>();
     _ecs.register_component<component::Damage>();
@@ -265,6 +336,14 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
     SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
+    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
+    // entity_t tmp_text = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text, component::Text("my text to print"));
+    // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
+    // entity_t tmp_text_2 = _ecs.spawn_entity();
+    // _ecs.add_component(tmp_text_2, component::Text("my second text to print"));
+    // _ecs.add_component(tmp_text_2, component::Position(200.0f, 600.0f));
     // _player = _ecs.spawn_entity();
     // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
     // _ecs.add_component(_player, component::Scale(5.0f));
@@ -314,6 +393,20 @@ Client::Client(std::string ip, int port, std::string username)
     _highScoreDisplay.score3.setPosition(1050, 600);
     _highScoreDisplay.title.setPosition(750, 200);
     _state = INGAME;
+    _chatEntity._rectangle = sf::RectangleShape(sf::Vector2f(400, 1100));
+    _chatEntity._rectangle.setPosition(0.0, 0.0);
+    _chatEntity._rectangle.setFillColor(sf::Color::Black);
+    _chatEntity._chatTitle  = sf::Text("Chat", _font, 30);
+    _chatEntity._chatTitle.setPosition(150, 50);
+    _chatEntity._inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
+    _chatEntity._inputBox.setPosition(25.0, 900.0);
+    _chatEntity._inputBox.setFillColor(sf::Color::White);
+    _chatEntity._input = std::string("");
+    _chatEntity._chatTextInput.setString(_chatEntity._input);
+    _chatEntity._chatTextInput.setFont(_font);
+    _chatEntity._chatTextInput.setCharacterSize(20);
+    _chatEntity._chatTextInput.setPosition(50, 900);
+    _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
 }
 
 Client::~Client()
@@ -366,6 +459,17 @@ int Client::manageEvent()
                 _state = (_state == INGAME) ? (INGAMEMENU) : (INGAME);
                 return 0;
             }
+            if (_event.key.code == sf::Keyboard::Tab) {
+                _state = (_state == INGAME) ?  CHAT : (INGAME);
+                return 0;
+            }
+            if (_event.key.code == sf::Keyboard::Enter) {
+                ChatMessage msg(10, _username, _chatEntity._input, _packet_id);
+                _packet_id++;
+                send_to_server(msg);
+                _chatEntity._input = "";
+                return 0;
+            }
         }
         if (std::find(eventsToPrint.begin(), eventsToPrint.end(), _event.type) != eventsToPrint.end()) {
             _send_structure.id = 1;
@@ -394,6 +498,18 @@ void Client::displayScoreBoardMenu()
     _window.draw(_highScoreDisplay.score3);
 }
 
+void Client::handleInput(sf::Event& event) {
+    if (event.type == sf::Event::TextEntered ) {
+        if (event.text.unicode < 128) {
+            if (event.text.unicode == '\b' && _chatEntity._input.size() > 0) {
+                _chatEntity._input.erase(_chatEntity._input.size() - 1, 1);
+            } else if (event.text.unicode != '\b') {
+                _chatEntity._input += event.text.unicode;
+            }
+            _chatEntity._chatTextInput.setString(_chatEntity._input);
+        }
+    }
+}
 
 int Client::run()
 {
@@ -428,11 +544,24 @@ int Client::run()
             break;
         if (_state == INGAMEMENU)
             displayScoreBoardMenu();
-        else if (_state == INGAME) {
+        else if (_state == INGAME || _state == CHAT) {
             _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
             while (listener.popEvent());
             _ecs.run_systems();
             displayTexts();
+            if (_state == CHAT) {
+                _window.draw(_chatEntity._rectangle);
+                _window.draw(_chatEntity._chatTitle);
+                _window.draw(_chatEntity._inputBox);
+                _window.draw(_chatEntity._chatTextInput);
+                for (int i = 0; i < _chatEntity._chat.size(); i++) {
+                    _window.draw(_chatEntity._chatText[i]);
+                }
+                if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
+                    handleInput(_event);
+                    _chatEntity._clock.restart();
+                }
+            }
         }
         _window.display();
     }

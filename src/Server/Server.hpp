@@ -7,7 +7,6 @@
 
 #ifndef SERVER_HPP
     #define SERVER_HPP
-    #define MAX_BUF_SIZE 11024
     //#pragma warning(disable: 4668)
     //#pragma warning(disable: 4626)
     //#pragma warning(disable: 4625)
@@ -29,6 +28,7 @@
     #include <iostream>
     #include <thread>
     #include <chrono>
+    #include <mutex>
     #include <array>
     #include <asio.hpp>
     #include <functional>
@@ -39,216 +39,11 @@
     #include "../Ecs/Systems/PositionSystem.hpp"
     #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
     #include <sqlite3.h>
-
-using asio::ip::udp;
-
-struct BaseMessage {
-    int16_t id;
-    int packet_id;
-};
-
-struct ConfirmationMessage: public BaseMessage {
-};
-
-struct SnapshotPosition: public BaseMessage {
-    entity_t entity;
-    component::Position data;
-
-    SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
-    entity(entity_),  data(data_) {
-        id = id_;
-        packet_id = packet_id_;
-    };
-};
-
-struct DrawableSnapshot: public BaseMessage {
-    entity_t entity;
-    char data[1024];
-
-    DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
-    entity(entity_) {
-        int i = 0;
-        id = id_;
-        packet_id = packet_id_;
-        for (; i < path.size(); i++) {
-            data[i] = path[i];
-        }
-        data[i] = '\0';
-    };
-};
-
-struct EventMessage: public BaseMessage {
-    int event;
-};
-
-struct HighScoreMessage: public BaseMessage {
-    int score1;
-    char name1[20];
-    int score2;
-    char name2[20];
-    int score3;
-    char name3[20];
-    HighScoreMessage(int16_t id_, std::string name1_, std::string name2_, std::string name3_,int score1_, int score2_, int score3_, int packet_id_):
-        score1(score1_), score2(score2_), score3(score3_) {
-            int i = 0;
-            id = id_;
-            packet_id = packet_id_;
-            for (; i < name1_.size(); i++) {
-                name1[i] = name1_[i];
-            }
-            name1[i] = '\0';
-            i = 0;
-            for (; i < name2_.size(); i++) {
-                name2[i] = name2_[i];
-            }
-            name2[i] = '\0';
-            i = 0;
-            for (; i < name3_.size(); i++) {
-                name3[i] = name3_[i];
-            }
-            name3[i] = '\0';
-        };
-};
-
-struct LoginMessage: public BaseMessage {
-    char username[20];
-    char password[20];
-    int logintype;
-    LoginMessage(int16_t id_, std::string username_, std::string password_, int type_, int packet_id_):
-        username(), password(), logintype(type_) {
-            int i = 0;
-            id = id_;
-            packet_id = packet_id_;
-            for (; i < username_.size(); i++) {
-                username[i] = username_[i];
-            }
-            username[i] = '\0';
-            for (; i < password_.size(); i++) {
-                password[i] = password_[i];
-            }
-            password[i] = '\0';
-        };
-};
-
-struct LoginResponse: public BaseMessage {
-    bool response;
-    int logintype;
-    LoginResponse(int16_t id_, bool success_, int _type, int packet_id_):
-        response(success_), logintype(_type) {
-            id = id_;
-            packet_id = packet_id_;
-        };
-};
-
-struct FriendsMessage: public BaseMessage {
-    char username[20];
-    FriendsMessage(int16_t id_, std::string username_, int packet_id_):
-        username() {
-            int i = 0;
-            id = id_;
-            packet_id = packet_id_;
-            for (; i < username_.size(); i++) {
-                username[i] = username_[i];
-            }
-            username[i] = '\0';
-        };
-};
-
-struct AddFriendsMessage: public BaseMessage {
-    char username[20];
-    char friendName[20];
-
-    AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
-        username(), friendName() {
-            int i = 0;
-            id = id_;
-            packet_id = packet_id_;
-            for (; i < username_.size(); i++) {
-                username[i] = username_[i];
-            }
-            username[i] = '\0';
-            i = 0;
-            for (; i < username_.size(); i++) {
-                friendName[i] = friendName_[i];
-            }
-            friendName[i] = '\0';
-        };
-};
-
-struct AddFriendsResponse: public BaseMessage {
-    bool response;
-    AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
-        response(success_) {
-            id = id_;
-            packet_id = packet_id_;
-        };
-};
-
-struct RemoveFriendsMessage: public BaseMessage {
-    char username[20];
-    char friendName[20];
-
-    RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
-        username(), friendName() {
-            int i = 0;
-            id = id_;
-            packet_id = packet_id_;
-            for (; i < username_.size(); i++) {
-                username[i] = username_[i];
-            }
-            username[i] = '\0';
-            i = 0;
-            for (; i < username_.size(); i++) {
-                friendName[i] = friendName_[i];
-            }
-            friendName[i] = '\0';
-        };
-};
-
-struct RemoveFriendsResponse: public BaseMessage {
-    bool response;
-    RemoveFriendsResponse(int16_t id_, bool success_, int packet_id_):
-        response(success_) {
-            id = id_;
-            packet_id = packet_id_;
-        };
-};
+    #include "../Network.hpp"
 
 struct Friendship {
     std::string name;
     std::string id;
-};
-
-struct FriendsResponse: public BaseMessage {
-    char friends[20];
-    FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
-            id = id_;
-            int i = 0;
-            for (; i < friends_.size(); i++) {
-                friends[i] = friends_[i];
-            }
-            packet_id = packet_id_;
-        };
-};
-
-struct ChatMessage: public BaseMessage {
-    char name[20];
-    char content[256];
-
-    ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
-        int i = 0;
-        id = id_;
-        packet_id = packet_id_;
-        for (; i < content_.size(); i++) {
-            content[i] = content_[i];
-        }
-        content[i] = '\0';
-        i = 0;
-        for (; i < name_.size(); i++) {
-            name[i] = name_[i];
-        }
-        name[i] = '\0';
-    };
 };
 
 class Server {
@@ -260,6 +55,9 @@ class Server {
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
         void send_position_snapshots_for_all_players();
+        void send_animated_drawable_snapshots_for_specific_player(entity_t entity);
+        void send_animated_drawable_snapshot_to_all_players(entity_t entity);
+        void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state);
         void send_entity_drawable_to_all_players(entity_t entity);
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
@@ -273,7 +71,7 @@ class Server {
         int receive_remove_friend_event(std::vector<char>&, entity_t);
         int receive_chat_event(std::vector<char>&, entity_t);
         template <typename T>
-        void send_data_to_all_clients(T& structure);
+        void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send);
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure);
         template <typename T>
@@ -308,6 +106,13 @@ class Server {
         std::vector<SnapshotPosition> _position_packets;
         std::vector<HighScoreMessage> _highscore_packets;
         std::vector<DrawableSnapshot> _drawable_packets;
+        std::vector<AnimatedDrawableSnapshot> _animated_drawable_packets;
+        std::vector<AnimatedStateUpdateMessage> _animated_drawable_update_packets;
+        std::vector<LoginResponse> _login_response_packets;
+        std::vector<AddFriendsResponse> _add_friend_response_packets;
+        std::vector<RemoveFriendsResponse> _remove_friend_response_packets;
+        std::vector<FriendsResponse> _friends_response_packets;
+        std::vector<ChatMessage> _chat_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -334,6 +139,9 @@ class Server {
         int _highScore = 0;
         std::string _nameForHighScore = "";
         bool can_mod = true;
+        bool can_send = true;
+        bool can_read = true;
+        std::mutex mtx;
 };
 
 #endif // SERVER_HPP
