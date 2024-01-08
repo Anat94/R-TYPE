@@ -101,19 +101,6 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
 
-    entity_t enemy = _ecs.spawn_entity();
-
-    can_send = false;
-    _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
-    can_send = true;
-    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-8.0f, 0.0f));
-    _ecs.add_component<component::Scale>(enemy, component::Scale(6.0f));
-    _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
-
-    auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
-    tmp1->addAnimation("idle", {0, 7}, true);
-    tmp1->_state = "idle";
-
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player(new_player);
     send_animated_drawable_snapshot_to_all_players(new_player);

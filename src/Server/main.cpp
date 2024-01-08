@@ -25,6 +25,7 @@
 #include "Server.hpp"
 #include "../Errors.hpp"
 #include "../Ecs/Systems/KillWhenOutOfBounds.hpp"
+#include "../Ecs/Systems/EnemyGeneration.hpp"
 
 using asio::ip::udp;
 
@@ -113,6 +114,8 @@ int main(int argc, char *argv[]) {
     // ecs.add_system<component::Hitbox, component::Position>(*col_sys);
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
+    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
+    ecs.add_system<component::Position, component::Health, component::Endpoint>(*engen_sys);
     // ecs.add_system<component::Drawable, component::Scale>(scale_system);
     // ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 
