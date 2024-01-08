@@ -49,7 +49,7 @@ struct HighScoreMessage: public BaseMessage {
     char name3[20];
     HighScoreMessage(int16_t id_, std::string name1_, std::string name2_, std::string name3_,int score1_, int score2_, int score3_, int packet_id_):
         score1(score1_), score2(score2_), score3(score3_) {
-            int i = 0;
+            size_t i = 0;
             id = id_;
             packet_id = packet_id_;
             for (; i < name1_.size(); i++) {
@@ -75,7 +75,7 @@ struct LoginMessage: public BaseMessage {
     int logintype;
     LoginMessage(int16_t id_, std::string username_, std::string password_, int type_, int packet_id_):
         username(), password(), logintype(type_) {
-            int i = 0;
+            size_t i = 0;
             id = id_;
             packet_id = packet_id_;
             for (; i < username_.size(); i++) {
@@ -104,7 +104,7 @@ struct FriendsMessage: public BaseMessage {
     char username[20];
     FriendsMessage(int16_t id_, std::string username_, int packet_id_):
         username() {
-            int i = 0;
+            size_t i = 0;
             id = id_;
             packet_id = packet_id_;
             for (; i < username_.size(); i++) {
@@ -118,7 +118,7 @@ struct FriendsResponse: public BaseMessage {
     char friends[20];
     FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
             id = id_;
-            int i = 0;
+            size_t i = 0;
             for (; i < friends_.size(); i++) {
                 friends[i] = friends_[i];
             }
@@ -132,7 +132,7 @@ struct AddFriendsMessage: public BaseMessage {
 
     AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
         username(), friendName() {
-            int i = 0;
+            size_t i = 0;
             id = id_;
             packet_id = packet_id_;
             for (; i < username_.size(); i++) {
@@ -162,7 +162,7 @@ struct RemoveFriendsMessage: public BaseMessage {
 
     RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
         username(), friendName() {
-            int i = 0;
+            size_t i = 0;
             id = id_;
             packet_id = packet_id_;
             for (; i < username_.size(); i++) {
@@ -191,7 +191,7 @@ struct ChatMessage: public BaseMessage {
     char content[256];
 
     ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
-        int i = 0;
+        size_t i = 0;
         id = id_;
         packet_id = packet_id_;
         for (; i < content_.size(); i++) {
@@ -207,12 +207,12 @@ struct ChatMessage: public BaseMessage {
 };
 
 struct DrawableSnapshot: public BaseMessage {
-    entity_t entity;
+    entity_t entity = 0;
     char data[1024];
 
     DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
     entity(entity_) {
-        int i = 0;
+        size_t i = 0;
         id = id_;
         packet_id = packet_id_;
         for (; i < path.size(); i++) {
@@ -222,11 +222,32 @@ struct DrawableSnapshot: public BaseMessage {
     };
 };
 
+struct ScaleSnapshot: public BaseMessage {
+    entity_t entity = 0;
+    component::Scale data;
+
+    ScaleSnapshot(int16_t id_, entity_t entity_, component::Scale data_, int packet_id_):
+    entity(entity_), data(data_) {
+        id = id_;
+        packet_id = packet_id_;
+    };
+};
+
+struct DeathEventMessage: public BaseMessage {
+    entity_t entity = 0;
+
+    DeathEventMessage(int16_t id_, entity_t entity_, int packet_id_):
+    entity(entity_) {
+        id = id_;
+        packet_id = packet_id_;
+    };
+};
+
 struct AnimatedDrawableSnapshot: public BaseMessage {
     /**
      * @brief entity to update the DrawableSnapshot for
      */
-    entity_t entity;
+    entity_t entity = 0;
     /**
      * @brief path to the desired asset
     */
@@ -240,33 +261,33 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      * (ex: {3, 4} for a 3 Sprites per line & 4 lines)
      * 
      */
-    std::pair<int, int> _nbSprites;
+    std::pair<int, int> _nbSprites = {0, 0};
     /**
      * @brief set of numbers representing the size of the sprites to load
      * 
      * (ex: {32, 14} for a 32x14 sprite)
      * 
      */
-    std::pair<int, int> _spriteSize;
+    std::pair<int, int> _spriteSize = {0, 0};
     /**
      * @brief set of numbers representing the size of the gapes between sprites
      * 
      * (ex: {3, 1} for a 3x1 gap)
      * 
      */
-    std::pair<int, int> _gaps;
+    std::pair<int, int> _gaps = {0, 0};
     /**
      * @brief set of numbers representing the size of the offset of the first sprite
      * 
      */
-    std::pair<int, int> _firstOffset;
+    std::pair<int, int> _firstOffset = {0, 0};
     /**
      * @brief set of numbers representing the indexes of the animation
      * 
      * (ex: {2, 0} to start with the 3rd sprite)
      * ! The second argument is not used yet !
      */
-    std::pair<int, int> _currentIdx;
+    std::pair<int, int> _currentIdx = {0, 0};
 
     AnimatedDrawableSnapshot &operator=(const AnimatedDrawableSnapshot &snapshot) {
         entity = snapshot.entity;
@@ -275,7 +296,7 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
         _gaps = snapshot._gaps;
         _spriteSize = snapshot._spriteSize;
         _nbSprites = snapshot._nbSprites;
-        for (int i = 0; i < snapshot._anims.size(); i++) {
+        for (size_t i = 0; i < snapshot._anims.size(); i++) {
             int j = 0;
             for (j = 0; snapshot._anims[i].first[j] != '\0'; j++) {
                 _anims[i].first[j] = snapshot._anims[i].first[j];
@@ -283,7 +304,7 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
             _anims[i].first[j] = '\0';
             _anims[i].second = snapshot._anims[i].second;
         }
-        int i = 0;
+        size_t i = 0;
         for (i = 0; snapshot._state[i] != '\0'; i++) {
             _state[i] = snapshot._state[i];
         }
@@ -307,8 +328,8 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
         const std::string &state,
         int packet_id_
     ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
-        int i = 0;
-        int j = 0;
+        size_t i = 0;
+        size_t j = 0;
 
         id = id_;
         packet_id = packet_id_;
@@ -327,18 +348,18 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
             _anims[j].second = anim.second;
             ++j;
         }
-        for (int k = j; k < _anims.size(); ++k)
+        for (size_t k = j; k < _anims.size(); ++k)
             _anims[k].first[0] = '\0';
     };
 };
 
 struct AnimatedStateUpdateMessage: public BaseMessage {
-    entity_t entity;
+    entity_t entity = 0;
     char state[16];
 
     AnimatedStateUpdateMessage(int16_t id_, entity_t entity_, std::string state_, int packet_id_):
         entity(entity_) {
-            int i = 0;
+            size_t i = 0;
 
             id = id_;
             packet_id = packet_id_;
