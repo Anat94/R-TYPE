@@ -34,13 +34,13 @@ jobs:
             git checkout "${GITHUB_REF:11}"
             echo ${GITHUB_REF:11}
             git remote set-url --push origin https://your_username:$GITHUB_TOKEN@github.com/your/repo
-    # git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
             git commit -am "(clang-format) [FIX] linter commit to clean code (clang-format)"
             git push
             exit 1
-          fi
-
-
+            fi
+            
+            
+      # git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
   linux:
     runs-on: ubuntu-latest
     name: Check compilation for linux
