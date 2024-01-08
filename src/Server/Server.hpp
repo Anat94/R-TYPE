@@ -49,11 +49,14 @@ struct Friendship {
 class Server {
     typedef int (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener);
+        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener, std::mutex &mtx);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
+        void send_death_event_to_all_players(entity_t entity);
+        void send_all_scale_to_player(entity_t entity);
+        void send_scale_to_all_players(entity_t entity);
         void send_position_snapshots_for_all_players();
         void send_animated_drawable_snapshots_for_specific_player(entity_t entity);
         void send_animated_drawable_snapshot_to_all_players(entity_t entity);
@@ -76,13 +79,21 @@ class Server {
         void send_data_to_all_clients_except_me(T& structure);
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
+            std::cout << "GONNA SEND TO SPECIFC\n";
             auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
+            // while (!can_send) continue;
+            // can_send = false;
+            // while (!can_mod) continue;
             if (!endpoint.has_value()) {
                 std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+                // can_send = true;
                 return;
             }
-            while (!can_mod) continue;
+            // can_mod = false;
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
+            // can_mod = true;
+            // can_send = true;
+            std::cout << "FINISHED SENDING TO SPECIFC\n";
         }
         void sendPositionpacketsPeriodically();
         void connectToDB();
@@ -103,6 +114,7 @@ class Server {
         template <typename T>
         void resend_packets(std::vector<T> &);
     private:
+        std::vector<DeathEventMessage> _death_packets;
         std::vector<SnapshotPosition> _position_packets;
         std::vector<HighScoreMessage> _highscore_packets;
         std::vector<DrawableSnapshot> _drawable_packets;
@@ -113,6 +125,7 @@ class Server {
         std::vector<RemoveFriendsResponse> _remove_friend_response_packets;
         std::vector<FriendsResponse> _friends_response_packets;
         std::vector<ChatMessage> _chat_packets;
+        std::vector<ScaleSnapshot> _scale_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -141,7 +154,7 @@ class Server {
         bool can_mod = true;
         bool can_send = true;
         bool can_read = true;
-        std::mutex mtx;
+        std::mutex &mtx;
 };
 
 #endif // SERVER_HPP
