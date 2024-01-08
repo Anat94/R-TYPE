@@ -329,6 +329,8 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
 
 void Client::receive()
 {
+    if (prgrmstop)
+        exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
     // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
@@ -465,6 +467,9 @@ Client::~Client()
 {
     _font.~Font();
     _music.stop();
+    prgrmstop = true;
+    if (receiveThread.joinable())
+        receiveThread.join();
 }
 
 void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
@@ -577,7 +582,7 @@ int Client::run()
 {
     _music.play();
     _music.setLoop(true);
-    std::thread receiveThread(&Client::receive, this);
+    receiveThread = std::thread(&Client::receive, this);
     _music.setVolume(25);
     _lives = 0; // ((player1_h.has_value()) ? (player1_h->_health) : (0));
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));

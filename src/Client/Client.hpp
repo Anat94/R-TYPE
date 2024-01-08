@@ -181,6 +181,7 @@ class Client {
         EventListener &_listener;
         Stage _stage;
         // content for enemys
+        std::thread receiveThread;
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {4, &Client::recieve_position_snapshot_update},
@@ -206,6 +207,7 @@ class Client {
         std::mutex &mtx;
         Timer shootTimer;
         Timer moveTimer;
+        bool prgrmstop = false;
 };
 
 #endif // CLIENT_HPP
