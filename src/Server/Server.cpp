@@ -88,31 +88,18 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
     _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
-    _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 8.5, 14 * 8.5)));
+    _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
     auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
     tmp->addAnimation("idle", {2, 2}, false);
     tmp->addAnimation("move up", {2, 4}, false);
     tmp->addAnimation("move down", {2, 0}, false);
     tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
-    _ecs.add_component(new_player, component::Scale(8.5f));
+    _ecs.add_component(new_player, component::Scale(6.0f));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
-
-    entity_t enemy = _ecs.spawn_entity();
-
-    _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
-    _ecs.add_component<component::Velocity>(enemy, component::Velocity(-8.0f, 0.0f));
-    _ecs.add_component<component::Health>(enemy, component::Health(100));
-    _ecs.add_component<component::Scale>(enemy, component::Scale(6.0f));
-    _ecs.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(21 * 6.0f, 24 * 6.0f)));
-    _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
-
-    auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
-    tmp1->addAnimation("idle", {0, 7}, true);
-    tmp1->_state = "idle";
 
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player(new_player);

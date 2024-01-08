@@ -24,6 +24,7 @@
 //#pragma warning(disable: 5220)
 //#pragma warning(disable: 5039)
     #include <queue>
+    #include <unordered_map>
     #include "./Registry.hpp"
 
 class registry;
@@ -170,6 +171,31 @@ class CollisionEvent : public AEvent {
          * @param listener the event listener used to create new events if needed
          */
         void handleEvent(registry &r, EventListener &listener);
+};
+
+class SpawnEnemy : public AEvent {
+    public:
+        /**
+         * @brief Construct a new Collision Event object
+         * 
+         * @param gotTouched entity id that got touched in the event
+         * @param touched entity id that touched during the event
+         */
+        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> anims): _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
+        /**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+        void handleEvent(registry &r, EventListener &listener);
+    private:
+        int _health = 200;
+        float _scale = 6.0f;
+        component::Velocity _vel = {-8.0f, 0.0f};
+        component::Position _pos = {1920, 500};
+        component::AnimatedDrawable _animatedDrawable;
+        std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> _anims;
 };
 
 /**
