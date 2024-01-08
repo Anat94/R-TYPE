@@ -3,8 +3,22 @@ name: Test Compilation
 on: [pull_request]
 
 jobs:
+  clang_format:
+    runs-on: ubuntu-latest
+    # needs: [linux, windows]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt-get install clang-format
+      - name: Check formatting
+        run: |
+          find ./src \( -name '*.cpp' -or -name '*.hpp' -or -name '*.h' \) -not -path "./src/json.hpp" -exec clang-format -style=file {} \;
+          git diff --exit-code
+
   linux:
     runs-on: ubuntu-latest
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v4
       - name: Set up CMake
@@ -42,6 +56,7 @@ jobs:
 
   windows:
     runs-on: windows-latest
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v2
 
@@ -58,19 +73,6 @@ jobs:
           path: |
             Debug/client.exe
             Debug/server.exe
-
-  clang_format:
-    runs-on: ubuntu-latest
-    needs: [linux, windows]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install clang-format
-        run: |
-          sudo apt-get install clang-format
-      - name: Check formatting
-        run: |
-          clang-format -i -style=file $(find . -name '*.cpp' -or -name '*.hpp' -or -name '*.h')
-          git diff --exit-code
 
   build:
     name: Create Release
