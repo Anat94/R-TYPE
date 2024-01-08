@@ -222,7 +222,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component(shot, component::Position(top_left.x, top_left.y));
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
-            r.add_component(shot, component::Scale(4.0f));
+            r.add_component(shot, component::Scale(2.0f));
             //  _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
             // _ecs.add_component(new_player, component::Hitbox(component::Position(0, 0), component::Position(32 * 8.5, 14 * 8.5)));
             // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
