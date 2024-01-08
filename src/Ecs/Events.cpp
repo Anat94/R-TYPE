@@ -15,15 +15,12 @@ bool EventListener::addEvent(IEvent *event)
 
 bool EventListener::popEvent()
 {
-    while (!_reg->can_run_updates) continue;
     if (!_events.empty()) {
-        _reg->can_run_updates = false;
+        // _reg->can_run_updates = false;
         IEvent* event = _events.front();
         _events.pop();
-        std::cout << "handling event\n";
         event->handleEvent(*_reg, *this);
-        std::cout << "finished handling event\n";
-        _reg->can_run_updates = true;
+        // _reg->can_run_updates = true;
         return true;
     } else
         return false;
@@ -157,13 +154,13 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
+            // r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Scale>(_ents.first);
             r.remove_component<component::Health>(_ents.first);
             r.remove_component<component::Damage>(_ents.first);
             r.remove_component<component::Hitbox>(_ents.first);
             r.remove_component<component::AnimatedDrawable>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
+            // r.remove_component<component::Drawable>(_ents.first);
             r.kill_entity(_ents.first);
             auto &killer_score = r.get_components<component::Score>()[_ents.second];
             if (killer_score.has_value())
@@ -174,39 +171,11 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
         e.what();
         //? ignore -> entity not a player
     }
-
-    try {
-        r.get_components<component::Controllable>()[_ents.first]; // see if the entity is the player
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::ResetOnMove>(_ents.first);
-            r.remove_component<component::Controllable>(_ents.first);
-            r.remove_component<component::Heading>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Rotation>(_ents.first);
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.kill_entity(_ents.first);
-            auto &killer_score = r.get_components<component::Score>()[_ents.second];
-            if (killer_score.has_value())
-                killer_score->_score += 10;
-        }
-        return;
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a player
-    }
-
     try {
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
+            r.remove_component<component::AnimatedDrawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::HurtsOnCollision>(_ents.first);
             r.kill_entity(_ents.first);
         }
     } catch (const std::exception &e) {

@@ -13,17 +13,23 @@
 
 class KillWhenOutOfBounds: public ISystems {
     public:
-        KillWhenOutOfBounds(EventListener *listener, component::Position bounds) : _listener(listener), _bounds(bounds) {};
+        KillWhenOutOfBounds(EventListener *listener, component::Position bounds) : _listener(listener), _bounds(bounds) {
+            timer.restart();
+        };
 
         void operator()(sparse_array<component::Position> &pos,sparse_array<component::Velocity> &vel) {
-            for (auto &&[idx, v, p] : zipper<sparse_array<component::Velocity>, sparse_array<component::Position>>(vel, pos)) {
-                if (!v.has_value() || !p.has_value()) continue;
-                if (p->x < -threshold || p->x > (_bounds.x + threshold) || p->y < -threshold ||  p->y > (_bounds.y + threshold)) {
-                    _listener->addEvent(new DeathEvent(idx, -1));
+            if (timer.getElapsedTime() > 250) {
+                for (auto &&[idx, v, p] : zipper<sparse_array<component::Velocity>, sparse_array<component::Position>>(vel, pos)) {
+                    if (!v.has_value() || !p.has_value()) continue;
+                    if (p->x < -threshold || p->x > (_bounds.x + threshold) || p->y < -threshold ||  p->y > (_bounds.y + threshold)) {
+                        _listener->addEvent(new DeathEvent(idx, 0));
+                    }
                 }
+                timer.restart();
             }
         };
     private:
+        Timer timer;
         EventListener *_listener;
         component::Position _bounds;
         float threshold = -30;

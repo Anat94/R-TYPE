@@ -49,7 +49,7 @@ struct Friendship {
 class Server {
     typedef int (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
-        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener);
+        Server(asio::io_context& service, int port, registry &ecs, EventListener &listener, std::mutex &mtx);
         ~Server();
         void recieve_from_client();
         entity_t get_player_entity_from_connection_address(udp::endpoint);
@@ -81,15 +81,18 @@ class Server {
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
             std::cout << "GONNA SEND TO SPECIFC\n";
             auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
-            while (!can_send) continue;
-            can_send = false;
+            // while (!can_send) continue;
+            // can_send = false;
+            // while (!can_mod) continue;
             if (!endpoint.has_value()) {
                 std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
+                // can_send = true;
                 return;
             }
-            while (!can_mod) continue;
+            // can_mod = false;
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
-            can_send = true;
+            // can_mod = true;
+            // can_send = true;
             std::cout << "FINISHED SENDING TO SPECIFC\n";
         }
         void sendPositionpacketsPeriodically();
@@ -151,7 +154,7 @@ class Server {
         bool can_mod = true;
         bool can_send = true;
         bool can_read = true;
-        std::mutex mtx;
+        std::mutex &mtx;
 };
 
 #endif // SERVER_HPP

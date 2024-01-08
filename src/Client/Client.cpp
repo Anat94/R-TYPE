@@ -104,7 +104,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            _ecs.mtx.lock();
+            _ecs.mtx->lock();
             std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
@@ -112,7 +112,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
                 pos[real_entity]->y = snapshot->data.y;
             }
             std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
-            _ecs.mtx.unlock();
+            _ecs.mtx->unlock();
             _ecs.can_run_updates = true;
         } else {
             // std::cout << "CREATED PLAYER\n";
@@ -148,10 +148,10 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
         if (real_entity > 0 && scale[real_entity].has_value()) {
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            _ecs.mtx.lock();
+            _ecs.mtx->lock();
             scale[real_entity]->_scale.first = snapshot->data._scale.first;
             scale[real_entity]->_scale.second = snapshot->data._scale.second;
-            _ecs.mtx.unlock();
+            _ecs.mtx->unlock();
             _ecs.can_run_updates = true;
         } else {
             _ecs.add_component(real_entity, component::Scale(snapshot->data));
@@ -339,9 +339,7 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
-    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
-    mtx.unlock();
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;
@@ -355,6 +353,7 @@ Client::Client(std::string ip, int port, std::string username)
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _username(username)
 {
+    _ecs.mtx = &mtx;
     _send_structure.id = 2;
     send_to_server(_send_structure);
     _ecs.register_component<component::Text>();
@@ -530,7 +529,17 @@ int Client::manageEvent()
                 _send_structure.event = KeyIds[SFMLKeys[_event.key.code]];
             else
                 _send_structure.event = -1;
-            send_to_server(_send_structure);
+            if (SFMLKeys[_event.key.code] == "Space") {
+                if (shootTimer.getElapsedTime() > 500) {
+                    send_to_server(_send_structure);
+                    shootTimer.restart();
+                }
+            } else {
+                if (moveTimer.getElapsedTime() > 10) {
+                    send_to_server(_send_structure);
+                    moveTimer.restart();
+                }
+            }
             _event = _event;
             return 0;
         }
@@ -587,9 +596,9 @@ int Client::run()
     // RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
     // _packet_id += 1;
     // send_to_server<RemoveFriendsMessage>(remove);
-    ChatMessage msg(10, "admin", "Hello World", _packet_id);
-    _packet_id +=1;
-    send_to_server<ChatMessage>(msg);
+    // ChatMessage msg(10, "admin", "Hello World", _packet_id);
+    // _packet_id +=1;
+    // send_to_server<ChatMessage>(msg);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();

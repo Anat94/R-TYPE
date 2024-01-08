@@ -35,6 +35,7 @@
     #include "../Ecs/Events.hpp"
     #include "../Errors.hpp"
     #include "../Network.hpp"
+    #include "../Timer.hpp"
 
 struct data_struct {
     int id;
@@ -202,6 +203,8 @@ class Client {
         std::vector<std::string> friendLists;
         ChatEntity _chatEntity;
         std::mutex mtx;
+        Timer shootTimer;
+        Timer moveTimer;
 };
 
 #endif // CLIENT_HPP

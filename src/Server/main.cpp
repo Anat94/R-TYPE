@@ -44,16 +44,18 @@ void logging_system(sparse_array<component::Position> &pos, sparse_array<compone
     }
 }
 
-void runServer(const char *argv, registry &ecs) {
+void runServer(const char *argv, registry &ecs, std::mutex *mtx) {
     asio::io_context service;
-    Server server(service, std::atoi(argv), ecs, listener);
+    Server server(service, std::atoi(argv), ecs, listener, *mtx);
     service.run();
 }
 
 int main(int argc, char *argv[]) {
+    std::mutex mtx;
     // sf::RenderWindow window;
     sf::Event event;
     registry ecs;
+    ecs.mtx = &mtx;
     // sf::Texture _texture;
     // _texture.loadFromFile(argv[1]);
 
@@ -116,11 +118,13 @@ int main(int argc, char *argv[]) {
 
     error_handling(argc);
     std::thread serverThread([&]() {
-        runServer(argv[1], ecs);
+        runServer(argv[1], ecs, &mtx);
     });
     while (true) {
+        mtx.lock();
         ecs.run_systems();
         while (listener.popEvent());
+        mtx.unlock();
     }
     serverThread.joinable();
     serverThread.join();
