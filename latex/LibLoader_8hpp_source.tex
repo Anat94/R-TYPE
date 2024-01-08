@@ -1,0 +1,73 @@
+\doxysection{Lib\+Loader.\+hpp}
+\hypertarget{LibLoader_8hpp_source}{}\label{LibLoader_8hpp_source}\index{src/Client/LibLoader.hpp@{src/Client/LibLoader.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/TYPE}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ LibLoader.hpp}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ LIBLOADER\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ LIBLOADER\_HPP}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ \_WIN32}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#include\ <windows.h>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#else}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#include\ <dlfcn.h>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classLibLoader}{LibLoader}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classLibLoader}{LibLoader}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ libName)\ \{}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#ifdef\ \_WIN32}}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_lib\ =\ LoadLibrary(libName);}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_lib\ =\ dlopen(libName,\ RTLD\_LAZY);}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\_lib)\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Failed\ to\ load\ library:\ "{}}\ <<\ libName\ <<\ std::endl;}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classLibLoader}{\string~LibLoader}}()\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_lib)\ \{}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#ifdef\ \_WIN32}}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FreeLibrary((HMODULE)\_lib);}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dlclose(\_lib);}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ getFunction(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ funcName)\ \{}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#ifdef\ \_WIN32}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ GetProcAddress((HMODULE)\_lib,\ funcName);}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#else}}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dlsym(\_lib,\ funcName);}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ \_lib\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00065\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LIBLOADER\_HPP}}
+
+\end{DoxyCode}

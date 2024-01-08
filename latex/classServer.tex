@@ -1,0 +1,132 @@
+\doxysection{Server Class Reference}
+\hypertarget{classServer}{}\label{classServer}\index{Server@{Server}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classServer_ae48e1a083c8eda23d58a3d0eb4689a10}\label{classServer_ae48e1a083c8eda23d58a3d0eb4689a10} 
+{\bfseries Server} (asio\+::io\+\_\+context \&service, int port, \mbox{\hyperlink{classregistry}{registry}} \&ecs, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\item 
+\Hypertarget{classServer_aebaa15526c89fca9a172b3366b6d67ac}\label{classServer_aebaa15526c89fca9a172b3366b6d67ac} 
+void {\bfseries recieve\+\_\+from\+\_\+client} ()
+\item 
+\Hypertarget{classServer_a830bddc2e68572a85904caf1ef1b5b25}\label{classServer_a830bddc2e68572a85904caf1ef1b5b25} 
+entity\+\_\+t {\bfseries get\+\_\+player\+\_\+entity\+\_\+from\+\_\+connection\+\_\+address} (udp\+::endpoint)
+\item 
+\Hypertarget{classServer_a9039585c177a2aae8d736b50fb488815}\label{classServer_a9039585c177a2aae8d736b50fb488815} 
+entity\+\_\+t {\bfseries connect\+\_\+player} (udp\+::endpoint player\+\_\+endpoint)
+\item 
+\Hypertarget{classServer_aeb4383edf10dd70ebdbb5190a3da59fc}\label{classServer_aeb4383edf10dd70ebdbb5190a3da59fc} 
+void {\bfseries send\+\_\+position\+\_\+snapshots\+\_\+for\+\_\+all\+\_\+players} ()
+\item 
+\Hypertarget{classServer_a5058ff2189a2d893773b17cc9ba29b65}\label{classServer_a5058ff2189a2d893773b17cc9ba29b65} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshots\+\_\+for\+\_\+specific\+\_\+player} (entity\+\_\+t entity)
+\item 
+\Hypertarget{classServer_aa4bc3645885ed2d7d84de8a83576d9dc}\label{classServer_aa4bc3645885ed2d7d84de8a83576d9dc} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshot\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity)
+\item 
+\Hypertarget{classServer_adcb3d8898fe689271cfe2d71629d55c1}\label{classServer_adcb3d8898fe689271cfe2d71629d55c1} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+update\+\_\+to\+\_\+all\+\_\+clients} (entity\+\_\+t entity, std\+::string state)
+\item 
+\Hypertarget{classServer_a1166af7b1be0bc15feb3ac55a1fd4411}\label{classServer_a1166af7b1be0bc15feb3ac55a1fd4411} 
+void {\bfseries send\+\_\+entity\+\_\+drawable\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity)
+\item 
+\Hypertarget{classServer_aa5d167d434386f86e7c722a9efa87694}\label{classServer_aa5d167d434386f86e7c722a9efa87694} 
+std\+::vector$<$ char $>$ {\bfseries recieve\+\_\+raw\+\_\+data\+\_\+from\+\_\+client} ()
+\item 
+\Hypertarget{classServer_a3842e9e551ed67c60e2c7bbacbad93f6}\label{classServer_a3842e9e551ed67c60e2c7bbacbad93f6} 
+std\+::pair$<$ int, int $>$ {\bfseries get\+\_\+position\+\_\+change\+\_\+for\+\_\+event} (entity\+\_\+t entity, int event)
+\item 
+\Hypertarget{classServer_ad406751be1518f32759816c6431431bf}\label{classServer_ad406751be1518f32759816c6431431bf} 
+int {\bfseries recieve\+\_\+client\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_ab4523a6af5aab14cd5e3d44ba6eb6f30}\label{classServer_ab4523a6af5aab14cd5e3d44ba6eb6f30} 
+int {\bfseries recieve\+\_\+connection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_af36f54b19807d9c229a09ec28b162a37}\label{classServer_af36f54b19807d9c229a09ec28b162a37} 
+int {\bfseries recieve\+\_\+disconnection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a56e303be7c6647ba385f6df7e12551db}\label{classServer_a56e303be7c6647ba385f6df7e12551db} 
+int {\bfseries recieve\+\_\+packet\+\_\+confirm} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a1022d0ca971961d9172b56ae31d2ed60}\label{classServer_a1022d0ca971961d9172b56ae31d2ed60} 
+int {\bfseries receive\+\_\+login\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a99c4ac08fc4d9dd901f9ffb9a819c00f}\label{classServer_a99c4ac08fc4d9dd901f9ffb9a819c00f} 
+int {\bfseries receive\+\_\+friend\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a8cbd1f27ef95ffab43364ff1ddb4b247}\label{classServer_a8cbd1f27ef95ffab43364ff1ddb4b247} 
+int {\bfseries receive\+\_\+add\+\_\+friend\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a4b9209c3ab0925b055a99fe1f744ea1d}\label{classServer_a4b9209c3ab0925b055a99fe1f744ea1d} 
+int {\bfseries receive\+\_\+remove\+\_\+friend\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_ad6c933a021e2bdb53f28e3ff1d41e55f}\label{classServer_ad6c933a021e2bdb53f28e3ff1d41e55f} 
+int {\bfseries receive\+\_\+chat\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\item 
+\Hypertarget{classServer_a2ba41e08407ac74efdc59b26465f9c34}\label{classServer_a2ba41e08407ac74efdc59b26465f9c34} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients} (T \&structure, std\+::vector$<$ T $>$ \&packets\+\_\+to\+\_\+send)
+\item 
+\Hypertarget{classServer_a0ea01b242d6ff82a7c50d1573b5dbfe5}\label{classServer_a0ea01b242d6ff82a7c50d1573b5dbfe5} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients\+\_\+except\+\_\+me} (T \&structure)
+\item 
+\Hypertarget{classServer_a7ef98d310e698700e905a4f505ed9a96}\label{classServer_a7ef98d310e698700e905a4f505ed9a96} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+client\+\_\+by\+\_\+entity} (T \&structure, entity\+\_\+t entity)
+\item 
+\Hypertarget{classServer_a2367e00ed8dbb87eacec73af9cbb2910}\label{classServer_a2367e00ed8dbb87eacec73af9cbb2910} 
+void {\bfseries send\+Positionpackets\+Periodically} ()
+\item 
+\Hypertarget{classServer_ad81387bb02683d1b4a3db241451a69d9}\label{classServer_ad81387bb02683d1b4a3db241451a69d9} 
+void {\bfseries connect\+To\+DB} ()
+\item 
+\Hypertarget{classServer_a0937d05a0181cd6f4c45effef66ba8e2}\label{classServer_a0937d05a0181cd6f4c45effef66ba8e2} 
+\mbox{\hyperlink{structHighScoreMessage}{High\+Score\+Message}} {\bfseries get\+High\+Score} ()
+\item 
+\Hypertarget{classServer_ac29d8e8b11053fccc5b43c0334744e1e}\label{classServer_ac29d8e8b11053fccc5b43c0334744e1e} 
+void {\bfseries add\+High\+Score} (std\+::string name, int score)
+\item 
+\Hypertarget{classServer_af0a227e9300935e0815760a82fafc9b5}\label{classServer_af0a227e9300935e0815760a82fafc9b5} 
+bool {\bfseries Is\+Name\+In\+Bdd} (std\+::string name)
+\item 
+\Hypertarget{classServer_a3ccd04c6922b167fddb4781c34cc3f9c}\label{classServer_a3ccd04c6922b167fddb4781c34cc3f9c} 
+bool {\bfseries sign\+Up} (std\+::string name, std\+::string password)
+\item 
+\Hypertarget{classServer_a2afdd6fd650281ef35bb2b71adfa746b}\label{classServer_a2afdd6fd650281ef35bb2b71adfa746b} 
+bool {\bfseries check\+If\+User\+Exist} (std\+::string name, std\+::string password)
+\item 
+\Hypertarget{classServer_a4013a9962aebde6ef9c9890f95f24d1f}\label{classServer_a4013a9962aebde6ef9c9890f95f24d1f} 
+std\+::string {\bfseries make\+Personnal\+ID} ()
+\item 
+\Hypertarget{classServer_a19c683a28bc1bf676dbd92c2e9cf6254}\label{classServer_a19c683a28bc1bf676dbd92c2e9cf6254} 
+bool {\bfseries sign\+In} (std\+::string name, std\+::string password)
+\item 
+\Hypertarget{classServer_a99b5bbad63f0a8f519ef55f21b313b59}\label{classServer_a99b5bbad63f0a8f519ef55f21b313b59} 
+bool {\bfseries add\+Friend} (std\+::string name, std\+::string friend\+Id)
+\item 
+\Hypertarget{classServer_abce4f20a7620c4268171a8973f3eaf82}\label{classServer_abce4f20a7620c4268171a8973f3eaf82} 
+bool {\bfseries check\+If\+Friendship\+Exist} (std\+::string name, std\+::string friend\+Id)
+\item 
+\Hypertarget{classServer_ad05e01f9f44c0a03e8f7f7bca871ad23}\label{classServer_ad05e01f9f44c0a03e8f7f7bca871ad23} 
+bool {\bfseries remove\+Friend} (std\+::string name, std\+::string friend\+Name)
+\item 
+\Hypertarget{classServer_a6cc5ab46f1249b49d6681d851938902a}\label{classServer_a6cc5ab46f1249b49d6681d851938902a} 
+std\+::vector$<$ \mbox{\hyperlink{structFriendship}{Friendship}} $>$ {\bfseries display\+Friends} (std\+::string name, entity\+\_\+t player\+\_\+entity)
+\item 
+\Hypertarget{classServer_a33d897fc5cb607a135f802339ca9cac4}\label{classServer_a33d897fc5cb607a135f802339ca9cac4} 
+\mbox{\hyperlink{structFriendship}{Friendship}} {\bfseries get\+Friends\+Data} (std\+::string id)
+\item 
+\Hypertarget{classServer_a10e6b8c7832b6b6bd47f5e826ce90848}\label{classServer_a10e6b8c7832b6b6bd47f5e826ce90848} 
+void {\bfseries send\+\_\+highscore\+\_\+to\+\_\+specific\+\_\+client} (entity\+\_\+t)
+\item 
+\Hypertarget{classServer_ad63ddf82722c4f18dd750b994107d11c}\label{classServer_ad63ddf82722c4f18dd750b994107d11c} 
+void {\bfseries send\+\_\+all\+\_\+entity\+\_\+drawables\+\_\+to\+\_\+specific\+\_\+player} (entity\+\_\+t player)
+\item 
+\Hypertarget{classServer_a0946feca1c2a91cf9474b39c8041fd82}\label{classServer_a0946feca1c2a91cf9474b39c8041fd82} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries resend\+\_\+packets} (std\+::vector$<$ T $>$ \&)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Server/Server.\+hpp\item 
+src/\+Server/database.\+cpp\item 
+src/\+Server/Server.\+cpp\end{DoxyCompactItemize}

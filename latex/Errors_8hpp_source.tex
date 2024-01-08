@@ -1,0 +1,83 @@
+\doxysection{Errors.\+hpp}
+\hypertarget{Errors_8hpp_source}{}\label{Errors_8hpp_source}\index{src/Errors.hpp@{src/Errors.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/TYPE}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Errors.hpp}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ ERRORS\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ ERRORS\_HPP}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ <asio.hpp>}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classError}{Error}}\ :\ \textcolor{keyword}{public}\ std::exception\{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classError}{Error}}(std::string\ message)\ :\ \_message(message)\ \{\}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classError}{\string~Error}}()\ \{\};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *what()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_message.c\_str();\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ std::string\ \_message;}
+\DoxyCodeLine{00039\ \};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classArgumentError}{ArgumentError}}\ :\ \textcolor{keyword}{public}\ std::exception\{}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classArgumentError}{ArgumentError}}(std::string\ message)\ :\ \_message(message)\ \{\}}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classArgumentError}{\string~ArgumentError}}()\ \{\};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *what()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_message.c\_str();\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ std::string\ \_message;}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSFMLError}{SFMLError}}\ :\ \textcolor{keyword}{public}\ std::exception\{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSFMLError}{SFMLError}}(std::string\ message)\ :\ \_message(message)\ \{\}}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSFMLError}{\string~SFMLError}}()\ \{\};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *what()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_message.c\_str();\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ std::string\ \_message;}
+\DoxyCodeLine{00063\ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classDatabaseError}{DatabaseError}}\ :\ \textcolor{keyword}{public}\ std::exception\{}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDatabaseError}{DatabaseError}}(std::string\ message)\ :\ \_message(message)\ \{\}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDatabaseError}{\string~DatabaseError}}()\ \{\};}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *what()\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{\ \textcolor{keywordflow}{return}\ \_message.c\_str();\ \};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ std::string\ \_message;}
+\DoxyCodeLine{00075\ \};}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//ERRORS\_HPP}}
+
+\end{DoxyCode}

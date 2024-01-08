@@ -1,0 +1,325 @@
+\doxysection{Network.\+hpp}
+\hypertarget{Network_8hpp_source}{}\label{Network_8hpp_source}\index{src/Network.hpp@{src/Network.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ rtype}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ main}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ NETWORK\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ NETWORK\_HPP}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ MAX\_BUF\_SIZE\ 11024}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <asio.hpp>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}../Ecs/Events.hpp"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}../Ecs/Components.hpp"{}}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{using\ }asio::ip::udp;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00020\ \ \ \ \ int16\_t\ id;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ packet\_id;}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structSnapshotPosition}{SnapshotPosition}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ entity\_t\ entity;}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Position}{component::Position}}\ data;}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{structSnapshotPosition}{SnapshotPosition}}():\ data(0,\ 0)\ \{\};}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{structSnapshotPosition}{SnapshotPosition}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ \mbox{\hyperlink{structcomponent_1_1Position}{component::Position}}\ data\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00030\ \ \ \ \ entity(entity\_),\ \ data(data\_)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00033\ \ \ \ \ \};}
+\DoxyCodeLine{00034\ \};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structConfirmationMessage}{ConfirmationMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structEventMessage}{EventMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ event;}
+\DoxyCodeLine{00041\ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structHighScoreMessage}{HighScoreMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{int}\ score1;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{char}\ name1[20];}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{int}\ score2;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{char}\ name2[20];}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{int}\ score3;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{char}\ name3[20];}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{structHighScoreMessage}{HighScoreMessage}}(int16\_t\ id\_,\ std::string\ name1\_,\ std::string\ name2\_,\ std::string\ name3\_,\textcolor{keywordtype}{int}\ score1\_,\ \textcolor{keywordtype}{int}\ score2\_,\ \textcolor{keywordtype}{int}\ score3\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ score1(score1\_),\ score2(score2\_),\ score3(score3\_)\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ name1\_.size();\ i++)\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ name1[i]\ =\ name1\_[i];}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ name1[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ name2\_.size();\ i++)\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ name2[i]\ =\ name2\_[i];}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ name2[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ name3\_.size();\ i++)\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ name3[i]\ =\ name3\_[i];}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ name3[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00070\ \};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structLoginMessage}{LoginMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{char}\ username[20];}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{char}\ password[20];}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ logintype;}
+\DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{structLoginMessage}{LoginMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ password\_,\ \textcolor{keywordtype}{int}\ type\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ username(),\ password(),\ logintype(type\_)\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ username\_[i];}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ password\_.size();\ i++)\ \{}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ password[i]\ =\ password\_[i];}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ password[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00091\ \};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structLoginResponse}{LoginResponse}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keywordtype}{bool}\ response;}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{int}\ logintype;}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{structLoginResponse}{LoginResponse}}(int16\_t\ id\_,\ \textcolor{keywordtype}{bool}\ success\_,\ \textcolor{keywordtype}{int}\ type\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ response(success\_),\ logintype(type\_)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00101\ \};}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structFriendsMessage}{FriendsMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{char}\ username[20];}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{structFriendsMessage}{FriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ username()\ \{}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ username\_[i];}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00115\ \};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structFriendsResponse}{FriendsResponse}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{char}\ friends[20];}
+\DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{structFriendsResponse}{FriendsResponse}}(int16\_t\ id\_,\ std::string\ friends\_,\ \textcolor{keywordtype}{int}\ packet\_id\_)\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ friends\_.size();\ i++)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friends[i]\ =\ friends\_[i];}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00127\ \};}
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAddFriendsMessage}{AddFriendsMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordtype}{char}\ username[20];}
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{char}\ friendName[20];}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structAddFriendsMessage}{AddFriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ friendName\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ username(),\ friendName()\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ username\_[i];}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ friendName\_[i];}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00148\ \};}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAddFriendsResponse}{AddFriendsResponse}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{bool}\ response;}
+\DoxyCodeLine{00152\ \ \ \ \ \mbox{\hyperlink{structAddFriendsResponse}{AddFriendsResponse}}(int16\_t\ id\_,\ \textcolor{keywordtype}{bool}\ success\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ response(success\_)\ \{}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00157\ \};}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structRemoveFriendsMessage}{RemoveFriendsMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordtype}{char}\ username[20];}
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{char}\ friendName[20];}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \mbox{\hyperlink{structRemoveFriendsMessage}{RemoveFriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ friendName\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ username(),\ friendName()\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ username\_[i];}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ friendName\_[i];}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00178\ \};}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structRemoveFriendsResponse}{RemoveFriendsResponse}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{bool}\ response;}
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{structRemoveFriendsResponse}{RemoveFriendsResponse}}(int16\_t\ id\_,\ \textcolor{keywordtype}{bool}\ success\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ response(success\_)\ \{}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00187\ \};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structChatMessage}{ChatMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{char}\ name[20];}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{char}\ content[256];}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{structChatMessage}{ChatMessage}}(int16\_t\ id\_,\ std::string\ name\_,\ std::string\ content\_,\ \textcolor{keywordtype}{int}\ packet\_id\_)\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ content\_.size();\ i++)\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ content[i]\ =\ content\_[i];}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ content[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ i\ =\ 0;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ name\_.size();\ i++)\ \{}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ name[i]\ =\ name\_[i];}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ name[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00206\ \ \ \ \ \};}
+\DoxyCodeLine{00207\ \};}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structDrawableSnapshot}{DrawableSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ entity\_t\ entity;}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{char}\ data[1024];}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \mbox{\hyperlink{structDrawableSnapshot}{DrawableSnapshot}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ std::string\ path,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00214\ \ \ \ \ entity(entity\_)\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ path.size();\ i++)\ \{}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ data[i]\ =\ path[i];}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ data[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00222\ \ \ \ \ \};}
+\DoxyCodeLine{00223\ \};}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ entity\_t\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}};}
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[256];}
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{char}\ \_state[16];}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ std::array<std::pair<char[16],\ std::pair<bool,\ std::pair<int,\ int>>>,\ 5>\ \_anims;}
+\DoxyCodeLine{00243\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}};}
+\DoxyCodeLine{00250\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}};}
+\DoxyCodeLine{00257\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}};}
+\DoxyCodeLine{00262\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}};}
+\DoxyCodeLine{00269\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}};}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&snapshot)\ \{}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}};}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}};}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}};}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}};}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}};}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}};}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ snapshot.\_anims.size();\ i++)\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ 0;}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (j\ =\ 0;\ snapshot.\_anims[i].first[j]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ j++)\ \{}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ snapshot.\_anims[i].first[j];}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].second\ =\ snapshot.\_anims[i].second;}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\_state[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ snapshot.\_state[i];}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i];}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00296\ \ \ \ \ \};}
+\DoxyCodeLine{00297\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}(}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ int16\_t\ id\_,}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ entity\_t\ entity\_,}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&path,}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ nbSprites,}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ spriteSize,}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ gaps,}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ firstOffset,}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ curretnIdx,}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ animation\_t\ anims\_,}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&state,}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ packet\_id\_}
+\DoxyCodeLine{00309\ \ \ \ \ )\ :\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}(nbSprites),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}(spriteSize),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}(gaps),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}(firstOffset),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}(curretnIdx),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}(entity\_)\ \{}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ 0;}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ path.size();\ i++)\ \{}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ path[i];}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ state.size();\ i++)\ \{}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ state[i];}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&anim:\ anims\_)\ \{}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ anim.first.size();\ i++)\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].first[i]\ =\ anim.first[i];}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].second\ =\ anim.second;}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ ++j;}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k\ =\ j;\ k\ <\ \_anims.size();\ ++k)}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[k].first[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00332\ \ \ \ \ \};}
+\DoxyCodeLine{00333\ \};}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00336\ \ \ \ \ entity\_t\ entity;}
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{char}\ state[16];}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \ \ \mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ std::string\ state\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ entity(entity\_)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ state\_.size();\ i++)\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ state\_[i];}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00350\ \};}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//NETWORK\_HPP}}
+
+\end{DoxyCode}
