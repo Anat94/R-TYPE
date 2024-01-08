@@ -84,10 +84,10 @@ struct ChatEntity {
     sf::Clock _clock;
 };
 
-class Client: public ISystems {
+class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
-        Client(std::string ip, int port, std::string _username = "");
+        Client(std::string ip, int port, std::string _username, EventListener &listener, registry &ecs, std::mutex &mtx_);
         ~Client();
 
         int run();
@@ -161,7 +161,6 @@ class Client: public ISystems {
                 sf::Event::SensorChanged
             };
         //Content for ECS
-        registry _ecs;
         entity_t _player;
         entity_t _background;
         entity_t _enemy;
@@ -178,6 +177,8 @@ class Client: public ISystems {
         sf::Text _score_text;
         sf::Text _lives_text;
         sf::Text _level_text;
+        registry &_ecs;
+        EventListener &_listener;
         Stage _stage;
         // content for enemys
         std::queue<entity_t> _enemiesQueue;
@@ -202,7 +203,7 @@ class Client: public ISystems {
         int _packet_id = 0;
         std::vector<std::string> friendLists;
         ChatEntity _chatEntity;
-        std::mutex mtx;
+        std::mutex &mtx;
         Timer shootTimer;
         Timer moveTimer;
 };
