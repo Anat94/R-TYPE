@@ -10,6 +10,7 @@
     #include "Systems.hpp"
     #include "../Registry.hpp"
     #include "../Events.hpp"
+    #include "../../Timer.hpp"
 
 class KillWhenOutOfBounds: public ISystems {
     public:
@@ -32,7 +33,7 @@ class KillWhenOutOfBounds: public ISystems {
         Timer timer;
         EventListener *_listener;
         component::Position _bounds;
-        float threshold = -30;
+        float threshold = 200;
 };
 
 #endif /* !KILLWHENOUTOFBOUNDS_HPP_ */
