@@ -104,8 +104,8 @@ int main(int argc, char *argv[]) {
     // ResetOnMoveSystem *rom_sys = new ResetOnMoveSystem();
     // ecs.add_system<component::Velocity, component::ResetOnMove>(*rom_sys);
     // ecs.add_system<component::Drawable, component::Position>(collision_system);
-    // CollisionSystem *col_sys = new CollisionSystem(&listener);
-    // ecs.add_system<component::Hitbox, component::Position>(*col_sys);
+    CollisionSystem *col_sys = new CollisionSystem(&listener);
+    ecs.add_system<component::Hitbox, component::Position>(*col_sys);
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
     EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
