@@ -59,10 +59,23 @@ jobs:
             Debug/client.exe
             Debug/server.exe
 
+  clang_format:
+    runs-on: ubuntu-latest
+    needs: [linux, windows]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt-get install clang-format
+      - name: Check formatting
+        run: |
+          clang-format -i -style=file $(find . -name '*.cpp' -or -name '*.hpp' -or -name '*.h')
+          git diff --exit-code
+
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [clang_format]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -125,7 +138,7 @@ jobs:
 
   deploy_doxygen:
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
