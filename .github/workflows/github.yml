@@ -31,6 +31,10 @@ jobs:
             git add .
             git config --global user.email "anatole.babin@epitech.eu"
             git config --global user.name "Anatole Babin"
+            git checkout "${GITHUB_REF:11}"
+            echo ${GITHUB_REF:11}
+            git remote set-url --push origin https://your_username:$GITHUB_TOKEN@github.com/your/repo
+    # git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/${{ github.repository }}
             git commit -am "(clang-format) [FIX] linter commit to clean code (clang-format)"
             git push
             exit 1
