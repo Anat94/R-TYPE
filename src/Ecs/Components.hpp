@@ -79,17 +79,17 @@ namespace component {
      */
     struct Button {
         // sf::RectangleShape shape;
-        sf::Font font;
-        sf::Text text;
-        std::string strText;
-        sf::Color textColor;
-        sf::Color idleColor;
-        sf::Color hoverColor;
-        sf::Color activeColor;
-        float height;
-        float width;
-        float x;
-        float y;
+        sf::Font font = sf::Font();
+        sf::Text text = sf::Text();
+        std::string strText = "";
+        sf::Color textColor = sf::Color();
+        sf::Color idleColor = sf::Color();
+        sf::Color hoverColor = sf::Color();
+        sf::Color activeColor = sf::Color();
+        float height = 0.0f;
+        float width = 0.0f;
+        float x = 0.0f;
+        float y = 0.0f;
         
         Button(float x_, float y_, float width_, float height_, sf::Font& font_, std::string text_, sf::Color textColor_, sf::Color idleColor_, sf::Color hoverColor_, sf::Color activeColor_):
             x(x_), y(y_), width(width_), height(height_), font(font_), strText(text_), textColor(textColor_), idleColor(idleColor_), hoverColor(hoverColor_), activeColor(activeColor_)
@@ -356,25 +356,10 @@ namespace component {
      */
     struct Hitbox {
         /**
-         * @brief the top left position of the hitbox
+         * @brief the size of the hitbox
          * 
          */
-        Position _top_left;
-        /**
-         * @brief the top right position of the hitbox
-         * 
-         */
-        Position _top_right;
-        /**
-         * @brief the bottom left position of the hitbox
-         * 
-         */
-        Position _bottom_left;
-        /**
-         * @brief the bottom right position of the hitbox
-         * 
-         */
-        Position _bottom_right;
+        Position _size;
         /**
          * @brief Construct a new Hitbox object
          * 
@@ -383,43 +368,24 @@ namespace component {
          * @param bottom_left the bottom left position of the hitbox to be set
          * @param bottom_right the bottom right position of the hitbox to be set
          */
-        Hitbox(const Position &top_left, const Position &top_right, const Position &bottom_left, const Position &bottom_right) :
-            _top_left(top_left), _top_right(top_right),
-            _bottom_left(bottom_left), _bottom_right(bottom_right)
+        Hitbox(const Position &size) :
+            _size(size)
         {};
-        /**
-         * @brief Construct a new Hitbox object. Construct 
-         * 
-         * @param top_left the top left position of the hitbox to be set
-         * @param bottom_right the bottom right position of the hitbox to be set
-         */
-        Hitbox(const Position &top_left, const Position &bottom_right) :
-            _top_left(top_left), 
-            _top_right(Position(bottom_right.x, top_left.y)),
-            _bottom_left(Position(top_left.x, bottom_right.y)),
-            _bottom_right(bottom_right)
-        {};
+
         bool isOverlap(float p1, float q1, float p2, float q2) {
             return (p1 < q2) && (q1 > p2);
-        }
-        bool isTouching(const Hitbox &other) {
-            return (_bottom_right.x >= other._top_left.x && _top_left.x <= other._bottom_right.x) &&
-                (_bottom_right.y >= other._top_left.y && _top_left.y <= other._bottom_right.y);
         };
-        Hitbox update(const Position &pos) {
-            Hitbox new_one = *this;
-            new_one._top_left.x += pos.x;
-            new_one._top_left.y += pos.y;
-            new_one._top_right.x += pos.x;
-            new_one._top_right.y += pos.y;
-            new_one._bottom_left.x += pos.x;
-            new_one._bottom_left.y += pos.y;
-            new_one._bottom_right.x += pos.x;
-            new_one._bottom_right.y += pos.y;
-            return new_one;
+        bool isTouching(const Position &pos1, const Position &pos2, const Hitbox &other) {
+            Position top_left = pos1;
+            Position bottom_right = {pos1.x + _size.x, pos1.y + _size.y};
+            Position top_left_other = pos2;
+            Position bottom_right_other = {pos2.x + other._size.x, pos2.y + other._size.y};
+            return (top_left_other.x >= top_left.x && bottom_right.x <= bottom_right_other.x) &&
+                (top_left_other.y >= top_left.y && bottom_right.y <= bottom_right_other.y);
         };
-        bool contains(int x, int y) {
-            return (x >= _top_left.x && y >= _top_left.y && x <= _bottom_right.x && y <= _bottom_right.y);
+        bool contains(const Position &pos, int x, int y) {
+            Position bottom_right = {_size.x + pos.x, _size.y + pos.y};
+            return (x >= pos.x && y >= pos.y && x <= bottom_right.x && y <= bottom_right.y);
         };
         friend std::ostream& operator<<(std::ostream& os, const Hitbox& hitbox) {
             // os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
@@ -429,10 +395,7 @@ namespace component {
             return os;
         };
         bool operator==(const Hitbox& other) const {
-          return _top_left == other._top_left &&
-                 _top_right == other._top_right &&
-                 _bottom_left == other._bottom_left &&
-                 _bottom_right == other._bottom_right;
+          return _size == other._size;
         };
     };
 

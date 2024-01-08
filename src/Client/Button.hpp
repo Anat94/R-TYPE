@@ -36,15 +36,15 @@ class Button {
         
 
     private:
-        sf::RectangleShape shape;
-        sf::Text text;
-        sf::Color textColor;
-        sf::Color idleColor;
-        sf::Color hoverColor;
-        sf::Color activeColor;
+        sf::RectangleShape shape = sf::RectangleShape();
+        sf::Text text = sf::Text();
+        sf::Color textColor = sf::Color();
+        sf::Color idleColor = sf::Color();
+        sf::Color hoverColor = sf::Color();
+        sf::Color activeColor = sf::Color();
 
-        bool isButtonPressed;
-        bool isButtonHover;
+        bool isButtonPressed = false;
+        bool isButtonHover = false;
 };
 
 #endif /* !BUTTON_HPP_ */
