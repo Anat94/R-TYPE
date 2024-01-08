@@ -20,7 +20,7 @@ jobs:
           echo "status"
           echo $status
           echo "======"
-          if [ $status -eq 0 ]; then
+          if [[ $status -eq 0 ]] ; then
             echo "clang-format check passed"
           else
             echo "clang-format check failed"
