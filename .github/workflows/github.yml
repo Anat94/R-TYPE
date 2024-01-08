@@ -16,23 +16,28 @@ jobs:
           chmod +x ./clang.sh
           ./clang.sh
           echo $?
+          echo "::set-output name=returnValue::$?"
+        id: format
 
       - name: Commit changes
         run: |
           git config --global user.email "anatole.babin@epitech.eu"
           git config --global user.name "Anatole Babin"
           git commit -am "(clang-format) [FIX] fomat code - by clang format"
+        if: steps.format.outputs.returnValue != '0'
 
       - name: Pull latest changes
         run: |
           git config pull.rebase true
           git pull origin ${{ github.head_ref }}
+        if: steps.format.outputs.returnValue != '0'
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}
+        if: steps.format.outputs.returnValue != '0'
   linux:
     runs-on: ubuntu-latest
     name: Check compilation for linux
