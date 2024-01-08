@@ -32,6 +32,10 @@ jobs:
           git config --global user.name "Anatole Babin"
           git commit -am "(clang-format) [FIX] fomat code - by clang format"
 
+      - name: Pull latest changes
+        run: |
+          git pull origin ${{ github.head_ref }}
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
