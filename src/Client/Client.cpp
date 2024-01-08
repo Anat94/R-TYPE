@@ -37,8 +37,6 @@
 #include "../KeyEventMapping.hpp"
 
 bool can_read = true;
-std::mutex mtx;
-EventListener listener;
 
 std::vector<char> Client::recieve_raw_data_from_client()
 {
@@ -77,7 +75,7 @@ int Client::recieve_death_event(std::vector<char> &server_msg)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        listener.addEvent(new DeathEvent(real_entity, -1));
+        _listener.addEvent(new DeathEvent(real_entity, -1));
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -104,7 +102,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            _ecs.mtx->lock();
+            mtx.lock();
             std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
@@ -112,7 +110,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
                 pos[real_entity]->y = snapshot->data.y;
             }
             std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
-            _ecs.mtx->unlock();
+            mtx.unlock();
             _ecs.can_run_updates = true;
         } else {
             // std::cout << "CREATED PLAYER\n";
@@ -331,6 +329,8 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
 
 void Client::receive()
 {
+    if (prgrmstop)
+        exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
     // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
@@ -347,13 +347,15 @@ void Client::receive()
     receive();
 }
 
-Client::Client(std::string ip, int port, std::string username)
+Client::Client(std::string ip, int port, std::string username, EventListener &listener, registry &ecs, std::mutex &mtx_)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
-      _username(username)
+      _username(username),
+      _listener(listener),
+      _ecs(ecs),
+      mtx(mtx_)
 {
-    _ecs.mtx = &mtx;
     _send_structure.id = 2;
     send_to_server(_send_structure);
     _ecs.register_component<component::Text>();
@@ -465,6 +467,9 @@ Client::~Client()
 {
     _font.~Font();
     _music.stop();
+    prgrmstop = true;
+    if (receiveThread.joinable())
+        receiveThread.join();
 }
 
 void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
@@ -577,7 +582,7 @@ int Client::run()
 {
     _music.play();
     _music.setLoop(true);
-    std::thread receiveThread(&Client::receive, this);
+    receiveThread = std::thread(&Client::receive, this);
     _music.setVolume(25);
     _lives = 0; // ((player1_h.has_value()) ? (player1_h->_health) : (0));
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));
@@ -608,7 +613,7 @@ int Client::run()
             displayScoreBoardMenu();
         else if (_state == INGAME || _state == CHAT) {
             _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
-            while (listener.popEvent());
+            while (_listener.popEvent());
             _ecs.run_systems();
             displayTexts();
             if (_state == CHAT) {
