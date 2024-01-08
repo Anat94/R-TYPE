@@ -3,8 +3,37 @@ name: Test Compilation
 on: [pull_request]
 
 jobs:
+  clang_format:
+    runs-on: ubuntu-latest
+    # needs: [linux, windows]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt-get install clang-format
+      - name: Run format
+        run: find ./src \( -name '*.cpp' -or -name '*.hpp' -or -name '*.h' \) -not -path "./src/json.hpp" -exec clang-format -style=file {} \;
+      - name: Check if formated
+        run: |
+          git diff --exit-code
+          status=$?
+          echo "status"
+          echo $status
+          echo "======"
+          if [ $status -eq 0 ]; then
+            echo "clang-format check passed"
+          else
+            echo "clang-format check failed"
+            git add .
+            git commit -m "(clang-format) [FIX] format code by clang-format"
+            git push
+          fi
+
+
   linux:
     runs-on: ubuntu-latest
+    name: Check compilation for linux
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v4
       - name: Set up CMake
@@ -42,6 +71,8 @@ jobs:
 
   windows:
     runs-on: windows-latest
+    name: Check compilation for windows
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v2
 
@@ -62,7 +93,7 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [windows, linux]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -124,8 +155,9 @@ jobs:
           asset_content_type: application/zip
 
   deploy_doxygen:
+    name: Generate doxygen documentation
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [windows, linux]
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
