@@ -12,15 +12,19 @@ jobs:
         run: |
           sudo apt-get install clang-format
       - name: Run format
-        run: find ./src \( -name '*.cpp' -or -name '*.hpp' -or -name '*.h' \) -not -path "./src/json.hpp" -exec clang-format -style=file {} \;
+        run: |
+          chmod +x ./clang.sh
+          ./clang.sh
+
       - name: Check if formated
+        shell: bash
         run: |
           git diff --exit-code
-          status=$?
-          echo "status"
-          echo $status
+          Status=$?
+          echo "Status"
+          echo $Status
           echo "======"
-          if [[ $status -eq 0 ]] ; then
+          if [ $Status -eq 0 ] ; then
             echo "clang-format check passed"
           else
             echo "clang-format check failed"
