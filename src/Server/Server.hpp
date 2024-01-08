@@ -40,28 +40,31 @@
     #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
     #include <sqlite3.h>
     #include "../Network.hpp"
+    #include "../Timer.hpp"
 
 struct Friendship {
     std::string name;
     std::string id;
 };
 
-class Server {
+class Server: public ISystems {
     typedef int (Server::*messageParserHandle)(std::vector<char>&, entity_t);
     public:
         Server(asio::io_context& service, int port, registry &ecs, EventListener &listener, std::mutex &mtx);
         ~Server();
         void recieve_from_client();
+        void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
-        void send_death_event_to_all_players(entity_t entity);
+        void send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp);
         void send_all_scale_to_player(entity_t entity);
-        void send_scale_to_all_players(entity_t entity);
-        void send_position_snapshots_for_all_players();
-        void send_animated_drawable_snapshots_for_specific_player(entity_t entity);
-        void send_animated_drawable_snapshot_to_all_players(entity_t entity);
-        void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state);
-        void send_entity_drawable_to_all_players(entity_t entity);
+        void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
+        void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
+        void send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
+        void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
+        void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
+        void send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp);
+        void recieveThread();
         std::vector<char> recieve_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
         int recieve_client_event(std::vector<char> &, entity_t);
@@ -74,9 +77,9 @@ class Server {
         int receive_remove_friend_event(std::vector<char>&, entity_t);
         int receive_chat_event(std::vector<char>&, entity_t);
         template <typename T>
-        void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send);
+        void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
-        void send_data_to_all_clients_except_me(T& structure);
+        void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
             std::cout << "GONNA SEND TO SPECIFC\n";
@@ -95,7 +98,6 @@ class Server {
             // can_send = true;
             std::cout << "FINISHED SENDING TO SPECIFC\n";
         }
-        void sendPositionpacketsPeriodically();
         void connectToDB();
         HighScoreMessage getHighScore();
         void addHighScore(std::string name, int score);
@@ -112,7 +114,7 @@ class Server {
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
         template <typename T>
-        void resend_packets(std::vector<T> &);
+        void resend_packets(std::vector<T> &, sparse_array<component::Endpoint> &);
     private:
         std::vector<DeathEventMessage> _death_packets;
         std::vector<SnapshotPosition> _position_packets;
@@ -155,6 +157,11 @@ class Server {
         bool can_send = true;
         bool can_read = true;
         std::mutex &mtx;
+        std::vector<entity_t> animatedDrawableRegistered = {};
+        std::vector<entity_t> entitiesAlive = {};
+        std::vector<entity_t> scalesRegistered = {};
+        Timer timer;
+        int resend_counter = 0;
 };
 
 #endif // SERVER_HPP
