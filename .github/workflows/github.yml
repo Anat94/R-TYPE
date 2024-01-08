@@ -15,8 +15,7 @@ jobs:
         run: find ./src \( -name '*.cpp' -or -name '*.hpp' -or -name '*.h' \) -not -path "./src/json.hpp" -exec clang-format -style=file {} \;
       - name: Check if formated
         run: |
-          git diff --exit-code
-          status=$?
+          status=git diff --exit-code
           echo "status"
           echo $status
           echo "======"
