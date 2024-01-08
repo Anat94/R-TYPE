@@ -22,7 +22,7 @@ class CollisionSystem : public ISystems {
                     if (first_ent_idx == second_ent_idx || !h2.has_value() || !p2.has_value() || *h1 == *h2)
                         continue;
                     if (h1->isTouching(*p1, *p2, *h2) || h2->isTouching(*p2, *p1, *h1)) {
-                        CollisionEvent* new_event = new CollisionEvent(first_ent_idx + 1, second_ent_idx);
+                        CollisionEvent* new_event = new CollisionEvent(first_ent_idx, second_ent_idx);
                         if (_listener->hasEvent(new_event)) {
                             second_ent_idx++;
                             delete new_event;
