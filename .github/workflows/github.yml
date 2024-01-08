@@ -10,10 +10,12 @@ jobs:
       - name: Install clang-format
         run: |
           sudo apt-get install clang-format
+
       - name: Run format
         run: |
           chmod +x ./clang.sh
           ./clang.sh
+          echo $?
 
       - name: Commit changes
         run: |
