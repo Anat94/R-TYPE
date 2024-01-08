@@ -7,7 +7,7 @@
 
 #include "Button.hpp"
 
-Button::Button(float x, float y, float width, float height, sf::Font& font, std::string text, sf::Color textColor, sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor) : isButtonPressed(false), isButtonHover(false), textColor(textColor) ,idleColor(idleColor), hoverColor(hoverColor), activeColor(activeColor) {
+Button::Button(float x, float y, float width, float height, sf::Font& font, std::string text, sf::Color textColor_, sf::Color idleColor, sf::Color hoverColor, sf::Color activeColor) : isButtonPressed(false), isButtonHover(false), textColor(textColor_) ,idleColor(idleColor), hoverColor(hoverColor), activeColor(activeColor) {
     this->shape.setPosition(sf::Vector2f(x, y));
     this->shape.setSize(sf::Vector2f(width, height));
     this->shape.setFillColor(this->idleColor);
@@ -15,7 +15,7 @@ Button::Button(float x, float y, float width, float height, sf::Font& font, std:
     this->text.setFont(font);
     this->text.setString(text);
     this->text.setCharacterSize(20);
-    this->text.setFillColor(textColor);
+    this->text.setFillColor(textColor_);
 
     sf::FloatRect textBounds = this->text.getLocalBounds();
     this->text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
