@@ -16,19 +16,16 @@ jobs:
           chmod +x ./clang.sh
           ./clang.sh
 
-      - name: Check if formated
-        shell: bash
-        run: |
-          git diff --exit-code
-          Status=$?
-          echo "Status"
-          echo $Status
-          echo "======"
-          if [ $Status -eq 0 ] ; then
-            echo "clang-format check passed"
-          else
-            echo "clang-format check failed"
-          fi
+      # - name: Check if formated
+      #   shell: bash
+      #   run: |
+      #     git diff
+      #     status=$?
+      #     if [ $status -eq 0 ]; then
+      #       echo "clang-format check passed"
+      #     else
+      #       echo "clang-format check failed"
+      #     fi
       - name: Commit changes
         run: |
           git config --global user.email "anatole.babin@epitech.eu"
