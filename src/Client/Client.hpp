@@ -84,7 +84,7 @@ struct ChatEntity {
     sf::Clock _clock;
 };
 
-class Client {
+class Client: public ISystems {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
         Client(std::string ip, int port, std::string _username = "");
