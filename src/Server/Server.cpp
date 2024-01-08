@@ -103,11 +103,11 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
 
     entity_t enemy = _ecs.spawn_entity();
 
-    can_send = false;
     _ecs.add_component<component::Position>(enemy, component::Position(1600, 500));
-    can_send = true;
     _ecs.add_component<component::Velocity>(enemy, component::Velocity(-8.0f, 0.0f));
+    _ecs.add_component<component::Health>(enemy, component::Health(100));
     _ecs.add_component<component::Scale>(enemy, component::Scale(6.0f));
+    _ecs.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(21 * 6.0f, 24 * 6.0f)));
     _ecs.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}));
 
     auto &tmp1 = _ecs.get_components<component::AnimatedDrawable>()[enemy];
