@@ -33,8 +33,7 @@ class SFMLDrawSystem : public ISystems {
                 if (pos[i].has_value() && dra[i].has_value() && _toDraw.find(dra[i]->_path) != _toDraw.end()) {
                     _toDraw[dra[i]->_path].second->setPosition(pos[i]->x, pos[i]->y);
                     if (hit[i].has_value() && cli[i].has_value()) {
-                        auto new_hit = hit[i]->update(*pos[i]);
-                        if (new_hit.contains(_mousePos->x, _mousePos->y)) {
+                        if (hit[i]->contains(*pos[i], _mousePos->x, _mousePos->y)) {
                             _toDraw[dra[i]->_path].second->setScale(0.3f, 0.3f);
                         } else
                             _toDraw[dra[i]->_path].second->setScale(0.1f, 0.1f);

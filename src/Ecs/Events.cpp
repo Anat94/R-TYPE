@@ -16,10 +16,11 @@ bool EventListener::addEvent(IEvent *event)
 bool EventListener::popEvent()
 {
     if (!_events.empty()) {
+        // _reg->can_run_updates = false;
         IEvent* event = _events.front();
         _events.pop();
-
         event->handleEvent(*_reg, *this);
+        // _reg->can_run_updates = true;
         return true;
     } else
         return false;
@@ -50,8 +51,10 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 
         auto &player1_pla = r.get_components<component::Position>()[_to_move];
 
-        player1_pla.value().x += _pos.first;
-        player1_pla.value().y += _pos.second;
+        if (player1_pla.has_value()) {
+            player1_pla->x += _pos.first;
+            player1_pla->y += _pos.second;
+        }
         std::cout << "updated position: x: " << player1_pla.value().x << ", y: " << player1_pla.value().y << std::endl;
     } catch (const std::exception &e) {
         e.what();
@@ -151,11 +154,13 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
+            // r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Scale>(_ents.first);
             r.remove_component<component::Health>(_ents.first);
             r.remove_component<component::Damage>(_ents.first);
             r.remove_component<component::Hitbox>(_ents.first);
+            r.remove_component<component::AnimatedDrawable>(_ents.first);
+            // r.remove_component<component::Drawable>(_ents.first);
             r.kill_entity(_ents.first);
             auto &killer_score = r.get_components<component::Score>()[_ents.second];
             if (killer_score.has_value())
@@ -166,39 +171,11 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
         e.what();
         //? ignore -> entity not a player
     }
-
-    try {
-        r.get_components<component::Controllable>()[_ents.first]; // see if the entity is the player
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::ResetOnMove>(_ents.first);
-            r.remove_component<component::Controllable>(_ents.first);
-            r.remove_component<component::Heading>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Rotation>(_ents.first);
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.kill_entity(_ents.first);
-            auto &killer_score = r.get_components<component::Score>()[_ents.second];
-            if (killer_score.has_value())
-                killer_score->_score += 10;
-        }
-        return;
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a player
-    }
-
     try {
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
+            r.remove_component<component::AnimatedDrawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::HurtsOnCollision>(_ents.first);
             r.kill_entity(_ents.first);
         }
     } catch (const std::exception &e) {
@@ -223,17 +200,28 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
         auto player_d = r.get_components<component::Damage>()[_ents.first];
 
         if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value()) {
-            component::Position top_left = component::Position(((player_p->x + player_hit->_top_right.x) + 1), (player_p->y + ((player_hit->_bottom_right.y - player_hit->_top_right.y) / 2)));
+            component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 2)));
             r.add_component(shot, component::Position(top_left.x, top_left.y));
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
-            r.add_component(shot, component::Drawable("temp/assets/textures/sprites/Hobbit-Idle1.png"));
-            r.add_component(shot, component::Hitbox(component::Position(0, 0), component::Position(64, 64)));
+            r.add_component(shot, component::Scale(4.0f));
+            //  _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+            // _ecs.add_component(new_player, component::Hitbox(component::Position(0, 0), component::Position(32 * 8.5, 14 * 8.5)));
+            // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
+            // tmp->addAnimation("idle", {2, 2}, false);
+            // tmp->addAnimation("move up", {2, 4}, false);
+            // tmp->addAnimation("move down", {2, 0}, false);
+            // tmp->_state = "idle";
+            r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
+            auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
+            tmp->addAnimation("idle", {0, 3}, true);
+            tmp->_state = "idle";
+            r.add_component(shot, component::Hitbox(component::Position(32, 32)));
             r.add_component(shot, component::Pierce());
             if (player_h->_rotation <= 180)
-                r.add_component(shot, component::Velocity(5.0f, 0.0f));
+                r.add_component(shot, component::Velocity(12.0f, 0.0f));
             else
-                r.add_component(shot, component::Velocity(-5.0f, 0.0f));
+                r.add_component(shot, component::Velocity(-12.0f, 0.0f));
         }
     } catch (std::exception &e) {
         //? ignore -> shooter not a player for some reason ???
