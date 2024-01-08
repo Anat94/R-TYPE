@@ -28,9 +28,7 @@ jobs:
             echo "clang-format check passed"
           else
             echo "clang-format check failed"
-            git add .
-            git commit -m "(clang-format) [FIX] format code by clang-format"
-            git push
+            exit 1
           fi
 
 
