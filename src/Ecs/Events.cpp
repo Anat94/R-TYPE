@@ -88,6 +88,9 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
         auto &player2_d = r.get_components<component::Damage>()[_ents.second];
         auto &player2_p = r.get_components<component::Pierce>()[_ents.second];
 
+        if (_ents.first == player2_hurt->_sender)
+            return;
+
         if (player1_h.has_value() && player2_hurt.has_value()
             && player2_d.has_value()) {
             player1_h->_health -= player2_d->_damage;
@@ -154,13 +157,11 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
         if (r.entity_exists(_ents.first)) {
             r.remove_component<component::Position>(_ents.first);
             r.remove_component<component::Velocity>(_ents.first);
-            // r.remove_component<component::Drawable>(_ents.first);
             r.remove_component<component::Scale>(_ents.first);
             r.remove_component<component::Health>(_ents.first);
             r.remove_component<component::Damage>(_ents.first);
             r.remove_component<component::Hitbox>(_ents.first);
             r.remove_component<component::AnimatedDrawable>(_ents.first);
-            // r.remove_component<component::Drawable>(_ents.first);
             r.kill_entity(_ents.first);
             auto &killer_score = r.get_components<component::Score>()[_ents.second];
             if (killer_score.has_value())
@@ -189,6 +190,24 @@ void SpawnEvent::handleEvent(registry &r, EventListener &listener)
     // Todo: ping all other to connect new player
 }
 
+void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
+{
+    entity_t enemy = r.spawn_entity();
+
+    r.add_component<component::Position>(enemy, component::Position(_pos.x, _pos.y));
+    r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
+    r.add_component<component::Scale>(enemy, component::Scale(_scale));
+    r.add_component<component::Health>(enemy, component::Health(_health));
+    r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
+    r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable(_animatedDrawable._path, _animatedDrawable._nbSprites, _animatedDrawable._spriteSize, _animatedDrawable._gaps, _animatedDrawable._firstOffset, _animatedDrawable._currentIdx));
+
+    auto &tmp1 = r.get_components<component::AnimatedDrawable>()[enemy];
+    for (auto & anim: _anims) {
+        tmp1->addAnimation(anim.first, anim.second.first, anim.second.second);
+    }
+    tmp1->_state = "idle";
+}
+
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
@@ -204,24 +223,17 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component(shot, component::Position(top_left.x, top_left.y));
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
-            r.add_component(shot, component::Scale(4.0f));
-            //  _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
-            // _ecs.add_component(new_player, component::Hitbox(component::Position(0, 0), component::Position(32 * 8.5, 14 * 8.5)));
-            // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
-            // tmp->addAnimation("idle", {2, 2}, false);
-            // tmp->addAnimation("move up", {2, 4}, false);
-            // tmp->addAnimation("move down", {2, 0}, false);
-            // tmp->_state = "idle";
+            r.add_component(shot, component::Scale(2.0f));
             r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
             auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
             tmp->addAnimation("idle", {0, 3}, true);
             tmp->_state = "idle";
-            r.add_component(shot, component::Hitbox(component::Position(32, 32)));
+            r.add_component(shot, component::Hitbox(component::Position(32 * 4.0f, 32 * 4.0f)));
             r.add_component(shot, component::Pierce());
             if (player_h->_rotation <= 180)
-                r.add_component(shot, component::Velocity(12.0f, 0.0f));
+                r.add_component(shot, component::Velocity(32.0f, 0.0f));
             else
-                r.add_component(shot, component::Velocity(-12.0f, 0.0f));
+                r.add_component(shot, component::Velocity(-32.0f, 0.0f));
         }
     } catch (std::exception &e) {
         //? ignore -> shooter not a player for some reason ???

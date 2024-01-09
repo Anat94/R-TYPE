@@ -15,6 +15,8 @@ class SFMLAnimatedDrawSystem : public ISystems {
 
         void operator()(sparse_array<component::AnimatedDrawable> &ani, sparse_array<component::Position> &pos, sparse_array<component::Scale> &sca, sparse_array<component::Rotation> &rot)
         {
+            if (!_window->isOpen())
+                return;
             float elapsedTick = _clock.getElapsedTime().asMilliseconds();
             for (size_t i = 0; i < ani.size(); ++i) {
                 if (ani[i].has_value() && _toDraw.find(i) == _toDraw.end()) {

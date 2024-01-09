@@ -25,6 +25,7 @@
 #include "Server.hpp"
 #include "../Errors.hpp"
 #include "../Ecs/Systems/KillWhenOutOfBounds.hpp"
+#include "../Ecs/Systems/EnemyGeneration.hpp"
 
 using asio::ip::udp;
 
@@ -42,12 +43,6 @@ void logging_system(sparse_array<component::Position> &pos, sparse_array<compone
         std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
             << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
     }
-}
-
-void runServer(const char *argv, registry &ecs, std::mutex *mtx) {
-    asio::io_context service;
-    Server server(service, std::atoi(argv), ecs, listener, *mtx);
-    service.run();
 }
 
 int main(int argc, char *argv[]) {
@@ -109,24 +104,28 @@ int main(int argc, char *argv[]) {
     // ResetOnMoveSystem *rom_sys = new ResetOnMoveSystem();
     // ecs.add_system<component::Velocity, component::ResetOnMove>(*rom_sys);
     // ecs.add_system<component::Drawable, component::Position>(collision_system);
-    // CollisionSystem *col_sys = new CollisionSystem(&listener);
-    // ecs.add_system<component::Hitbox, component::Position>(*col_sys);
+    CollisionSystem *col_sys = new CollisionSystem(&listener);
+    ecs.add_system<component::Hitbox, component::Position>(*col_sys);
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
+    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
+    ecs.add_system<component::Position, component::Health, component::Endpoint>(*engen_sys);
+    asio::io_context service;
+    Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
+    service.run();
+    ecs.add_system<component::AnimatedDrawable, component::Scale, component::Position, component::Endpoint>(*server);
     // ecs.add_system<component::Drawable, component::Scale>(scale_system);
     // ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
 
     error_handling(argc);
-    std::thread serverThread([&]() {
-        runServer(argv[1], ecs, &mtx);
-    });
+    // std::thread serverThread([&]() {
+    //     runServer(argv[1], ecs, &mtx);
+    // });
     while (true) {
         mtx.lock();
         ecs.run_systems();
         while (listener.popEvent());
         mtx.unlock();
     }
-    serverThread.joinable();
-    serverThread.join();
     return 0;
 }

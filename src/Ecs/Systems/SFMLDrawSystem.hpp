@@ -17,6 +17,8 @@ class SFMLDrawSystem : public ISystems {
         SFMLDrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
 
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Clickable> &cli, sparse_array<component::Hitbox> &hit) {
+            if (!_window->isOpen())
+                return;
             for (size_t i = 0; i < dra.size(); ++i) {
                 if (dra[i].has_value() && _toDraw.find(dra[i]->_path) == _toDraw.end()) {
                     std::unique_ptr<sf::Texture> t = std::make_unique<sf::Texture>();
