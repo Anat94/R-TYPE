@@ -349,40 +349,6 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
       _ecs(ecs),
       mtx(mtx_)
 {
-    _send_structure.id = 2;
-    send_to_server(_send_structure);
-    _ecs.register_component<component::Text>();
-    _ecs.register_component<component::Scale>();
-    _ecs.register_component<component::Score>();
-    _ecs.register_component<component::Damage>();
-    _ecs.register_component<component::Health>();
-    _ecs.register_component<component::Hitbox>();
-    _ecs.register_component<component::Pierce>();
-    _ecs.register_component<component::Heading>();
-    _ecs.register_component<component::Drawable>();
-    _ecs.register_component<component::Position>();
-    _ecs.register_component<component::Rotation>();
-    _ecs.register_component<component::Velocity>();
-    _ecs.register_component<component::Clickable>();
-    _ecs.register_component<component::Controllable>();
-    _ecs.register_component<component::ResetOnMove>();
-    _ecs.register_component<component::ServerEntity>();
-    _ecs.register_component<component::AnimatedDrawable>();
-    _ecs.register_component<component::HurtsOnCollision>();
-    _background = _ecs.spawn_entity();
-    _btn_play = _ecs.spawn_entity();
-    _ecs.add_component(_background, component::Position(0.0f, 0.0f));
-    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
-    if (!_music.openFromFile("./assets/game_music.ogg"))
-        throw SFMLError("Music not found");
-
-    _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
-    _window.setFramerateLimit(60);
-    listener.addRegistry(_ecs);
-    SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
     // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
     // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
     // entity_t tmp_text = _ecs.spawn_entity();
@@ -690,8 +656,47 @@ void Client::manageCli()
     }
 }
 
+void Client::initClass()
+{
+    _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
+    _window.setFramerateLimit(60);
+    _send_structure.id = 2;
+    send_to_server(_send_structure);
+    _ecs.register_component<component::Text>();
+    _ecs.register_component<component::Scale>();
+    _ecs.register_component<component::Score>();
+    _ecs.register_component<component::Damage>();
+    _ecs.register_component<component::Health>();
+    _ecs.register_component<component::Hitbox>();
+    _ecs.register_component<component::Pierce>();
+    _ecs.register_component<component::Heading>();
+    _ecs.register_component<component::Drawable>();
+    _ecs.register_component<component::Position>();
+    _ecs.register_component<component::Rotation>();
+    _ecs.register_component<component::Velocity>();
+    _ecs.register_component<component::Clickable>();
+    _ecs.register_component<component::Controllable>();
+    _ecs.register_component<component::ResetOnMove>();
+    _ecs.register_component<component::ServerEntity>();
+    _ecs.register_component<component::AnimatedDrawable>();
+    _ecs.register_component<component::HurtsOnCollision>();
+    _background = _ecs.spawn_entity();
+    _btn_play = _ecs.spawn_entity();
+    _ecs.add_component(_background, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
+    if (!_music.openFromFile("./assets/game_music.ogg"))
+        throw SFMLError("Music not found");
+    _listener.addRegistry(_ecs);
+    SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
+    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+}
+
 int Client::run()
 {
+    manageCli();
+    initClass();
     _music.play();
     _music.setLoop(true);
     receiveThread = std::thread(&Client::receive, this);
@@ -716,7 +721,6 @@ int Client::run()
     // ChatMessage msg(21, "admin", "Hello World", _packet_id);
     // _packet_id +=1;
     // send_to_server<ChatMessage>(msg);
-    manageCli();
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();

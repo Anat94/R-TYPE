@@ -126,6 +126,7 @@ class Client {
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
         void manageCli();
+        void initClass();
     private:
         //Content for network
         EventMessage _send_structure;
