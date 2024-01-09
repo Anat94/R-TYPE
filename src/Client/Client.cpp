@@ -521,7 +521,7 @@ int Client::manageEvent()
                 return 0;
             }
             if (_event.key.code == sf::Keyboard::Enter) {
-                ChatMessage msg(10, _username, _chatEntity._input, _packet_id);
+                ChatMessage msg(21, _username, _chatEntity._input, _packet_id);
                 _packet_id++;
                 send_to_server(msg);
                 _chatEntity._input = "";
@@ -589,19 +589,19 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    // LoginMessage login(6, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
+    // LoginMessage login(17, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
     // _packet_id += 1;
     // send_to_server<LoginMessage>(login);
-    // FriendsMessage friendsmsg(7, "admin", _packet_id);
+    // FriendsMessage friendsmsg(18, "admin", _packet_id);
     // _packet_id += 1;
     // send_to_server<FriendsMessage>(friendsmsg);
-    // AddFriendsMessage add(8, "Anatole", "Jacques",  _packet_id);
+    // AddFriendsMessage add(19, "Anatole", "Jacques",  _packet_id);
     // _packet_id += 1;
     // send_to_server<AddFriendsMessage>(add);
-    // RemoveFriendsMessage remove(9, "Anatole", "Jacques",  _packet_id);
+    // RemoveFriendsMessage remove(20, "Anatole", "Jacques",  _packet_id);
     // _packet_id += 1;
     // send_to_server<RemoveFriendsMessage>(remove);
-    // ChatMessage msg(10, "admin", "Hello World", _packet_id);
+    // ChatMessage msg(21, "admin", "Hello World", _packet_id);
     // _packet_id +=1;
     // send_to_server<ChatMessage>(msg);
     while (true) {
