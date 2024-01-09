@@ -102,7 +102,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            mtx.lock();
             // std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
@@ -110,7 +109,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
                 pos[real_entity]->y = snapshot->data.y;
             }
             // std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
-            mtx.unlock();
             _ecs.can_run_updates = true;
         } else {
             // std::cout << "CREATED PLAYER\n";
@@ -146,10 +144,8 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
         if (real_entity > 0 && scale[real_entity].has_value()) {
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            _ecs.mtx->lock();
             scale[real_entity]->_scale.first = snapshot->data._scale.first;
             scale[real_entity]->_scale.second = snapshot->data._scale.second;
-            _ecs.mtx->unlock();
             _ecs.can_run_updates = true;
         } else {
             _ecs.add_component(real_entity, component::Scale(snapshot->data));
@@ -333,11 +329,13 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;
     send_to_server<ConfirmationMessage>(to_send);
+    mtx.unlock();
     receive();
 }
 
@@ -412,13 +410,13 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     _chatEntity._chatTitle  = sf::Text("Chat", _font, 30);
     _chatEntity._chatTitle.setPosition(150, 50);
     _chatEntity._inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
-    _chatEntity._inputBox.setPosition(25.0, 900.0);
+    _chatEntity._inputBox.setPosition(25.0, 920.0);
     _chatEntity._inputBox.setFillColor(sf::Color::White);
     _chatEntity._input = std::string("");
     _chatEntity._chatTextInput.setString(_chatEntity._input);
     _chatEntity._chatTextInput.setFont(_font);
     _chatEntity._chatTextInput.setCharacterSize(20);
-    _chatEntity._chatTextInput.setPosition(50, 900);
+    _chatEntity._chatTextInput.setPosition(50, 920);
     _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
 }
 
@@ -444,6 +442,7 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 
 template <typename T>
 void Client::send_to_server(const T& structure) {
+    std::cout << "SENDING\n";
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
@@ -465,6 +464,7 @@ void Client::displayTexts()
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
+        handleInput(_event);
         if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
             send_to_server<EventMessage>(_send_structure);
@@ -724,6 +724,7 @@ int Client::run()
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
+        mtx.lock();
         if (manageEvent())
             break;
         if (_state == INGAMEMENU)
@@ -741,12 +742,16 @@ int Client::run()
                 for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
                     _window.draw(_chatEntity._chatText[i]);
                 }
-                if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
-                    handleInput(_event);
-                    _chatEntity._clock.restart();
+                if (_chatEntity._chat.size() > 25) {
+                    _chatEntity._chat.erase(_chatEntity._chat.begin());
+                    _chatEntity._chatText.erase(_chatEntity._chatText.begin());
+                    for (size_t i = 0; i < _chatEntity._chatText.size(); i++) {
+                        _chatEntity._chatText[i].setPosition(30, 150 + i * 30);
+                    }
                 }
             }
         }
+        mtx.unlock();
         _window.display();
     }
     _window.close();
