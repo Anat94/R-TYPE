@@ -410,13 +410,13 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     _chatEntity._chatTitle  = sf::Text("Chat", _font, 30);
     _chatEntity._chatTitle.setPosition(150, 50);
     _chatEntity._inputBox = sf::RectangleShape(sf::Vector2f(350, 50));
-    _chatEntity._inputBox.setPosition(25.0, 900.0);
+    _chatEntity._inputBox.setPosition(25.0, 920.0);
     _chatEntity._inputBox.setFillColor(sf::Color::White);
     _chatEntity._input = std::string("");
     _chatEntity._chatTextInput.setString(_chatEntity._input);
     _chatEntity._chatTextInput.setFont(_font);
     _chatEntity._chatTextInput.setCharacterSize(20);
-    _chatEntity._chatTextInput.setPosition(50, 900);
+    _chatEntity._chatTextInput.setPosition(50, 920);
     _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
 }
 
@@ -742,10 +742,13 @@ int Client::run()
                 for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
                     _window.draw(_chatEntity._chatText[i]);
                 }
-                // if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
-                //     handleInput(_event);
-                //     _chatEntity._clock.restart();
-                // }
+                if (_chatEntity._chat.size() > 25) {
+                    _chatEntity._chat.erase(_chatEntity._chat.begin());
+                    _chatEntity._chatText.erase(_chatEntity._chatText.begin());
+                    for (size_t i = 0; i < _chatEntity._chatText.size(); i++) {
+                        _chatEntity._chatText[i].setPosition(30, 150 + i * 30);
+                    }
+                }
             }
         }
         mtx.unlock();
