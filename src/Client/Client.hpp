@@ -87,7 +87,7 @@ struct ChatEntity {
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
-        Client(std::string ip, int port, std::string _username, EventListener &listener, registry &ecs, std::mutex &mtx_);
+        Client(std::string ip, int port, EventListener &listener, registry &ecs, std::mutex &mtx_);
         ~Client();
 
         int run();
@@ -125,6 +125,7 @@ class Client {
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
+        void manageCli();
     private:
         //Content for network
         EventMessage _send_structure;
@@ -202,7 +203,8 @@ class Client {
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
-        std::vector<std::string> friendLists;
+        std::string friendLists;
+        bool friendListFinish = false;
         ChatEntity _chatEntity;
         std::mutex &mtx;
         Timer shootTimer;

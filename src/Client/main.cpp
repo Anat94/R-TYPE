@@ -47,9 +47,8 @@ int main(int argc, char** argv) {
                 Menu menu;
                 state = menu.run();
                 tmp_username = menu.getUsername();
-                std::cout << "username: " << tmp_username << std::endl;
             } else if (state == GAME) {
-                Client client(argv[1], atoi(argv[2]), tmp_username, listener, ecs, mtx);
+                Client client(argv[1], atoi(argv[2]), listener, ecs, mtx);
                 return client.run();
             }
             if (state == SUCCES)
