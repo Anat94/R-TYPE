@@ -70,7 +70,7 @@ int Client::recieve_death_event(std::vector<char> &server_msg)
         return -1;
     DeathEventMessage *snapshot = reinterpret_cast<DeathEventMessage *>(server_msg.data());
     // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
-    std::cout << "recieved death event !!!!\n";
+    // std::cout << "recieved death event !!!!\n";
     while (!can_read)
         continue;
     try {
@@ -103,13 +103,13 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
             mtx.lock();
-            std::cout << "UPDATING POS\n";
+            // std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
                 pos[real_entity]->x = snapshot->data.x;
                 pos[real_entity]->y = snapshot->data.y;
             }
-            std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+            // std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
             mtx.unlock();
             _ecs.can_run_updates = true;
         } else {
@@ -186,16 +186,10 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
 }
 
 int Client::receive_friends_reponse(std::vector<char> &server_msg) {
-    printf("receive_friends_reponse\n");
     if (server_msg.size() < sizeof(FriendsResponse))
         return -1;
-    printf("receive_friends_reponse\n");
     FriendsResponse *friends = reinterpret_cast<FriendsResponse *>(server_msg.data());
-    printf("receive_friends_reponse\n");
-    std::cout << friends->friends << std::endl;
-    printf("receive_friends_reponse\n");
-    friendLists.push_back(friends->friends);
-    printf("receive_friends_reponse\n");
+    friendLists = friends->friends;
     return friends->packet_id;
 }
 
@@ -270,7 +264,7 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 
 int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
 {
-    std::cout << "recieved animated drawable snapshot\n";
+    // std::cout << "recieved animated drawable snapshot\n";
     if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
         return -1;
     AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
@@ -347,49 +341,14 @@ void Client::receive()
     receive();
 }
 
-Client::Client(std::string ip, int port, std::string username, EventListener &listener, registry &ecs, std::mutex &mtx_)
+Client::Client(std::string ip, int port, EventListener &listener, registry &ecs, std::mutex &mtx_)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
-      _username(username),
       _listener(listener),
       _ecs(ecs),
       mtx(mtx_)
 {
-    _send_structure.id = 2;
-    send_to_server(_send_structure);
-    _ecs.register_component<component::Text>();
-    _ecs.register_component<component::Scale>();
-    _ecs.register_component<component::Score>();
-    _ecs.register_component<component::Damage>();
-    _ecs.register_component<component::Health>();
-    _ecs.register_component<component::Hitbox>();
-    _ecs.register_component<component::Pierce>();
-    _ecs.register_component<component::Heading>();
-    _ecs.register_component<component::Drawable>();
-    _ecs.register_component<component::Position>();
-    _ecs.register_component<component::Rotation>();
-    _ecs.register_component<component::Velocity>();
-    _ecs.register_component<component::Clickable>();
-    _ecs.register_component<component::Controllable>();
-    _ecs.register_component<component::ResetOnMove>();
-    _ecs.register_component<component::ServerEntity>();
-    _ecs.register_component<component::AnimatedDrawable>();
-    _ecs.register_component<component::HurtsOnCollision>();
-    _background = _ecs.spawn_entity();
-    _btn_play = _ecs.spawn_entity();
-    _ecs.add_component(_background, component::Position(0.0f, 0.0f));
-    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
-    if (!_music.openFromFile("./assets/game_music.ogg"))
-        throw SFMLError("Music not found");
-
-    _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
-    _window.setFramerateLimit(60);
-    listener.addRegistry(_ecs);
-    SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
-    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
     // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
     // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
     // entity_t tmp_text = _ecs.spawn_entity();
@@ -578,8 +537,166 @@ void Client::handleInput(sf::Event& event) {
     }
 }
 
+void Client::manageCli()
+{
+    std::string input;
+    std::string command;
+    std::string params;
+    std::string param2;
+    while (true) {
+        std::cout << ">> ";
+        std::getline(std::cin, input);
+        std::istringstream iss(input);
+        std::getline(iss, command, ' ');
+        std::getline(iss, params, ' ');
+        std::getline(iss, param2, ' ');
+        if (command == "EXIT")
+            exit(0);
+        else if (command == "SIGNIN") {
+            if (params == "" || param2 == "") {
+                std::cout << "Usage: SIGNIN [username] [password]" << std::endl;
+                continue;
+            } else {
+                LoginMessage login(17, params, param2, 1, _packet_id); // 0 == signup & 1 == signin
+                _packet_id += 1;
+                send_to_server<LoginMessage>(login);
+                _username = params;
+            }
+        } else if (command == "SIGNUP") {
+            std::cout << "SIGNUP" << std::endl;
+            std::cout << params << std::endl;
+            std::cout << param2 << std::endl;
+            if (params == "" || param2 == "") {
+                std::cout << "Usage: SIGNUP [username] [password]" << std::endl;
+                continue;
+            } else {
+                LoginMessage login(17, params, param2, 0, _packet_id); // 0 == signup & 1 == signin
+                _packet_id += 1;
+                send_to_server<LoginMessage>(login);
+                _username = params;
+            }
+        } else if (command == "START") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            return;
+        } else if (command == "LIST_FRIENDS") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            if (friendLists.size() > 0)
+                friendLists.clear();
+            FriendsMessage friendsmsg(18, _username, _packet_id);
+            _packet_id += 1;
+            send_to_server<FriendsMessage>(friendsmsg);
+            std::cout << "Friends list:" << std::endl;
+            while (friendLists.size() == 0) {
+                continue;
+            }
+            std::cout << friendLists;
+        } else if (command == "ADD_FRIENDS") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            if (params != "") {
+                AddFriendsMessage add(19, _username, params,  _packet_id);
+                _packet_id += 1;
+                send_to_server<AddFriendsMessage>(add);
+            } else {
+                std::cout << "Usage: ADD_FRIENDS [name]" << std::endl;
+            }
+        } else if (command == "REMOVE_FRIENDS") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            if (params != "") {
+                printf("%s\n", params.c_str());
+                RemoveFriendsMessage remove(20, _username, params,  _packet_id);
+                _packet_id += 1;
+                send_to_server<RemoveFriendsMessage>(remove);
+            } else {
+                std::cout << "Usage: REMOVE_FRIENDS [name]" << std::endl;
+            }
+        } else if (command == "CHAT") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            if (params != "") {
+                ChatMessage msg(21, _username, params, _packet_id);
+                _packet_id +=1;
+                send_to_server<ChatMessage>(msg);
+            } else {
+                std::cout << "Usage: CHAT [message]" << std::endl;
+            }
+        } else if (command == "WHOAMI") {
+            std::cout << "You are " << _username << std::endl;
+        } else if (command == "HELP") {
+            std::cout << "Available commands:" << std::endl;
+            std::cout << "START: Start the game" << std::endl;
+            std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
+            std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
+            std::cout << "WHOAMI: Show who you are" << std::endl;
+            std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
+            std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
+            std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;
+            std::cout << "CHAT [message]: Send a message to all your friends" << std::endl;
+            std::cout << "HIGHSCORE: Display the highscore" << std::endl;
+            std::cout << "CLEAR: Clear the terminal" << std::endl;
+            std::cout << "EXIT: Exit the game" << std::endl;
+        } else if (command == "CLEAR") {
+            system("clear");
+        } else {
+            std::cout << "Command not found" << std::endl;
+        }
+    }
+}
+
+void Client::initClass()
+{
+    _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
+    _window.setFramerateLimit(60);
+    _send_structure.id = 2;
+    send_to_server(_send_structure);
+    _ecs.register_component<component::Text>();
+    _ecs.register_component<component::Scale>();
+    _ecs.register_component<component::Score>();
+    _ecs.register_component<component::Damage>();
+    _ecs.register_component<component::Health>();
+    _ecs.register_component<component::Hitbox>();
+    _ecs.register_component<component::Pierce>();
+    _ecs.register_component<component::Heading>();
+    _ecs.register_component<component::Drawable>();
+    _ecs.register_component<component::Position>();
+    _ecs.register_component<component::Rotation>();
+    _ecs.register_component<component::Velocity>();
+    _ecs.register_component<component::Clickable>();
+    _ecs.register_component<component::Controllable>();
+    _ecs.register_component<component::ResetOnMove>();
+    _ecs.register_component<component::ServerEntity>();
+    _ecs.register_component<component::AnimatedDrawable>();
+    _ecs.register_component<component::HurtsOnCollision>();
+    _background = _ecs.spawn_entity();
+    _btn_play = _ecs.spawn_entity();
+    _ecs.add_component(_background, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
+    if (!_music.openFromFile("./assets/game_music.ogg"))
+        throw SFMLError("Music not found");
+    _listener.addRegistry(_ecs);
+    SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
+    SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
+    _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+}
+
 int Client::run()
 {
+    manageCli();
+    initClass();
     _music.play();
     _music.setLoop(true);
     receiveThread = std::thread(&Client::receive, this);

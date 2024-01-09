@@ -109,7 +109,7 @@ class Server: public ISystems {
         bool addFriend(std::string name, std::string friendId);
         bool checkIfFriendshipExist(std::string name, std::string friendId);
         bool removeFriend(std::string name, std::string friendName);
-        std::vector<Friendship> displayFriends(std::string name, entity_t player_entity);
+        std::vector<std::string> displayFriends(std::string name, entity_t player_entity);
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);

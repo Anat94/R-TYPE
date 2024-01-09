@@ -194,7 +194,7 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     if (!scale.has_value())
         return;
     ScaleSnapshot to_send(15, entity, *scale, 0);
-    std::cout << "sending scale\n";
+    // std::cout << "sending scale\n";
     send_data_to_all_clients(to_send, _scale_packets, edp);
 }
 
@@ -225,7 +225,7 @@ std::vector<char> Server::recieve_raw_data_from_client()
     try {
         size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _remote_endpoint);
         receivedData.resize(bytesRead);
-        std::cout << "RECIEVED FROM CLIENT: " << _remote_endpoint << "\n";
+        // std::cout << "RECIEVED FROM CLIENT: " << _remote_endpoint << "\n";
     } catch (std::exception &e) {
         // std::cout << e.what() << std::endl;
         receivedData.resize(0);
@@ -260,7 +260,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
     }
     // std::cout << "sending update\n";
     AnimatedStateUpdateMessage to_send(14, entity, state, 0);
-    std::cout << "sending animated drawable update\n";
+    // std::cout << "sending animated drawable update\n";
     send_data_to_all_clients(to_send, _animated_drawable_update_packets, edp);
 }
 
@@ -282,7 +282,7 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
             0
         );
         // while (!can_send) continue;
-        std::cout << "sending animated drawable\n";
+        // std::cout << "sending animated drawable\n";
         send_data_to_all_clients(snap_ad, _animated_drawable_packets, edp);
     }
 }
@@ -315,14 +315,14 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
 {
     component::Drawable drawable = dra[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, 0);
-    std::cout << "sending normal drawable\n";
+    // std::cout << "sending normal drawable\n";
     send_data_to_all_clients<DrawableSnapshot>(to_send, _drawable_packets, edp);
 }
 
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
     DeathEventMessage evt(16, entity, 0);
-    std::cout << "sending death event\n";
+    // std::cout << "sending death event\n";
     send_data_to_all_clients(evt, _death_packets, edp);
 }
 
@@ -409,7 +409,6 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _death_packets.end()
     );
-    
     return 0;
 }
 
@@ -464,13 +463,12 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(FriendsMessage)) {
-        printf("uy\n");
         return -1;
     }
     FriendsMessage *snapshot = reinterpret_cast<FriendsMessage *>(client_msg.data());
     while (!can_read)
         continue;
-    std::vector<Friendship> friends = displayFriends(snapshot->username, player_entity);
+    std::vector<std::string> friends = displayFriends(snapshot->username, player_entity);
     _packet_id++;
     return 0;
 }
@@ -482,6 +480,8 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
     AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
     while (!can_read)
         continue;
+    std::cout << snapshot->friendName << std::endl;
+    std::cout << snapshot->username << std::endl;
     bool response = addFriend(snapshot->username, snapshot->friendName);
     AddFriendsResponse resp(10, response, _packet_id);
     send_data_to_client_by_entity<AddFriendsResponse>(resp, player_entity);
@@ -509,7 +509,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     while (!can_read)
         continue;
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    std::cout << "sending chat message\n";
+    // std::cout << "sending chat message\n";
     // while (!can_send) continue;
     send_data_to_all_clients<ChatMessage>(reponse, _chat_packets, _ecs.get_components<component::Endpoint>());
     return 0;

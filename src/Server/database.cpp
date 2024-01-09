@@ -219,8 +219,9 @@ bool Server::addFriend(std::string name, std::string friendId) {
 }
 
 bool Server::removeFriend(std::string name, std::string friendName) {
-    const std::string tableName = "FRIENDS";
-    std::string sql = "DELETE FROM " + tableName + " WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
+    std::cout << "name: " << name << std::endl;
+    std::cout << "friendName: " << friendName << std::endl;
+    std::string sql = "DELETE FROM FRIENDS WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
     char *zErrMsg = 0;
     int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
@@ -231,53 +232,37 @@ bool Server::removeFriend(std::string name, std::string friendName) {
     return true;
 }
 
-static int callbackGetFriendsData(void *data, int argc, char** argv, char** azColName) {
-    Friendship* myFriend = static_cast<Friendship*>(data);
-    myFriend->id = argv[0];
-    myFriend->name = argv[1];
-    return 0;
-}
-
-Friendship Server::getFriendsData(std::string id)
-{
-    const std::string tableName = "USERS";
-    std::string sql = "SELECT * FROM " + tableName + " WHERE id = '" + id + "';";
-    char *zErrMsg = 0;
-    Friendship myFriend;
-    int rc = sqlite3_exec(_db, sql.c_str(), callbackGetFriendsData, &myFriend, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
-        sqlite3_free(zErrMsg);
-    }
-    return myFriend;
-}
-
 struct CallbackData {
     Server* server;
     std::vector<Friendship>* friends;
 };
 
 static int callbackDisplayFriends(void *data, int argc, char** argv, char** azColName) {
-    CallbackData* callbackData = static_cast<CallbackData*>(data);
-    callbackData->friends->push_back(callbackData->server->getFriendsData(argv[1]));
+    std::vector<std::string>* callbackData = static_cast<std::vector<std::string>*>(data);
+    std::cout << argv[1] << std::endl;
+    callbackData->push_back(std::string(argv[1]));
     return 0;
 }
 
-std::vector<Friendship> Server::displayFriends(std::string name, entity_t player_entity) {
+std::vector<std::string> Server::displayFriends(std::string name, entity_t player_entity) {
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
     char *zErrMsg = 0;
-    std::vector<Friendship> friends;
-    CallbackData callbackData = { this, &friends };
-    int rc = sqlite3_exec(_db, sql.c_str(), callbackDisplayFriends, &callbackData, &zErrMsg);
+    std::vector<std::string> friends;
+    int rc = sqlite3_exec(_db, sql.c_str(), callbackDisplayFriends, &friends, &zErrMsg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+    std::cout << friends.size() << std::endl;
+    std::string str = "";
+    std::string sep = "\n";
     for (const auto& friendData : friends) {
-        std::cout << "Name: " << friendData.name << ", ID: " << friendData.id << std::endl;
-        FriendsResponse resp(9, friendData.name, _packet_id);
-        send_data_to_client_by_entity<FriendsResponse>(resp, player_entity);
+        std::cout << "Name: " << friendData << std::endl;
+        str += friendData + sep;
     }
+    std::cout << str << std::endl;
+    FriendsResponse resp(9, str, _packet_id);
+    send_data_to_client_by_entity<FriendsResponse>(resp, player_entity);
     return friends;
 }
