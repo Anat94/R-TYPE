@@ -465,6 +465,7 @@ void Client::displayTexts()
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
+        handleInput(_event);
         if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
             send_to_server<EventMessage>(_send_structure);
@@ -741,10 +742,10 @@ int Client::run()
                 for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
                     _window.draw(_chatEntity._chatText[i]);
                 }
-                if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
-                    handleInput(_event);
-                    _chatEntity._clock.restart();
-                }
+                // if (_chatEntity._clock.getElapsedTime().asSeconds() >= 0.1f) {
+                //     handleInput(_event);
+                //     _chatEntity._clock.restart();
+                // }
             }
         }
         _window.display();
