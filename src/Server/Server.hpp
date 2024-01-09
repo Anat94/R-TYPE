@@ -142,11 +142,11 @@ class Server: public ISystems {
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm},
-            {6, &Server::receive_login_event},
-            {7, &Server::receive_friend_event},
-            {8, &Server::receive_add_friend_event},
-            {9, &Server::receive_remove_friend_event},
-            {10, &Server::receive_chat_event},
+            {17, &Server::receive_login_event},
+            {18, &Server::receive_friend_event},
+            {19, &Server::receive_add_friend_event},
+            {20, &Server::receive_remove_friend_event},
+            {21, &Server::receive_chat_event},
         };
         std::string _event;
         std::thread _send_thread;
