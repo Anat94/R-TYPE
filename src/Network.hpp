@@ -140,7 +140,7 @@ struct AddFriendsMessage: public BaseMessage {
             }
             username[i] = '\0';
             i = 0;
-            for (; i < username_.size(); i++) {
+            for (; i < friendName_.size(); i++) {
                 friendName[i] = friendName_[i];
             }
             friendName[i] = '\0';
@@ -170,7 +170,7 @@ struct RemoveFriendsMessage: public BaseMessage {
             }
             username[i] = '\0';
             i = 0;
-            for (; i < username_.size(); i++) {
+            for (; i < friendName_.size(); i++) {
                 friendName[i] = friendName_[i];
             }
             friendName[i] = '\0';

@@ -41,15 +41,14 @@ int main(int argc, char** argv) {
         if (argc != 3) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
-        enum state state = MENU;
+        enum state state = GAME;
         while (state != END) {
             if (state == MENU) {
-                Menu menu;
-                state = menu.run();
-                tmp_username = menu.getUsername();
-                std::cout << "username: " << tmp_username << std::endl;
+                // Menu menu;
+                // state = menu.run();
+                // tmp_username = menu.getUsername();
             } else if (state == GAME) {
-                Client client(argv[1], atoi(argv[2]), tmp_username, listener, ecs, mtx);
+                Client client(argv[1], atoi(argv[2]), listener, ecs, mtx);
                 return client.run();
             }
             if (state == SUCCES)
