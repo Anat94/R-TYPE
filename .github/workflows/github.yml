@@ -3,8 +3,45 @@ name: Test Compilation
 on: [pull_request]
 
 jobs:
+  clang_format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install clang-format
+        run: |
+          sudo apt-get install clang-format
+
+      - name: Run format
+        run: |
+          chmod +x ./clang.sh
+          ./clang.sh
+          echo $?
+          echo "::set-output name=returnValue::$?"
+        id: format
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "anatole.babin@epitech.eu"
+          git config --global user.name "Anatole Babin"
+          git commit -am "(clang-format) [FIX] fomat code - by clang format"
+        if: steps.format.outputs.returnValue != '0'
+
+      - name: Pull latest changes
+        run: |
+          git config pull.rebase true
+          git pull origin ${{ github.head_ref }}
+        if: steps.format.outputs.returnValue != '0'
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref }}
+        if: steps.format.outputs.returnValue != '0'
   linux:
     runs-on: ubuntu-latest
+    name: Check compilation for linux
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v4
       - name: Set up CMake
@@ -42,6 +79,8 @@ jobs:
 
   windows:
     runs-on: windows-latest
+    name: Check compilation for windows
+    needs: [clang_format]
     steps:
       - uses: actions/checkout@v2
 
@@ -62,7 +101,7 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [windows, linux]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -124,8 +163,9 @@ jobs:
           asset_content_type: application/zip
 
   deploy_doxygen:
+    name: Generate doxygen documentation
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    needs: [windows, linux]
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
