@@ -11,7 +11,7 @@
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
-    std::string prevState = animatedDrawable.value()._state;
+    std::string prevState = animatedDrawable->_state;
     if (event == KeyIds["Up"]) {
         animatedDrawable->_state = "move up";
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state);
