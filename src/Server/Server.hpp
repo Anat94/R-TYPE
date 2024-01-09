@@ -76,6 +76,7 @@ class Server: public ISystems {
         int receive_add_friend_event(std::vector<char>&, entity_t);
         int receive_remove_friend_event(std::vector<char>&, entity_t);
         int receive_chat_event(std::vector<char>&, entity_t);
+        int receive_room_creation_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
@@ -128,6 +129,7 @@ class Server: public ISystems {
         std::vector<FriendsResponse> _friends_response_packets;
         std::vector<ChatMessage> _chat_packets;
         std::vector<ScaleSnapshot> _scale_packets;
+        std::vector<RoomCreationMessage> _room_creation_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -142,12 +144,14 @@ class Server: public ISystems {
             {2, &Server::recieve_connection_event},
             {3, &Server::recieve_disconnection_event},
             {5, &Server::recieve_packet_confirm},
+            {12, &Server::receive_chat_event},
             {17, &Server::receive_login_event},
             {18, &Server::receive_friend_event},
             {19, &Server::receive_add_friend_event},
             {20, &Server::receive_remove_friend_event},
-            {21, &Server::receive_chat_event},
+            {21, &Server::receive_room_creation_event},
         };
+        std::unordered_map<std::string, std::string> _lobbies;
         std::string _event;
         std::thread _send_thread;
         sqlite3 *_db;

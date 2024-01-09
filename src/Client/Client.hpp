@@ -122,6 +122,7 @@ class Client {
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
         int receive_chat_event(std::vector<char> &server_msg);
+        int recieve_room_creation_event(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
@@ -197,7 +198,8 @@ class Client {
             {13, &Client::recieve_animated_drawable_snapshot},
             {14, &Client::recieve_animated_drawable_state_update},
             {15, &Client::recieve_scale_snapshot_update},
-            {16, &Client::recieve_death_event}
+            {16, &Client::recieve_death_event},
+            {21, &Client::recieve_room_creation_event}
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
@@ -210,7 +212,9 @@ class Client {
         std::mutex &mtx;
         Timer shootTimer;
         Timer moveTimer;
+        std::string _room_name = "";
         bool prgrmstop = false;
+        bool _logged_in = false;
 };
 
 #endif // CLIENT_HPP

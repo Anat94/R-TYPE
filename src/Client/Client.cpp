@@ -64,6 +64,16 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
 
 }
 
+int Client::recieve_room_creation_event(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(RoomCreationMessage))
+        return -1;
+    RoomCreationMessage *snapshot = reinterpret_cast<RoomCreationMessage *>(server_msg.data());
+    std::cout << "Successfully created room: " << snapshot->room_name << "!\n";
+    _room_name = snapshot->room_name;
+    return snapshot->id;
+}
+
 int Client::recieve_death_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DeathEventMessage))
@@ -163,6 +173,7 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     LoginResponse *login = reinterpret_cast<LoginResponse *>(server_msg.data());
     if (login->response == true && login->logintype == 1) {
         std::cout << "Connected" << std::endl;
+        _logged_in = true;
         // _state = GAME;
         return login->packet_id;
     } else if (login->response == false  && login->logintype == 1) {
@@ -172,6 +183,7 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     } else if (login->response == true && login->logintype == 0) {
         std::cout << "Registered" << std::endl;
         // _state = GAME;
+        _logged_in = true;
         return login->packet_id;
     } else if (login->response == false && login->logintype == 0) {
         std::cout << "An error occured whil registring" << std::endl;
@@ -418,6 +430,7 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     _chatEntity._chatTextInput.setCharacterSize(20);
     _chatEntity._chatTextInput.setPosition(50, 920);
     _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
+    receiveThread = std::thread(&Client::receive, this);
 }
 
 Client::~Client()
@@ -442,7 +455,6 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 
 template <typename T>
 void Client::send_to_server(const T& structure) {
-    std::cout << "SENDING\n";
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
@@ -480,7 +492,7 @@ int Client::manageEvent()
                 return 0;
             }
             if (_event.key.code == sf::Keyboard::Enter) {
-                ChatMessage msg(21, _username, _chatEntity._input, _packet_id);
+                ChatMessage msg(12, _username, _chatEntity._input, _packet_id);
                 _packet_id++;
                 send_to_server(msg);
                 _chatEntity._input = "";
@@ -580,6 +592,28 @@ void Client::manageCli()
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
             }
+            if (_room_name == "") {
+                std::cout << "You must be in a room to start the game - see HELP" << std::endl;
+                continue;
+            }
+            return;
+        } else if (command == "CREATE") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
+            if (params == "" ) {
+                std::cout << "Usage: CREATE [room_name]" << std::endl;
+                continue;
+            }
+            RoomCreationMessage to_send(21, _username, params, _packet_id);
+            _packet_id;
+            send_to_server<RoomCreationMessage>(to_send);
+        } else if (command == "JOIN") {
+            if (_username == "") {
+                std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                continue;
+            }
             return;
         } else if (command == "LIST_FRIENDS") {
             if (_username == "") {
@@ -627,7 +661,7 @@ void Client::manageCli()
                 continue;
             }
             if (params != "") {
-                ChatMessage msg(21, _username, params, _packet_id);
+                ChatMessage msg(12, _username, params, _packet_id);
                 _packet_id +=1;
                 send_to_server<ChatMessage>(msg);
             } else {
@@ -638,6 +672,8 @@ void Client::manageCli()
         } else if (command == "HELP") {
             std::cout << "Available commands:" << std::endl;
             std::cout << "START: Start the game" << std::endl;
+            std::cout << "CREATE [room_name]: Create a room" << std::endl;
+            std::cout << "JOIN [room_name]: Join a room" << std::endl;
             std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
             std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
             std::cout << "WHOAMI: Show who you are" << std::endl;
@@ -699,7 +735,6 @@ int Client::run()
     initClass();
     _music.play();
     _music.setLoop(true);
-    receiveThread = std::thread(&Client::receive, this);
     _music.setVolume(25);
     _lives = 0; // ((player1_h.has_value()) ? (player1_h->_health) : (0));
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));

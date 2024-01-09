@@ -370,5 +370,26 @@ struct AnimatedStateUpdateMessage: public BaseMessage {
         };
 };
 
+struct RoomCreationMessage: public BaseMessage {
+    char username[20];
+    char room_name[32];
+
+    RoomCreationMessage(int16_t id_, std::string username_, std::string room_name_, int packet_id_)
+    {
+        size_t i = 0;
+
+        id = id_;
+        packet_id = packet_id_;
+        for (; i < username_.size(); i++) {
+            username[i] = username[i];
+        }
+        username[i] = '\0';
+        for (i = 0; i < room_name_.size(); i++) {
+            room_name[i] = room_name_[i];
+        }
+        room_name[i] = '\0';
+    };
+};
+
 
 #endif //NETWORK_HPP

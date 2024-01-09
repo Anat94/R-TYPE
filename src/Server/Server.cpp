@@ -49,7 +49,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<AnimatedStateUpdateMessage>(_animated_drawable_update_packets, edp);
         resend_packets<HighScoreMessage>(_highscore_packets, edp);
         resend_packets<ScaleSnapshot>(_scale_packets, edp);
-        resend_packets<DeathEventMessage>(_death_packets,edp);
+        resend_packets<DeathEventMessage>(_death_packets, edp);
+        resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -336,8 +337,11 @@ void Server::recieve_from_client()
     entity_t player_entity = get_player_entity_from_connection_address(_remote_endpoint);
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(client_msg.data());
 
-    if (player_entity == -1) {
-        player_entity = connect_player(_remote_endpoint);
+    if (player_entity == -1 || baseMsg->id == 5) {
+        if (baseMsg->id == 5 || baseMsg->id == 17 || baseMsg->id == 21 || baseMsg->id == 22) {
+            (this->*_messageParser[baseMsg->id])(client_msg, 1);
+        } else
+            player_entity = connect_player(_remote_endpoint);
     }
     // std::cout << "message id: " << baseMsg->id << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
@@ -346,6 +350,17 @@ void Server::recieve_from_client()
     // std::cout << "FINISHED RECIEVING\n";
     // mtx.unlock();
     return;
+}
+
+int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
+    RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
+
+    _lobbies[std::string(creationMsg->room_name)] = std::string(creationMsg->username);
+    std::cout << "successfully created room !\n";
+    RoomCreationMessage to_send(21, std::string(creationMsg->username), std::string(creationMsg->room_name), _packet_id);
+    _packet_id++;
+    _room_creation_packets.push_back(to_send);
+    _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
 }
 
 int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
@@ -409,6 +424,13 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _death_packets.end()
     );
+    _room_creation_packets.erase(
+        std::remove_if(_room_creation_packets.begin(), _room_creation_packets.end(), [id](const RoomCreationMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _room_creation_packets.end()
+    );
     return 0;
 }
 
@@ -455,7 +477,7 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     else if (snapshot->logintype == 1)
         response = signIn(snapshot->username, snapshot->password);
     LoginResponse resp(8, response, snapshot->logintype, _packet_id);
-    send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
+    _socket.send_to(asio::buffer(&resp, sizeof(LoginResponse)), _remote_endpoint);
     _packet_id += 1;
     return 0;
 }
