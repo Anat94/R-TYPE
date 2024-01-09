@@ -102,7 +102,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            mtx.lock();
             // std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
@@ -110,7 +109,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
                 pos[real_entity]->y = snapshot->data.y;
             }
             // std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
-            mtx.unlock();
             _ecs.can_run_updates = true;
         } else {
             // std::cout << "CREATED PLAYER\n";
@@ -146,10 +144,8 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
         if (real_entity > 0 && scale[real_entity].has_value()) {
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            _ecs.mtx->lock();
             scale[real_entity]->_scale.first = snapshot->data._scale.first;
             scale[real_entity]->_scale.second = snapshot->data._scale.second;
-            _ecs.mtx->unlock();
             _ecs.can_run_updates = true;
         } else {
             _ecs.add_component(real_entity, component::Scale(snapshot->data));
@@ -333,11 +329,13 @@ void Client::receive()
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+    mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
     ConfirmationMessage to_send;
     to_send.id = 5;
     to_send.packet_id = packet_id;
     send_to_server<ConfirmationMessage>(to_send);
+    mtx.unlock();
     receive();
 }
 
@@ -444,6 +442,7 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 
 template <typename T>
 void Client::send_to_server(const T& structure) {
+    std::cout << "SENDING\n";
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
@@ -725,6 +724,7 @@ int Client::run()
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
+        mtx.lock();
         if (manageEvent())
             break;
         if (_state == INGAMEMENU)
@@ -748,6 +748,7 @@ int Client::run()
                 // }
             }
         }
+        mtx.unlock();
         _window.display();
     }
     _window.close();
