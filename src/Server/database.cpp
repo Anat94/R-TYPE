@@ -219,8 +219,6 @@ bool Server::addFriend(std::string name, std::string friendId) {
 }
 
 bool Server::removeFriend(std::string name, std::string friendName) {
-    std::cout << "name: " << name << std::endl;
-    std::cout << "friendName: " << friendName << std::endl;
     std::string sql = "DELETE FROM FRIENDS WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
     char *zErrMsg = 0;
     int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
