@@ -87,7 +87,7 @@ struct ChatEntity {
 class Client {
     typedef int (Client::*messageParserHandle)(std::vector<char>&);
     public:
-        Client(std::string ip, int port, std::string _username = "");
+        Client(std::string ip, int port, EventListener &listener, registry &ecs, std::mutex &mtx_);
         ~Client();
 
         int run();
@@ -125,6 +125,8 @@ class Client {
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
+        void manageCli();
+        void initClass();
     private:
         //Content for network
         EventMessage _send_structure;
@@ -161,7 +163,6 @@ class Client {
                 sf::Event::SensorChanged
             };
         //Content for ECS
-        registry _ecs;
         entity_t _player;
         entity_t _background;
         entity_t _enemy;
@@ -178,8 +179,11 @@ class Client {
         sf::Text _score_text;
         sf::Text _lives_text;
         sf::Text _level_text;
+        registry &_ecs;
+        EventListener &_listener;
         Stage _stage;
         // content for enemys
+        std::thread receiveThread;
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
             {4, &Client::recieve_position_snapshot_update},
@@ -200,11 +204,13 @@ class Client {
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
-        std::vector<std::string> friendLists;
+        std::string friendLists;
+        bool friendListFinish = false;
         ChatEntity _chatEntity;
-        std::mutex mtx;
+        std::mutex &mtx;
         Timer shootTimer;
         Timer moveTimer;
+        bool prgrmstop = false;
 };
 
 #endif // CLIENT_HPP

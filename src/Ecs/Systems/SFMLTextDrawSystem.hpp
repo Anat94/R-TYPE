@@ -16,6 +16,8 @@ class SFMLTextDrawSystem : public ISystems {
         };
 
         void operator()(sparse_array<component::Text> &tex, sparse_array<component::Position> &pos) {
+            if (!_window->isOpen())
+                return;
             for (auto &&[idx, t, p] : zipper<sparse_array<component::Text>, sparse_array<component::Position>>(tex, pos)) {
                 if (t.has_value() && p.has_value()) {
                     _texts.emplace(idx, sf::Text(t->_text, _font, t->_size));
