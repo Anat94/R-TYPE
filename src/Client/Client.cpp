@@ -35,6 +35,8 @@
 #include "../Ecs/Systems/ScaleSystem.hpp"
 #include "../Ecs/Systems/ButtonSystem.hpp"
 #include "../KeyEventMapping.hpp"
+#include "imgui.h"
+#include "./imgui-SFML.h"
 
 bool can_read = true;
 
@@ -464,6 +466,7 @@ void Client::displayTexts()
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
+        ImGui::SFML::ProcessEvent(_event);
         handleInput(_event);
         if (_event.type == sf::Event::Closed) {
             _send_structure.id = 3;
@@ -693,6 +696,41 @@ void Client::initClass()
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
 }
 
+void renderMenu() {
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Open", "Ctrl+O")) 
+            {
+                // Handle when Open is clicked
+            }
+            if (ImGui::MenuItem("Save", "Ctrl+S")) 
+            {
+                // Handle when Save is clicked
+            }
+            if (ImGui::MenuItem("Exit", "Ctrl+Q")) 
+            {
+                // Handle when Exit is clicked
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "Ctrl+Z")) 
+            {
+                // Handle when Undo is clicked
+            }
+            if (ImGui::MenuItem("Redo", "Ctrl+Y")) 
+            {
+                // Handle when Redo is clicked
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
+
 int Client::run()
 {
     manageCli();
@@ -721,39 +759,60 @@ int Client::run()
     // ChatMessage msg(21, "admin", "Hello World", _packet_id);
     // _packet_id +=1;
     // send_to_server<ChatMessage>(msg);
+    ImGui::SFML::Init(_window);
+    sf::Clock deltaClock;
     while (true) {
-        _mouse_position = sf::Mouse::getPosition(_window);
-        _window.clear();
-        mtx.lock();
-        if (manageEvent())
-            break;
-        if (_state == INGAMEMENU)
-            displayScoreBoardMenu();
-        else if (_state == INGAME || _state == CHAT) {
-            _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
-            while (_listener.popEvent());
-            _ecs.run_systems();
-            displayTexts();
-            if (_state == CHAT) {
-                _window.draw(_chatEntity._rectangle);
-                _window.draw(_chatEntity._chatTitle);
-                _window.draw(_chatEntity._inputBox);
-                _window.draw(_chatEntity._chatTextInput);
-                for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
-                    _window.draw(_chatEntity._chatText[i]);
-                }
-                if (_chatEntity._chat.size() > 25) {
-                    _chatEntity._chat.erase(_chatEntity._chat.begin());
-                    _chatEntity._chatText.erase(_chatEntity._chatText.begin());
-                    for (size_t i = 0; i < _chatEntity._chatText.size(); i++) {
-                        _chatEntity._chatText[i].setPosition(30, 150 + i * 30);
-                    }
-                }
+        // _mouse_position = sf::Mouse::getPosition(_window);
+        ImGui::SFML::Update(_window, deltaClock.restart());
+
+        ImGui::Begin("Hello, world!");
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Open", "Ctrl+O")) {
+                // Handle when the Open menu item is clicked
             }
+            if (ImGui::MenuItem("Save", "Ctrl+S")) {
+                // Handle when the Save menu item is clicked
+            }
+            ImGui::EndMenu();
         }
-        mtx.unlock();
+
+        ImGui::Button("Look at me");
+        ImGui::End();
+
+        // renderMenu();
+        _window.clear();
+        // mtx.lock();
+        // if (manageEvent())
+        //     break;
+        // if (_state == INGAMEMENU)
+        //     displayScoreBoardMenu();
+        // else if (_state == INGAME || _state == CHAT) {
+        //     _mouse_position_text.setString("Mouse: " + std::to_string(_mouse_position.x) + ", " + std::to_string(_mouse_position.y));
+        //     while (_listener.popEvent());
+        //     _ecs.run_systems();
+        //     displayTexts();
+        //     if (_state == CHAT) {
+        //         _window.draw(_chatEntity._rectangle);
+        //         _window.draw(_chatEntity._chatTitle);
+        //         _window.draw(_chatEntity._inputBox);
+        //         _window.draw(_chatEntity._chatTextInput);
+        //         for (size_t i = 0; i < _chatEntity._chat.size(); i++) {
+        //             _window.draw(_chatEntity._chatText[i]);
+        //         }
+        //         if (_chatEntity._chat.size() > 25) {
+        //             _chatEntity._chat.erase(_chatEntity._chat.begin());
+        //             _chatEntity._chatText.erase(_chatEntity._chatText.begin());
+        //             for (size_t i = 0; i < _chatEntity._chatText.size(); i++) {
+        //                 _chatEntity._chatText[i].setPosition(30, 150 + i * 30);
+        //             }
+        //         }
+        //     }
+        // }
+        // mtx.unlock();
         _window.display();
+        ImGui::SFML::Render(_window);
     }
     _window.close();
+    ImGui::SFML::Shutdown();
     return 0;
 }

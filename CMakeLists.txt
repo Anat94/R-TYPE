@@ -100,6 +100,21 @@ if(NOT sfml_POPULATED)
     add_subdirectory(${sfml_SOURCE_DIR} ${sfml_BINARY_DIR})
 endif()
 
+# Install imgui
+
+FetchContent_Declare(
+        imgui
+        GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
+        GIT_TAG        "master"
+)
+
+FetchContent_GetProperties(imgui)
+if(NOT imgui_POPULATED)
+    FetchContent_Populate(imgui)
+    include_directories(${imgui_SOURCE_DIR})
+    set(IMGUI_SOURCES ${imgui_SOURCE_DIR}/imgui.cpp ${imgui_SOURCE_DIR}/imgui_draw.cpp ${imgui_SOURCE_DIR}/imgui_widgets.cpp ${imgui_SOURCE_DIR}/imgui_tables.cpp)
+    add_library(imgui ${IMGUI_SOURCES})
+endif()
 
 # INSTALL SQLITE3
 
@@ -145,7 +160,17 @@ if(NOT googletest_POPULATED)
         message(STATUS "Populating googletest ${googletest_TAG} done; src at ${googletest_SOURCE_DIR}")
 endif()
 
+# INSTALL OPENGL2
+find_package(OpenGL REQUIRED)
 
+if(OPENGL_FOUND)
+    message(STATUS "OpenGL Correctly Found")
+    include_directories(${OPENGL_INCLUDE_DIRS})
+    link_directories(${OPENGL_LIBRARY_DIRS})
+    add_definitions(${OPENGL_DEFINITIONS})
+else()
+    message(ERROR " OPENGL not found!")
+endif(OPENGL_FOUND)
 
 # COMPILATION FOR SERVER
 
@@ -207,6 +232,7 @@ target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 # COMPILATION FOR CLIENT
 
 include_directories(include src src/Client)
+include_directories(${OPENGL_INCLUDE_DIRS})
 add_executable(client
         src/Ecs/Events.cpp
         src/Client/Menu.cpp
@@ -214,6 +240,7 @@ add_executable(client
         src/Client/Game.cpp
         src/Client/main.cpp
         src/Client/Button.cpp
+        src/Client/imgui-SFML.cpp
 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_include_directories(client PRIVATE _deps/sfml-src/include)
@@ -226,6 +253,8 @@ target_link_libraries(client
         sfml-system
         sfml-window
         asio
+        imgui
+        ${OPENGL_LIBRARIES}
 )
 target_compile_options(client PRIVATE -Wall)
 
