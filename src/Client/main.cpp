@@ -35,20 +35,8 @@ int main(int argc, char** argv) {
         if (argc != 3) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
-        enum state state = MENU;
-        while (state != END) {
-            if (state == MENU) {
-                Menu menu;
-                state = menu.run();
-                tmp_username = menu.getUsername();
-                std::cout << "username: " << tmp_username << std::endl;
-            } else if (state == GAME) {
-                Client client(argv[1], atoi(argv[2]), tmp_username);
-                return client.run();
-            }
-            if (state == SUCCES)
-                return 0;
-        }
+        Client client(argv[1], atoi(argv[2]), tmp_username);
+        return client.run();
     } catch (const ArgumentError &e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
@@ -56,6 +44,5 @@ int main(int argc, char** argv) {
         std::cerr << "Sfml error: " << e.what() << std::endl;
         return 84;
     }
-
     return 0;
 }
