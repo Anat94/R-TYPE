@@ -141,6 +141,10 @@ enum Stage {
 };
 
 enum inGameState {
+    MENU,
+    SIGNIN,
+    LOGIN,
+    CONNECTED,
     INGAME,
     INGAMEMENU,
 };
@@ -193,6 +197,19 @@ class Client {
         int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
         void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
+        void displayMenu();
+        void drawLogin();
+        void displayLogin();
+        void drawSignin();
+        void displaySignin();
+        void displayConnected();
+        void removeMenu();
+        void removeLog();
+        void removeLogin();
+        void removeSignin();
+        void removeConnected();
+        void updState(inGameState state);
+        inGameState getStatus();
 
     private:
         //Content for network
@@ -233,8 +250,7 @@ class Client {
         registry _ecs;
         entity_t _player;
         entity_t _background;
-        entity_t _enemy;
-        entity_t _btn_play;
+        entity_t _enemy;    
         //Content for SFML
         sf::RenderWindow _window;
         sf::Event _event;
@@ -261,6 +277,24 @@ class Client {
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
+        // content for menu
+        entity_t _btn_login;
+        entity_t _btn_signin;
+        entity_t _btn_back;
+        // content for login 
+        entity_t _inputLoginUsername;
+        entity_t _inputLoginPassword;
+        sf::Text _usernameLogin;
+        sf::Text _passwordLogin;
+        sf::Text _login_usernameSf;
+        std::string _usernameStr;
+        sf::Text _login_passwordSf;
+        std::string _passwordStr;
+        entity_t _buttonLogin;
+        // content for signin
+        entity_t _buttonSignin;
+        // content for connected
+        entity_t _btnPlay;
 };
 
 #endif // CLIENT_HPP

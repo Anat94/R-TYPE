@@ -209,11 +209,10 @@ target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 include_directories(include src src/Client)
 add_executable(client
         src/Ecs/Events.cpp
-        src/Client/Menu.cpp
         src/Client/Client.cpp
         src/Client/Game.cpp
         src/Client/main.cpp
-        src/Client/Button.cpp
+        src/Client/Menu.cpp
 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_include_directories(client PRIVATE _deps/sfml-src/include)

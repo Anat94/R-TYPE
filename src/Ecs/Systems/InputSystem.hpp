@@ -29,12 +29,9 @@ class InputSystem : public ISystems {
                 float new_height_button = inputHeight * intputScale;
 
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    //std::cout << "new_height_button" << new_width_button << std::endl;
-                    //std::cout << "new_height_button" << new_height_button << std::endl;
                     if (_mousePos->x >= inputPos.x && _mousePos->x <= (inputPos.x + new_width_button) && 
                         _mousePos->y >= inputPos.y && _mousePos->y <= (inputPos.y + new_height_button)) {
                             input->_state = true;
-                            std::cout << "dans if pressed" << std::endl;
                     } else {
                         input->_state = false;
                     }

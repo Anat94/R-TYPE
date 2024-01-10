@@ -33,6 +33,7 @@
 #include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
 #include "../Ecs/Systems/ButtonSystem.hpp"
+#include "../Ecs/Systems/InputSystem.hpp"
 #include "../KeyEventMapping.hpp"
 
 bool can_read = true;
@@ -188,6 +189,7 @@ Client::Client(std::string ip, int port, std::string username)
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _username(username)
 {
+    std::cout << "client constructeur" << std::endl;
     _send_structure.id = 2;
     send_to_server(_send_structure);
     _ecs.register_component<component::Scale>();
@@ -207,12 +209,116 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
+    _ecs.register_component<component::Button>();
+
     _background = _ecs.spawn_entity();
-    _btn_play = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
     if (!_music.openFromFile("./assets/game_music.ogg"))
         throw SFMLError("Music not found");
+
+    _font = sf::Font();
+    if (!_font.loadFromFile("src/Client/assets/font.ttf"))
+        throw SFMLError("Font not found");
+
+    // menu
+
+    _btn_login = _ecs.spawn_entity();
+    _btn_signin = _ecs.spawn_entity();
+    _btn_back = _ecs.spawn_entity();
+
+    _ecs.add_component(_btn_login, component::Position((sf::VideoMode::getDesktopMode().width / 2) + 120, sf::VideoMode::getDesktopMode().height / 2));
+    _ecs.add_component(_btn_login, component::Scale(0.5f));
+    _ecs.add_component(_btn_login, component::Button([this]() {
+        this->updState(LOGIN);
+        this->removeMenu();
+        this->displayLogin();
+    }, 379, 130, 0.5f));
+    _ecs.add_component(_btn_login, component::AnimatedDrawable("assets/button_login.png", {2, 1}, {379, 130}, {1, 0}, {0, 0}, {0, 0}));
+
+    _ecs.add_component(_btn_signin, component::Position((sf::VideoMode::getDesktopMode().width / 2) - 300, ( sf::VideoMode::getDesktopMode().height / 2)));
+    _ecs.add_component(_btn_signin, component::Scale(0.5f));
+    _ecs.add_component(_btn_signin, component::Button([this]() { 
+        this->updState(SIGNIN);
+        this->removeMenu();
+        this->displaySignin();
+    }, 395, 135, 0.5f));
+    _ecs.add_component(_btn_signin, component::AnimatedDrawable("assets/button_signin.png", {2, 1}, {395, 135}, {1, 0}, {0, 0}, {0, 0}));
+
+    
+    _ecs.add_component(_btn_back, component::Position(20, 20));
+    _ecs.add_component(_btn_back, component::Scale(0.05f));
+    _ecs.add_component(_btn_back, component::Button([this]() {
+        if (this->getStatus() == inGameState::LOGIN)
+            this->removeLogin();
+        else if (this->getStatus() == inGameState::SIGNIN)
+            this->removeSignin();
+        this->updState(MENU);
+        this->removeLog();
+        this->displayMenu();
+    }, 512, 512, 0.5f));
+
+    // login
+
+    _inputLoginUsername = _ecs.spawn_entity();
+    _inputLoginPassword = _ecs.spawn_entity();
+
+    _usernameLogin = sf::Text("Username", _font, 30);
+    _usernameLogin.setPosition(630, 265);
+    _login_usernameSf = sf::Text("", _font, 25);
+    _login_usernameSf.setPosition(630, 315);
+    _login_usernameSf.setColor(sf::Color::Black);
+    _ecs.add_component(_inputLoginUsername, component::Scale(0.5f));
+    _ecs.add_component(_inputLoginUsername, component::Position(620.0f, 300.0f));
+    _ecs.add_component(_inputLoginUsername, component::Input(&_login_usernameSf, _usernameStr, 528, 140));
+
+    _passwordLogin = sf::Text("Password", _font, 30);
+    _passwordLogin.setPosition(630, 465);
+    _login_passwordSf = sf::Text("", _font, 25);
+    _login_passwordSf.setPosition(630, 515);
+    _login_passwordSf.setColor(sf::Color::Black);
+    _ecs.add_component(_inputLoginPassword, component::Scale(0.5f));
+    _ecs.add_component(_inputLoginPassword, component::Position(620.0f, 500.0f));
+    _ecs.add_component(_inputLoginPassword, component::Input(&_login_passwordSf, _passwordStr, 528, 140));
+    
+    _buttonLogin = _ecs.spawn_entity();
+
+    _ecs.add_component(_buttonLogin, component::Position(650, 600));
+    _ecs.add_component(_buttonLogin, component::Scale(0.5f));
+    _ecs.add_component(_buttonLogin, component::Button([this]() { 
+        this->updState(CONNECTED);
+        this->removeLog();
+        this->removeLogin();
+        this->displayConnected();
+    }, 379, 130, 0.5f));
+
+    // signin
+
+    _buttonSignin = _ecs.spawn_entity();
+
+    _ecs.add_component(_buttonSignin, component::Position(650, 600));
+    _ecs.add_component(_buttonSignin, component::Scale(0.5f));
+    _ecs.add_component(_buttonSignin, component::Button([this]() { 
+        this->updState(CONNECTED);
+        this->removeLog();
+        this->removeSignin();
+        this->displayConnected();
+    }, 379, 130, 0.5f));
+
+    // connected
+
+    _btnPlay = _ecs.spawn_entity();
+
+    _ecs.add_component(_btnPlay, component::Position(650, 550));
+    _ecs.add_component(_btnPlay, component::Scale(0.5f));
+    _ecs.add_component(_btnPlay, component::Button([this]() {
+        this->updState(INGAME);
+        this->removeConnected();
+    }, 410, 104, 0.5f));
+
+
+    InputSystem *tmp_input_sys = new InputSystem(_event, &_mouse_position, &_window);
+    _ecs.add_system<component::Input, component::Position, component::Scale>(*tmp_input_sys);
 
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
     _window.setFramerateLimit(60);
@@ -221,6 +327,10 @@ Client::Client(std::string ip, int port, std::string username)
     _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
     SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+
+    ButtonSystem *tmp_btn_sys = new ButtonSystem(&_mouse_position);
+    _ecs.add_system<component::Button, component::Position>(*tmp_btn_sys);
+
     // _player = _ecs.spawn_entity();
     // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
     // _ecs.add_component(_player, component::Scale(5.0f));
@@ -236,9 +346,6 @@ Client::Client(std::string ip, int port, std::string username)
     _score = 0;
     _lives = 0;
     _level = 1;
-    _font = sf::Font();
-    if (!_font.loadFromFile("src/Client/assets/font.ttf"))
-        throw SFMLError("Font not found");
     _score_text = sf::Text("Score: " + std::to_string(_score), _font, 30);
     _score_text.setPosition(10, 10);
     _lives_text = sf::Text("Lives: " + std::to_string(_lives), _font, 30);
@@ -269,7 +376,7 @@ Client::Client(std::string ip, int port, std::string username)
     _highScoreDisplay.score2.setPosition(1050, 500);
     _highScoreDisplay.score3.setPosition(1050, 600);
     _highScoreDisplay.title.setPosition(750, 200);
-    _state = INGAME;
+    _state = MENU;
 }
 
 Client::~Client()
@@ -350,6 +457,143 @@ void Client::displayScoreBoardMenu()
     _window.draw(_highScoreDisplay.score3);
 }
 
+void Client::displayMenu()
+{
+    _ecs.add_component(_btn_login, component::AnimatedDrawable("assets/button_login.png", {2, 1}, {379, 130}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_btn_login, component::Button([this]() {
+        this->updState(LOGIN);
+        this->removeMenu();
+        this->displayLogin();
+    }, 379, 130, 0.5f));
+
+    _ecs.add_component(_btn_signin, component::Button([this]() { 
+        this->updState(SIGNIN);
+        this->removeMenu();
+        this->displaySignin();
+    }, 395, 135, 0.5f));
+    _ecs.add_component(_btn_signin, component::AnimatedDrawable("assets/button_signin.png", {2, 1}, {395, 135}, {1, 0}, {0, 0}, {0, 0}));
+}
+
+void Client::removeMenu()
+{
+    _ecs.remove_component<component::AnimatedDrawable>(_btn_signin);
+    _ecs.remove_component<component::Button>(_btn_signin);
+    _ecs.remove_component<component::AnimatedDrawable>(_btn_login);
+    _ecs.remove_component<component::Button>(_btn_login);
+}
+
+void Client::drawLogin()
+{
+    std::cout << "dranw login" << std::endl;
+    _window.draw(_usernameLogin);
+    _window.draw(_passwordLogin);
+    _window.draw(_login_usernameSf);
+    _window.draw(_login_passwordSf);
+}
+
+void Client::displayLogin()
+{
+    _ecs.add_component(_inputLoginUsername, component::AnimatedDrawable("assets/input_img.png", {2, 1}, {528, 140}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_inputLoginUsername, component::Input(&_login_usernameSf, _usernameStr, 528, 140));
+    _ecs.add_component(_inputLoginPassword, component::AnimatedDrawable("assets/input_img.png", {2, 1}, {528, 140}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_inputLoginPassword, component::Input(&_login_passwordSf, _passwordStr, 528, 140));
+    _ecs.add_component(_buttonLogin, component::AnimatedDrawable("assets/button_login.png", {2, 1}, {395, 135}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_buttonLogin, component::Button([this]() { 
+        this->updState(CONNECTED);
+        this->removeLog();
+        this->removeLogin();
+        this->displayConnected();
+    }, 379, 130, 0.5f));
+    _ecs.add_component(_btn_back, component::AnimatedDrawable("assets/back.png", {2, 1}, {512, 512}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_btn_back, component::Button([this]() {
+        if (this->getStatus() == inGameState::LOGIN)
+            this->removeLogin();
+        else if (this->getStatus() == inGameState::SIGNIN)
+            this->removeSignin();
+        this->updState(MENU);
+        this->removeLog();
+        this->displayMenu();
+    }, 512, 512, 0.5f));
+}
+
+void Client::drawSignin()
+{
+    std::cout << "dranw signin" << std::endl;
+    _window.draw(_usernameLogin);
+    _window.draw(_passwordLogin);
+    _window.draw(_login_usernameSf);
+    _window.draw(_login_passwordSf);
+}
+
+void Client::displaySignin()
+{
+    _ecs.add_component(_inputLoginUsername, component::AnimatedDrawable("assets/input_img.png", {2, 1}, {528, 140}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_inputLoginUsername, component::Input(&_login_usernameSf, _usernameStr, 528, 140));
+    _ecs.add_component(_inputLoginPassword, component::AnimatedDrawable("assets/input_img.png", {2, 1}, {528, 140}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_inputLoginPassword, component::Input(&_login_passwordSf, _passwordStr, 528, 140));
+    _ecs.add_component(_buttonSignin, component::AnimatedDrawable("assets/button_signin.png", {2, 1}, {395, 135}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_buttonSignin, component::Button([this]() { 
+        this->updState(CONNECTED);
+        this->removeLog();
+        this->removeSignin();
+        this->displayConnected();
+    }, 379, 130, 0.5f));
+    _ecs.add_component(_btn_back, component::AnimatedDrawable("assets/back.png", {2, 1}, {512, 512}, {1, 0}, {0, 0}, {0, 0}));
+    _ecs.add_component(_btn_back, component::Button([this]() {
+        if (this->getStatus() == inGameState::LOGIN)
+            this->removeLogin();
+        else if (this->getStatus() == inGameState::SIGNIN)
+            this->removeSignin();
+        this->updState(MENU);
+        this->removeLog();
+        this->displayMenu();
+    }, 512, 512, 0.5f));
+}
+
+void Client::removeLog()
+{
+    _ecs.remove_component<component::AnimatedDrawable>(_inputLoginUsername);
+    _ecs.remove_component<component::AnimatedDrawable>(_inputLoginPassword);
+    _ecs.remove_component<component::Input>(_inputLoginUsername);
+    _ecs.remove_component<component::Input>(_inputLoginPassword);
+    _ecs.remove_component<component::AnimatedDrawable>(_btn_back);
+    _ecs.remove_component<component::Button>(_btn_back);
+}
+
+void Client::displayConnected()
+{
+    _ecs.add_component(_btnPlay, component::AnimatedDrawable("assets/button_playing.png", {2, 1}, {410, 104}, {1, 0}, {0, 0}, {0, 0}));
+}
+
+void Client::removeLogin()
+{
+    std::cout << "remove Login" << std::endl;
+    _ecs.remove_component<component::AnimatedDrawable>(_buttonLogin);
+    _ecs.remove_component<component::Button>(_buttonLogin);
+}
+
+void Client::removeSignin()
+{
+    std::cout << "remove signin" << std::endl;
+    _ecs.remove_component<component::AnimatedDrawable>(_buttonSignin);
+    _ecs.remove_component<component::Button>(_buttonSignin);
+}
+
+void Client::removeConnected()
+{
+    _ecs.remove_component<component::AnimatedDrawable>(_btnPlay);
+    _ecs.remove_component<component::Button>(_btnPlay);
+}
+
+void Client::updState(inGameState state)
+{
+    this->_state = state;
+}
+
+inGameState Client::getStatus()
+{
+    return _state;
+}
 
 int Client::run()
 {
@@ -370,6 +614,20 @@ int Client::run()
         _window.clear();
         if (manageEvent())
             break;
+        if (_state == MENU) {
+            _ecs.run_systems();
+        }
+        if (_state == SIGNIN) {
+            _ecs.run_systems();
+            drawSignin();
+        }
+        if (_state == LOGIN) {
+            _ecs.run_systems();
+            drawLogin();
+        }
+        if (_state == CONNECTED) {
+            _ecs.run_systems();
+        }
         if (_state == INGAMEMENU)
             displayScoreBoardMenu();
         else if (_state == INGAME) {
