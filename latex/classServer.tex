@@ -12,8 +12,8 @@ Inheritance diagram for Server\+:\begin{figure}[H]
 \Hypertarget{classServer_aba715f3e4719f392ee559d48de30bd1b}\label{classServer_aba715f3e4719f392ee559d48de30bd1b} 
 {\bfseries Server} (asio\+::io\+\_\+context \&service, int port, \mbox{\hyperlink{classregistry}{registry}} \&ecs, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener, std\+::mutex \&mtx)
 \item 
-\Hypertarget{classServer_aebaa15526c89fca9a172b3366b6d67ac}\label{classServer_aebaa15526c89fca9a172b3366b6d67ac} 
-void {\bfseries recieve\+\_\+from\+\_\+client} ()
+\Hypertarget{classServer_a666dd0969b3f486fc08aa5f19b5438de}\label{classServer_a666dd0969b3f486fc08aa5f19b5438de} 
+void {\bfseries receive\+\_\+from\+\_\+client} ()
 \item 
 \Hypertarget{classServer_ad3f897e544d75125f4b9b41a0030ccd3}\label{classServer_ad3f897e544d75125f4b9b41a0030ccd3} 
 void {\bfseries operator()} (\mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}} $>$ \&dra, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Scale}{component\+::\+Scale}} $>$ \&scl, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} $>$ \&pos, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
@@ -48,26 +48,26 @@ void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+update\+\_\+to\+\_\+all\+\
 \Hypertarget{classServer_ae37a729c3a8205e5b35e4370a87e450e}\label{classServer_ae37a729c3a8205e5b35e4370a87e450e} 
 void {\bfseries send\+\_\+entity\+\_\+drawable\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Drawable}{component\+::\+Drawable}} $>$ \&dra, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
-\Hypertarget{classServer_ac64926ab8165b430a283ef402bdde38b}\label{classServer_ac64926ab8165b430a283ef402bdde38b} 
-void {\bfseries recieve\+Thread} ()
+\Hypertarget{classServer_a2c7187a85f9f754ccf3f3f45e65130cf}\label{classServer_a2c7187a85f9f754ccf3f3f45e65130cf} 
+void {\bfseries receive\+Thread} ()
 \item 
-\Hypertarget{classServer_aa5d167d434386f86e7c722a9efa87694}\label{classServer_aa5d167d434386f86e7c722a9efa87694} 
-std\+::vector$<$ char $>$ {\bfseries recieve\+\_\+raw\+\_\+data\+\_\+from\+\_\+client} ()
+\Hypertarget{classServer_a5069e37491d3a911d283bab2e283c4bd}\label{classServer_a5069e37491d3a911d283bab2e283c4bd} 
+std\+::vector$<$ char $>$ {\bfseries receive\+\_\+raw\+\_\+data\+\_\+from\+\_\+client} ()
 \item 
 \Hypertarget{classServer_a3842e9e551ed67c60e2c7bbacbad93f6}\label{classServer_a3842e9e551ed67c60e2c7bbacbad93f6} 
 std\+::pair$<$ int, int $>$ {\bfseries get\+\_\+position\+\_\+change\+\_\+for\+\_\+event} (entity\+\_\+t entity, int event)
 \item 
-\Hypertarget{classServer_ad406751be1518f32759816c6431431bf}\label{classServer_ad406751be1518f32759816c6431431bf} 
-int {\bfseries recieve\+\_\+client\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\Hypertarget{classServer_ac195d260d11951243dfa089064a7a56d}\label{classServer_ac195d260d11951243dfa089064a7a56d} 
+int {\bfseries receive\+\_\+client\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
 \item 
-\Hypertarget{classServer_ab4523a6af5aab14cd5e3d44ba6eb6f30}\label{classServer_ab4523a6af5aab14cd5e3d44ba6eb6f30} 
-int {\bfseries recieve\+\_\+connection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\Hypertarget{classServer_a7dac4e8c262cc36f45524b461d021906}\label{classServer_a7dac4e8c262cc36f45524b461d021906} 
+int {\bfseries receive\+\_\+connection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
 \item 
-\Hypertarget{classServer_af36f54b19807d9c229a09ec28b162a37}\label{classServer_af36f54b19807d9c229a09ec28b162a37} 
-int {\bfseries recieve\+\_\+disconnection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\Hypertarget{classServer_ac56929da6a3e0c859b63d506710f97a0}\label{classServer_ac56929da6a3e0c859b63d506710f97a0} 
+int {\bfseries receive\+\_\+disconnection\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
 \item 
-\Hypertarget{classServer_a56e303be7c6647ba385f6df7e12551db}\label{classServer_a56e303be7c6647ba385f6df7e12551db} 
-int {\bfseries recieve\+\_\+packet\+\_\+confirm} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
+\Hypertarget{classServer_aac5395dcc20ba967055e3c8cab5b42e5}\label{classServer_aac5395dcc20ba967055e3c8cab5b42e5} 
+int {\bfseries receive\+\_\+packet\+\_\+confirm} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
 \item 
 \Hypertarget{classServer_a1022d0ca971961d9172b56ae31d2ed60}\label{classServer_a1022d0ca971961d9172b56ae31d2ed60} 
 int {\bfseries receive\+\_\+login\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)

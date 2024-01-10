@@ -88,9 +88,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba715f3e4719f392ee559d48de30bd1b"><td class="memItemLeft" align="right" valign="top"><a id="aba715f3e4719f392ee559d48de30bd1b" name="aba715f3e4719f392ee559d48de30bd1b"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Server</b> (asio::io_context &amp;service, int port, <a class="el" href="classregistry.html">registry</a> &amp;ecs, <a class="el" href="classEventListener.html">EventListener</a> &amp;listener, std::mutex &amp;mtx)</td></tr>
 <tr class="separator:aba715f3e4719f392ee559d48de30bd1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebaa15526c89fca9a172b3366b6d67ac"><td class="memItemLeft" align="right" valign="top"><a id="aebaa15526c89fca9a172b3366b6d67ac" name="aebaa15526c89fca9a172b3366b6d67ac"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_from_client</b> ()</td></tr>
-<tr class="separator:aebaa15526c89fca9a172b3366b6d67ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a666dd0969b3f486fc08aa5f19b5438de"><td class="memItemLeft" align="right" valign="top"><a id="a666dd0969b3f486fc08aa5f19b5438de" name="a666dd0969b3f486fc08aa5f19b5438de"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>receive_from_client</b> ()</td></tr>
+<tr class="separator:a666dd0969b3f486fc08aa5f19b5438de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3f897e544d75125f4b9b41a0030ccd3"><td class="memItemLeft" align="right" valign="top"><a id="ad3f897e544d75125f4b9b41a0030ccd3" name="ad3f897e544d75125f4b9b41a0030ccd3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (<a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; &amp;dra, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Scale.html">component::Scale</a> &gt; &amp;scl, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Position.html">component::Position</a> &gt; &amp;pos, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
 <tr class="separator:ad3f897e544d75125f4b9b41a0030ccd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,27 +124,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>send_animated_drawabl
 <tr class="memitem:ae37a729c3a8205e5b35e4370a87e450e"><td class="memItemLeft" align="right" valign="top"><a id="ae37a729c3a8205e5b35e4370a87e450e" name="ae37a729c3a8205e5b35e4370a87e450e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>send_entity_drawable_to_all_players</b> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Drawable.html">component::Drawable</a> &gt; &amp;dra, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
 <tr class="separator:ae37a729c3a8205e5b35e4370a87e450e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac64926ab8165b430a283ef402bdde38b"><td class="memItemLeft" align="right" valign="top"><a id="ac64926ab8165b430a283ef402bdde38b" name="ac64926ab8165b430a283ef402bdde38b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>recieveThread</b> ()</td></tr>
-<tr class="separator:ac64926ab8165b430a283ef402bdde38b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5d167d434386f86e7c722a9efa87694"><td class="memItemLeft" align="right" valign="top"><a id="aa5d167d434386f86e7c722a9efa87694" name="aa5d167d434386f86e7c722a9efa87694"></a>
-std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_raw_data_from_client</b> ()</td></tr>
-<tr class="separator:aa5d167d434386f86e7c722a9efa87694"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c7187a85f9f754ccf3f3f45e65130cf"><td class="memItemLeft" align="right" valign="top"><a id="a2c7187a85f9f754ccf3f3f45e65130cf" name="a2c7187a85f9f754ccf3f3f45e65130cf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>receiveThread</b> ()</td></tr>
+<tr class="separator:a2c7187a85f9f754ccf3f3f45e65130cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5069e37491d3a911d283bab2e283c4bd"><td class="memItemLeft" align="right" valign="top"><a id="a5069e37491d3a911d283bab2e283c4bd" name="a5069e37491d3a911d283bab2e283c4bd"></a>
+std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>receive_raw_data_from_client</b> ()</td></tr>
+<tr class="separator:a5069e37491d3a911d283bab2e283c4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="memItemLeft" align="right" valign="top"><a id="a3842e9e551ed67c60e2c7bbacbad93f6" name="a3842e9e551ed67c60e2c7bbacbad93f6"></a>
 std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_position_change_for_event</b> (entity_t entity, int event)</td></tr>
 <tr class="separator:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad406751be1518f32759816c6431431bf"><td class="memItemLeft" align="right" valign="top"><a id="ad406751be1518f32759816c6431431bf" name="ad406751be1518f32759816c6431431bf"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_client_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:ad406751be1518f32759816c6431431bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4523a6af5aab14cd5e3d44ba6eb6f30"><td class="memItemLeft" align="right" valign="top"><a id="ab4523a6af5aab14cd5e3d44ba6eb6f30" name="ab4523a6af5aab14cd5e3d44ba6eb6f30"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_connection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:ab4523a6af5aab14cd5e3d44ba6eb6f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af36f54b19807d9c229a09ec28b162a37"><td class="memItemLeft" align="right" valign="top"><a id="af36f54b19807d9c229a09ec28b162a37" name="af36f54b19807d9c229a09ec28b162a37"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_disconnection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:af36f54b19807d9c229a09ec28b162a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56e303be7c6647ba385f6df7e12551db"><td class="memItemLeft" align="right" valign="top"><a id="a56e303be7c6647ba385f6df7e12551db" name="a56e303be7c6647ba385f6df7e12551db"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_packet_confirm</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:a56e303be7c6647ba385f6df7e12551db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac195d260d11951243dfa089064a7a56d"><td class="memItemLeft" align="right" valign="top"><a id="ac195d260d11951243dfa089064a7a56d" name="ac195d260d11951243dfa089064a7a56d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_client_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="separator:ac195d260d11951243dfa089064a7a56d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dac4e8c262cc36f45524b461d021906"><td class="memItemLeft" align="right" valign="top"><a id="a7dac4e8c262cc36f45524b461d021906" name="a7dac4e8c262cc36f45524b461d021906"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_connection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="separator:a7dac4e8c262cc36f45524b461d021906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56929da6a3e0c859b63d506710f97a0"><td class="memItemLeft" align="right" valign="top"><a id="ac56929da6a3e0c859b63d506710f97a0" name="ac56929da6a3e0c859b63d506710f97a0"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_disconnection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="separator:ac56929da6a3e0c859b63d506710f97a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac5395dcc20ba967055e3c8cab5b42e5"><td class="memItemLeft" align="right" valign="top"><a id="aac5395dcc20ba967055e3c8cab5b42e5" name="aac5395dcc20ba967055e3c8cab5b42e5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_packet_confirm</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="separator:aac5395dcc20ba967055e3c8cab5b42e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1022d0ca971961d9172b56ae31d2ed60"><td class="memItemLeft" align="right" valign="top"><a id="a1022d0ca971961d9172b56ae31d2ed60" name="a1022d0ca971961d9172b56ae31d2ed60"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_login_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
 <tr class="separator:a1022d0ca971961d9172b56ae31d2ed60"><td class="memSeparator" colspan="2">&#160;</td></tr>

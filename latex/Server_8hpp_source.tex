@@ -56,7 +56,7 @@
 \DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{public}:}
 \DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classServer}{Server}}(asio::io\_context\&\ service,\ \textcolor{keywordtype}{int}\ port,\ \mbox{\hyperlink{classregistry}{registry}}\ \&ecs,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener,\ std::mutex\ \&mtx);}
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classServer}{\string~Server}}();}
-\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ recieve\_from\_client();}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ receive\_from\_client();}
 \DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ operator()(\mbox{\hyperlink{classsparse__array}{sparse\_array<component::AnimatedDrawable>}}\ \&dra,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Scale>}}\ \&scl,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Position>}}\ \&pos,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Endpoint>}}\ \&edp);}
 \DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ entity\_t\ get\_player\_entity\_from\_connection\_address(udp::endpoint);}
 \DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ entity\_t\ connect\_player(udp::endpoint\ player\_endpoint);}
@@ -68,13 +68,13 @@
 \DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_animated\_drawable\_snapshot\_to\_all\_players(entity\_t\ entity,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::AnimatedDrawable>}}\ \&dra,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Endpoint>}}\ \&edp);}
 \DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_animated\_drawable\_update\_to\_all\_clients(entity\_t\ entity,\ std::string\ state,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Endpoint>}}\ \&edp);}
 \DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ send\_entity\_drawable\_to\_all\_players(entity\_t\ entity,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Drawable>}}\ \&dra,\ \mbox{\hyperlink{classsparse__array}{sparse\_array<component::Endpoint>}}\ \&edp);}
-\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ recieveThread();}
-\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::vector<char>\ recieve\_raw\_data\_from\_client();}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ receiveThread();}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ std::vector<char>\ receive\_raw\_data\_from\_client();}
 \DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ get\_position\_change\_for\_event(entity\_t\ entity,\ \textcolor{keywordtype}{int}\ event);}
-\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_client\_event(std::vector<char>\ \&,\ entity\_t);}
-\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_connection\_event(std::vector<char>\ \&,\ entity\_t);}
-\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_disconnection\_event(std::vector<char>\ \&,\ entity\_t);}
-\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ recieve\_packet\_confirm(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_client\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_connection\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_disconnection\_event(std::vector<char>\ \&,\ entity\_t);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_packet\_confirm(std::vector<char>\ \&,\ entity\_t);}
 \DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_login\_event(std::vector<char>\ \&,\ entity\_t);}
 \DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_friend\_event(std::vector<char>\ \&,\ entity\_t);}
 \DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ receive\_add\_friend\_event(std::vector<char>\&,\ entity\_t);}
@@ -142,10 +142,10 @@
 \DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ asio::ip::udp::socket\ \_socket;}
 \DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_packet\_id\ =\ 0;}
 \DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ std::map<int16\_t,\ messageParserHandle>\ \_messageParser\ =\ \{}
-\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \{1,\ \&Server::recieve\_client\_event\},}
-\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \{2,\ \&Server::recieve\_connection\_event\},}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \{3,\ \&Server::recieve\_disconnection\_event\},}
-\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \{5,\ \&Server::recieve\_packet\_confirm\},}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \{1,\ \&Server::receive\_client\_event\},}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \{2,\ \&Server::receive\_connection\_event\},}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \{3,\ \&Server::receive\_disconnection\_event\},}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \{5,\ \&Server::receive\_packet\_confirm\},}
 \DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \{17,\ \&Server::receive\_login\_event\},}
 \DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \{18,\ \&Server::receive\_friend\_event\},}
 \DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \{19,\ \&Server::receive\_add\_friend\_event\},}

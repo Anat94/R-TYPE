@@ -44,7 +44,7 @@ bool can_read = true;
  * @return std::vector<char>
  */
 
-std::vector<char> Client::recieve_raw_data_from_client()
+std::vector<char> Client::receive_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
 
@@ -62,7 +62,7 @@ std::vector<char> Client::recieve_raw_data_from_client()
  * @return The packet id
  */
 
-int Client::recieve_high_score(std::vector<char> &server_msg)
+int Client::receive_high_score(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(HighScoreMessage))
         return -1;
@@ -86,7 +86,7 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
  * @return The packet id
  */
 
-int Client::recieve_death_event(std::vector<char> &server_msg)
+int Client::receive_death_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DeathEventMessage))
         return -1;
@@ -109,7 +109,7 @@ int Client::recieve_death_event(std::vector<char> &server_msg)
  * @return int The packet id
  */
 
-int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
+int Client::receive_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
         return -1;
@@ -151,7 +151,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
+int Client::receive_scale_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(ScaleSnapshot))
         return -1;
@@ -182,7 +182,7 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::recieve_login_response(std::vector<char> &server_msg)
+int Client::receive_login_response(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(LoginResponse))
         return -1;
@@ -282,7 +282,7 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
+int Client::receive_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
         return -1;
@@ -305,7 +305,7 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
             drawables[real_entity]->_path = std::string(snapshot->data);
         } else {
             // std::cout << "CREATED PLAYER SPRITE\n";
-            // std::cout << _recieve_structure.data.x << std::endl;
+            // std::cout << _receive_structure.data.x << std::endl;
             _ecs.add_component(real_entity, component::Drawable(std::string(snapshot->data)));
         }
     } catch (const std::exception &ex) {
@@ -320,7 +320,7 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
+int Client::receive_animated_drawable_snapshot(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
         return -1;
@@ -353,7 +353,7 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
+int Client::receive_animated_drawable_state_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
         return -1;
@@ -384,13 +384,13 @@ void Client::receive()
 {
     if (prgrmstop)
         exit(0);
-    std::vector<char> server_msg = recieve_raw_data_from_client();
+    std::vector<char> server_msg = receive_raw_data_from_client();
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
 
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
-        throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+        throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
     int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
     ConfirmationMessage to_send;
@@ -523,7 +523,7 @@ void Client::send_to_server(const T& structure) {
  *
  */
 void Client::receive_datas() {
-    _socket.receive_from(asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
+    _socket.receive_from(asio::buffer(&_receive_structure, sizeof(_receive_structure)), _server_endpoint);
     receive_datas();
 }
 
