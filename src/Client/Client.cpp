@@ -189,7 +189,6 @@ Client::Client(std::string ip, int port, std::string username)
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _username(username)
 {
-    std::cout << "client constructeur" << std::endl;
     _send_structure.id = 2;
     send_to_server(_send_structure);
     _ecs.register_component<component::Scale>();
@@ -484,7 +483,6 @@ void Client::removeMenu()
 
 void Client::drawLogin()
 {
-    std::cout << "dranw login" << std::endl;
     _window.draw(_usernameLogin);
     _window.draw(_passwordLogin);
     _window.draw(_login_usernameSf);
@@ -518,7 +516,6 @@ void Client::displayLogin()
 
 void Client::drawSignin()
 {
-    std::cout << "dranw signin" << std::endl;
     _window.draw(_usernameLogin);
     _window.draw(_passwordLogin);
     _window.draw(_login_usernameSf);
