@@ -553,14 +553,14 @@ namespace component {
     };
 
     struct Input {
-        sf::Text _text;
+        sf::Text *_text;
         std::string _username;
         float _width;
         float _height;
         bool _state = false;
 
-        Input(sf::Text text, std::string username, float widht, float height) : _text(text), _username(username), _width(widht), _height(height) {
-            _text.operator=(text);
+        Input(sf::Text *text, std::string username, float widht, float height) : _text(text), _username(username), _width(widht), _height(height) {
+            _text->setString(text->getString());
         };
     };
 };

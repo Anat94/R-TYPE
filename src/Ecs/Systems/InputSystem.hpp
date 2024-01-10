@@ -45,12 +45,10 @@ class InputSystem : public ISystems {
                             if (_event.text.unicode < 128) {
                                 if (_event.text.unicode == '\b' && input->_username.size() > 0) {
                                     input->_username.erase(input->_username.size() - 1, 1);
-                                } else if (_event.text.unicode != '\b') {
+                                } else if (_event.text.unicode != '\b' && input->_username.size() < 14) {
                                     input->_username += _event.text.unicode;
                                 }
-                                input->_text.setString(input->_username);
-                                //std::cout << input->_username << std::endl;
-
+                                input->_text->setString(input->_username);
                             }
                         }   
                     }
