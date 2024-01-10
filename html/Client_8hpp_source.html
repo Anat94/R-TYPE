@@ -85,208 +85,249 @@ $(function() {
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">*/</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#ifndef CLIENT_HPP</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#define CLIENT_HPP</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">//#pragma warning(disable: 4668)</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">//#pragma warning(disable: 4626)</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">//#pragma warning(disable: 4625)</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">//#pragma warning(disable: 4820)</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">//#pragma warning(disable: 5031)</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">//#pragma warning(disable: 4365)</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">//#pragma warning(disable: 5027)</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">//#pragma warning(disable: 4514)</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">//#pragma warning(disable: 4464)</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">//#pragma warning(disable: 5026)</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">//#pragma warning(disable: 4457)</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">//#pragma warning(disable: 5262)</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">//#pragma warning(disable: 5204)</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">//#pragma warning(disable: 4355)</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">//#pragma warning(disable: 5220)</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">//#pragma warning(disable: 5039)</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;asio.hpp&gt;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;SFML/Window.hpp&gt;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;SFML/Graphics.hpp&gt;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;SFML/System.hpp&gt;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;queue&gt;</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;mutex&gt;</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;../Ecs/Events.hpp&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;../Errors.hpp&quot;</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;../Network.hpp&quot;</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structdata__struct.html">   38</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structdata__struct.html">data_struct</a> {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">int</span> id;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    sf::Event event;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">int</span> package_id;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>};</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">    #define CLIENT_HPP</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="comment">//#pragma warning(disable: 4668)</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="comment">//#pragma warning(disable: 4626)</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="comment">//#pragma warning(disable: 4625)</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="comment">//#pragma warning(disable: 4820)</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="comment">//#pragma warning(disable: 5031)</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="comment">//#pragma warning(disable: 4365)</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="comment">//#pragma warning(disable: 5027)</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment">//#pragma warning(disable: 4514)</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">//#pragma warning(disable: 4464)</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="comment">//#pragma warning(disable: 5026)</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">//#pragma warning(disable: 4457)</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">//#pragma warning(disable: 5262)</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">//#pragma warning(disable: 5204)</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="comment">//#pragma warning(disable: 4355)</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">//#pragma warning(disable: 5220)</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">//#pragma warning(disable: 5039)</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">    #define MAX_POSITION_MOVE_THRESHOLD 100</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">    #include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">    #include &lt;asio.hpp&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">    #include &lt;SFML/Window.hpp&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">    #include &lt;SFML/Graphics.hpp&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">    #include &lt;SFML/System.hpp&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">    #include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">    #include &lt;queue&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">    #include &lt;mutex&gt;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">    #include &quot;../Ecs/Events.hpp&quot;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">    #include &quot;../Errors.hpp&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">    #include &quot;../Network.hpp&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">    #include &quot;../Timer.hpp&quot;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structdata__struct.html">   40</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structdata__struct.html">data_struct</a> {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">int</span> id;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    sf::Event event;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">int</span> package_id;</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">enum</span> Stage {</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    ONE,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    TWO,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    THREE,</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>};</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">enum</span> inGameState {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    INGAME,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    INGAMEMENU,</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    CHAT</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>};</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="structTrophy.html">   57</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structTrophy.html">Trophy</a> {</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    sf::Sprite sprite;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    sf::Texture texture;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>};</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="structHighScoreDisplay.html">   62</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structHighScoreDisplay.html">HighScoreDisplay</a> {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    sf::Text title;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    sf::Text name1;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    sf::Text score1;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    sf::Text name2;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    sf::Text score2;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    sf::Text name3;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    sf::Text score3;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <a class="code hl_struct" href="structTrophy.html">Trophy</a> trophy1;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <a class="code hl_struct" href="structTrophy.html">Trophy</a> trophy2;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>};</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="structChatEntity.html">   74</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structChatEntity.html">ChatEntity</a> {</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    sf::RectangleShape _rectangle;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    std::vector&lt;std::string&gt; _chat;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    std::vector&lt;sf::Text&gt; _chatText;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    sf::Text _chatTitle;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    sf::RectangleShape _inputBox;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    std::string _input;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    sf::Text _chatTextInput;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    sf::Clock _clock;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>};</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="classClient.html">   85</a></span><span class="keyword">class </span><a class="code hl_class" href="classClient.html">Client</a> {</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">typedef</span> int (<a class="code hl_class" href="classClient.html">Client</a>::*messageParserHandle)(std::vector&lt;char&gt;&amp;);</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <a class="code hl_class" href="classClient.html">Client</a>(std::string ip, <span class="keywordtype">int</span> port, std::string _username = <span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <a class="code hl_class" href="classClient.html">~Client</a>();</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="keywordtype">int</span> run();</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordtype">void</span> send_to_server(<span class="keyword">const</span> T&amp; structure);</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="comment">// template &lt;typename T&gt;</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="comment">// void send_datas(const T&amp; structure);</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="comment">// template &lt;typename T&gt;</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        <span class="comment">// void receive_datas(T&amp; structure);</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordtype">void</span> receive_datas();</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keywordtype">void</span> displayTexts();</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keywordtype">void</span> addLevel() { _level++; }</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keywordtype">void</span> addScore() { _score++; }</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keywordtype">void</span> decreaseLives() { _lives--; }</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keywordtype">void</span> increaseLives() { _lives++; }</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordtype">void</span> setLevel(<span class="keywordtype">int</span> level) { _level = level; }</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordtype">bool</span> hasPendingMessages() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordtype">int</span> manageEvent();</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keywordtype">void</span> receive();</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        <span class="keywordtype">int</span> recieve_position_snapshot_update(std::vector&lt;char&gt; &amp;);</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        std::vector&lt;char&gt; recieve_raw_data_from_client();</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordtype">int</span> recieve_high_score(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordtype">int</span> recieve_login_response(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordtype">int</span> recieve_drawable_snapshot_update(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keywordtype">int</span> recieve_animated_drawable_snapshot(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordtype">int</span> recieve_animated_drawable_state_update(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        <span class="keywordtype">int</span> receive_friends_reponse(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <span class="keywordtype">int</span> receive_add_friends_reponse(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        <span class="keywordtype">int</span> receive_remove_friends_reponse(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordtype">int</span> receive_chat_event(std::vector&lt;char&gt; &amp;server_msg);</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keywordtype">void</span> createEnemy(std::pair&lt;float, float&gt; pos, std::pair&lt;float, float&gt; vel, <span class="keyword">const</span> std::string &amp;path_to_texture, std::pair&lt;float, float&gt; scale, <span class="keywordtype">int</span> health, <span class="keywordtype">int</span> damage);</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordtype">void</span> displayScoreBoardMenu();</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordtype">void</span> handleInput(sf::Event &amp;event);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <span class="comment">//Content for network</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <a class="code hl_struct" href="structEventMessage.html">EventMessage</a> _send_structure;</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        asio::io_context _io_context;</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        udp::socket _socket;</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        udp::endpoint _server_endpoint;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        std::string _username;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>};</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">enum</span> Stage {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    ONE,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    TWO,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    THREE,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">enum</span> inGameState {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    INGAME,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    INGAMEMENU,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    CHAT</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>};</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="structTrophy.html">   59</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structTrophy.html">Trophy</a> {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    sf::Sprite sprite;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    sf::Texture texture;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="structHighScoreDisplay.html">   64</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structHighScoreDisplay.html">HighScoreDisplay</a> {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    sf::Text title;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    sf::Text name1;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    sf::Text score1;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    sf::Text name2;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    sf::Text score2;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    sf::Text name3;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    sf::Text score3;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_struct" href="structTrophy.html">Trophy</a> trophy1;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <a class="code hl_struct" href="structTrophy.html">Trophy</a> trophy2;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>};</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="structChatEntity.html">   76</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structChatEntity.html">ChatEntity</a> {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    sf::RectangleShape _rectangle;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    std::vector&lt;std::string&gt; _chat;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    std::vector&lt;sf::Text&gt; _chatText;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    sf::Text _chatTitle;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    sf::RectangleShape _inputBox;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    std::string _input;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    sf::Text _chatTextInput;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    sf::Clock _clock;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>};</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classClient.html">   87</a></span><span class="keyword">class </span><a class="code hl_class" href="classClient.html">Client</a> {</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keyword">typedef</span> int (<a class="code hl_class" href="classClient.html">Client</a>::*messageParserHandle)(std::vector&lt;char&gt;&amp;);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <a class="code hl_class" href="classClient.html">Client</a>(std::string ip, <span class="keywordtype">int</span> port, <a class="code hl_class" href="classEventListener.html">EventListener</a> &amp;listener, <a class="code hl_class" href="classregistry.html">registry</a> &amp;ecs, std::mutex &amp;mtx_);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <a class="code hl_function" href="classClient.html#a840e519ca781888cbd54181572ebe3a7">~Client</a>();</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a168399eeddbdde9a219278158914b9d2">run</a>();</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#ad56b05fc35da53496f318c7bdd96ebed">send_to_server</a>(<span class="keyword">const</span> T&amp; structure);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="comment">// template &lt;typename T&gt;</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="comment">// void send_datas(const T&amp; structure);</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="comment">// template &lt;typename T&gt;</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="comment">// void receive_datas(T&amp; structure);</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#afff638ebfd56ee7ab56f9dc1b886e1d8">receive_datas</a>();</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a85e60f733164296d0c545597f0bd08be">displayTexts</a>();</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keywordtype">void</span> addLevel() { _level++; }</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        <span class="keywordtype">void</span> addScore() { _score++; }</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        <span class="keywordtype">void</span> decreaseLives() { _lives--; }</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordtype">void</span> increaseLives() { _lives++; }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordtype">void</span> setLevel(<span class="keywordtype">int</span> level) { _level = level; }</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keywordtype">bool</span> hasPendingMessages() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a84ca2859e7ccceb8abd0858da4674e1d">manageEvent</a>();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a1cbd83a26acc32a68d35f4b94bc9af68">receive</a>();</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a032ed6a2fcf928be70d7d9c1105f5c51">recieve_position_snapshot_update</a>(std::vector&lt;char&gt; &amp;);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a46b431764eab1815764d29e93e8558df">recieve_scale_snapshot_update</a>(std::vector&lt;char&gt; &amp;);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        std::vector&lt;char&gt; <a class="code hl_function" href="classClient.html#aa5d7751a9e4bb5361fd276db0ec21586">recieve_raw_data_from_client</a>();</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a1ec3e6047c726feba021fbb2b49344d3">recieve_death_event</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#ae477e4a3770f26a5426e73f327c7a2b4">recieve_high_score</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a6bc12b7b5d0de32d3841ecfafc9d2a8e">recieve_login_response</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a36df43e7557fc6e2661781f8df22e211">recieve_drawable_snapshot_update</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a4284cf0e5c6e44fd1790f6930a458ec3">recieve_animated_drawable_snapshot</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a2f407d03e59101b31af4aafae01428ed">recieve_animated_drawable_state_update</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#ac3f7b703cb03d9785f557147ef8bf244">receive_friends_reponse</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#afef9c25e48c1816a4626697f6c88f91f">receive_add_friends_reponse</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a3ba457d759cff151c353f4e6fe2ac0b9">receive_remove_friends_reponse</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="classClient.html#a14c553437a24bc81a743ac3ffac7ce7a">receive_chat_event</a>(std::vector&lt;char&gt; &amp;server_msg);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a29eadc05eecb345c418b20a5a589f15f">createEnemy</a>(std::pair&lt;float, float&gt; pos, std::pair&lt;float, float&gt; vel, <span class="keyword">const</span> std::string &amp;path_to_texture, std::pair&lt;float, float&gt; scale, <span class="keywordtype">int</span> health, <span class="keywordtype">int</span> damage);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a1a37e6650eef7546f32d52b06776770c">displayScoreBoardMenu</a>();</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#ad47257b87ca02f998b8056843172e190">handleInput</a>(sf::Event &amp;event);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a752971fba33e068a5c12ea41d4cc64e1">manageCli</a>();</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classClient.html#a36cac90702860598162e1d725201a1a8">initClass</a>();</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        <span class="comment">//Content for network</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        <a class="code hl_struct" href="structSnapshotPosition.html">SnapshotPosition</a> _recieve_structure;</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        std::array&lt;char, 1024&gt; _receiveBuffer;</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        std::vector&lt;sf::Event::EventType&gt; eventsToPrint = {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                sf::Event::Closed,</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                sf::Event::Resized,</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                sf::Event::LostFocus,</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                sf::Event::GainedFocus,</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                sf::Event::TextEntered,</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>                sf::Event::KeyPressed,</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>                sf::Event::KeyReleased,</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>                sf::Event::MouseWheelMoved,</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                sf::Event::MouseWheelScrolled,</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                sf::Event::MouseButtonPressed,</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                sf::Event::MouseButtonReleased,</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                <span class="comment">//sf::Event::MouseMoved,</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                <span class="comment">// sf::Event::MouseEntered,</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                <span class="comment">// sf::Event::MouseLeft,</span></div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                sf::Event::JoystickButtonPressed,</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                sf::Event::JoystickButtonReleased,</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                sf::Event::JoystickMoved,</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                sf::Event::JoystickConnected,</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                sf::Event::JoystickDisconnected,</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>                sf::Event::TouchBegan,</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                sf::Event::TouchMoved,</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                sf::Event::TouchEnded,</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                sf::Event::SensorChanged</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            };</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        <span class="comment">//Content for ECS</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <a class="code hl_class" href="classregistry.html">registry</a> _ecs;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        entity_t _player;</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        entity_t _background;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        entity_t _enemy;</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        entity_t _btn_play;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="comment">//Content for SFML</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        sf::RenderWindow _window;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        sf::Event _event;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        sf::Font _font;</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        sf::Music _music;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        <span class="comment">//Content for gameplay</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keywordtype">int</span> _score;</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        <span class="keywordtype">int</span> _lives;</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        <span class="keywordtype">int</span> _level;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        sf::Text _score_text;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        sf::Text _lives_text;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        sf::Text _level_text;</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        Stage _stage;</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="comment">// content for enemys</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        std::queue&lt;entity_t&gt; _enemiesQueue;</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        std::map&lt;int16_t, messageParserHandle&gt; _messageParser = {</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            {4, &amp;Client::recieve_position_snapshot_update},</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>            {6, &amp;Client::recieve_drawable_snapshot_update},</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            {7, &amp;Client::recieve_high_score},</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            {8, &amp;Client::recieve_login_response},</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            {9, &amp;Client::receive_friends_reponse},</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            {10, &amp;Client::receive_add_friends_reponse},</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            {11, &amp;Client::receive_remove_friends_reponse},</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>            {12, &amp;Client::receive_chat_event},</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            {13, &amp;Client::recieve_animated_drawable_snapshot},</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>            {14, &amp;Client::recieve_animated_drawable_state_update}</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        };</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        sf::Vector2i _mouse_position;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        sf::Text _mouse_position_text;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <a class="code hl_struct" href="structHighScoreDisplay.html">HighScoreDisplay</a> _highScoreDisplay;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        inGameState _state;</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        <span class="keywordtype">int</span> _packet_id = 0;</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        std::vector&lt;std::string&gt; friendLists;</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <a class="code hl_struct" href="structChatEntity.html">ChatEntity</a> _chatEntity;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        std::mutex mtx;</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>};</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="preprocessor">#endif </span><span class="comment">// CLIENT_HPP</span></div>
-<div class="ttc" id="aclassClient_html"><div class="ttname"><a href="classClient.html">Client</a></div><div class="ttdef"><b>Definition</b> Client.hpp:85</div></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        <a class="code hl_struct" href="structEventMessage.html">EventMessage</a> _send_structure;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        asio::io_context _io_context;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        udp::socket _socket;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        udp::endpoint _server_endpoint;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        std::string _username;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        <span class="comment">//Content for network</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <a class="code hl_struct" href="structSnapshotPosition.html">SnapshotPosition</a> _recieve_structure;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        std::array&lt;char, 1024&gt; _receiveBuffer;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        std::vector&lt;sf::Event::EventType&gt; eventsToPrint = {</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>                sf::Event::Closed,</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>                sf::Event::Resized,</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                sf::Event::LostFocus,</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                sf::Event::GainedFocus,</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                sf::Event::TextEntered,</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                sf::Event::KeyPressed,</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                sf::Event::KeyReleased,</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                sf::Event::MouseWheelMoved,</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                sf::Event::MouseWheelScrolled,</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                sf::Event::MouseButtonPressed,</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                sf::Event::MouseButtonReleased,</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                <span class="comment">//sf::Event::MouseMoved,</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                <span class="comment">// sf::Event::MouseEntered,</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>                <span class="comment">// sf::Event::MouseLeft,</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                sf::Event::JoystickButtonPressed,</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>                sf::Event::JoystickButtonReleased,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>                sf::Event::JoystickMoved,</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                sf::Event::JoystickConnected,</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                sf::Event::JoystickDisconnected,</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                sf::Event::TouchBegan,</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                sf::Event::TouchMoved,</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>                sf::Event::TouchEnded,</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>                sf::Event::SensorChanged</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>            };</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="comment">//Content for ECS</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        entity_t _player;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        entity_t _background;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        entity_t _enemy;</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        entity_t _btn_play;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        <span class="comment">//Content for SFML</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        sf::RenderWindow _window;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        sf::Event _event;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        sf::Font _font;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        sf::Music _music;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="comment">//Content for gameplay</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordtype">int</span> _score;</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        <span class="keywordtype">int</span> _lives;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="keywordtype">int</span> _level;</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        sf::Text _score_text;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        sf::Text _lives_text;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        sf::Text _level_text;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        <a class="code hl_class" href="classregistry.html">registry</a> &amp;_ecs;</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        <a class="code hl_class" href="classEventListener.html">EventListener</a> &amp;_listener;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        Stage _stage;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <span class="comment">// content for enemys</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        std::thread receiveThread;</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        std::queue&lt;entity_t&gt; _enemiesQueue;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        std::map&lt;int16_t, messageParserHandle&gt; _messageParser = {</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            {4, &amp;<a class="code hl_function" href="classClient.html#a032ed6a2fcf928be70d7d9c1105f5c51">Client::recieve_position_snapshot_update</a>},</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>            {6, &amp;<a class="code hl_function" href="classClient.html#a36df43e7557fc6e2661781f8df22e211">Client::recieve_drawable_snapshot_update</a>},</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            {7, &amp;<a class="code hl_function" href="classClient.html#ae477e4a3770f26a5426e73f327c7a2b4">Client::recieve_high_score</a>},</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            {8, &amp;<a class="code hl_function" href="classClient.html#a6bc12b7b5d0de32d3841ecfafc9d2a8e">Client::recieve_login_response</a>},</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            {9, &amp;<a class="code hl_function" href="classClient.html#ac3f7b703cb03d9785f557147ef8bf244">Client::receive_friends_reponse</a>},</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>            {10, &amp;<a class="code hl_function" href="classClient.html#afef9c25e48c1816a4626697f6c88f91f">Client::receive_add_friends_reponse</a>},</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            {11, &amp;<a class="code hl_function" href="classClient.html#a3ba457d759cff151c353f4e6fe2ac0b9">Client::receive_remove_friends_reponse</a>},</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            {12, &amp;<a class="code hl_function" href="classClient.html#a14c553437a24bc81a743ac3ffac7ce7a">Client::receive_chat_event</a>},</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            {13, &amp;<a class="code hl_function" href="classClient.html#a4284cf0e5c6e44fd1790f6930a458ec3">Client::recieve_animated_drawable_snapshot</a>},</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>            {14, &amp;<a class="code hl_function" href="classClient.html#a2f407d03e59101b31af4aafae01428ed">Client::recieve_animated_drawable_state_update</a>},</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>            {15, &amp;<a class="code hl_function" href="classClient.html#a46b431764eab1815764d29e93e8558df">Client::recieve_scale_snapshot_update</a>},</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>            {16, &amp;<a class="code hl_function" href="classClient.html#a1ec3e6047c726feba021fbb2b49344d3">Client::recieve_death_event</a>}</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        };</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        sf::Vector2i _mouse_position;</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        sf::Text _mouse_position_text;</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <a class="code hl_struct" href="structHighScoreDisplay.html">HighScoreDisplay</a> _highScoreDisplay;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>        inGameState _state;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>        <span class="keywordtype">int</span> _packet_id = 0;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        std::string friendLists;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        <span class="keywordtype">bool</span> friendListFinish = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        <a class="code hl_struct" href="structChatEntity.html">ChatEntity</a> _chatEntity;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        std::mutex &amp;mtx;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        <a class="code hl_class" href="classTimer.html">Timer</a> shootTimer;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <a class="code hl_class" href="classTimer.html">Timer</a> moveTimer;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <span class="keywordtype">bool</span> prgrmstop = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>};</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="preprocessor">#endif </span><span class="comment">// CLIENT_HPP</span></div>
+<div class="ttc" id="aclassClient_html"><div class="ttname"><a href="classClient.html">Client</a></div><div class="ttdef"><b>Definition</b> Client.hpp:87</div></div>
+<div class="ttc" id="aclassClient_html_a032ed6a2fcf928be70d7d9c1105f5c51"><div class="ttname"><a href="classClient.html#a032ed6a2fcf928be70d7d9c1105f5c51">Client::recieve_position_snapshot_update</a></div><div class="ttdeci">int recieve_position_snapshot_update(std::vector&lt; char &gt; &amp;)</div><div class="ttdoc">get the player position from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:112</div></div>
+<div class="ttc" id="aclassClient_html_a14c553437a24bc81a743ac3ffac7ce7a"><div class="ttname"><a href="classClient.html#a14c553437a24bc81a743ac3ffac7ce7a">Client::receive_chat_event</a></div><div class="ttdeci">int receive_chat_event(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">receive a chat from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:264</div></div>
+<div class="ttc" id="aclassClient_html_a168399eeddbdde9a219278158914b9d2"><div class="ttname"><a href="classClient.html#a168399eeddbdde9a219278158914b9d2">Client::run</a></div><div class="ttdeci">int run()</div><div class="ttdoc">run the client window</div><div class="ttdef"><b>Definition</b> Client.cpp:802</div></div>
+<div class="ttc" id="aclassClient_html_a1a37e6650eef7546f32d52b06776770c"><div class="ttname"><a href="classClient.html#a1a37e6650eef7546f32d52b06776770c">Client::displayScoreBoardMenu</a></div><div class="ttdeci">void displayScoreBoardMenu()</div><div class="ttdoc">Display the scoreboard menu.</div><div class="ttdef"><b>Definition</b> Client.cpp:601</div></div>
+<div class="ttc" id="aclassClient_html_a1cbd83a26acc32a68d35f4b94bc9af68"><div class="ttname"><a href="classClient.html#a1cbd83a26acc32a68d35f4b94bc9af68">Client::receive</a></div><div class="ttdeci">void receive()</div><div class="ttdoc">Receuve event from the server.</div><div class="ttdef"><b>Definition</b> Client.cpp:383</div></div>
+<div class="ttc" id="aclassClient_html_a1ec3e6047c726feba021fbb2b49344d3"><div class="ttname"><a href="classClient.html#a1ec3e6047c726feba021fbb2b49344d3">Client::recieve_death_event</a></div><div class="ttdeci">int recieve_death_event(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">get when a player dead</div><div class="ttdef"><b>Definition</b> Client.cpp:89</div></div>
+<div class="ttc" id="aclassClient_html_a29eadc05eecb345c418b20a5a589f15f"><div class="ttname"><a href="classClient.html#a29eadc05eecb345c418b20a5a589f15f">Client::createEnemy</a></div><div class="ttdeci">void createEnemy(std::pair&lt; float, float &gt; pos, std::pair&lt; float, float &gt; vel, const std::string &amp;path_to_texture, std::pair&lt; float, float &gt; scale, int health, int damage)</div><div class="ttdoc">create enemy</div><div class="ttdef"><b>Definition</b> Client.cpp:498</div></div>
+<div class="ttc" id="aclassClient_html_a2f407d03e59101b31af4aafae01428ed"><div class="ttname"><a href="classClient.html#a2f407d03e59101b31af4aafae01428ed">Client::recieve_animated_drawable_state_update</a></div><div class="ttdeci">int recieve_animated_drawable_state_update(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">receive animation update from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:356</div></div>
+<div class="ttc" id="aclassClient_html_a36cac90702860598162e1d725201a1a8"><div class="ttname"><a href="classClient.html#a36cac90702860598162e1d725201a1a8">Client::initClass</a></div><div class="ttdeci">void initClass()</div><div class="ttdoc">Init client class.</div><div class="ttdef"><b>Definition</b> Client.cpp:760</div></div>
+<div class="ttc" id="aclassClient_html_a36df43e7557fc6e2661781f8df22e211"><div class="ttname"><a href="classClient.html#a36df43e7557fc6e2661781f8df22e211">Client::recieve_drawable_snapshot_update</a></div><div class="ttdeci">int recieve_drawable_snapshot_update(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">receive thr drawable from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:285</div></div>
+<div class="ttc" id="aclassClient_html_a3ba457d759cff151c353f4e6fe2ac0b9"><div class="ttname"><a href="classClient.html#a3ba457d759cff151c353f4e6fe2ac0b9">Client::receive_remove_friends_reponse</a></div><div class="ttdeci">int receive_remove_friends_reponse(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">reponse of removing friends from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:247</div></div>
+<div class="ttc" id="aclassClient_html_a4284cf0e5c6e44fd1790f6930a458ec3"><div class="ttname"><a href="classClient.html#a4284cf0e5c6e44fd1790f6930a458ec3">Client::recieve_animated_drawable_snapshot</a></div><div class="ttdeci">int recieve_animated_drawable_snapshot(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">receive the animated drawable from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:323</div></div>
+<div class="ttc" id="aclassClient_html_a46b431764eab1815764d29e93e8558df"><div class="ttname"><a href="classClient.html#a46b431764eab1815764d29e93e8558df">Client::recieve_scale_snapshot_update</a></div><div class="ttdeci">int recieve_scale_snapshot_update(std::vector&lt; char &gt; &amp;)</div><div class="ttdoc">get the scale from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:154</div></div>
+<div class="ttc" id="aclassClient_html_a6bc12b7b5d0de32d3841ecfafc9d2a8e"><div class="ttname"><a href="classClient.html#a6bc12b7b5d0de32d3841ecfafc9d2a8e">Client::recieve_login_response</a></div><div class="ttdeci">int recieve_login_response(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">while login, this get the login response from server</div><div class="ttdef"><b>Definition</b> Client.cpp:185</div></div>
+<div class="ttc" id="aclassClient_html_a752971fba33e068a5c12ea41d4cc64e1"><div class="ttname"><a href="classClient.html#a752971fba33e068a5c12ea41d4cc64e1">Client::manageCli</a></div><div class="ttdeci">void manageCli()</div><div class="ttdoc">manage the client cli at the beginning of the program</div><div class="ttdef"><b>Definition</b> Client.cpp:636</div></div>
+<div class="ttc" id="aclassClient_html_a840e519ca781888cbd54181572ebe3a7"><div class="ttname"><a href="classClient.html#a840e519ca781888cbd54181572ebe3a7">Client::~Client</a></div><div class="ttdeci">~Client()</div><div class="ttdoc">Destroy the Client:: Client object.</div><div class="ttdef"><b>Definition</b> Client.cpp:479</div></div>
+<div class="ttc" id="aclassClient_html_a84ca2859e7ccceb8abd0858da4674e1d"><div class="ttname"><a href="classClient.html#a84ca2859e7ccceb8abd0858da4674e1d">Client::manageEvent</a></div><div class="ttdeci">int manageEvent()</div><div class="ttdoc">manage event of the window</div><div class="ttdef"><b>Definition</b> Client.cpp:547</div></div>
+<div class="ttc" id="aclassClient_html_a85e60f733164296d0c545597f0bd08be"><div class="ttname"><a href="classClient.html#a85e60f733164296d0c545597f0bd08be">Client::displayTexts</a></div><div class="ttdeci">void displayTexts()</div><div class="ttdoc">Display text on the window.</div><div class="ttdef"><b>Definition</b> Client.cpp:534</div></div>
+<div class="ttc" id="aclassClient_html_aa5d7751a9e4bb5361fd276db0ec21586"><div class="ttname"><a href="classClient.html#aa5d7751a9e4bb5361fd276db0ec21586">Client::recieve_raw_data_from_client</a></div><div class="ttdeci">std::vector&lt; char &gt; recieve_raw_data_from_client()</div><div class="ttdoc">Receive data from the server and store them.</div><div class="ttdef"><b>Definition</b> Client.cpp:47</div></div>
+<div class="ttc" id="aclassClient_html_ac3f7b703cb03d9785f557147ef8bf244"><div class="ttname"><a href="classClient.html#ac3f7b703cb03d9785f557147ef8bf244">Client::receive_friends_reponse</a></div><div class="ttdeci">int receive_friends_reponse(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">get friends from server</div><div class="ttdef"><b>Definition</b> Client.cpp:216</div></div>
+<div class="ttc" id="aclassClient_html_ad47257b87ca02f998b8056843172e190"><div class="ttname"><a href="classClient.html#ad47257b87ca02f998b8056843172e190">Client::handleInput</a></div><div class="ttdeci">void handleInput(sf::Event &amp;event)</div><div class="ttdoc">Handle input from the user.</div><div class="ttdef"><b>Definition</b> Client.cpp:619</div></div>
+<div class="ttc" id="aclassClient_html_ad56b05fc35da53496f318c7bdd96ebed"><div class="ttname"><a href="classClient.html#ad56b05fc35da53496f318c7bdd96ebed">Client::send_to_server</a></div><div class="ttdeci">void send_to_server(const T &amp;structure)</div><div class="ttdoc">send a structure to the server</div><div class="ttdef"><b>Definition</b> Client.cpp:516</div></div>
+<div class="ttc" id="aclassClient_html_ae477e4a3770f26a5426e73f327c7a2b4"><div class="ttname"><a href="classClient.html#ae477e4a3770f26a5426e73f327c7a2b4">Client::recieve_high_score</a></div><div class="ttdeci">int recieve_high_score(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">get best 3 highscores from server</div><div class="ttdef"><b>Definition</b> Client.cpp:65</div></div>
+<div class="ttc" id="aclassClient_html_afef9c25e48c1816a4626697f6c88f91f"><div class="ttname"><a href="classClient.html#afef9c25e48c1816a4626697f6c88f91f">Client::receive_add_friends_reponse</a></div><div class="ttdeci">int receive_add_friends_reponse(std::vector&lt; char &gt; &amp;server_msg)</div><div class="ttdoc">response of adding friends from the server</div><div class="ttdef"><b>Definition</b> Client.cpp:230</div></div>
+<div class="ttc" id="aclassClient_html_afff638ebfd56ee7ab56f9dc1b886e1d8"><div class="ttname"><a href="classClient.html#afff638ebfd56ee7ab56f9dc1b886e1d8">Client::receive_datas</a></div><div class="ttdeci">void receive_datas()</div><div class="ttdoc">receive datas from server</div><div class="ttdef"><b>Definition</b> Client.cpp:525</div></div>
+<div class="ttc" id="aclassEventListener_html"><div class="ttname"><a href="classEventListener.html">EventListener</a></div><div class="ttdoc">Real class declaration.</div><div class="ttdef"><b>Definition</b> Events.hpp:100</div></div>
+<div class="ttc" id="aclassTimer_html"><div class="ttname"><a href="classTimer.html">Timer</a></div><div class="ttdef"><b>Definition</b> Timer.hpp:13</div></div>
 <div class="ttc" id="aclassregistry_html"><div class="ttname"><a href="classregistry.html">registry</a></div><div class="ttdoc">Registry class managing all the sparse_arrays.</div><div class="ttdef"><b>Definition</b> Registry.hpp:33</div></div>
-<div class="ttc" id="astructChatEntity_html"><div class="ttname"><a href="structChatEntity.html">ChatEntity</a></div><div class="ttdef"><b>Definition</b> Client.hpp:74</div></div>
+<div class="ttc" id="astructChatEntity_html"><div class="ttname"><a href="structChatEntity.html">ChatEntity</a></div><div class="ttdef"><b>Definition</b> Client.hpp:76</div></div>
 <div class="ttc" id="astructEventMessage_html"><div class="ttname"><a href="structEventMessage.html">EventMessage</a></div><div class="ttdef"><b>Definition</b> Network.hpp:39</div></div>
-<div class="ttc" id="astructHighScoreDisplay_html"><div class="ttname"><a href="structHighScoreDisplay.html">HighScoreDisplay</a></div><div class="ttdef"><b>Definition</b> Client.hpp:62</div></div>
+<div class="ttc" id="astructHighScoreDisplay_html"><div class="ttname"><a href="structHighScoreDisplay.html">HighScoreDisplay</a></div><div class="ttdef"><b>Definition</b> Client.hpp:64</div></div>
 <div class="ttc" id="astructSnapshotPosition_html"><div class="ttname"><a href="structSnapshotPosition.html">SnapshotPosition</a></div><div class="ttdef"><b>Definition</b> Network.hpp:24</div></div>
-<div class="ttc" id="astructTrophy_html"><div class="ttname"><a href="structTrophy.html">Trophy</a></div><div class="ttdef"><b>Definition</b> Client.hpp:57</div></div>
-<div class="ttc" id="astructdata__struct_html"><div class="ttname"><a href="structdata__struct.html">data_struct</a></div><div class="ttdef"><b>Definition</b> Client.hpp:38</div></div>
+<div class="ttc" id="astructTrophy_html"><div class="ttname"><a href="structTrophy.html">Trophy</a></div><div class="ttdef"><b>Definition</b> Client.hpp:59</div></div>
+<div class="ttc" id="astructdata__struct_html"><div class="ttname"><a href="structdata__struct.html">data_struct</a></div><div class="ttdef"><b>Definition</b> Client.hpp:40</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,13 +1,22 @@
 \doxysection{Server Class Reference}
 \hypertarget{classServer}{}\label{classServer}\index{Server@{Server}}
+Inheritance diagram for Server\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classServer}
+\end{center}
+\end{figure}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classServer_ae48e1a083c8eda23d58a3d0eb4689a10}\label{classServer_ae48e1a083c8eda23d58a3d0eb4689a10} 
-{\bfseries Server} (asio\+::io\+\_\+context \&service, int port, \mbox{\hyperlink{classregistry}{registry}} \&ecs, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\Hypertarget{classServer_aba715f3e4719f392ee559d48de30bd1b}\label{classServer_aba715f3e4719f392ee559d48de30bd1b} 
+{\bfseries Server} (asio\+::io\+\_\+context \&service, int port, \mbox{\hyperlink{classregistry}{registry}} \&ecs, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener, std\+::mutex \&mtx)
 \item 
 \Hypertarget{classServer_aebaa15526c89fca9a172b3366b6d67ac}\label{classServer_aebaa15526c89fca9a172b3366b6d67ac} 
 void {\bfseries recieve\+\_\+from\+\_\+client} ()
+\item 
+\Hypertarget{classServer_ad3f897e544d75125f4b9b41a0030ccd3}\label{classServer_ad3f897e544d75125f4b9b41a0030ccd3} 
+void {\bfseries operator()} (\mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}} $>$ \&dra, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Scale}{component\+::\+Scale}} $>$ \&scl, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} $>$ \&pos, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
 \Hypertarget{classServer_a830bddc2e68572a85904caf1ef1b5b25}\label{classServer_a830bddc2e68572a85904caf1ef1b5b25} 
 entity\+\_\+t {\bfseries get\+\_\+player\+\_\+entity\+\_\+from\+\_\+connection\+\_\+address} (udp\+::endpoint)
@@ -15,20 +24,32 @@ entity\+\_\+t {\bfseries get\+\_\+player\+\_\+entity\+\_\+from\+\_\+connection\+
 \Hypertarget{classServer_a9039585c177a2aae8d736b50fb488815}\label{classServer_a9039585c177a2aae8d736b50fb488815} 
 entity\+\_\+t {\bfseries connect\+\_\+player} (udp\+::endpoint player\+\_\+endpoint)
 \item 
-\Hypertarget{classServer_aeb4383edf10dd70ebdbb5190a3da59fc}\label{classServer_aeb4383edf10dd70ebdbb5190a3da59fc} 
-void {\bfseries send\+\_\+position\+\_\+snapshots\+\_\+for\+\_\+all\+\_\+players} ()
+\Hypertarget{classServer_a807b714745de14b9e23e5d69cb7eff4e}\label{classServer_a807b714745de14b9e23e5d69cb7eff4e} 
+void {\bfseries send\+\_\+death\+\_\+event\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
-\Hypertarget{classServer_a5058ff2189a2d893773b17cc9ba29b65}\label{classServer_a5058ff2189a2d893773b17cc9ba29b65} 
-void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshots\+\_\+for\+\_\+specific\+\_\+player} (entity\+\_\+t entity)
+\Hypertarget{classServer_a6d65b6d208de28d7cace924d057c6e2b}\label{classServer_a6d65b6d208de28d7cace924d057c6e2b} 
+void {\bfseries send\+\_\+all\+\_\+scale\+\_\+to\+\_\+player} (entity\+\_\+t entity)
 \item 
-\Hypertarget{classServer_aa4bc3645885ed2d7d84de8a83576d9dc}\label{classServer_aa4bc3645885ed2d7d84de8a83576d9dc} 
-void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshot\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity)
+\Hypertarget{classServer_abf95ed02bf45b62072ee3dd84050ba33}\label{classServer_abf95ed02bf45b62072ee3dd84050ba33} 
+void {\bfseries send\+\_\+scale\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Scale}{component\+::\+Scale}} $>$ \&scl, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
-\Hypertarget{classServer_adcb3d8898fe689271cfe2d71629d55c1}\label{classServer_adcb3d8898fe689271cfe2d71629d55c1} 
-void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+update\+\_\+to\+\_\+all\+\_\+clients} (entity\+\_\+t entity, std\+::string state)
+\Hypertarget{classServer_ad21324a87964dec10c1018e0a1babfd0}\label{classServer_ad21324a87964dec10c1018e0a1babfd0} 
+void {\bfseries send\+\_\+position\+\_\+snapshots\+\_\+for\+\_\+all\+\_\+players} (\mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} $>$ \&pos, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
-\Hypertarget{classServer_a1166af7b1be0bc15feb3ac55a1fd4411}\label{classServer_a1166af7b1be0bc15feb3ac55a1fd4411} 
-void {\bfseries send\+\_\+entity\+\_\+drawable\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity)
+\Hypertarget{classServer_ad7534d3d9c171cb34bdf183dab55520b}\label{classServer_ad7534d3d9c171cb34bdf183dab55520b} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshots\+\_\+for\+\_\+specific\+\_\+player} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}} $>$ dra)
+\item 
+\Hypertarget{classServer_a43f9eb998d7f08a231320d4030e80206}\label{classServer_a43f9eb998d7f08a231320d4030e80206} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+snapshot\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}} $>$ \&dra, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
+\item 
+\Hypertarget{classServer_a59c4e80468bac097f1f918c00c1daa0d}\label{classServer_a59c4e80468bac097f1f918c00c1daa0d} 
+void {\bfseries send\+\_\+animated\+\_\+drawable\+\_\+update\+\_\+to\+\_\+all\+\_\+clients} (entity\+\_\+t entity, std\+::string state, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
+\item 
+\Hypertarget{classServer_ae37a729c3a8205e5b35e4370a87e450e}\label{classServer_ae37a729c3a8205e5b35e4370a87e450e} 
+void {\bfseries send\+\_\+entity\+\_\+drawable\+\_\+to\+\_\+all\+\_\+players} (entity\+\_\+t entity, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Drawable}{component\+::\+Drawable}} $>$ \&dra, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
+\item 
+\Hypertarget{classServer_ac64926ab8165b430a283ef402bdde38b}\label{classServer_ac64926ab8165b430a283ef402bdde38b} 
+void {\bfseries recieve\+Thread} ()
 \item 
 \Hypertarget{classServer_aa5d167d434386f86e7c722a9efa87694}\label{classServer_aa5d167d434386f86e7c722a9efa87694} 
 std\+::vector$<$ char $>$ {\bfseries recieve\+\_\+raw\+\_\+data\+\_\+from\+\_\+client} ()
@@ -63,17 +84,14 @@ int {\bfseries receive\+\_\+remove\+\_\+friend\+\_\+event} (std\+::vector$<$ cha
 \Hypertarget{classServer_ad6c933a021e2bdb53f28e3ff1d41e55f}\label{classServer_ad6c933a021e2bdb53f28e3ff1d41e55f} 
 int {\bfseries receive\+\_\+chat\+\_\+event} (std\+::vector$<$ char $>$ \&, entity\+\_\+t)
 \item 
-\Hypertarget{classServer_a2ba41e08407ac74efdc59b26465f9c34}\label{classServer_a2ba41e08407ac74efdc59b26465f9c34} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients} (T \&structure, std\+::vector$<$ T $>$ \&packets\+\_\+to\+\_\+send)
+\Hypertarget{classServer_a9ddf5d7738cb0d1d1f7a1c7c08580cc9}\label{classServer_a9ddf5d7738cb0d1d1f7a1c7c08580cc9} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients} (T \&structure, std\+::vector$<$ T $>$ \&packets\+\_\+to\+\_\+send, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
-\Hypertarget{classServer_a0ea01b242d6ff82a7c50d1573b5dbfe5}\label{classServer_a0ea01b242d6ff82a7c50d1573b5dbfe5} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients\+\_\+except\+\_\+me} (T \&structure)
+\Hypertarget{classServer_a68ee20b0875835a4a1c9bcee47bfccde}\label{classServer_a68ee20b0875835a4a1c9bcee47bfccde} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+all\+\_\+clients\+\_\+except\+\_\+me} (T \&structure, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&edp)
 \item 
 \Hypertarget{classServer_a7ef98d310e698700e905a4f505ed9a96}\label{classServer_a7ef98d310e698700e905a4f505ed9a96} 
 {\footnotesize template$<$typename T $>$ }\\void {\bfseries send\+\_\+data\+\_\+to\+\_\+client\+\_\+by\+\_\+entity} (T \&structure, entity\+\_\+t entity)
-\item 
-\Hypertarget{classServer_a2367e00ed8dbb87eacec73af9cbb2910}\label{classServer_a2367e00ed8dbb87eacec73af9cbb2910} 
-void {\bfseries send\+Positionpackets\+Periodically} ()
 \item 
 \Hypertarget{classServer_ad81387bb02683d1b4a3db241451a69d9}\label{classServer_ad81387bb02683d1b4a3db241451a69d9} 
 void {\bfseries connect\+To\+DB} ()
@@ -108,8 +126,8 @@ bool {\bfseries check\+If\+Friendship\+Exist} (std\+::string name, std\+::string
 \Hypertarget{classServer_ad05e01f9f44c0a03e8f7f7bca871ad23}\label{classServer_ad05e01f9f44c0a03e8f7f7bca871ad23} 
 bool {\bfseries remove\+Friend} (std\+::string name, std\+::string friend\+Name)
 \item 
-\Hypertarget{classServer_a6cc5ab46f1249b49d6681d851938902a}\label{classServer_a6cc5ab46f1249b49d6681d851938902a} 
-std\+::vector$<$ \mbox{\hyperlink{structFriendship}{Friendship}} $>$ {\bfseries display\+Friends} (std\+::string name, entity\+\_\+t player\+\_\+entity)
+\Hypertarget{classServer_a1074d5db01c55f308431f1d5bdeaa005}\label{classServer_a1074d5db01c55f308431f1d5bdeaa005} 
+std\+::vector$<$ std\+::string $>$ {\bfseries display\+Friends} (std\+::string name, entity\+\_\+t player\+\_\+entity)
 \item 
 \Hypertarget{classServer_a33d897fc5cb607a135f802339ca9cac4}\label{classServer_a33d897fc5cb607a135f802339ca9cac4} 
 \mbox{\hyperlink{structFriendship}{Friendship}} {\bfseries get\+Friends\+Data} (std\+::string id)
@@ -120,8 +138,8 @@ void {\bfseries send\+\_\+highscore\+\_\+to\+\_\+specific\+\_\+client} (entity\+
 \Hypertarget{classServer_ad63ddf82722c4f18dd750b994107d11c}\label{classServer_ad63ddf82722c4f18dd750b994107d11c} 
 void {\bfseries send\+\_\+all\+\_\+entity\+\_\+drawables\+\_\+to\+\_\+specific\+\_\+player} (entity\+\_\+t player)
 \item 
-\Hypertarget{classServer_a0946feca1c2a91cf9474b39c8041fd82}\label{classServer_a0946feca1c2a91cf9474b39c8041fd82} 
-{\footnotesize template$<$typename T $>$ }\\void {\bfseries resend\+\_\+packets} (std\+::vector$<$ T $>$ \&)
+\Hypertarget{classServer_a4543ef0f01910fa324a8c3482530b983}\label{classServer_a4543ef0f01910fa324a8c3482530b983} 
+{\footnotesize template$<$typename T $>$ }\\void {\bfseries resend\+\_\+packets} (std\+::vector$<$ T $>$ \&, \mbox{\hyperlink{classsparse__array}{sparse\+\_\+array}}$<$ \mbox{\hyperlink{structcomponent_1_1Endpoint}{component\+::\+Endpoint}} $>$ \&)
 \end{DoxyCompactItemize}
 
 

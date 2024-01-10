@@ -38,14 +38,29 @@
 
 bool can_read = true;
 
+/**
+ * @brief Receive data from the server and store them
+ *
+ * @return std::vector<char>
+ */
+
 std::vector<char> Client::recieve_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
+
     size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _server_endpoint);
 
     receivedData.resize(bytesRead);
+
     return receivedData;
 }
+
+/**
+ * @brief get best 3 highscores from server
+ *
+ * @param server_msg The message from the server
+ * @return The packet id
+ */
 
 int Client::recieve_high_score(std::vector<char> &server_msg)
 {
@@ -64,13 +79,18 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
 
 }
 
+/**
+ * @brief get when a player dead
+ *
+ * @param server_msg The message from the server
+ * @return The packet id
+ */
+
 int Client::recieve_death_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DeathEventMessage))
         return -1;
     DeathEventMessage *snapshot = reinterpret_cast<DeathEventMessage *>(server_msg.data());
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
-    // std::cout << "recieved death event !!!!\n";
     while (!can_read)
         continue;
     try {
@@ -82,38 +102,34 @@ int Client::recieve_death_event(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief get the player position from the server
+ *
+ * @param server_msg The message from the server
+ * @return int The packet id
+ */
+
 int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
         return -1;
     SnapshotPosition *snapshot = reinterpret_cast<SnapshotPosition *>(server_msg.data());
     sparse_array<component::Position> &pos = _ecs.get_components<component::Position>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
         if (real_entity > 0 && pos[real_entity].has_value()) {
-            // std::cout << "UPDATED PLAYER\n";
-            // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            // std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
                 pos[real_entity]->x = snapshot->data.x;
                 pos[real_entity]->y = snapshot->data.y;
             }
-            // std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
             _ecs.can_run_updates = true;
         } else {
-            // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
-            // std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
@@ -122,7 +138,6 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
-            // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -130,13 +145,18 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief get the scale from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(ScaleSnapshot))
         return -1;
     ScaleSnapshot *snapshot = reinterpret_cast<ScaleSnapshot *>(server_msg.data());
     sparse_array<component::Scale> &scale = _ecs.get_components<component::Scale>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -156,6 +176,12 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief while login, this get the login response from server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::recieve_login_response(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(LoginResponse))
@@ -181,6 +207,12 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     return -1;
 }
 
+/**
+ * @brief get friends from server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(FriendsResponse))
         return -1;
@@ -189,6 +221,12 @@ int Client::receive_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief response of adding friends from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(AddFriendsResponse))
         return -1;
@@ -200,6 +238,12 @@ int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief reponse of removing friends from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(RemoveFriendsResponse))
         return -1;
@@ -211,6 +255,12 @@ int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief receive a chat from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_chat_event(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(ChatMessage))
         return -1;
@@ -226,6 +276,12 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
     return chat->packet_id;
 }
 
+/**
+ * @brief receive thr drawable from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
@@ -258,24 +314,23 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief receive the animated drawable from the server
+ * 
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
 {
-    // std::cout << "recieved animated drawable snapshot\n";
     if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
         return -1;
     AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
     sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
         if (real_entity > 0 && drawables[real_entity].has_value()) {
-            // std::cout << "UPDATED PLAYER SPRITE\n";
             drawables[real_entity]->_state = std::string(snapshot->_state);
         } else {
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
@@ -292,6 +347,12 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief receive animation update from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
@@ -303,10 +364,6 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
         if (real_entity > 0 && drawables[real_entity].has_value()) {
             drawables[real_entity]->_state = std::string(snapshot->state);
             std::cout << drawables[real_entity]->_state << std::endl;
@@ -317,12 +374,17 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
     return snapshot->packet_id;
 }
 
+/**
+ * @brief Receuve event from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 void Client::receive()
 {
     if (prgrmstop)
         exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
-    // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -339,6 +401,15 @@ void Client::receive()
     receive();
 }
 
+/**
+ * @brief Construct a new Client:: Client object
+ *
+ * @param ip ip to connect
+ * @param port port to connect
+ * @param listener event listener
+ * @param ecs ecs registry
+ * @param mtx_ mutex for thread safety
+ */
 Client::Client(std::string ip, int port, EventListener &listener, registry &ecs, std::mutex &mtx_)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
@@ -347,26 +418,6 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
       _ecs(ecs),
       mtx(mtx_)
 {
-    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
-    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
-    // entity_t tmp_text = _ecs.spawn_entity();
-    // _ecs.add_component(tmp_text, component::Text("my text to print"));
-    // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
-    // entity_t tmp_text_2 = _ecs.spawn_entity();
-    // _ecs.add_component(tmp_text_2, component::Text("my second text to print"));
-    // _ecs.add_component(tmp_text_2, component::Position(200.0f, 600.0f));
-    // _player = _ecs.spawn_entity();
-    // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
-    // _ecs.add_component(_player, component::Scale(5.0f));
-    // _ecs.add_component(_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3}, {0, 0}));
-    // _enemy = _ecs.spawn_entity();
-    // _ecs.add_component(_enemy, component::Position(200.0f, 300.0f));
-    // _ecs.add_component(_enemy, component::Scale(5.0f));
-    // _ecs.add_component(_enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
-    // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[_enemy];
-    // tmp->addAnimation("idle", {0, 4}, false);
-    // tmp->addAnimation("move up", {2, 4}, false);
-    // tmp->addAnimation("move down", {2, 0}, true);
     _score = 0;
     _lives = 0;
     _level = 1;
@@ -420,6 +471,11 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
 }
 
+
+/**
+ * @brief Destroy the Client:: Client object
+ *
+ */
 Client::~Client()
 {
     _font.~Font();
@@ -429,6 +485,16 @@ Client::~Client()
         receiveThread.join();
 }
 
+/**
+ * @brief create enemy
+ *
+ * @param pos position for the enemy
+ * @param vel velocity for the enemy
+ * @param path_to_texture texture path for the enemy
+ * @param scale scale for the enemy
+ * @param health health for the enemy
+ * @param damage damage for the enemy
+ */
 void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage) {
     entity_t _newEnemy = _ecs.spawn_entity();
 
@@ -440,19 +506,31 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
     _enemiesQueue.push(_newEnemy);
 }
 
+/**
+ * @brief send a structure to the server
+ *
+ * @tparam T
+ * @param structure stucture to send
+ */
 template <typename T>
 void Client::send_to_server(const T& structure) {
     std::cout << "SENDING\n";
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
+/**
+ * @brief receive datas from server
+ *
+ */
 void Client::receive_datas() {
-    // std::cout << "START RECIEVE";
     _socket.receive_from(asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
-    // std::cout << "RECIEVED\n";
     receive_datas();
 }
 
+/**
+ * @brief Display text on the window
+ *
+ */
 void Client::displayTexts()
 {
     _window.draw(_score_text);
@@ -461,6 +539,11 @@ void Client::displayTexts()
     _window.draw(_mouse_position_text);
 }
 
+/**
+ * @brief manage event of the window
+ *
+ * @return int 0 if no error, 1 on error or on window close
+ */
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
@@ -511,6 +594,10 @@ int Client::manageEvent()
     return 0;
 }
 
+/**
+ * @brief Display the scoreboard menu
+ *
+ */
 void Client::displayScoreBoardMenu()
 {
     _window.draw(_highScoreDisplay.trophy1.sprite);
@@ -524,6 +611,11 @@ void Client::displayScoreBoardMenu()
     _window.draw(_highScoreDisplay.score3);
 }
 
+/**
+ * @brief Handle input from the user
+ *
+ * @param event Event of the window
+ */
 void Client::handleInput(sf::Event& event) {
     if (event.type == sf::Event::TextEntered ) {
         if (event.text.unicode < 128) {
@@ -537,6 +629,10 @@ void Client::handleInput(sf::Event& event) {
     }
 }
 
+/**
+ * @brief manage the client cli at the beginning of the program
+ *
+ */
 void Client::manageCli()
 {
     std::string input;
@@ -656,6 +752,11 @@ void Client::manageCli()
     }
 }
 
+
+/**
+ * @brief Init client class
+ *
+ */
 void Client::initClass()
 {
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
@@ -693,6 +794,11 @@ void Client::initClass()
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
 }
 
+/**
+ * @brief run the client window
+ *
+ * @return int return 0
+ */
 int Client::run()
 {
     manageCli();
@@ -706,21 +812,6 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    // LoginMessage login(17, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
-    // _packet_id += 1;
-    // send_to_server<LoginMessage>(login);
-    // FriendsMessage friendsmsg(18, "admin", _packet_id);
-    // _packet_id += 1;
-    // send_to_server<FriendsMessage>(friendsmsg);
-    // AddFriendsMessage add(19, "Anatole", "Jacques",  _packet_id);
-    // _packet_id += 1;
-    // send_to_server<AddFriendsMessage>(add);
-    // RemoveFriendsMessage remove(20, "Anatole", "Jacques",  _packet_id);
-    // _packet_id += 1;
-    // send_to_server<RemoveFriendsMessage>(remove);
-    // ChatMessage msg(21, "admin", "Hello World", _packet_id);
-    // _packet_id +=1;
-    // send_to_server<ChatMessage>(msg);
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();
