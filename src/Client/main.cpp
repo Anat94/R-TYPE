@@ -24,7 +24,6 @@
 #include <asio.hpp>
 #include "../Errors.hpp"
 #include "Client.hpp"
-#include "Menu.hpp"
 
 using asio::ip::udp;
 
