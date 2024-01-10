@@ -64,11 +64,28 @@ int Client::recieve_high_score(std::vector<char> &server_msg)
 
 }
 
+int Client::receive_room_join_event(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(RoomJoinMessage))
+        return -1;
+    RoomJoinMessage *snapshot = reinterpret_cast<RoomJoinMessage *>(server_msg.data());
+    if (snapshot->room_name[0] == '\0') {
+        return snapshot->id;
+    }
+    std::cout << "Successfully joined room: " << snapshot->room_name << "!\n";
+    _room_name = snapshot->room_name;
+    return snapshot->id;
+}
+
 int Client::recieve_room_creation_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(RoomCreationMessage))
         return -1;
     RoomCreationMessage *snapshot = reinterpret_cast<RoomCreationMessage *>(server_msg.data());
+    if (snapshot->room_name[0] == '\0') {
+        std::cout << "unable to create room" << std::endl;
+        return snapshot->id;
+    }
     std::cout << "Successfully created room: " << snapshot->room_name << "!\n";
     _room_name = snapshot->room_name;
     return snapshot->id;
@@ -596,6 +613,9 @@ void Client::manageCli()
                 std::cout << "You must be in a room to start the game - see HELP" << std::endl;
                 continue;
             }
+            JoinGameMessage to_send(2, _username, _room_name, _packet_id);
+            _packet_id++;
+            send_to_server(to_send);
             return;
         } else if (command == "CREATE") {
             if (_username == "") {
@@ -607,14 +627,20 @@ void Client::manageCli()
                 continue;
             }
             RoomCreationMessage to_send(21, _username, params, _packet_id);
-            _packet_id;
+            _packet_id++;
             send_to_server<RoomCreationMessage>(to_send);
         } else if (command == "JOIN") {
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
             }
-            return;
+            if (params == "" ) {
+                std::cout << "Usage: JOIN [room_name]" << std::endl;
+                continue;
+            }
+            RoomJoinMessage to_send(22, params, _packet_id);
+            _packet_id++;
+            send_to_server<RoomJoinMessage>(to_send);
         } else if (command == "LIST_FRIENDS") {
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
@@ -732,6 +758,7 @@ void Client::initClass()
 int Client::run()
 {
     manageCli();
+    mtx.lock();
     initClass();
     _music.play();
     _music.setLoop(true);
@@ -756,6 +783,7 @@ int Client::run()
     // ChatMessage msg(21, "admin", "Hello World", _packet_id);
     // _packet_id +=1;
     // send_to_server<ChatMessage>(msg);
+    mtx.unlock();
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _window.clear();

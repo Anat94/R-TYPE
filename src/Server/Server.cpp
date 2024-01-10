@@ -51,6 +51,7 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<ScaleSnapshot>(_scale_packets, edp);
         resend_packets<DeathEventMessage>(_death_packets, edp);
         resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
+        resend_packets<RoomJoinMessage>(_room_join_packets, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -141,7 +142,7 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
     return -1;
 }
 
-entity_t Server::connect_player(udp::endpoint player_endpoint)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
@@ -159,6 +160,10 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     tmp->addAnimation("move down", {2, 0}, false);
     tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
+    _ecs.add_component(new_player, component::Room(room_name));
+    _ecs.add_component(new_player, component::Username(username));
+    if (username == _lobbies[room_name])
+        _ecs.add_component(new_player, component::Host());
     _ecs.add_component(new_player, component::Scale(6.0f));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
@@ -333,41 +338,63 @@ void Server::recieve_from_client()
     if (client_msg.size() < sizeof(BaseMessage)) {
         return;
     }
-    // mtx.lock();
     entity_t player_entity = get_player_entity_from_connection_address(_remote_endpoint);
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(client_msg.data());
 
     if (player_entity == -1 || baseMsg->id == 5) {
-        if (baseMsg->id == 5 || baseMsg->id == 17 || baseMsg->id == 21 || baseMsg->id == 22) {
+        if (baseMsg->id == 5 || baseMsg->id == 17 || baseMsg->id == 21 || baseMsg->id == 22 || baseMsg->id == 2) {
             (this->*_messageParser[baseMsg->id])(client_msg, 1);
         } else
-            player_entity = connect_player(_remote_endpoint);
+            return;
     }
-    // std::cout << "message id: " << baseMsg->id << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
-    // std::cout << "FINISHED RECIEVING\n";
-    // mtx.unlock();
     return;
+}
+
+int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
+{
+    RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
+
+    if (_lobbies.find(std::string(joinMsg->room_name)) == _lobbies.end()) {
+        RoomJoinMessage to_send(22, "", _packet_id);
+        _packet_id++;
+        // _room_join_packets.push_back(to_send);
+        _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
+        return -1;
+    }
+    std::cout << "successfully joined room: " << joinMsg->room_name << "!\n";
+    RoomJoinMessage to_send(22, std::string(joinMsg->room_name), _packet_id);
+    _packet_id++;
+    _room_join_packets.push_back(to_send);
+    _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
+    return 0;
 }
 
 int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
     RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
 
+    if (_lobbies.find(std::string(creationMsg->room_name)) != _lobbies.end()) {
+        RoomCreationMessage to_send(21, "", "", _packet_id);
+        _packet_id++;
+        _room_creation_packets.push_back(to_send);
+        _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
+        return -1;
+    }
     _lobbies[std::string(creationMsg->room_name)] = std::string(creationMsg->username);
     std::cout << "successfully created room !\n";
     RoomCreationMessage to_send(21, std::string(creationMsg->username), std::string(creationMsg->room_name), _packet_id);
     _packet_id++;
     _room_creation_packets.push_back(to_send);
     _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
+    return 0;
 }
 
 int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
-    // while (!can_mod) continue;
     _position_packets.erase(
         std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
             return snapshot.packet_id == id;
@@ -431,6 +458,13 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _room_creation_packets.end()
     );
+    _room_join_packets.erase(
+        std::remove_if(_room_join_packets.begin(), _room_join_packets.end(), [id](const RoomJoinMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _room_join_packets.end()
+    );
     return 0;
 }
 
@@ -443,19 +477,24 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     // std::cout << "event recieved: " << event->event << std::endl;
     // while (!_ecs.can_run_updates) continue;
     // _ecs.can_run_updates = false;
+     std::cout << "BEFORE NEW POS\n";
     std::pair<int, int> to_move = get_position_change_for_event(player_entity, event->event);
+    std::cout << "GOT NEW POS\n";
     if (to_move.first != 0 || to_move.second != 0) {
         _listener.addEvent(new UpdatePositionEvent(player_entity, to_move));
         _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
     }
+    std::cout << "ADDED EVENTS\n";
     // _ecs.can_run_updates = true;
     return 0;
 }
 
-int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t _)
 {
-    static_cast<void>(client_msg);
-    static_cast<void>(player_entity);
+    if (client_msg.size() < sizeof(JoinGameMessage))
+        return -1;
+    JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
+    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name));
     return 0;
 }
 

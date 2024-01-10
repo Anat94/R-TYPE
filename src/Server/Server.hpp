@@ -55,7 +55,7 @@ class Server: public ISystems {
         void recieve_from_client();
         void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
-        entity_t connect_player(udp::endpoint player_endpoint);
+        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
         void send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp);
         void send_all_scale_to_player(entity_t entity);
         void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
@@ -77,6 +77,7 @@ class Server: public ISystems {
         int receive_remove_friend_event(std::vector<char>&, entity_t);
         int receive_chat_event(std::vector<char>&, entity_t);
         int receive_room_creation_event(std::vector<char>&, entity_t);
+        int receive_room_join_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
@@ -130,6 +131,7 @@ class Server: public ISystems {
         std::vector<ChatMessage> _chat_packets;
         std::vector<ScaleSnapshot> _scale_packets;
         std::vector<RoomCreationMessage> _room_creation_packets;
+        std::vector<RoomJoinMessage> _room_join_packets;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -150,6 +152,7 @@ class Server: public ISystems {
             {19, &Server::receive_add_friend_event},
             {20, &Server::receive_remove_friend_event},
             {21, &Server::receive_room_creation_event},
+            {22, &Server::receive_room_join_event},
         };
         std::unordered_map<std::string, std::string> _lobbies;
         std::string _event;
