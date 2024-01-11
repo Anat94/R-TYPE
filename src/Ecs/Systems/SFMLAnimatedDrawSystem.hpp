@@ -38,11 +38,19 @@ class SFMLAnimatedDrawSystem : public ISystems {
                     std::string state = ani[i]->_state;
                     auto &currentIdx = _toDraw[i].first;
                     int offsetY = ani[i]->_firstOffset.second;
-                    if (currentIdx.first == ani[i]->_anims[state].second.second) {
-                        if (ani[i]->_anims[state].first)
+
+                    if (ani[i]->_anims[state].second.first > ani[i]->_anims[state].second.second) {
+                        if (currentIdx.first != ani[i]->_anims[state].second.second)
+                            currentIdx.first--;
+                        else if (ani[i]->_anims[state].first)
                             currentIdx.first = ani[i]->_anims[state].second.first;
-                    } else
-                        (ani[i]->_anims[state].second.second < ani[i]->_anims[state].second.first) ? currentIdx.first-- : currentIdx.first++;
+                    } else if (ani[i]->_anims[state].second.second > ani[i]->_anims[state].second.first) {
+                        if (currentIdx.first != ani[i]->_anims[state].second.second)
+                            currentIdx.first++;
+                        else if (ani[i]->_anims[state].first)
+                            currentIdx.first = ani[i]->_anims[state].second.first;
+                    }
+
                     int offsetX = ani[i]->_firstOffset.first + ((ani[i]->_spriteSize.first + ani[i]->_gaps.first) * currentIdx.first);
                     _toDraw[i].second.second->setTextureRect({offsetX, offsetY, ani[i]->_spriteSize.first, ani[i]->_spriteSize.second});
                     _clock.restart();
@@ -60,7 +68,7 @@ class SFMLAnimatedDrawSystem : public ISystems {
         sf::Vector2i *_mousePos;
         std::unordered_map<entity_t, std::pair<std::pair<int, int>, std::pair<std::unique_ptr<sf::Texture>, std::unique_ptr<sf::Sprite>>>> _toDraw;
         sf::Clock _clock;
-        float _threshold = 400.0f;
+        float _threshold = 300.0f;
 };
 
 #endif /* !SFMLANIMATEDDRAWSYSTEM_HPP_ */
