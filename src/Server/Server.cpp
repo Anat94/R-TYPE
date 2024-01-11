@@ -271,14 +271,14 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
         AnimatedDrawableSnapshot snap_ad(
             13,
             entity,
-            animatedDrawable.value()._path,
-            animatedDrawable.value()._nbSprites,
-            animatedDrawable.value()._spriteSize,
-            animatedDrawable.value()._gaps,
-            animatedDrawable.value()._firstOffset,
-            animatedDrawable.value()._currentIdx,
-            animatedDrawable.value()._anims,
-            animatedDrawable.value()._state,
+            animatedDrawable->_path,
+            animatedDrawable->_nbSprites,
+            animatedDrawable->_spriteSize,
+            animatedDrawable->_gaps,
+            animatedDrawable->_firstOffset,
+            animatedDrawable->_currentIdx,
+            animatedDrawable->_anims,
+            animatedDrawable->_state,
             0
         );
         // while (!can_send) continue;

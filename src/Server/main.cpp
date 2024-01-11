@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
     while (true) {
         mtx.lock();
         ecs.run_systems();
-        while (listener.popEvent());
+        listener.popEvent();
         mtx.unlock();
     }
     return 0;
