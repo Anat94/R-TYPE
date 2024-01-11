@@ -79,17 +79,17 @@ namespace component {
      */
     struct Button {
         // sf::RectangleShape shape;
+        float x = 0.0f;
+        float y = 0.0f;
+        float width = 0.0f;
+        float height = 0.0f;
         sf::Font font = sf::Font();
-        sf::Text text = sf::Text();
         std::string strText = "";
         sf::Color textColor = sf::Color();
         sf::Color idleColor = sf::Color();
         sf::Color hoverColor = sf::Color();
         sf::Color activeColor = sf::Color();
-        float height = 0.0f;
-        float width = 0.0f;
-        float x = 0.0f;
-        float y = 0.0f;
+        sf::Text text = sf::Text();
         
         Button(float x_, float y_, float width_, float height_, sf::Font& font_, std::string text_, sf::Color textColor_, sf::Color idleColor_, sf::Color hoverColor_, sf::Color activeColor_):
             x(x_), y(y_), width(width_), height(height_), font(font_), strText(text_), textColor(textColor_), idleColor(idleColor_), hoverColor(hoverColor_), activeColor(activeColor_)
