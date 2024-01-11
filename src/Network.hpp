@@ -15,17 +15,45 @@
 using asio::ip::udp;
 
 
-
+/**
+ * @brief Base Message, all network structures must inherit from this.
+*/
 struct BaseMessage {
+    /**
+     * @brief id of the message that is going to be sent through the network. Identifies the type of message.
+    */
     int16_t id;
+    /**
+     * @brief packet id of the message, used to identify individual packets
+    */
     int packet_id;
 };
 
+/**
+ * @brief Position snapshot, encapsulates positional data of game entities to be sent over Network
+*/
 struct SnapshotPosition: public BaseMessage {
+    /**
+     * @brief Identifies the associated game entity for which position data is transmitted.
+    */
     entity_t entity;
+    /**
+     * @brief Contains positional information (e.g., coordinates) of the entity.
+    */
     component::Position data;
 
+    /**
+     * @brief Base constructor of the Position Snapshot structure
+    */
     SnapshotPosition(): data(0, 0) {};
+     /**
+     * @brief Constructs SnapshotPosition with the following data
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ Identifies the associated game entity for which position data is transmitted.
+     * @param data_ Contains positional information (e.g., coordinates) of the entity.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     SnapshotPosition(int16_t id_, entity_t entity_, component::Position data_, int packet_id_):
     entity(entity_),  data(data_) {
         id = id_;
@@ -33,20 +61,62 @@ struct SnapshotPosition: public BaseMessage {
     };
 };
 
+/**
+ * @brief acts as a confirmation signal without additional payload.
+*/
 struct ConfirmationMessage: public BaseMessage {
 };
 
+/**
+ * @brief Encapsulates game events transmitted from clients to the server.
+*/
 struct EventMessage: public BaseMessage {
+    /**
+     * @brief Contains the ID related to the event to be sent.
+    */
     int event;
 };
 
+/**
+ * @brief encapsulates the top 3 scores of all time from players
+*/
 struct HighScoreMessage: public BaseMessage {
+    /**
+     * @brief Top 1 score associated to the name1 player
+    */
     int score1;
+    /**
+     * @brief Contains the username of the player who achieved score1.
+    */
     char name1[20];
+    /**
+     * @brief Top 2 score associated to the name2 player
+    */
     int score2;
+    /**
+     * @brief Contains the username of the player who achieved score2.
+    */
     char name2[20];
+    /**
+     * @brief Top 3 score associated to the name3 player
+    */
     int score3;
+    /**
+     * @brief Contains the username of the player who achieved score2.
+    */
     char name3[20];
+    /**
+     * @brief Constructor initiating the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param name1_ Contains the username of the player who achieved score1.
+     * @param name2_ Contains the username of the player who achieved score2.
+     * @param name3_ Contains the username of the player who achieved score3.
+     * @param score1_ Top 1 score associated to the name1 player
+     * @param score2_ Top 1 score associated to the name2 player
+     * @param score3_ Top 1 score associated to the name3 player
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     HighScoreMessage(int16_t id_, std::string name1_, std::string name2_, std::string name3_,int score1_, int score2_, int score3_, int packet_id_):
         score1(score1_), score2(score2_), score3(score3_) {
             size_t i = 0;
@@ -69,10 +139,31 @@ struct HighScoreMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates the login / signup details of the user
+*/
 struct LoginMessage: public BaseMessage {
+    /**
+     * @brief Username entered by the user.
+    */
     char username[20];
+    /**
+     * @brief password entered by the user.
+    */
     char password[20];
+    /**
+     * @brief type of the login: 0 = register, 1 = login.
+    */
     int logintype;
+    /**
+     * @brief Login Message constructor, initiates the following parameter
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username entered by the user.
+     * @param password_ password entered by the user.
+     * @param type_ type of the login: 0 = register, 1 = login.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     LoginMessage(int16_t id_, std::string username_, std::string password_, int type_, int packet_id_):
         username(), password(), logintype(type_) {
             size_t i = 0;
@@ -90,9 +181,26 @@ struct LoginMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates the login / signup response from the server to the user
+*/
 struct LoginResponse: public BaseMessage {
+    /**
+     * @brief response of the login request, 1 if successfull, 0 if not.
+    */
     bool response;
+    /**
+     * @brief type of the login: 0 = register, 1 = login.
+    */
     int logintype;
+    /**
+     * @brief Constructor initiating hte following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param response response of the login request, 1 if successfull, 0 if not.
+     * @param logintype type of the login: 0 = register, 1 = login.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     LoginResponse(int16_t id_, bool success_, int type_, int packet_id_):
         response(success_), logintype(type_) {
             id = id_;
@@ -100,8 +208,21 @@ struct LoginResponse: public BaseMessage {
         };
 };
 
+/**
+ * @brief is used as a request from the client to the server for a friend list
+*/
 struct FriendsMessage: public BaseMessage {
+    /**
+     * @brief Username of the user to fetch the friend list for.
+    */
     char username[20];
+    /**
+     * @brief Constructor initiating the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username of the user to fetch the friend list for.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     FriendsMessage(int16_t id_, std::string username_, int packet_id_):
         username() {
             size_t i = 0;
@@ -114,8 +235,21 @@ struct FriendsMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates a friend of the user's friend list
+*/
 struct FriendsResponse: public BaseMessage {
+    /**
+     * @brief username of the friend of the user's friend list.
+    */
     char friends[20];
+    /**
+     * @brief constructor initiating the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param friends_ username of the friend of the user's friend list.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     FriendsResponse(int16_t id_, std::string friends_, int packet_id_) {
             id = id_;
             size_t i = 0;
@@ -126,10 +260,27 @@ struct FriendsResponse: public BaseMessage {
         };
 };
 
+/**
+ * @brief contains the information necessary to request a friend
+*/
 struct AddFriendsMessage: public BaseMessage {
+    /**
+     * Username of user.
+    */
     char username[20];
+    /**
+     * Username of friend to remove.
+    */
     char friendName[20];
 
+    /**
+     * @brief Constructor initializing following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username of user.
+     * @param friendName_ Username of friend to remove.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     AddFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
         username(), friendName() {
             size_t i = 0;
@@ -147,8 +298,21 @@ struct AddFriendsMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates the friend request response from the server to the player
+*/
 struct AddFriendsResponse: public BaseMessage {
+    /**
+     * @brief response of the friend request, 1 if successfull, 0 if not.
+    */
     bool response;
+    /**
+     * @brief Constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param success_ response of the friend request, 1 if successfull, 0 if not.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     AddFriendsResponse(int16_t id_, bool success_, int packet_id_):
         response(success_) {
             id = id_;

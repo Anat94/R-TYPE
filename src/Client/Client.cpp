@@ -153,7 +153,6 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
         return -1;
     ScaleSnapshot *snapshot = reinterpret_cast<ScaleSnapshot *>(server_msg.data());
     sparse_array<component::Scale> &scale = _ecs.get_components<component::Scale>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -327,7 +326,6 @@ void Client::receive()
     if (prgrmstop)
         exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
-    // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -352,26 +350,6 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
       _ecs(ecs),
       mtx(mtx_)
 {
-    // SFMLTextDrawSystem *tmp_text_draw_sys = new SFMLTextDrawSystem(&_window);
-    // _ecs.add_system<component::Text, component::Position>(*tmp_text_draw_sys);
-    // entity_t tmp_text = _ecs.spawn_entity();
-    // _ecs.add_component(tmp_text, component::Text("my text to print"));
-    // _ecs.add_component(tmp_text, component::Position(100.0f, 550.0f));
-    // entity_t tmp_text_2 = _ecs.spawn_entity();
-    // _ecs.add_component(tmp_text_2, component::Text("my second text to print"));
-    // _ecs.add_component(tmp_text_2, component::Position(200.0f, 600.0f));
-    // _player = _ecs.spawn_entity();
-    // _ecs.add_component(_player, component::Position(100.0f, 600.0f));
-    // _ecs.add_component(_player, component::Scale(5.0f));
-    // _ecs.add_component(_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3}, {0, 0}));
-    // _enemy = _ecs.spawn_entity();
-    // _ecs.add_component(_enemy, component::Position(200.0f, 300.0f));
-    // _ecs.add_component(_enemy, component::Scale(5.0f));
-    // _ecs.add_component(_enemy, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
-    // auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[_enemy];
-    // tmp->addAnimation("idle", {0, 4}, false);
-    // tmp->addAnimation("move up", {2, 4}, false);
-    // tmp->addAnimation("move down", {2, 0}, true);
     _score = 0;
     _lives = 0;
     _level = 1;
@@ -449,13 +427,6 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
 template <typename T>
 void Client::send_to_server(const T& structure) {
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
-}
-
-void Client::receive_datas() {
-    // std::cout << "START RECIEVE";
-    _socket.receive_from(asio::buffer(&_recieve_structure, sizeof(_recieve_structure)), _server_endpoint);
-    // std::cout << "RECIEVED\n";
-    receive_datas();
 }
 
 void Client::displayTexts()
@@ -744,21 +715,6 @@ int Client::run()
     _score_text.setString("Score: " + std::to_string(_score));
     _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
-    // LoginMessage login(17, "test", "test", 1, _packet_id); // 0 == signup & 1 == signin
-    // _packet_id += 1;
-    // send_to_server<LoginMessage>(login);
-    // FriendsMessage friendsmsg(18, "admin", _packet_id);
-    // _packet_id += 1;
-    // send_to_server<FriendsMessage>(friendsmsg);
-    // AddFriendsMessage add(19, "Anatole", "Jacques",  _packet_id);
-    // _packet_id += 1;
-    // send_to_server<AddFriendsMessage>(add);
-    // RemoveFriendsMessage remove(20, "Anatole", "Jacques",  _packet_id);
-    // _packet_id += 1;
-    // send_to_server<RemoveFriendsMessage>(remove);
-    // ChatMessage msg(21, "admin", "Hello World", _packet_id);
-    // _packet_id +=1;
-    // send_to_server<ChatMessage>(msg);
     mtx.unlock();
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);

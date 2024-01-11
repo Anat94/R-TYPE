@@ -96,9 +96,6 @@ class Client {
         // template <typename T>
         // void send_datas(const T& structure);
 
-        // template <typename T>
-        // void receive_datas(T& structure);
-        void receive_datas();
         void displayTexts();
 
         void addLevel() { _level++; }
