@@ -376,26 +376,17 @@ namespace component {
             return (p1 < q2) && (q1 > p2);
         };
         bool isTouching(const Position &pos1, const Position &pos2, const Hitbox &other) {
-            Position top_left = pos1;
-            Position bottom_right = {pos1.x + _size.x, pos1.y + _size.y};
-            Position top_left_other = pos2;
-            Position bottom_right_other = {pos2.x + other._size.x, pos2.y + other._size.y};
-            return (top_left_other.x >= top_left.x && bottom_right.x <= bottom_right_other.x) &&
-                (top_left_other.y >= top_left.y && bottom_right.y <= bottom_right_other.y);
+            return (pos1.x < (pos2.x + other._size.x) &&
+                    (pos1.x + other._size.x) > pos2.x &&
+                    pos1.y < (pos2.y + other._size.y) &&
+                    (pos1.y + other._size.y) > pos2.y);
         };
         bool contains(const Position &pos, int x, int y) {
             Position bottom_right = {_size.x + pos.x, _size.y + pos.y};
             return (x >= pos.x && y >= pos.y && x <= bottom_right.x && y <= bottom_right.y);
         };
-        friend std::ostream& operator<<(std::ostream& os, const Hitbox& hitbox) {
-            // os << "Top Left: (" << hitbox._top_left.x << ", " << hitbox._top_left.y << "), ";
-            // os << "Top Right: (" << hitbox._top_right.x << ", " << hitbox._top_right.y << "), ";
-            // os << "Bottom Left: (" << hitbox._bottom_left.x << ", " << hitbox._bottom_left.y << "), ";
-            // os << "Bottom Right: (" << hitbox._bottom_right.x << ", " << hitbox._bottom_right.y << ")";
-            return os;
-        };
         bool operator==(const Hitbox& other) const {
-          return _size == other._size;
+            return _size == other._size;
         };
     };
 
