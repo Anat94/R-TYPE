@@ -198,6 +198,8 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
     r.add_component<component::Scale>(enemy, component::Scale(_scale));
     r.add_component<component::Health>(enemy, component::Health(_health));
+    if (_roomName.size() != 0)
+        r.add_component<component::Room>(enemy, component::Room(_roomName));
     r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
     r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable(_animatedDrawable._path, _animatedDrawable._nbSprites, _animatedDrawable._spriteSize, _animatedDrawable._gaps, _animatedDrawable._firstOffset, _animatedDrawable._currentIdx));
 
@@ -217,6 +219,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
         auto player_p = r.get_components<component::Position>()[_ents.first];
         auto player_h = r.get_components<component::Heading>()[_ents.first];
         auto player_d = r.get_components<component::Damage>()[_ents.first];
+        auto player_room = r.get_components<component::Room>()[_ents.first];
 
         if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value()) {
             component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 2)));
@@ -224,6 +227,8 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
             r.add_component(shot, component::Scale(2.0f));
+            if (player_room.has_value())
+                r.add_component<component::Room>(shot, component::Room(player_room->_name));
             r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
             auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
             tmp->addAnimation("idle", {0, 3}, true);

@@ -83,6 +83,8 @@ class Server: public ISystems {
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
         template <typename T>
+        void send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room);
+        template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
             std::cout << "GONNA SEND TO SPECIFC\n";
             auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
