@@ -96,12 +96,12 @@ int Client::recieve_death_event(std::vector<char> &server_msg)
     if (server_msg.size() < sizeof(DeathEventMessage))
         return -1;
     DeathEventMessage *snapshot = reinterpret_cast<DeathEventMessage *>(server_msg.data());
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
-    // std::cout << "recieved death event !!!!\n";
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         _listener.addEvent(new DeathEvent(real_entity, -1));
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -115,32 +115,23 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         return -1;
     SnapshotPosition *snapshot = reinterpret_cast<SnapshotPosition *>(server_msg.data());
     sparse_array<component::Position> &pos = _ecs.get_components<component::Position>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         if (real_entity > 0 && pos[real_entity].has_value()) {
-            // std::cout << "UPDATED PLAYER\n";
-            // std::cout << snapshot->data.x << std::endl;
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
-            // std::cout << "UPDATING POS\n";
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
                 pos[real_entity]->x = snapshot->data.x;
                 pos[real_entity]->y = snapshot->data.y;
             }
-            // std::cout << "UPDATED POS: " << snapshot->data.x << ", " << snapshot->data.y << std::endl;
             _ecs.can_run_updates = true;
         } else {
-            // std::cout << "CREATED PLAYER\n";
             entity_t new_player = _ecs.spawn_entity();
-            // std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(new_player, component::Position(snapshot->data.x,  snapshot->data.y));
             _ecs.add_component(new_player, component::Velocity(0.0f, 0.0f));
             _ecs.add_component(new_player, component::ResetOnMove());
@@ -148,8 +139,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Rotation(90));
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
-            _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
-            // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
+            _ecs.add_component(snapshot->entity, component::ServerEntity(new_player));
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -168,6 +158,8 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         if (real_entity > 0 && scale[real_entity].has_value()) {
             while (!_ecs.can_run_updates) continue;
             _ecs.can_run_updates = false;
@@ -260,25 +252,17 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     if (server_msg.size() < sizeof(DrawableSnapshot))
         return -1;
 
-    // std::cout << server_msg.data() << ", " << sizeof(DrawableSnapshot) << std::endl;
     DrawableSnapshot *snapshot = reinterpret_cast<DrawableSnapshot *>(server_msg.data());
-    // std::cout << snapshot->data << std::endl;
     sparse_array<component::Drawable> &drawables = _ecs.get_components<component::Drawable>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         if (real_entity > 0 && drawables[real_entity].has_value()) {
-            // std::cout << "UPDATED PLAYER SPRITE\n";
             drawables[real_entity]->_path = std::string(snapshot->data);
         } else {
-            // std::cout << "CREATED PLAYER SPRITE\n";
-            // std::cout << _recieve_structure.data.x << std::endl;
             _ecs.add_component(real_entity, component::Drawable(std::string(snapshot->data)));
         }
     } catch (const std::exception &ex) {
@@ -289,22 +273,17 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
 
 int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
 {
-    // std::cout << "recieved animated drawable snapshot\n";
     if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
         return -1;
     AnimatedDrawableSnapshot *snapshot = reinterpret_cast<AnimatedDrawableSnapshot *>(server_msg.data());
     sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
-    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         if (real_entity > 0 && drawables[real_entity].has_value()) {
-            // std::cout << "UPDATED PLAYER SPRITE\n";
             drawables[real_entity]->_state = std::string(snapshot->_state);
         } else {
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
@@ -327,15 +306,12 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
         return -1;
     AnimatedStateUpdateMessage *snapshot = reinterpret_cast<AnimatedStateUpdateMessage *>(server_msg.data());
     sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
-    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
         entity_t real_entity = snapshot->entity + 2;
-        // for (size_t j = 0; j < servEntities.size(); j++) {
-        //     std::cout << "j is: " << j << std::endl;
-        //     real_entity = (servEntities[j].has_value() && servEntities[j].value().entity == snapshot->entity) ? servEntities[j].value().entity : real_entity;
-        // }
+        auto &servEntity = _ecs.get_components<component::ServerEntity>()[snapshot->entity];
+        real_entity = servEntity.has_value() ? servEntity->entity : real_entity;
         if (real_entity > 0 && drawables[real_entity].has_value()) {
             drawables[real_entity]->_state = std::string(snapshot->state);
             std::cout << drawables[real_entity]->_state << std::endl;
