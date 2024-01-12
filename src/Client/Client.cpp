@@ -326,7 +326,8 @@ void Client::receive()
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
-
+    if (_packets_received.size() > 2000)
+        _packets_received.erase(_packets_received.begin());
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
