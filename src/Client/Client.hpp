@@ -211,6 +211,7 @@ class Client {
         Timer shootTimer;
         Timer moveTimer;
         bool prgrmstop = false;
+        std::vector<int> _packets_received;
 };
 
 #endif // CLIENT_HPP
