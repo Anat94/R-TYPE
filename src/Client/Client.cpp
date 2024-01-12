@@ -322,18 +322,26 @@ void Client::receive()
     if (prgrmstop)
         exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
-    // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
-
+    int check_if_packet_exist = 0;
+    for (const auto &element: _packets_received) {
+        if (element == baseMsg->packet_id)
+            check_if_packet_exist = 1;
+    }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
-    int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    if (check_if_packet_exist == 0) {
+        (this->*_messageParser[baseMsg->id])(server_msg);
+        if (_packets_received.size() > 1000)
+            _packets_received.erase(_packets_received.begin());
+        _packets_received.push_back(baseMsg->packet_id);
+    }
     ConfirmationMessage to_send;
     to_send.id = 5;
-    to_send.packet_id = packet_id;
+    to_send.packet_id = baseMsg->packet_id;
     send_to_server<ConfirmationMessage>(to_send);
     mtx.unlock();
     receive();
