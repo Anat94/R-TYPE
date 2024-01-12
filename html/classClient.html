@@ -79,21 +79,24 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7bab516216e26a0b7d9c9307584f7392"><td class="memItemLeft" align="right" valign="top"><a id="a7bab516216e26a0b7d9c9307584f7392" name="a7bab516216e26a0b7d9c9307584f7392"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Client</b> (std::string ip, int port, std::string _username=&quot;&quot;)</td></tr>
-<tr class="separator:a7bab516216e26a0b7d9c9307584f7392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a168399eeddbdde9a219278158914b9d2"><td class="memItemLeft" align="right" valign="top"><a id="a168399eeddbdde9a219278158914b9d2" name="a168399eeddbdde9a219278158914b9d2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+<tr class="memitem:aa785458c19de1737aa616a4d7f14cdef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#aa785458c19de1737aa616a4d7f14cdef">Client</a> (std::string ip, int port, <a class="el" href="classEventListener.html">EventListener</a> &amp;listener, <a class="el" href="classregistry.html">registry</a> &amp;ecs, std::mutex &amp;mtx_)</td></tr>
+<tr class="memdesc:aa785458c19de1737aa616a4d7f14cdef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classClient.html">Client</a>:: <a class="el" href="classClient.html">Client</a> object.  <br /></td></tr>
+<tr class="separator:aa785458c19de1737aa616a4d7f14cdef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a840e519ca781888cbd54181572ebe3a7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a840e519ca781888cbd54181572ebe3a7">~Client</a> ()</td></tr>
+<tr class="memdesc:a840e519ca781888cbd54181572ebe3a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="classClient.html">Client</a>:: <a class="el" href="classClient.html">Client</a> object.  <br /></td></tr>
+<tr class="separator:a840e519ca781888cbd54181572ebe3a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a168399eeddbdde9a219278158914b9d2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a168399eeddbdde9a219278158914b9d2">run</a> ()</td></tr>
+<tr class="memdesc:a168399eeddbdde9a219278158914b9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">run the client window  <br /></td></tr>
 <tr class="separator:a168399eeddbdde9a219278158914b9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad56b05fc35da53496f318c7bdd96ebed"><td class="memTemplParams" colspan="2"><a id="ad56b05fc35da53496f318c7bdd96ebed" name="ad56b05fc35da53496f318c7bdd96ebed"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad56b05fc35da53496f318c7bdd96ebed"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>send_to_server</b> (const T &amp;structure)</td></tr>
+<tr class="memitem:ad56b05fc35da53496f318c7bdd96ebed"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad56b05fc35da53496f318c7bdd96ebed"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classClient.html#ad56b05fc35da53496f318c7bdd96ebed">send_to_server</a> (const T &amp;structure)</td></tr>
+<tr class="memdesc:ad56b05fc35da53496f318c7bdd96ebed"><td class="mdescLeft">&#160;</td><td class="mdescRight">send a structure to the server  <br /></td></tr>
 <tr class="separator:ad56b05fc35da53496f318c7bdd96ebed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afff638ebfd56ee7ab56f9dc1b886e1d8"><td class="memItemLeft" align="right" valign="top"><a id="afff638ebfd56ee7ab56f9dc1b886e1d8" name="afff638ebfd56ee7ab56f9dc1b886e1d8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>receive_datas</b> ()</td></tr>
+<tr class="memitem:afff638ebfd56ee7ab56f9dc1b886e1d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#afff638ebfd56ee7ab56f9dc1b886e1d8">receive_datas</a> ()</td></tr>
+<tr class="memdesc:afff638ebfd56ee7ab56f9dc1b886e1d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive datas from server  <br /></td></tr>
 <tr class="separator:afff638ebfd56ee7ab56f9dc1b886e1d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85e60f733164296d0c545597f0bd08be"><td class="memItemLeft" align="right" valign="top"><a id="a85e60f733164296d0c545597f0bd08be" name="a85e60f733164296d0c545597f0bd08be"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>displayTexts</b> ()</td></tr>
+<tr class="memitem:a85e60f733164296d0c545597f0bd08be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a85e60f733164296d0c545597f0bd08be">displayTexts</a> ()</td></tr>
+<tr class="memdesc:a85e60f733164296d0c545597f0bd08be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display text on the window.  <br /></td></tr>
 <tr class="separator:a85e60f733164296d0c545597f0bd08be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8463da33234bc2c3e3715b786f4cf627"><td class="memItemLeft" align="right" valign="top"><a id="a8463da33234bc2c3e3715b786f4cf627" name="a8463da33234bc2c3e3715b786f4cf627"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addLevel</b> ()</td></tr>
@@ -113,55 +116,776 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setLevel</b> (int lev
 <tr class="memitem:a9118f130db1b0c82bf04bf7f4084f890"><td class="memItemLeft" align="right" valign="top"><a id="a9118f130db1b0c82bf04bf7f4084f890" name="a9118f130db1b0c82bf04bf7f4084f890"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasPendingMessages</b> () const</td></tr>
 <tr class="separator:a9118f130db1b0c82bf04bf7f4084f890"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84ca2859e7ccceb8abd0858da4674e1d"><td class="memItemLeft" align="right" valign="top"><a id="a84ca2859e7ccceb8abd0858da4674e1d" name="a84ca2859e7ccceb8abd0858da4674e1d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>manageEvent</b> ()</td></tr>
+<tr class="memitem:a84ca2859e7ccceb8abd0858da4674e1d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a84ca2859e7ccceb8abd0858da4674e1d">manageEvent</a> ()</td></tr>
+<tr class="memdesc:a84ca2859e7ccceb8abd0858da4674e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">manage event of the window  <br /></td></tr>
 <tr class="separator:a84ca2859e7ccceb8abd0858da4674e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cbd83a26acc32a68d35f4b94bc9af68"><td class="memItemLeft" align="right" valign="top"><a id="a1cbd83a26acc32a68d35f4b94bc9af68" name="a1cbd83a26acc32a68d35f4b94bc9af68"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>receive</b> ()</td></tr>
+<tr class="memitem:a1cbd83a26acc32a68d35f4b94bc9af68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a1cbd83a26acc32a68d35f4b94bc9af68">receive</a> ()</td></tr>
+<tr class="memdesc:a1cbd83a26acc32a68d35f4b94bc9af68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receuve event from the server.  <br /></td></tr>
 <tr class="separator:a1cbd83a26acc32a68d35f4b94bc9af68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a032ed6a2fcf928be70d7d9c1105f5c51"><td class="memItemLeft" align="right" valign="top"><a id="a032ed6a2fcf928be70d7d9c1105f5c51" name="a032ed6a2fcf928be70d7d9c1105f5c51"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_position_snapshot_update</b> (std::vector&lt; char &gt; &amp;)</td></tr>
-<tr class="separator:a032ed6a2fcf928be70d7d9c1105f5c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5d7751a9e4bb5361fd276db0ec21586"><td class="memItemLeft" align="right" valign="top"><a id="aa5d7751a9e4bb5361fd276db0ec21586" name="aa5d7751a9e4bb5361fd276db0ec21586"></a>
-std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_raw_data_from_client</b> ()</td></tr>
-<tr class="separator:aa5d7751a9e4bb5361fd276db0ec21586"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae477e4a3770f26a5426e73f327c7a2b4"><td class="memItemLeft" align="right" valign="top"><a id="ae477e4a3770f26a5426e73f327c7a2b4" name="ae477e4a3770f26a5426e73f327c7a2b4"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_high_score</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
-<tr class="separator:ae477e4a3770f26a5426e73f327c7a2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bc12b7b5d0de32d3841ecfafc9d2a8e"><td class="memItemLeft" align="right" valign="top"><a id="a6bc12b7b5d0de32d3841ecfafc9d2a8e" name="a6bc12b7b5d0de32d3841ecfafc9d2a8e"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_login_response</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
-<tr class="separator:a6bc12b7b5d0de32d3841ecfafc9d2a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36df43e7557fc6e2661781f8df22e211"><td class="memItemLeft" align="right" valign="top"><a id="a36df43e7557fc6e2661781f8df22e211" name="a36df43e7557fc6e2661781f8df22e211"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_drawable_snapshot_update</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
-<tr class="separator:a36df43e7557fc6e2661781f8df22e211"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4284cf0e5c6e44fd1790f6930a458ec3"><td class="memItemLeft" align="right" valign="top"><a id="a4284cf0e5c6e44fd1790f6930a458ec3" name="a4284cf0e5c6e44fd1790f6930a458ec3"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_animated_drawable_snapshot</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
-<tr class="separator:a4284cf0e5c6e44fd1790f6930a458ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f407d03e59101b31af4aafae01428ed"><td class="memItemLeft" align="right" valign="top"><a id="a2f407d03e59101b31af4aafae01428ed" name="a2f407d03e59101b31af4aafae01428ed"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_animated_drawable_state_update</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
-<tr class="separator:a2f407d03e59101b31af4aafae01428ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3f7b703cb03d9785f557147ef8bf244"><td class="memItemLeft" align="right" valign="top"><a id="ac3f7b703cb03d9785f557147ef8bf244" name="ac3f7b703cb03d9785f557147ef8bf244"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_friends_reponse</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memitem:a4a07db434d377496401b3d1163c0e6d2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a4a07db434d377496401b3d1163c0e6d2">receive_position_snapshot_update</a> (std::vector&lt; char &gt; &amp;)</td></tr>
+<tr class="memdesc:a4a07db434d377496401b3d1163c0e6d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the player position from the server  <br /></td></tr>
+<tr class="separator:a4a07db434d377496401b3d1163c0e6d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a911ddce0764d74e47eab48e196dc5ebe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a911ddce0764d74e47eab48e196dc5ebe">receive_scale_snapshot_update</a> (std::vector&lt; char &gt; &amp;)</td></tr>
+<tr class="memdesc:a911ddce0764d74e47eab48e196dc5ebe"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the scale from the server  <br /></td></tr>
+<tr class="separator:a911ddce0764d74e47eab48e196dc5ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1062e4d1dda0a8f0844ac3b9bf66d280"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a1062e4d1dda0a8f0844ac3b9bf66d280">receive_raw_data_from_client</a> ()</td></tr>
+<tr class="memdesc:a1062e4d1dda0a8f0844ac3b9bf66d280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive data from the server and store them.  <br /></td></tr>
+<tr class="separator:a1062e4d1dda0a8f0844ac3b9bf66d280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdebfad53cf68fca1718475c119cc5c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#acdebfad53cf68fca1718475c119cc5c3">receive_death_event</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:acdebfad53cf68fca1718475c119cc5c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">get when a player dead  <br /></td></tr>
+<tr class="separator:acdebfad53cf68fca1718475c119cc5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2a2622b8c3c122e0698cf54628b1400"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#ae2a2622b8c3c122e0698cf54628b1400">receive_high_score</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:ae2a2622b8c3c122e0698cf54628b1400"><td class="mdescLeft">&#160;</td><td class="mdescRight">get best 3 highscores from server  <br /></td></tr>
+<tr class="separator:ae2a2622b8c3c122e0698cf54628b1400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20f8a7a420d3b0aa16a9ecef6e888c33"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a20f8a7a420d3b0aa16a9ecef6e888c33">receive_login_response</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:a20f8a7a420d3b0aa16a9ecef6e888c33"><td class="mdescLeft">&#160;</td><td class="mdescRight">while login, this get the login response from server  <br /></td></tr>
+<tr class="separator:a20f8a7a420d3b0aa16a9ecef6e888c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf467bfe986134c956b5d893c4475212"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#acf467bfe986134c956b5d893c4475212">receive_drawable_snapshot_update</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:acf467bfe986134c956b5d893c4475212"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive thr drawable from the server  <br /></td></tr>
+<tr class="separator:acf467bfe986134c956b5d893c4475212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4076ae09ccfbf64b28605675846192a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#ac4076ae09ccfbf64b28605675846192a">receive_animated_drawable_snapshot</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:ac4076ae09ccfbf64b28605675846192a"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive the animated drawable from the server  <br /></td></tr>
+<tr class="separator:ac4076ae09ccfbf64b28605675846192a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5780253a5a01dc7a5c810c186bde7a81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a5780253a5a01dc7a5c810c186bde7a81">receive_animated_drawable_state_update</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:a5780253a5a01dc7a5c810c186bde7a81"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive animation update from the server  <br /></td></tr>
+<tr class="separator:a5780253a5a01dc7a5c810c186bde7a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3f7b703cb03d9785f557147ef8bf244"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#ac3f7b703cb03d9785f557147ef8bf244">receive_friends_reponse</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:ac3f7b703cb03d9785f557147ef8bf244"><td class="mdescLeft">&#160;</td><td class="mdescRight">get friends from server  <br /></td></tr>
 <tr class="separator:ac3f7b703cb03d9785f557147ef8bf244"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afef9c25e48c1816a4626697f6c88f91f"><td class="memItemLeft" align="right" valign="top"><a id="afef9c25e48c1816a4626697f6c88f91f" name="afef9c25e48c1816a4626697f6c88f91f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_add_friends_reponse</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memitem:afef9c25e48c1816a4626697f6c88f91f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#afef9c25e48c1816a4626697f6c88f91f">receive_add_friends_reponse</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:afef9c25e48c1816a4626697f6c88f91f"><td class="mdescLeft">&#160;</td><td class="mdescRight">response of adding friends from the server  <br /></td></tr>
 <tr class="separator:afef9c25e48c1816a4626697f6c88f91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ba457d759cff151c353f4e6fe2ac0b9"><td class="memItemLeft" align="right" valign="top"><a id="a3ba457d759cff151c353f4e6fe2ac0b9" name="a3ba457d759cff151c353f4e6fe2ac0b9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_remove_friends_reponse</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memitem:a3ba457d759cff151c353f4e6fe2ac0b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a3ba457d759cff151c353f4e6fe2ac0b9">receive_remove_friends_reponse</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:a3ba457d759cff151c353f4e6fe2ac0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">reponse of removing friends from the server  <br /></td></tr>
 <tr class="separator:a3ba457d759cff151c353f4e6fe2ac0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14c553437a24bc81a743ac3ffac7ce7a"><td class="memItemLeft" align="right" valign="top"><a id="a14c553437a24bc81a743ac3ffac7ce7a" name="a14c553437a24bc81a743ac3ffac7ce7a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_chat_event</b> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memitem:a14c553437a24bc81a743ac3ffac7ce7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a14c553437a24bc81a743ac3ffac7ce7a">receive_chat_event</a> (std::vector&lt; char &gt; &amp;server_msg)</td></tr>
+<tr class="memdesc:a14c553437a24bc81a743ac3ffac7ce7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive a chat from the server  <br /></td></tr>
 <tr class="separator:a14c553437a24bc81a743ac3ffac7ce7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29eadc05eecb345c418b20a5a589f15f"><td class="memItemLeft" align="right" valign="top"><a id="a29eadc05eecb345c418b20a5a589f15f" name="a29eadc05eecb345c418b20a5a589f15f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createEnemy</b> (std::pair&lt; float, float &gt; pos, std::pair&lt; float, float &gt; vel, const std::string &amp;path_to_texture, std::pair&lt; float, float &gt; scale, int health, int damage)</td></tr>
+<tr class="memitem:a29eadc05eecb345c418b20a5a589f15f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a29eadc05eecb345c418b20a5a589f15f">createEnemy</a> (std::pair&lt; float, float &gt; pos, std::pair&lt; float, float &gt; vel, const std::string &amp;path_to_texture, std::pair&lt; float, float &gt; scale, int health, int damage)</td></tr>
+<tr class="memdesc:a29eadc05eecb345c418b20a5a589f15f"><td class="mdescLeft">&#160;</td><td class="mdescRight">create enemy  <br /></td></tr>
 <tr class="separator:a29eadc05eecb345c418b20a5a589f15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a37e6650eef7546f32d52b06776770c"><td class="memItemLeft" align="right" valign="top"><a id="a1a37e6650eef7546f32d52b06776770c" name="a1a37e6650eef7546f32d52b06776770c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>displayScoreBoardMenu</b> ()</td></tr>
+<tr class="memitem:a1a37e6650eef7546f32d52b06776770c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a1a37e6650eef7546f32d52b06776770c">displayScoreBoardMenu</a> ()</td></tr>
+<tr class="memdesc:a1a37e6650eef7546f32d52b06776770c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display the scoreboard menu.  <br /></td></tr>
 <tr class="separator:a1a37e6650eef7546f32d52b06776770c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad47257b87ca02f998b8056843172e190"><td class="memItemLeft" align="right" valign="top"><a id="ad47257b87ca02f998b8056843172e190" name="ad47257b87ca02f998b8056843172e190"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handleInput</b> (sf::Event &amp;event)</td></tr>
+<tr class="memitem:ad47257b87ca02f998b8056843172e190"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#ad47257b87ca02f998b8056843172e190">handleInput</a> (sf::Event &amp;event)</td></tr>
+<tr class="memdesc:ad47257b87ca02f998b8056843172e190"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle input from the user.  <br /></td></tr>
 <tr class="separator:ad47257b87ca02f998b8056843172e190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a752971fba33e068a5c12ea41d4cc64e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a752971fba33e068a5c12ea41d4cc64e1">manageCli</a> ()</td></tr>
+<tr class="memdesc:a752971fba33e068a5c12ea41d4cc64e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">manage the client cli at the beginning of the program  <br /></td></tr>
+<tr class="separator:a752971fba33e068a5c12ea41d4cc64e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36cac90702860598162e1d725201a1a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClient.html#a36cac90702860598162e1d725201a1a8">initClass</a> ()</td></tr>
+<tr class="memdesc:a36cac90702860598162e1d725201a1a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init client class.  <br /></td></tr>
+<tr class="separator:a36cac90702860598162e1d725201a1a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa785458c19de1737aa616a4d7f14cdef" name="aa785458c19de1737aa616a4d7f14cdef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa785458c19de1737aa616a4d7f14cdef">&#9670;&#160;</a></span>Client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Client::Client </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>ip</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEventListener.html">EventListener</a> &amp;&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classregistry.html">registry</a> &amp;&#160;</td>
+          <td class="paramname"><em>ecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::mutex &amp;&#160;</td>
+          <td class="paramname"><em>mtx_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classClient.html">Client</a>:: <a class="el" href="classClient.html">Client</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip</td><td>ip to connect </td></tr>
+    <tr><td class="paramname">port</td><td>port to connect </td></tr>
+    <tr><td class="paramname">listener</td><td>event listener </td></tr>
+    <tr><td class="paramname">ecs</td><td>ecs registry </td></tr>
+    <tr><td class="paramname">mtx_</td><td>mutex for thread safety </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a840e519ca781888cbd54181572ebe3a7" name="a840e519ca781888cbd54181572ebe3a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840e519ca781888cbd54181572ebe3a7">&#9670;&#160;</a></span>~Client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Client::~Client </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy the <a class="el" href="classClient.html">Client</a>:: <a class="el" href="classClient.html">Client</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a29eadc05eecb345c418b20a5a589f15f" name="a29eadc05eecb345c418b20a5a589f15f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29eadc05eecb345c418b20a5a589f15f">&#9670;&#160;</a></span>createEnemy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::createEnemy </td>
+          <td>(</td>
+          <td class="paramtype">std::pair&lt; float, float &gt;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::pair&lt; float, float &gt;&#160;</td>
+          <td class="paramname"><em>vel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path_to_texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::pair&lt; float, float &gt;&#160;</td>
+          <td class="paramname"><em>scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>health</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>damage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>create enemy </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>position for the enemy </td></tr>
+    <tr><td class="paramname">vel</td><td>velocity for the enemy </td></tr>
+    <tr><td class="paramname">path_to_texture</td><td>texture path for the enemy </td></tr>
+    <tr><td class="paramname">scale</td><td>scale for the enemy </td></tr>
+    <tr><td class="paramname">health</td><td>health for the enemy </td></tr>
+    <tr><td class="paramname">damage</td><td>damage for the enemy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1a37e6650eef7546f32d52b06776770c" name="a1a37e6650eef7546f32d52b06776770c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a37e6650eef7546f32d52b06776770c">&#9670;&#160;</a></span>displayScoreBoardMenu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::displayScoreBoardMenu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Display the scoreboard menu. </p>
+
+</div>
+</div>
+<a id="a85e60f733164296d0c545597f0bd08be" name="a85e60f733164296d0c545597f0bd08be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e60f733164296d0c545597f0bd08be">&#9670;&#160;</a></span>displayTexts()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::displayTexts </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Display text on the window. </p>
+
+</div>
+</div>
+<a id="ad47257b87ca02f998b8056843172e190" name="ad47257b87ca02f998b8056843172e190"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad47257b87ca02f998b8056843172e190">&#9670;&#160;</a></span>handleInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::handleInput </td>
+          <td>(</td>
+          <td class="paramtype">sf::Event &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle input from the user. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>Event of the window </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a36cac90702860598162e1d725201a1a8" name="a36cac90702860598162e1d725201a1a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36cac90702860598162e1d725201a1a8">&#9670;&#160;</a></span>initClass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::initClass </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Init client class. </p>
+
+</div>
+</div>
+<a id="a752971fba33e068a5c12ea41d4cc64e1" name="a752971fba33e068a5c12ea41d4cc64e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a752971fba33e068a5c12ea41d4cc64e1">&#9670;&#160;</a></span>manageCli()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::manageCli </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>manage the client cli at the beginning of the program </p>
+
+</div>
+</div>
+<a id="a84ca2859e7ccceb8abd0858da4674e1d" name="a84ca2859e7ccceb8abd0858da4674e1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84ca2859e7ccceb8abd0858da4674e1d">&#9670;&#160;</a></span>manageEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::manageEvent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>manage event of the window </p>
+<dl class="section return"><dt>Returns</dt><dd>int 0 if no error, 1 on error or on window close </dd></dl>
+
+</div>
+</div>
+<a id="a1cbd83a26acc32a68d35f4b94bc9af68" name="a1cbd83a26acc32a68d35f4b94bc9af68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cbd83a26acc32a68d35f4b94bc9af68">&#9670;&#160;</a></span>receive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::receive </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Receuve event from the server. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="afef9c25e48c1816a4626697f6c88f91f" name="afef9c25e48c1816a4626697f6c88f91f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afef9c25e48c1816a4626697f6c88f91f">&#9670;&#160;</a></span>receive_add_friends_reponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_add_friends_reponse </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>response of adding friends from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="ac4076ae09ccfbf64b28605675846192a" name="ac4076ae09ccfbf64b28605675846192a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4076ae09ccfbf64b28605675846192a">&#9670;&#160;</a></span>receive_animated_drawable_snapshot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_animated_drawable_snapshot </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive the animated drawable from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a5780253a5a01dc7a5c810c186bde7a81" name="a5780253a5a01dc7a5c810c186bde7a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5780253a5a01dc7a5c810c186bde7a81">&#9670;&#160;</a></span>receive_animated_drawable_state_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_animated_drawable_state_update </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive animation update from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a14c553437a24bc81a743ac3ffac7ce7a" name="a14c553437a24bc81a743ac3ffac7ce7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14c553437a24bc81a743ac3ffac7ce7a">&#9670;&#160;</a></span>receive_chat_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_chat_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive a chat from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="afff638ebfd56ee7ab56f9dc1b886e1d8" name="afff638ebfd56ee7ab56f9dc1b886e1d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afff638ebfd56ee7ab56f9dc1b886e1d8">&#9670;&#160;</a></span>receive_datas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::receive_datas </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive datas from server </p>
+
+</div>
+</div>
+<a id="acdebfad53cf68fca1718475c119cc5c3" name="acdebfad53cf68fca1718475c119cc5c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdebfad53cf68fca1718475c119cc5c3">&#9670;&#160;</a></span>receive_death_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_death_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get when a player dead </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The packet id </dd></dl>
+
+</div>
+</div>
+<a id="acf467bfe986134c956b5d893c4475212" name="acf467bfe986134c956b5d893c4475212"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf467bfe986134c956b5d893c4475212">&#9670;&#160;</a></span>receive_drawable_snapshot_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_drawable_snapshot_update </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive thr drawable from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="ac3f7b703cb03d9785f557147ef8bf244" name="ac3f7b703cb03d9785f557147ef8bf244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3f7b703cb03d9785f557147ef8bf244">&#9670;&#160;</a></span>receive_friends_reponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_friends_reponse </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get friends from server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="ae2a2622b8c3c122e0698cf54628b1400" name="ae2a2622b8c3c122e0698cf54628b1400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2a2622b8c3c122e0698cf54628b1400">&#9670;&#160;</a></span>receive_high_score()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_high_score </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get best 3 highscores from server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a20f8a7a420d3b0aa16a9ecef6e888c33" name="a20f8a7a420d3b0aa16a9ecef6e888c33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20f8a7a420d3b0aa16a9ecef6e888c33">&#9670;&#160;</a></span>receive_login_response()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_login_response </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>while login, this get the login response from server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a4a07db434d377496401b3d1163c0e6d2" name="a4a07db434d377496401b3d1163c0e6d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a07db434d377496401b3d1163c0e6d2">&#9670;&#160;</a></span>receive_position_snapshot_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_position_snapshot_update </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the player position from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a1062e4d1dda0a8f0844ac3b9bf66d280" name="a1062e4d1dda0a8f0844ac3b9bf66d280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1062e4d1dda0a8f0844ac3b9bf66d280">&#9670;&#160;</a></span>receive_raw_data_from_client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; char &gt; Client::receive_raw_data_from_client </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Receive data from the server and store them. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;char&gt; </dd></dl>
+
+</div>
+</div>
+<a id="a3ba457d759cff151c353f4e6fe2ac0b9" name="a3ba457d759cff151c353f4e6fe2ac0b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ba457d759cff151c353f4e6fe2ac0b9">&#9670;&#160;</a></span>receive_remove_friends_reponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_remove_friends_reponse </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reponse of removing friends from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a911ddce0764d74e47eab48e196dc5ebe" name="a911ddce0764d74e47eab48e196dc5ebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a911ddce0764d74e47eab48e196dc5ebe">&#9670;&#160;</a></span>receive_scale_snapshot_update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::receive_scale_snapshot_update </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>server_msg</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get the scale from the server </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">server_msg</td><td>The message from the server </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The packet id </dd></dl>
+
+</div>
+</div>
+<a id="a168399eeddbdde9a219278158914b9d2" name="a168399eeddbdde9a219278158914b9d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a168399eeddbdde9a219278158914b9d2">&#9670;&#160;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Client::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>run the client window </p>
+<dl class="section return"><dt>Returns</dt><dd>int return 0 </dd></dl>
+
+</div>
+</div>
+<a id="ad56b05fc35da53496f318c7bdd96ebed" name="ad56b05fc35da53496f318c7bdd96ebed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad56b05fc35da53496f318c7bdd96ebed">&#9670;&#160;</a></span>send_to_server()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void Client::send_to_server </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>structure</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send a structure to the server </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">structure</td><td>stucture to send </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/Client/<a class="el" href="Client_8hpp_source.html">Client.hpp</a></li>
 <li>src/Client/Client.cpp</li>

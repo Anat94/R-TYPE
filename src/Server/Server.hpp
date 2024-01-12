@@ -52,7 +52,7 @@ class Server: public ISystems {
     public:
         Server(asio::io_context& service, int port, registry &ecs, EventListener &listener, std::mutex &mtx);
         ~Server();
-        void recieve_from_client();
+        void receive_from_client();
         void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint);
@@ -64,13 +64,13 @@ class Server: public ISystems {
         void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
         void send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp);
-        void recieveThread();
-        std::vector<char> recieve_raw_data_from_client();
+        void receiveThread();
+        std::vector<char> receive_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
-        int recieve_client_event(std::vector<char> &, entity_t);
-        int recieve_connection_event(std::vector<char> &, entity_t);
-        int recieve_disconnection_event(std::vector<char> &, entity_t);
-        int recieve_packet_confirm(std::vector<char> &, entity_t);
+        int receive_client_event(std::vector<char> &, entity_t);
+        int receive_connection_event(std::vector<char> &, entity_t);
+        int receive_disconnection_event(std::vector<char> &, entity_t);
+        int receive_packet_confirm(std::vector<char> &, entity_t);
         int receive_login_event(std::vector<char> &, entity_t);
         int receive_friend_event(std::vector<char> &, entity_t);
         int receive_add_friend_event(std::vector<char>&, entity_t);
@@ -138,10 +138,10 @@ class Server: public ISystems {
         asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {1, &Server::recieve_client_event},
-            {2, &Server::recieve_connection_event},
-            {3, &Server::recieve_disconnection_event},
-            {5, &Server::recieve_packet_confirm},
+            {1, &Server::receive_client_event},
+            {2, &Server::receive_connection_event},
+            {3, &Server::receive_disconnection_event},
+            {5, &Server::receive_packet_confirm},
             {17, &Server::receive_login_event},
             {18, &Server::receive_friend_event},
             {19, &Server::receive_add_friend_event},
