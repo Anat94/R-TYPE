@@ -320,10 +320,27 @@ struct AddFriendsResponse: public BaseMessage {
         };
 };
 
+/**
+ * @brief contains the information necessary to remove a friend from specified user
+*/
 struct RemoveFriendsMessage: public BaseMessage {
+    /**
+     * @brief Username of user.
+    */
     char username[20];
+    /**
+     * @brief Username of friend to remove.
+    */
     char friendName[20];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username of user.
+     * @param friendName_ Username of friend to remove.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     RemoveFriendsMessage(int16_t id_, std::string username_, std::string friendName_, int packet_id_):
         username(), friendName() {
             size_t i = 0;
@@ -341,8 +358,21 @@ struct RemoveFriendsMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates the friend removal request response from the server to the player
+*/
 struct RemoveFriendsResponse: public BaseMessage {
+    /**
+     * @brief response of the friend removal request, 1 if successfull, 0 if not.
+    */
     bool response;
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param success_ response of the friend removal request, 1 if successfull, 0 if not.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     RemoveFriendsResponse(int16_t id_, bool success_, int packet_id_):
         response(success_) {
             id = id_;
@@ -350,10 +380,27 @@ struct RemoveFriendsResponse: public BaseMessage {
         };
 };
 
+/**
+ * @brief encapsulates the content and sender of a chat message
+*/
 struct ChatMessage: public BaseMessage {
+    /**
+     * @brief username of the sender.
+    */
     char name[20];
+    /**
+     * @brief content of the message.
+    */
     char content[256];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param name_ username of the sender.
+     * @param content_ content of the message.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     ChatMessage(int16_t id_, std::string name_, std::string content_, int packet_id_) {
         size_t i = 0;
         id = id_;
@@ -370,10 +417,27 @@ struct ChatMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief encapsulates drawable data of game entities so that the client can correctly display the entity
+*/
 struct DrawableSnapshot: public BaseMessage {
+    /**
+     * @brief Identifies the associated game entity for which dawable data is transmitted.
+    */
     entity_t entity = 0;
+    /**
+     * @brief Contains the path of the image to display for the entity (e.g., "assets/players/ship.png).
+    */
     char data[1024];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ Identifies the associated game entity for which dawable data is transmitted.
+     * @param path Contains the path of the image to display for the entity (e.g., "assets/players/ship.png).
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     DrawableSnapshot(int16_t id_, entity_t entity_, std::string path, int packet_id_):
     entity(entity_) {
         size_t i = 0;
@@ -386,10 +450,27 @@ struct DrawableSnapshot: public BaseMessage {
     };
 };
 
+/**
+ * @brief encapsulates a scale snapshot for given entity
+*/
 struct ScaleSnapshot: public BaseMessage {
+    /**
+     * @brief Entity for which to set the scale
+    */
     entity_t entity = 0;
+    /**
+     * @brief scale of the entity
+    */
     component::Scale data;
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ Entity for which to set the scale
+     * @param data_ scale of the entity
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     ScaleSnapshot(int16_t id_, entity_t entity_, component::Scale data_, int packet_id_):
     entity(entity_), data(data_) {
         id = id_;
@@ -397,9 +478,22 @@ struct ScaleSnapshot: public BaseMessage {
     };
 };
 
+/**
+ * @brief encapsulates a death event for given entity
+*/
 struct DeathEventMessage: public BaseMessage {
+    /**
+     * @brief Entity that died.
+    */
     entity_t entity = 0;
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ Entity that died.
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     DeathEventMessage(int16_t id_, entity_t entity_, int packet_id_):
     entity(entity_) {
         id = id_;
@@ -407,17 +501,26 @@ struct DeathEventMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief encapsulates the necessary information to initiate an animated drawable for a given entity
+*/
 struct AnimatedDrawableSnapshot: public BaseMessage {
     /**
-     * @brief entity to update the DrawableSnapshot for
+     * @brief entity to initialize an AnimatedDrawableSnapshot for
      */
     entity_t entity = 0;
     /**
-     * @brief path to the desired asset
+     * @brief Contains the path of the image to display for the entity (e.g., "assets/players/ship.png).
     */
     char _path[256];
+    /**
+     * @brief current state of the animated drawable to determin its animation (e.g., "idle").
+    */
     char _state[16];
 
+    /**
+     * @brief an array of 5 elements maximum (5 * 25 bytes) representing the animations of the drawable.
+    */
     std::array<std::pair<char[16], std::pair<bool, std::pair<int, int>>>, 5> _anims;
     /**
      * @brief number of sprites on the x & y axis
@@ -453,6 +556,13 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
      */
     std::pair<int, int> _currentIdx = {0, 0};
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param snapshot copies values from the snapshot parameter to the current structure members.
+     * 
+     * @returns reference to the modified structure
+    */
     AnimatedDrawableSnapshot &operator=(const AnimatedDrawableSnapshot &snapshot) {
         entity = snapshot.entity;
         _currentIdx = snapshot._currentIdx;
@@ -479,6 +589,21 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
         _path[i] = '\0';
         return *this;
     };
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ entity to initialize an AnimatedDrawableSnapshot for
+     * @param path Contains the path of the image to display for the entity.
+     * @param nbSprites number of sprites on the x & y axis
+     * @param spriteSize set of numbers representing the size of the sprites to load
+     * @param gaps set of numbers representing the size of the gapes between sprites
+     * @param firstOffset set of numbers representing the size of the offset of the first sprite
+     * @param curretnIdx set of numbers representing the indexes of the animation
+     * @param anims_ an array of 5 elements maximum (5 * 25 bytes) representing the animations of the drawable.
+     * @param state current state of the animated drawable to determin its animation
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     AnimatedDrawableSnapshot(
         int16_t id_,
         entity_t entity_,
@@ -517,10 +642,27 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
     };
 };
 
+/**
+ * @brief structure, derived from BaseMessage, encapsulates a state update of an animated drawable entity
+*/
 struct AnimatedStateUpdateMessage: public BaseMessage {
+    /**
+     * @brief Entity for which to update the animated drawable state.
+    */
     entity_t entity = 0;
+    /**
+     * @brief updated state of the animated drawable (e.g. "idle" or "move up")
+    */
     char state[16];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param entity_ Entity for which to update the animated drawable state.
+     * @param state_ updated state of the animated drawable (e.g. "idle" or "move up")
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     AnimatedStateUpdateMessage(int16_t id_, entity_t entity_, std::string state_, int packet_id_):
         entity(entity_) {
             size_t i = 0;
