@@ -7,6 +7,11 @@
 
 #ifndef SYSTEMS_HPP_
     #define SYSTEMS_HPP_
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
+    #define MIN(a, b) ((a) < (b) ? (a) : (b))
+    #define IS_IN(a, b, c) ((a) == (b) || (a) == (c))
+    #define IS(a, b) ((a) == (b))
+    #define IS_NOT(a, b) ((a) != (b))
 
     #if not defined(ZIPPERITERATOR_HPP)
         #include "../ZipperIterator.hpp"

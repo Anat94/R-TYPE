@@ -125,12 +125,11 @@ void Server::connectToDB() {
     int rc;
     rc = sqlite3_open("db/rtype.db", &_db);
     if (rc) {
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(_db));
+        std::cerr << "Can't open database: " << sqlite3_errmsg(_db) << std::endl;
         exit(84);
     } else {
-        fprintf(stderr, "Opened database successfully\n");
+        std::cerr << "Database opened successfully" << std::endl;
     }
-    printf("Opened database successfully\n");
     // std::string sql12 = "DELETE FROM FRIENDS";
     // char *zErrMsg = 0;
     // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
