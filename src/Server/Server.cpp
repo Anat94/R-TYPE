@@ -171,11 +171,11 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Score());
 
     std::cout << "New player connected !" << std::endl;
-    send_animated_drawable_snapshots_for_specific_player(new_player, _ecs.get_components<component::AnimatedDrawable>());
+    send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
     send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
-    send_all_entity_drawables_to_specific_player(new_player);
+    send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
-    send_all_scale_to_player(new_player);
+    send_all_scale_to_player_by_room(new_player);
     return new_player;
 }
 
@@ -185,6 +185,21 @@ void Server::send_all_scale_to_player(entity_t entity)
 
     for (int i = 0; i < scale.size(); ++i) {
         if (!scale[i].has_value())
+            continue;
+        ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
+        _packet_id++;
+        _scale_packets.push_back(to_send);
+        send_data_to_client_by_entity(to_send, entity);
+    }
+}
+
+void Server::send_all_scale_to_player_by_room(entity_t entity)
+{
+    auto scale = _ecs.get_components<component::Scale>();
+    auto rooms = _ecs.get_components<component::Room>();
+
+    for (int i = 0; i < scale.size(); ++i) {
+        if (!scale[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
             continue;
         ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
         _packet_id++;
@@ -205,12 +220,28 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
 }
 
+void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
+{
+    auto drawables = _ecs.get_components<component::Drawable>();
+    auto rooms = _ecs.get_components<component::Room>();
+
+    for (int i = 0; i < drawables.size(); ++i) {
+        if (!drawables[i].has_value() || !rooms[player].has_value() || !rooms[i].has_value() || (rooms[player]->_name != rooms[i]->_name))
+            continue;
+        DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
+        _packet_id += 1;
+        _drawable_packets.push_back(to_send);
+        send_data_to_client_by_entity(to_send, player);
+    }
+}
+
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
 {
     auto drawables = _ecs.get_components<component::Drawable>();
+    auto rooms = _ecs.get_components<component::Room>();
 
     for (int i = 0; i < drawables.size(); ++i) {
-        if (!drawables[i].has_value())
+        if (!drawables[i].has_value() || !rooms[player].has_value() || !rooms[i].has_value() || (rooms[player]->_name != rooms[i]->_name))
             continue;
         DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
         _packet_id += 1;
@@ -295,6 +326,31 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
         
         auto &rooms = _ecs.get_components<component::Room>();
         send_data_to_all_clients_by_room(snap_ad, _animated_drawable_packets, edp, rooms, rooms[entity]->_name);
+    }
+}
+
+void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
+{
+    auto rooms = _ecs.get_components<component::Room>();
+    for (size_t i = 0; i < dra.size(); i++) {
+        if (!dra[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
+            continue;
+        AnimatedDrawableSnapshot snap_ad(
+            13,
+            i,
+            dra[i].value()._path,
+            dra[i].value()._nbSprites,
+            dra[i].value()._spriteSize,
+            dra[i].value()._gaps,
+            dra[i].value()._firstOffset,
+            dra[i].value()._currentIdx,
+            dra[i].value()._anims,
+            dra[i].value()._state,
+            _packet_id
+        );
+        _packet_id++;
+        _animated_drawable_packets.push_back(snap_ad);
+        send_data_to_client_by_entity(snap_ad, entity);
     }
 }
 
@@ -609,7 +665,7 @@ template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
     can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
-        if (edp[i].has_value() && (rms[i].has_value() == room || !rms[i].has_value())) {
+        if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)) || !rms[i].has_value())) {
             structure.packet_id = _packet_id;
             _packet_id += 1;
             packets_to_send.push_back(structure);

@@ -58,6 +58,7 @@ class Server: public ISystems {
         entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
         void send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp);
         void send_all_scale_to_player(entity_t entity);
+        void send_all_scale_to_player_by_room(entity_t entity);
         void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
         void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
@@ -117,6 +118,8 @@ class Server: public ISystems {
         Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
+        void send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
+        void send_all_entity_drawables_to_specific_player_by_room(entity_t player);
         template <typename T>
         void resend_packets(std::vector<T> &, sparse_array<component::Endpoint> &);
     private:

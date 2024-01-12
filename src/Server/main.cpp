@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
     EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
-    ecs.add_system<component::Position, component::Health, component::Endpoint>(*engen_sys);
+    ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room>(*engen_sys);
     asio::io_context service;
     Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
     service.run();
