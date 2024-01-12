@@ -7,7 +7,7 @@
 
 #ifndef SYSTEMS_HPP_
     #define SYSTEMS_HPP_
-    
+
     #if not defined(ZIPPERITERATOR_HPP)
         #include "../ZipperIterator.hpp"
     #endif

@@ -18,6 +18,8 @@ var searchData=
   ['get_5fstring_15',['get_string',['../classdetail_1_1lexer.html#aae63a63a83ae7e7bd5dc1a83669ba281',1,'detail::lexer']]],
   ['get_5fto_16',['get_to',['../classbasic__json.html#a8773ee34154b4f492549f5496c640ce5',1,'basic_json']]],
   ['get_5ftoken_5fstring_17',['get_token_string',['../classdetail_1_1lexer.html#a41481d87dc1bcaaf532f529fbc0e690b',1,'detail::lexer']]],
-  ['grisu2_18',['grisu2',['../namespacedetail_1_1dtoa__impl.html#ad549352ed1a9676a092d143a2daa3dee',1,'detail::dtoa_impl::grisu2(char *buf, int &amp;len, int &amp;decimal_exponent, diyfp m_minus, diyfp v, diyfp m_plus)'],['../namespacedetail_1_1dtoa__impl.html#abdf6bc05c54068a5930f66c2e803e8b8',1,'detail::dtoa_impl::grisu2(char *buf, int &amp;len, int &amp;decimal_exponent, FloatType value)']]],
-  ['grisu2_5fdigit_5fgen_19',['grisu2_digit_gen',['../namespacedetail_1_1dtoa__impl.html#ae877aa13ab872c99a1c614e5e1524807',1,'detail::dtoa_impl']]]
+  ['getfunction_18',['getFunction',['../classLibLoader.html#a2a7ca0eecc96960ed83cb1308a75a672',1,'LibLoader']]],
+  ['getusername_19',['getUsername',['../classMenu.html#a7d4d83906596f3f0d3331f1fdef19430',1,'Menu']]],
+  ['grisu2_20',['grisu2',['../namespacedetail_1_1dtoa__impl.html#ad549352ed1a9676a092d143a2daa3dee',1,'detail::dtoa_impl::grisu2(char *buf, int &amp;len, int &amp;decimal_exponent, diyfp m_minus, diyfp v, diyfp m_plus)'],['../namespacedetail_1_1dtoa__impl.html#abdf6bc05c54068a5930f66c2e803e8b8',1,'detail::dtoa_impl::grisu2(char *buf, int &amp;len, int &amp;decimal_exponent, FloatType value)']]],
+  ['grisu2_5fdigit_5fgen_21',['grisu2_digit_gen',['../namespacedetail_1_1dtoa__impl.html#ae877aa13ab872c99a1c614e5e1524807',1,'detail::dtoa_impl']]]
 ];

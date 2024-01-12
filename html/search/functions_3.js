@@ -6,6 +6,7 @@ var searchData=
   ['diff_3',['diff',['../classbasic__json.html#a699ef418df577e75f28dfce6b04d6c2f',1,'basic_json']]],
   ['displayscoreboardmenu_4',['displayScoreBoardMenu',['../classClient.html#a1a37e6650eef7546f32d52b06776770c',1,'Client']]],
   ['displaytexts_5',['displayTexts',['../classClient.html#a85e60f733164296d0c545597f0bd08be',1,'Client']]],
-  ['drawable_6',['Drawable',['../structcomponent_1_1Drawable.html#ae595642beaf9006a4544dd5e037ccbd3',1,'component::Drawable']]],
-  ['dump_7',['dump',['../classdetail_1_1serializer.html#ae73c1bac64bcc810923b9f1261af8b09',1,'detail::serializer::dump()'],['../classbasic__json.html#a85df48caed9e341bb14d98ab88891d1e',1,'basic_json::dump()']]]
+  ['draw_6',['draw',['../classMenu.html#a1443dcfd1c1c9844c40658d752c1fbab',1,'Menu']]],
+  ['drawable_7',['Drawable',['../structcomponent_1_1Drawable.html#ae595642beaf9006a4544dd5e037ccbd3',1,'component::Drawable']]],
+  ['dump_8',['dump',['../classdetail_1_1serializer.html#ae73c1bac64bcc810923b9f1261af8b09',1,'detail::serializer::dump()'],['../classbasic__json.html#a85df48caed9e341bb14d98ab88891d1e',1,'basic_json::dump()']]]
 ];

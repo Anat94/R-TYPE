@@ -13,8 +13,19 @@
 
 class CollisionSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Collision System object
+         *
+         * @param listener  Listener to add events
+         */
         CollisionSystem(EventListener *listener) : _listener(listener) {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra   List of hitboxes
+         * @param pos   List of positions
+         */
         void operator()(sparse_array<component::Hitbox> &dra, sparse_array<component::Position> &pos) {
             for (auto &&[first_ent_idx, h1, p1] : zipper<sparse_array<component::Hitbox>, sparse_array<component::Position>>(dra, pos)) {
                 if (!h1.has_value() || !p1.has_value()) continue;

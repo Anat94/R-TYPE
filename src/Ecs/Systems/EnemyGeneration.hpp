@@ -14,10 +14,23 @@
 
 class EnemyGeneration: public ISystems {
     public:
+        /**
+         * @brief Construct a new Enemy Generation object
+         *
+         * @param listener  Listener to add events
+         * @param maxEnemiesPerPlayer_  Maximum number of enemies per player
+         */
         EnemyGeneration(EventListener *listener, int maxEnemiesPerPlayer_ = 3) : _listener(listener), maxEnemiesPerPlayer(maxEnemiesPerPlayer_) {
             timer.restart();
         };
 
+        /**
+         * @brief  operator ()
+         *
+         * @param pos position of the entity
+         * @param hlt health of the entity
+         * @param edp endpoint of the entity
+         */
         void operator()(sparse_array<component::Position> &pos, sparse_array<component::Health> &hlt, sparse_array<component::Endpoint> &edp) {
             if (timer.getElapsedTime() > 1500) {
                 int totalEnemies = 0;

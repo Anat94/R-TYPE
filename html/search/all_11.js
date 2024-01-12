@@ -31,6 +31,6 @@ var searchData=
   ['resetonmove_28',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html',1,'component::ResetOnMove'],['../structcomponent_1_1ResetOnMove.html#a488d190e1fc78482041ae3af543a7375',1,'component::ResetOnMove::ResetOnMove()']]],
   ['reverse_5fiterator_29',['reverse_iterator',['../classbasic__json.html#aedc059cdae078322bb0d434b2127d1cf',1,'basic_json']]],
   ['rotation_30',['Rotation',['../structcomponent_1_1Rotation.html',1,'component::Rotation'],['../structcomponent_1_1Rotation.html#a3d924fcf6c7d8550d9ea843d5db530c5',1,'component::Rotation::Rotation()']]],
-  ['run_31',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client::run()'],['../classGame.html#a1ab78f5ed0d5ea879157357cf2fb2afa',1,'Game::run()']]],
+  ['run_31',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client::run()'],['../classGame.html#a1ab78f5ed0d5ea879157357cf2fb2afa',1,'Game::run()'],['../classMenu.html#a9c38134ff308846c6cfdd9b1c27b577d',1,'Menu::run()']]],
   ['run_5fsystems_32',['run_systems',['../classregistry.html#a1fda5cc52e611441228f8b1c26302060',1,'registry']]]
 ];

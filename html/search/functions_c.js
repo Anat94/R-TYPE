@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['normalize_0',['normalize',['../structdetail_1_1dtoa__impl_1_1diyfp.html#a5bad735c2cb50b194938a8a89b82f6ed',1,'detail::dtoa_impl::diyfp']]],
-  ['normalize_5fto_1',['normalize_to',['../structdetail_1_1dtoa__impl_1_1diyfp.html#a5a9ce83c6c1663c9aaac7ffd9009b971',1,'detail::dtoa_impl::diyfp']]],
-  ['null_2',['null',['../structjson__sax.html#acbcc09c0ada2782cd73cc4135823181d',1,'json_sax']]],
-  ['number_5ffloat_3',['number_float',['../structjson__sax.html#a19eafa3a92fc75e0258a842283396aa9',1,'json_sax']]],
-  ['number_5finteger_4',['number_integer',['../structjson__sax.html#a46cc306b7677553d8f6bd8c9592eb1bd',1,'json_sax']]],
-  ['number_5funsigned_5',['number_unsigned',['../structjson__sax.html#a32f8a32794cb384f0de3d3a96a6bb696',1,'json_sax']]]
+  ['managecli_0',['manageCli',['../classClient.html#a752971fba33e068a5c12ea41d4cc64e1',1,'Client']]],
+  ['manageevent_1',['manageEvent',['../classClient.html#a84ca2859e7ccceb8abd0858da4674e1d',1,'Client::manageEvent()'],['../classGame.html#a72ec85f10ded44ea8e251b3fde67387d',1,'Game::manageEvent()']]],
+  ['max_5fsize_2',['max_size',['../classbasic__json.html#a380f98b02e7d50cf28af056a6ad8ffe6',1,'basic_json']]],
+  ['menu_3',['Menu',['../classMenu.html#ad466dd83355124a6ed958430450bfe94',1,'Menu']]],
+  ['merge_5fpatch_4',['merge_patch',['../classbasic__json.html#a8676ac2433fe299b8d420f00a0741395',1,'basic_json']]],
+  ['meta_5',['meta',['../classbasic__json.html#a7b435c2ed2db99cb1daa78ae3c6c4580',1,'basic_json']]],
+  ['mul_6',['mul',['../structdetail_1_1dtoa__impl_1_1diyfp.html#a046c61f2c13411677eedfb5b9b7a8226',1,'detail::dtoa_impl::diyfp']]]
 ];

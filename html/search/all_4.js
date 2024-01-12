@@ -13,14 +13,15 @@ var searchData=
   ['detector_10',['detector',['../structdetail_1_1detector.html',1,'detail']]],
   ['detector_3c_20default_2c_20void_5ft_3c_20op_3c_20args_2e_2e_2e_20_3e_20_3e_2c_20op_2c_20args_2e_2e_2e_20_3e_11',['detector&lt; Default, void_t&lt; Op&lt; Args... &gt; &gt;, Op, Args... &gt;',['../structdetail_1_1detector_3_01Default_00_01void__t_3_01Op_3_01Args_8_8_8_01_4_01_4_00_01Op_00_01Args_8_8_8_01_4.html',1,'detail']]],
   ['diff_12',['diff',['../classbasic__json.html#a699ef418df577e75f28dfce6b04d6c2f',1,'basic_json']]],
-  ['difference_5ftype_13',['difference_type',['../classdetail_1_1iter__impl.html#a6d51e1372282929d1c240223aa973c6e',1,'detail::iter_impl::difference_type'],['../classbasic__json.html#ae45e8f7ce7c3e62035cd097a39910399',1,'basic_json::difference_type']]],
+  ['difference_5ftype_13',['difference_type',['../classbasic__json.html#ae45e8f7ce7c3e62035cd097a39910399',1,'basic_json::difference_type'],['../classdetail_1_1iter__impl.html#a6d51e1372282929d1c240223aa973c6e',1,'detail::iter_impl::difference_type']]],
   ['discarded_14',['discarded',['../namespacedetail.html#a917c3efabea8a20dc72d9ae2c673d632a94708897ec9db8647dfe695714c98e46',1,'detail']]],
   ['displayscoreboardmenu_15',['displayScoreBoardMenu',['../classClient.html#a1a37e6650eef7546f32d52b06776770c',1,'Client']]],
   ['displaytexts_16',['displayTexts',['../classClient.html#a85e60f733164296d0c545597f0bd08be',1,'Client']]],
   ['diyfp_17',['diyfp',['../structdetail_1_1dtoa__impl_1_1diyfp.html',1,'detail::dtoa_impl']]],
-  ['drawable_18',['Drawable',['../structcomponent_1_1Drawable.html',1,'component::Drawable'],['../structcomponent_1_1Drawable.html#ae595642beaf9006a4544dd5e037ccbd3',1,'component::Drawable::Drawable()']]],
-  ['drawablecontent_19',['DrawableContent',['../structcomponent_1_1DrawableContent.html',1,'component']]],
-  ['drawablesnapshot_20',['DrawableSnapshot',['../structDrawableSnapshot.html',1,'']]],
-  ['dtoa_5fimpl_21',['dtoa_impl',['../namespacedetail_1_1dtoa__impl.html',1,'detail']]],
-  ['dump_22',['dump',['../classdetail_1_1serializer.html#ae73c1bac64bcc810923b9f1261af8b09',1,'detail::serializer::dump()'],['../classbasic__json.html#a85df48caed9e341bb14d98ab88891d1e',1,'basic_json::dump()']]]
+  ['draw_18',['draw',['../classMenu.html#a1443dcfd1c1c9844c40658d752c1fbab',1,'Menu']]],
+  ['drawable_19',['Drawable',['../structcomponent_1_1Drawable.html',1,'component::Drawable'],['../structcomponent_1_1Drawable.html#ae595642beaf9006a4544dd5e037ccbd3',1,'component::Drawable::Drawable()']]],
+  ['drawablecontent_20',['DrawableContent',['../structcomponent_1_1DrawableContent.html',1,'component']]],
+  ['drawablesnapshot_21',['DrawableSnapshot',['../structDrawableSnapshot.html',1,'']]],
+  ['dtoa_5fimpl_22',['dtoa_impl',['../namespacedetail_1_1dtoa__impl.html',1,'detail']]],
+  ['dump_23',['dump',['../classdetail_1_1serializer.html#ae73c1bac64bcc810923b9f1261af8b09',1,'detail::serializer::dump()'],['../classbasic__json.html#a85df48caed9e341bb14d98ab88891d1e',1,'basic_json::dump()']]]
 ];

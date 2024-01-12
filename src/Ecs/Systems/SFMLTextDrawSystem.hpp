@@ -11,10 +11,21 @@
 
 class SFMLTextDrawSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new SFMLTextDrawSystem object
+         *
+         * @param window window object
+         */
         SFMLTextDrawSystem(sf::RenderWindow *window) : _window(window), _texts() {
             _font.loadFromFile("src/Client/assets/font.ttf");
         };
 
+        /**
+         * @brief operator ()
+         *
+         * @param tex text to draw
+         * @param pos position to draw
+         */
         void operator()(sparse_array<component::Text> &tex, sparse_array<component::Position> &pos) {
             if (!_window->isOpen())
                 return;
