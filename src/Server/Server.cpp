@@ -22,9 +22,8 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, 30};
     }
-    // animatedDrawable->_state = "idle";
-    if (prevState != animatedDrawable->_state)
-        send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
+    animatedDrawable->_state = "idle";
+    send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -62,10 +61,7 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
                 auto &endpoint = _ecs.get_components<component::Endpoint>()[i];
                 animatedDrawableRegistered.push_back(i);
                 if (!endpoint.has_value()) {
-                    // while (!can_send) continue;
-                    // can_send = false;
                     send_animated_drawable_snapshot_to_all_players(i, dra, edp);
-                    // can_send = true;
                 }
             }
         }
@@ -146,9 +142,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
-    can_send = false;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-    can_send = true;
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
@@ -274,9 +268,6 @@ std::vector<char> Server::recieve_raw_data_from_client()
 
 void Server::send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
 {
-    // while (!can_send) continue;
-    // while (!_ecs.can_run_updates) continue;
-    // _ecs.can_run_updates = false;
     std::vector<SnapshotPosition> to_send = {};
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
@@ -321,9 +312,8 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
             animatedDrawable->_state,
             0
         );
-        // while (!can_send) continue;
-        // std::cout << "sending animated drawable\n";
-        
+        auto &pos = _ecs.get_components<component::Position>()[entity];
+        std::cout << animatedDrawable->_path << ": " << entity << " - x: " << pos->x << ", y: " << pos->y << std::endl;
         auto &rooms = _ecs.get_components<component::Room>();
         send_data_to_all_clients_by_room(snap_ad, _animated_drawable_packets, edp, rooms, rooms[entity]->_name);
     }
@@ -407,6 +397,7 @@ void Server::recieve_from_client()
     if (player_entity == -1 || baseMsg->id == 5) {
         if (baseMsg->id == 5 || baseMsg->id == 17 || baseMsg->id == 21 || baseMsg->id == 22 || baseMsg->id == 2) {
             (this->*_messageParser[baseMsg->id])(client_msg, 1);
+            return;
         } else
             return;
     }
@@ -536,19 +527,11 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
-    // std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-    // std::cout << "event recieved: " << event->event << std::endl;
-    // while (!_ecs.can_run_updates) continue;
-    // _ecs.can_run_updates = false;
-     std::cout << "BEFORE NEW POS\n";
     std::pair<int, int> to_move = get_position_change_for_event(player_entity, event->event);
-    std::cout << "GOT NEW POS\n";
     if (to_move.first != 0 || to_move.second != 0) {
         _listener.addEvent(new UpdatePositionEvent(player_entity, to_move));
         _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
     }
-    std::cout << "ADDED EVENTS\n";
-    // _ecs.can_run_updates = true;
     return 0;
 }
 
@@ -571,8 +554,6 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     if (client_msg.size() < sizeof(LoginMessage))
         return -1;
     LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     bool response = true;
     if (snapshot->logintype == 0)
         response = signUp(snapshot->username, snapshot->password);
@@ -590,8 +571,6 @@ int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_
         return -1;
     }
     FriendsMessage *snapshot = reinterpret_cast<FriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     std::vector<std::string> friends = displayFriends(snapshot->username, player_entity);
     _packet_id++;
     return 0;
@@ -602,8 +581,6 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
     if (client_msg.size() < sizeof(AddFriendsMessage))
         return -1;
     AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     std::cout << snapshot->friendName << std::endl;
     std::cout << snapshot->username << std::endl;
     bool response = addFriend(snapshot->username, snapshot->friendName);
@@ -617,8 +594,6 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
     if (client_msg.size() < sizeof(RemoveFriendsMessage))
         return -1;
     RemoveFriendsMessage *snapshot = reinterpret_cast<RemoveFriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     bool response = removeFriend(snapshot->username, snapshot->friendName);
     RemoveFriendsResponse resp(11, response, _packet_id);
     send_data_to_client_by_entity<RemoveFriendsResponse>(resp, player_entity);
@@ -630,11 +605,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     if (client_msg.size() < sizeof(ChatMessage))
         return -1;
     ChatMessage *snapshot = reinterpret_cast<ChatMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    // std::cout << "sending chat message\n";
-    // while (!can_send) continue;
     
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(reponse, _chat_packets, _ecs.get_components<component::Endpoint>(), rooms, rooms[player_entity]->_name);
@@ -648,7 +619,6 @@ Server::~Server() {
 
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp) {
-    can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value()) {
             structure.packet_id = _packet_id;
@@ -658,12 +628,10 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
         }
     }
-    can_send = true;
 }
 
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
-    can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)) || !rms[i].has_value())) {
             structure.packet_id = _packet_id;
@@ -673,23 +641,16 @@ void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& pack
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
         }
     }
-    can_send = true;
 }
 
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp) {
-    // while (!can_send) continue;
-    // can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && edp[i].value()._endpoint != _remote_endpoint) {
-            // while (!can_mod) continue;
-            // can_mod = false;
             if (edp[i].has_value())
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
-            // can_mod = true;
         }
     }
-    // can_send = true;
 }
 
 template <typename T>

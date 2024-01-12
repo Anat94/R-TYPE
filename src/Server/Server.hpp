@@ -166,8 +166,6 @@ class Server: public ISystems {
         int _highScore = 0;
         std::string _nameForHighScore = "";
         bool can_mod = true;
-        bool can_send = true;
-        bool can_read = true;
         std::mutex &mtx;
         std::vector<entity_t> animatedDrawableRegistered = {};
         std::vector<entity_t> entitiesAlive = {};
