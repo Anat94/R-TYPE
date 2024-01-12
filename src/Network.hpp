@@ -676,10 +676,27 @@ struct AnimatedStateUpdateMessage: public BaseMessage {
         };
 };
 
+/**
+ * @brief contains the information necessary to create a room
+*/
 struct RoomCreationMessage: public BaseMessage {
+    /**
+     * @brief Username of host.
+    */
     char username[20];
+    /**
+     * @brief Room Name
+    */
     char room_name[32];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username of host.
+     * @param room_name_ Room Name
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     RoomCreationMessage(int16_t id_, std::string username_, std::string room_name_, int packet_id_)
     {
         size_t i = 0;
@@ -697,10 +714,27 @@ struct RoomCreationMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief contains the information necessary to start the game for the user
+*/
 struct JoinGameMessage: public BaseMessage {
+    /**
+     * @brief Username of host.
+    */
     char username[20];
+    /**
+     * @brief Room Name
+    */
     char room_name[32];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param username_ Username of host.
+     * @param room_name_ Room Name
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, int packet_id_)
     {
         size_t i = 0;
@@ -718,9 +752,22 @@ struct JoinGameMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief contains the information necessary to join a room
+*/
 struct RoomJoinMessage: public BaseMessage {
+    /**
+     * @brief Room Name
+    */
     char room_name[32];
 
+    /**
+     * @brief constructor initializing the following parameters
+     * 
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
+     * @param room_name_ Room Name
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
     RoomJoinMessage(int16_t id_, std::string room_name_, int packet_id_)
     {
         size_t i = 0;
@@ -733,6 +780,5 @@ struct RoomJoinMessage: public BaseMessage {
         room_name[i] = '\0';
     };
 };
-
 
 #endif //NETWORK_HPP
