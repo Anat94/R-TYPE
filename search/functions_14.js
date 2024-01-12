@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['value_0',['value',['../classdetail_1_1iteration__proxy__value.html#aac08993af9f4f0bf3d058b4beae36a45',1,'detail::iteration_proxy_value::value()'],['../classdetail_1_1iter__impl.html#a96557c87bc9b3adf6aa0b1a6b6209525',1,'detail::iter_impl::value()'],['../classdetail_1_1json__reverse__iterator.html#a90132b4589e7b8c6cfdf4e25e1c311fe',1,'detail::json_reverse_iterator::value()'],['../classbasic__json.html#a80c2436388fd16a1529ce9afce8229ef',1,'basic_json::value(const typename object_t::key_type &amp;key, const ValueType &amp;default_value) const'],['../classbasic__json.html#a56244e0ed0943ad62faf61b06e7ba139',1,'basic_json::value(const typename object_t::key_type &amp;key, ValueType &amp;&amp;default_value) const'],['../classbasic__json.html#acbe572bbfbd4687a7a9167465e4d41f2',1,'basic_json::value(KeyType &amp;&amp;key, const ValueType &amp;default_value) const'],['../classbasic__json.html#a694398741710ce1c22797ad47109898b',1,'basic_json::value(KeyType &amp;&amp;key, ValueType &amp;&amp;default_value) const'],['../classbasic__json.html#ac63045992eb552c11f77fefddd801591',1,'basic_json::value(const json_pointer &amp;ptr, const ValueType &amp;default_value) const'],['../classbasic__json.html#a1ab7b5edf8e5831195940f8d377a6ee3',1,'basic_json::value(const json_pointer &amp;ptr, ValueType &amp;&amp;default_value) const']]],
-  ['velocity_1',['Velocity',['../structcomponent_1_1Velocity.html#a9c417c79cf8030c322cdd966b5a5b724',1,'component::Velocity']]]
+  ['what_0',['what',['../classdetail_1_1exception.html#ae75d7315f5f2d85958da6d961375caf0',1,'detail::exception']]],
+  ['write_5fbson_1',['write_bson',['../classdetail_1_1binary__writer.html#a1aae361b7492825979cbb80245b9c0d6',1,'detail::binary_writer']]],
+  ['write_5fcbor_2',['write_cbor',['../classdetail_1_1binary__writer.html#ae6ab36b61e8ad346e75d9f9abc983d4c',1,'detail::binary_writer']]],
+  ['write_5fmsgpack_3',['write_msgpack',['../classdetail_1_1binary__writer.html#adc3dbefa80134d3530a1b3f1c9629586',1,'detail::binary_writer']]],
+  ['write_5fubjson_4',['write_ubjson',['../classdetail_1_1binary__writer.html#a972bec9688cbc5673bb482bbe9543e2a',1,'detail::binary_writer']]]
 ];
