@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['game_0',['Game',['../classGame.html#a0788ffa08ca27a1d06b6cf0ef1ef6a38',1,'Game::Game()'],['../classGame.html',1,'Game']]],
+  ['game_0',['Game',['../classGame.html',1,'']]],
   ['gen_1',['Gen',['../structdetail_1_1utility__internal_1_1Gen.html',1,'detail::utility_internal']]],
   ['gen_3c_20t_2c_200_20_3e_2',['Gen&lt; T, 0 &gt;',['../structdetail_1_1utility__internal_1_1Gen_3_01T_00_010_01_4.html',1,'detail::utility_internal']]],
   ['get_3',['get',['../classbasic__json.html#a0ab31c7fdbab38898070bca01637f886',1,'basic_json::get() const noexcept(noexcept(std::declval&lt; const basic_json_t &amp; &gt;().template get_impl&lt; ValueType &gt;(detail::priority_tag&lt; 4 &gt; {}))) -&gt; decltype(std::declval&lt; const basic_json_t &amp; &gt;().template get_impl&lt; ValueType &gt;(detail::priority_tag&lt; 4 &gt; {}))'],['../classbasic__json.html#ab11f66d4edc50a209fab3f8c48664a53',1,'basic_json::get() noexcept -&gt; decltype(std::declval&lt; basic_json_t &amp; &gt;().template get_ptr&lt; PointerType &gt;())'],['../classIEvent.html#a5f7d3ddd53102fa2bd29f2d41d2f1b59',1,'IEvent::get()'],['../classAEvent.html#ad3824df16d31a5f97f3afe91336448d6',1,'AEvent::get()']]],
