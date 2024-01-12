@@ -25,11 +25,12 @@ var searchData=
   ['removefriendsmessage_22',['RemoveFriendsMessage',['../structRemoveFriendsMessage.html',1,'']]],
   ['removefriendsresponse_23',['RemoveFriendsResponse',['../structRemoveFriendsResponse.html',1,'']]],
   ['rend_24',['rend',['../classbasic__json.html#a8d8855a8c04ee7986ae8bab283c4f0de',1,'basic_json::rend() noexcept'],['../classbasic__json.html#ae81c3b38089a63d988a1efefe3ebc4bf',1,'basic_json::rend() const noexcept']]],
-  ['replace_25',['replace',['../namespacedetail.html#abe7cfa1fd8fa706ff4392bff9d1a8298a9dde360102c103867bd2f45872f1129c',1,'detail']]],
-  ['replace_5fsubstring_26',['replace_substring',['../namespacedetail.html#a6fd295e53b1dd4f46e235e6afee26d5e',1,'detail']]],
-  ['resetonmove_27',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html',1,'component::ResetOnMove'],['../structcomponent_1_1ResetOnMove.html#a488d190e1fc78482041ae3af543a7375',1,'component::ResetOnMove::ResetOnMove()']]],
-  ['reverse_5fiterator_28',['reverse_iterator',['../classbasic__json.html#aedc059cdae078322bb0d434b2127d1cf',1,'basic_json']]],
-  ['rotation_29',['Rotation',['../structcomponent_1_1Rotation.html',1,'component::Rotation'],['../structcomponent_1_1Rotation.html#a3d924fcf6c7d8550d9ea843d5db530c5',1,'component::Rotation::Rotation()']]],
-  ['run_30',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client']]],
-  ['run_5fsystems_31',['run_systems',['../classregistry.html#a1fda5cc52e611441228f8b1c26302060',1,'registry']]]
+  ['render_25',['render',['../classButton.html#a6f25fee1789b53d94fd3601197fe8961',1,'Button']]],
+  ['replace_26',['replace',['../namespacedetail.html#abe7cfa1fd8fa706ff4392bff9d1a8298a9dde360102c103867bd2f45872f1129c',1,'detail']]],
+  ['replace_5fsubstring_27',['replace_substring',['../namespacedetail.html#a6fd295e53b1dd4f46e235e6afee26d5e',1,'detail']]],
+  ['resetonmove_28',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html',1,'component::ResetOnMove'],['../structcomponent_1_1ResetOnMove.html#a488d190e1fc78482041ae3af543a7375',1,'component::ResetOnMove::ResetOnMove()']]],
+  ['reverse_5fiterator_29',['reverse_iterator',['../classbasic__json.html#aedc059cdae078322bb0d434b2127d1cf',1,'basic_json']]],
+  ['rotation_30',['Rotation',['../structcomponent_1_1Rotation.html',1,'component::Rotation'],['../structcomponent_1_1Rotation.html#a3d924fcf6c7d8550d9ea843d5db530c5',1,'component::Rotation::Rotation()']]],
+  ['run_31',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client::run()'],['../classGame.html#a1ab78f5ed0d5ea879157357cf2fb2afa',1,'Game::run()']]],
+  ['run_5fsystems_32',['run_systems',['../classregistry.html#a1fda5cc52e611441228f8b1c26302060',1,'registry']]]
 ];

@@ -15,24 +15,16 @@ void \mbox{\hyperlink{classClient_afff638ebfd56ee7ab56f9dc1b886e1d8}{receive\+\_
 \begin{DoxyCompactList}\small\item\em receive datas from server \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classClient_a85e60f733164296d0c545597f0bd08be}{display\+Texts}} ()
 \begin{DoxyCompactList}\small\item\em Display text on the window. \end{DoxyCompactList}\item 
-\Hypertarget{classClient_a8463da33234bc2c3e3715b786f4cf627}\label{classClient_a8463da33234bc2c3e3715b786f4cf627} 
-void {\bfseries add\+Level} ()
-\item 
-\Hypertarget{classClient_a81779397297d815088996c7372bfe026}\label{classClient_a81779397297d815088996c7372bfe026} 
-void {\bfseries add\+Score} ()
-\item 
-\Hypertarget{classClient_ae31980599eef0c42f08d9755e08a4760}\label{classClient_ae31980599eef0c42f08d9755e08a4760} 
-void {\bfseries decrease\+Lives} ()
-\item 
-\Hypertarget{classClient_ae06feaf173c523966b816bb505f4ca0d}\label{classClient_ae06feaf173c523966b816bb505f4ca0d} 
-void {\bfseries increase\+Lives} ()
-\item 
-\Hypertarget{classClient_aeb5979840f6a1769353f31f7bea764b1}\label{classClient_aeb5979840f6a1769353f31f7bea764b1} 
-void {\bfseries set\+Level} (int level)
-\item 
-\Hypertarget{classClient_a9118f130db1b0c82bf04bf7f4084f890}\label{classClient_a9118f130db1b0c82bf04bf7f4084f890} 
-bool {\bfseries has\+Pending\+Messages} () const
-\item 
+void \mbox{\hyperlink{classClient_a8463da33234bc2c3e3715b786f4cf627}{add\+Level}} ()
+\begin{DoxyCompactList}\small\item\em Increase the level. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_a81779397297d815088996c7372bfe026}{add\+Score}} ()
+\begin{DoxyCompactList}\small\item\em Increase the score. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_ae31980599eef0c42f08d9755e08a4760}{decrease\+Lives}} ()
+\begin{DoxyCompactList}\small\item\em Decrease the lives. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_ae06feaf173c523966b816bb505f4ca0d}{increase\+Lives}} ()
+\begin{DoxyCompactList}\small\item\em Increase the lives. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_aeb5979840f6a1769353f31f7bea764b1}{set\+Level}} (int level)
+\begin{DoxyCompactList}\small\item\em Get the level. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{classClient_a84ca2859e7ccceb8abd0858da4674e1d}{manage\+Event}} ()
 \begin{DoxyCompactList}\small\item\em manage event of the window \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}{receive}} ()
@@ -112,6 +104,26 @@ Destroy the \doxylink{classClient}{Client}\+:\+: \doxylink{classClient}{Client} 
 
 
 \doxysubsection{Member Function Documentation}
+\Hypertarget{classClient_a8463da33234bc2c3e3715b786f4cf627}\label{classClient_a8463da33234bc2c3e3715b786f4cf627} 
+\index{Client@{Client}!addLevel@{addLevel}}
+\index{addLevel@{addLevel}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{addLevel()}{addLevel()}}
+{\footnotesize\ttfamily void Client\+::add\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Increase the level. 
+
+\Hypertarget{classClient_a81779397297d815088996c7372bfe026}\label{classClient_a81779397297d815088996c7372bfe026} 
+\index{Client@{Client}!addScore@{addScore}}
+\index{addScore@{addScore}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{addScore()}{addScore()}}
+{\footnotesize\ttfamily void Client\+::add\+Score (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Increase the score. 
+
 \Hypertarget{classClient_a29eadc05eecb345c418b20a5a589f15f}\label{classClient_a29eadc05eecb345c418b20a5a589f15f} 
 \index{Client@{Client}!createEnemy@{createEnemy}}
 \index{createEnemy@{createEnemy}!Client@{Client}}
@@ -137,6 +149,16 @@ create enemy
 {\em damage} & damage for the enemy \\
 \hline
 \end{DoxyParams}
+\Hypertarget{classClient_ae31980599eef0c42f08d9755e08a4760}\label{classClient_ae31980599eef0c42f08d9755e08a4760} 
+\index{Client@{Client}!decreaseLives@{decreaseLives}}
+\index{decreaseLives@{decreaseLives}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{decreaseLives()}{decreaseLives()}}
+{\footnotesize\ttfamily void Client\+::decrease\+Lives (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Decrease the lives. 
+
 \Hypertarget{classClient_a1a37e6650eef7546f32d52b06776770c}\label{classClient_a1a37e6650eef7546f32d52b06776770c} 
 \index{Client@{Client}!displayScoreBoardMenu@{displayScoreBoardMenu}}
 \index{displayScoreBoardMenu@{displayScoreBoardMenu}!Client@{Client}}
@@ -172,6 +194,16 @@ Handle input from the user.
 {\em event} & Event of the window \\
 \hline
 \end{DoxyParams}
+\Hypertarget{classClient_ae06feaf173c523966b816bb505f4ca0d}\label{classClient_ae06feaf173c523966b816bb505f4ca0d} 
+\index{Client@{Client}!increaseLives@{increaseLives}}
+\index{increaseLives@{increaseLives}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{increaseLives()}{increaseLives()}}
+{\footnotesize\ttfamily void Client\+::increase\+Lives (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Increase the lives. 
+
 \Hypertarget{classClient_a36cac90702860598162e1d725201a1a8}\label{classClient_a36cac90702860598162e1d725201a1a8} 
 \index{Client@{Client}!initClass@{initClass}}
 \index{initClass@{initClass}!Client@{Client}}
@@ -496,6 +528,19 @@ send a structure to the server
 {\em structure} & stucture to send \\
 \hline
 \end{DoxyParams}
+\Hypertarget{classClient_aeb5979840f6a1769353f31f7bea764b1}\label{classClient_aeb5979840f6a1769353f31f7bea764b1} 
+\index{Client@{Client}!setLevel@{setLevel}}
+\index{setLevel@{setLevel}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{setLevel()}{setLevel()}}
+{\footnotesize\ttfamily void Client\+::set\+Level (\begin{DoxyParamCaption}\item[{int}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the level. 
+
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

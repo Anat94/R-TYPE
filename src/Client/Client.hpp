@@ -101,12 +101,36 @@ class Client {
         void receive_datas();
         void displayTexts();
 
+        /**
+         * @brief Increase the level
+         *
+         */
         void addLevel() { _level++; }
+
+        /**
+         * @brief Increase the score
+         *
+         */
         void addScore() { _score++; }
+
+        /**
+         * @brief Decrease the lives
+         *
+         */
         void decreaseLives() { _lives--; }
+
+        /**
+         * @brief Increase the lives
+         *
+         */
         void increaseLives() { _lives++; }
+
+        /**
+         * @brief Get the level
+         *
+         * @return int
+         */
         void setLevel(int level) { _level = level; }
-        bool hasPendingMessages() const;
         int manageEvent();
         void receive();
         int receive_position_snapshot_update(std::vector<char> &);
