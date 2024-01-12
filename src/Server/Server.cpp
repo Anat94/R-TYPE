@@ -108,19 +108,6 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
 {
     try {
         connectToDB();
-        // signUp("Jacques", "Jacques");
-        // signIn("admin", "admin");
-        // addHighScore("admin", 100);
-        // addHighScore("Anatole", 110);
-        // addHighScore("Pierre", 80);
-        // addHighScore("Jacques", 90);
-        // getHighScore();
-        // addFriend("admin", "9AEPR4G1XK");
-        // addFriend("Anatole", "Pierre");
-        // addFriend("Anatole", "admin");
-        // addFriend("Jacques", "tests");
-        // removeFriend("admin", "9AEPR4G1XK");
-        // displayFriends("admin");
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
     }
@@ -209,7 +196,6 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     if (!scale.has_value())
         return;
     ScaleSnapshot to_send(15, entity, *scale, 0);
-    // std::cout << "sending scale\n";
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
 }
@@ -257,9 +243,7 @@ std::vector<char> Server::recieve_raw_data_from_client()
     try {
         size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _remote_endpoint);
         receivedData.resize(bytesRead);
-        // std::cout << "RECIEVED FROM CLIENT: " << _remote_endpoint << "\n";
     } catch (std::exception &e) {
-        // std::cout << e.what() << std::endl;
         receivedData.resize(0);
     }
 
@@ -271,7 +255,6 @@ void Server::send_position_snapshots_for_all_players(sparse_array<component::Pos
     std::vector<SnapshotPosition> to_send = {};
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
-            // std::cout << "position: x "  << pos[i].value().x << ", y " << pos[i].value().y << std::endl;
             to_send.push_back(SnapshotPosition(4, i, component::Position(pos[i].value().x, pos[i].value().y), 0));
 
         }
@@ -313,7 +296,6 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
             0
         );
         auto &pos = _ecs.get_components<component::Position>()[entity];
-        std::cout << animatedDrawable->_path << ": " << entity << " - x: " << pos->x << ", y: " << pos->y << std::endl;
         auto &rooms = _ecs.get_components<component::Room>();
         send_data_to_all_clients_by_room(snap_ad, _animated_drawable_packets, edp, rooms, rooms[entity]->_name);
     }
@@ -372,7 +354,6 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
 {
     component::Drawable drawable = dra[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, 0);
-    // std::cout << "sending normal drawable\n";
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(to_send, _drawable_packets, edp, rooms, rooms[entity]->_name);
 }
@@ -380,7 +361,6 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
     DeathEventMessage evt(16, entity, 0);
-    // std::cout << "sending death event\n";
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(evt, _death_packets, edp, rooms, rooms[entity]->_name);
 }
@@ -418,7 +398,6 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
         _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
         return -1;
     }
-    std::cout << "successfully joined room: " << joinMsg->room_name << "!\n";
     RoomJoinMessage to_send(22, std::string(joinMsg->room_name), _packet_id);
     _packet_id++;
     _room_join_packets.push_back(to_send);
@@ -437,7 +416,6 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
         return -1;
     }
     _lobbies[std::string(creationMsg->room_name)] = std::string(creationMsg->username);
-    std::cout << "successfully created room !\n";
     RoomCreationMessage to_send(21, std::string(creationMsg->username), std::string(creationMsg->room_name), _packet_id);
     _packet_id++;
     _room_creation_packets.push_back(to_send);

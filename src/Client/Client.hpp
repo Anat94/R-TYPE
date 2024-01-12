@@ -121,11 +121,12 @@ class Client {
         int receive_chat_event(std::vector<char> &server_msg);
         int recieve_room_creation_event(std::vector<char> &server_msg);
         int receive_room_join_event(std::vector<char> &server_msg);
-        void createEnemy(std::pair<float, float> pos, std::pair<float, float> vel, const std::string &path_to_texture, std::pair<float, float> scale, int health, int damage);
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
+        entity_t init_new_entity(entity_t srvEntity);
         void manageCli();
         void initClass();
+        entity_t get_entity_from_server_entity(entity_t srvEntity);
     private:
         //Content for network
         EventMessage _send_structure;

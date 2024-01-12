@@ -22,11 +22,11 @@ class EnemyGeneration: public ISystems {
         void operator()(sparse_array<component::Position> &pos, sparse_array<component::Health> &hlt, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms) {
             if (timer.getElapsedTime() > 1500) {
                 std::vector<std::string> allRooms = RoomUtils::GetAll(rms);
-                // std::cout << ((allRooms.size() > 0) ? allRooms[0] : "Nothing") << std::endl;
                 for (size_t i = 0; i < allRooms.size(); ++i) {
                     int totalEnemies = 0;
                     int totalPlayers = 0;
                     for (auto &&[idx, p, h, e, r] : zipper<sparse_array<component::Position>, sparse_array<component::Health>, sparse_array<component::Endpoint>, sparse_array<component::Room>>(pos, hlt, edp, rms)) {
+                        std::cout << "beg loop" << std::endl;
                         if (r.has_value() && r->_name != allRooms[i])
                             continue;
                         if (p.has_value() && h.has_value() && !e.has_value()) {
@@ -45,7 +45,6 @@ class EnemyGeneration: public ISystems {
                             {
                                 {"idle", {{0, 7}, true}}
                             }, allRooms[i]));
-                        std::cout << "ADDED ENEMY EVENT\n";
                     }
                 }
                 timer.restart();

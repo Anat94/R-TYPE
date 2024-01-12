@@ -16,7 +16,7 @@ class RoomUtils {
     public:
         static std::vector<std::string> GetAll(sparse_array<component::Room> &all_rooms)
         {
-            std::vector<std::string> resRooms;
+            std::vector<std::string> resRooms = {};
             for (size_t i = 0; i < all_rooms.size(); ++i) {
                 if (std::find(resRooms.begin(), resRooms.end(), all_rooms[i]->_name) == resRooms.end()) {
                     resRooms.push_back(all_rooms[i]->_name);
