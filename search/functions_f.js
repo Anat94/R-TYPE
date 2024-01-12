@@ -19,9 +19,10 @@ var searchData=
   ['register_5fcomponent_16',['register_component',['../classregistry.html#ac77008529bb6e296916633cc41ba5be5',1,'registry']]],
   ['remove_5fcomponent_17',['remove_component',['../classregistry.html#ae6ae3ba636214bb3972a99492923bf7c',1,'registry']]],
   ['rend_18',['rend',['../classbasic__json.html#a8d8855a8c04ee7986ae8bab283c4f0de',1,'basic_json::rend() noexcept'],['../classbasic__json.html#ae81c3b38089a63d988a1efefe3ebc4bf',1,'basic_json::rend() const noexcept']]],
-  ['replace_5fsubstring_19',['replace_substring',['../namespacedetail.html#a6fd295e53b1dd4f46e235e6afee26d5e',1,'detail']]],
-  ['resetonmove_20',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html#a488d190e1fc78482041ae3af543a7375',1,'component::ResetOnMove']]],
-  ['rotation_21',['Rotation',['../structcomponent_1_1Rotation.html#a3d924fcf6c7d8550d9ea843d5db530c5',1,'component::Rotation']]],
-  ['run_22',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client']]],
-  ['run_5fsystems_23',['run_systems',['../classregistry.html#a1fda5cc52e611441228f8b1c26302060',1,'registry']]]
+  ['render_19',['render',['../classButton.html#a6f25fee1789b53d94fd3601197fe8961',1,'Button']]],
+  ['replace_5fsubstring_20',['replace_substring',['../namespacedetail.html#a6fd295e53b1dd4f46e235e6afee26d5e',1,'detail']]],
+  ['resetonmove_21',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html#a488d190e1fc78482041ae3af543a7375',1,'component::ResetOnMove']]],
+  ['rotation_22',['Rotation',['../structcomponent_1_1Rotation.html#a3d924fcf6c7d8550d9ea843d5db530c5',1,'component::Rotation']]],
+  ['run_23',['run',['../classClient.html#a168399eeddbdde9a219278158914b9d2',1,'Client::run()'],['../classGame.html#a1ab78f5ed0d5ea879157357cf2fb2afa',1,'Game::run()']]],
+  ['run_5fsystems_24',['run_systems',['../classregistry.html#a1fda5cc52e611441228f8b1c26302060',1,'registry']]]
 ];
