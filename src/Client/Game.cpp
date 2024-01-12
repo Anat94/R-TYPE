@@ -18,18 +18,34 @@
 #include "LibLoader.hpp"
 #include "Game.hpp"
 
+
+/**
+ * @brief Construct a new Game:: Game object
+ *
+ * @param sizeX size on x size of the windows
+ * @param sizeY size on y size of the windows
+ * @param title title of the windows
+ */
 Game::Game(int sizeX, int sizeY, std::string title): _lib("./libecs.so")
 {
     this->_window.create(sf::VideoMode(sizeX, sizeY), title);
     initParalaxBackground();
 }
 
+/**
+ * @brief Destroy the Game:: Game object
+ *
+ */
 Game::~Game()
 {
     if (this->_window.isOpen())
         this->_window.close();
 }
 
+/**
+ * @brief init the background to make some paralax
+ *
+ */
 void Game::initParalaxBackground() {
     sf::Texture texture;
     if (!texture.loadFromFile("./assets/background.png")) {
@@ -39,7 +55,10 @@ void Game::initParalaxBackground() {
     _spriteBackground.setTexture(texture);
 }
 
-
+/**
+ * @brief manage event from the windows
+ *
+ */
 void Game::manageEvent()
 {
     while (this->_window.pollEvent(_event))
@@ -61,6 +80,11 @@ void Game::manageEvent()
     }
 }
 
+
+/**
+ * @brief run the game loop
+ *
+ */
 void Game::run()
 {
     while (this->_window.isOpen()) {

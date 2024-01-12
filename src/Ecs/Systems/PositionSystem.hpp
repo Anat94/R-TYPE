@@ -13,10 +13,20 @@
 
 class PositionSystem : public ISystems {
     public:
+    /**
+     * @brief Construct a new Position System object
+     *
+     */
         PositionSystem() {
             timer.restart();
         };
 
+        /**
+         * @brief operator ()
+         *
+         * @param pos   List of positions
+         * @param vel   List of velocities
+         */
         void operator()(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
             try {
                 if (timer.getElapsedTime() >= 100) {

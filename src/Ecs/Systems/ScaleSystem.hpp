@@ -11,8 +11,18 @@
 
 class ScaleSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Scale System object
+         *
+         */
         ScaleSystem() {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra draw object
+         * @param sca scale system
+         */
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca) {
             std::cout << "Scale system" << std::endl;
             for (auto &&[_, d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
