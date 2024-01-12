@@ -140,6 +140,8 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
             _ecs.add_component(snapshot->entity, component::ServerEntity(new_player));
+            _ecs.add_component(new_player, component::Health(100));
+            // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
@@ -329,14 +331,23 @@ void Client::receive()
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
-
+    int check_if_packet_exist = 0;
+    for (const auto &element: _packets_received) {
+        if (element == baseMsg->packet_id)
+            check_if_packet_exist = 1;
+    }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
-    int packet_id = (this->*_messageParser[baseMsg->id])(server_msg);
+    if (check_if_packet_exist == 0) {
+        (this->*_messageParser[baseMsg->id])(server_msg);
+        if (_packets_received.size() > 1000)
+            _packets_received.erase(_packets_received.begin());
+        _packets_received.push_back(baseMsg->packet_id);
+    }
     ConfirmationMessage to_send;
     to_send.id = 5;
-    to_send.packet_id = packet_id;
+    to_send.packet_id = baseMsg->packet_id;
     send_to_server<ConfirmationMessage>(to_send);
     mtx.unlock();
     receive();
@@ -420,6 +431,8 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
     _ecs.add_component(_newEnemy, component::Velocity(vel.first, vel.second));
     _ecs.add_component(_newEnemy, component::Drawable(path_to_texture));
     _ecs.add_component(_newEnemy, component::Health(health));
+    _ecs.add_component(_newEnemy, component::HurtsOnCollision(_newEnemy));
+    _ecs.add_component(_newEnemy, component::Damage(50));
 
     _enemiesQueue.push(_newEnemy);
 }

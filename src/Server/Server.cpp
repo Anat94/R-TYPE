@@ -11,20 +11,20 @@
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
-    std::string prevState = animatedDrawable.value()._state;
+    std::string prevState = animatedDrawable->_state;
     if (event == KeyIds["Up"]) {
-        // animatedDrawable.value()._state = "move up";
-        // send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
+        animatedDrawable->_state = "move up";
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, -30};
     }
     if (event == KeyIds["Down"]) {
-        // animatedDrawable.value()._state = "move down";
-        // send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state);
+        animatedDrawable->_state = "move down";
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, 30};
     }
-    // animatedDrawable.value()._state = "idle";
-    if (prevState != animatedDrawable.value()._state)
-        send_animated_drawable_update_to_all_clients(entity, animatedDrawable.value()._state, _ecs.get_components<component::Endpoint>());
+    // animatedDrawable->_state = "idle";
+    if (prevState != animatedDrawable->_state)
+        send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -152,7 +152,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
-    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}, {0, 0}));
+    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}));
     _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
     auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
     tmp->addAnimation("idle", {2, 2}, false);
@@ -311,14 +311,14 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
         AnimatedDrawableSnapshot snap_ad(
             13,
             entity,
-            animatedDrawable.value()._path,
-            animatedDrawable.value()._nbSprites,
-            animatedDrawable.value()._spriteSize,
-            animatedDrawable.value()._gaps,
-            animatedDrawable.value()._firstOffset,
-            animatedDrawable.value()._currentIdx,
-            animatedDrawable.value()._anims,
-            animatedDrawable.value()._state,
+            animatedDrawable->_path,
+            animatedDrawable->_nbSprites,
+            animatedDrawable->_spriteSize,
+            animatedDrawable->_gaps,
+            animatedDrawable->_firstOffset,
+            animatedDrawable->_currentIdx,
+            animatedDrawable->_anims,
+            animatedDrawable->_state,
             0
         );
         // while (!can_send) continue;

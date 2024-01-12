@@ -178,8 +178,8 @@ class Client {
         sf::Text _score_text;
         sf::Text _lives_text;
         sf::Text _level_text;
-        registry &_ecs;
         EventListener &_listener;
+        registry &_ecs;
         Stage _stage;
         // content for enemys
         std::thread receiveThread;
@@ -214,6 +214,7 @@ class Client {
         std::string _room_name = "";
         bool prgrmstop = false;
         bool _logged_in = false;
+        std::vector<int> _packets_received;
 };
 
 #endif // CLIENT_HPP

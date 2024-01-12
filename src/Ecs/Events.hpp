@@ -190,12 +190,12 @@ class SpawnEnemy : public AEvent {
          */
         void handleEvent(registry &r, EventListener &listener);
     private:
+        component::AnimatedDrawable _animatedDrawable;
         int _health = 200;
         float _scale = 6.0f;
         std::string _roomName = "";
         component::Velocity _vel = {-8.0f, 0.0f};
         component::Position _pos = {1920, 500};
-        component::AnimatedDrawable _animatedDrawable;
         std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> _anims;
 };
 
