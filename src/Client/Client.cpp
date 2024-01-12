@@ -322,7 +322,6 @@ void Client::receive()
     if (prgrmstop)
         exit(0);
     std::vector<char> server_msg = recieve_raw_data_from_client();
-    // std::cout << "recieved raw" << std::endl;
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -331,7 +330,6 @@ void Client::receive()
         if (element == baseMsg->packet_id)
             check_if_packet_exist = 1;
     }
-    std::cout << "LA SIZE :::" << _packets_received.size() << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
