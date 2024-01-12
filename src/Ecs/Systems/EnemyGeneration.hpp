@@ -27,7 +27,6 @@ class EnemyGeneration: public ISystems {
                     int totalEnemies = 0;
                     int totalPlayers = 0;
                     for (auto &&[idx, p, h, e, r] : zipper<sparse_array<component::Position>, sparse_array<component::Health>, sparse_array<component::Endpoint>, sparse_array<component::Room>>(pos, hlt, edp, rms)) {
-                        std::cout << r->_name << " " << allRooms[i] << std::endl;
                         if (r.has_value() && r->_name != allRooms[i])
                             continue;
                         if (p.has_value() && h.has_value() && !e.has_value()) {

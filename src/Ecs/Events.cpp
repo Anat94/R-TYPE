@@ -215,6 +215,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
     entity_t shot = r.spawn_entity();
 
     try {
+        std::cout << "new shot !!\n";
         auto player_hit = r.get_components<component::Hitbox>()[_ents.first];
         auto player_p = r.get_components<component::Position>()[_ents.first];
         auto player_h = r.get_components<component::Heading>()[_ents.first];
