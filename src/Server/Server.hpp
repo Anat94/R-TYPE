@@ -64,7 +64,6 @@ class Server: public ISystems {
         void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
         void send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp);
-        void receiveThread();
         std::vector<char> receive_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
         int receive_client_event(std::vector<char> &, entity_t);
@@ -80,6 +79,13 @@ class Server: public ISystems {
         void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
+        /**
+         * @brief send data to specific client
+         *
+         * @tparam T structure type
+         * @param structure structure to send
+         * @param entity entity to send to
+         */
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
             std::cout << "GONNA SEND TO SPECIFC\n";
@@ -110,7 +116,6 @@ class Server: public ISystems {
         bool checkIfFriendshipExist(std::string name, std::string friendId);
         bool removeFriend(std::string name, std::string friendName);
         std::vector<std::string> displayFriends(std::string name, entity_t player_entity);
-        Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
         template <typename T>

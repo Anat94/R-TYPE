@@ -8,5 +8,6 @@ var searchData=
   ['_7eievent_5',['~IEvent',['../classIEvent.html#a37c201e7a45ac21a4ad0e387a6d9b47d',1,'IEvent']]],
   ['_7elibloader_6',['~LibLoader',['../classLibLoader.html#a352f4496136f436fc70caf8841564ecf',1,'LibLoader']]],
   ['_7emenu_7',['~Menu',['../classMenu.html#a831387f51358cfb88cd018e1777bc980',1,'Menu']]],
-  ['_7esparse_5farray_8',['~sparse_array',['../classsparse__array.html#a462f64cc46c81b54e7c7d1181f7b889f',1,'sparse_array']]]
+  ['_7eserver_8',['~Server',['../classServer.html#a4b3aa2579cb1c8cd1d069582c14d0fa6',1,'Server']]],
+  ['_7esparse_5farray_9',['~sparse_array',['../classsparse__array.html#a462f64cc46c81b54e7c7d1181f7b889f',1,'sparse_array']]]
 ];

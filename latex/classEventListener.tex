@@ -70,6 +70,8 @@ Destroy the Event Listener object.
 
 Adds an event passed as parameter to the queue of events. 
 
+add an event to the queue
+
 
 \begin{DoxyParams}{Parameters}
 {\em event} & the event to add \\
@@ -78,7 +80,17 @@ Adds an event passed as parameter to the queue of events.
 \begin{DoxyReturn}{Returns}
 true if the event was successfully added, 
 
-false otherwise 
+false otherwise
+\end{DoxyReturn}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the event was added 
 \end{DoxyReturn}
 \Hypertarget{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}\label{classEventListener_a98b65ba5319b89b539da5a5fd265a01e} 
 \index{EventListener@{EventListener}!addRegistry@{addRegistry}}
@@ -90,9 +102,18 @@ false otherwise
 
 Stores the regitry\+\_\+t object inside of the listener. 
 
+add a registry to the event listener
+
 
 \begin{DoxyParams}{Parameters}
-{\em reg} & the registry\+\_\+t instance pointer \\
+{\em reg} & the registry\+\_\+t instance pointer\\
+\hline
+\end{DoxyParams}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & reference to the registry \\
 \hline
 \end{DoxyParams}
 \Hypertarget{classEventListener_a6b3902728a263e3b5878dd04b239d425}\label{classEventListener_a6b3902728a263e3b5878dd04b239d425} 
@@ -105,6 +126,8 @@ Stores the regitry\+\_\+t object inside of the listener.
 
 Checks if the listener currently has the event passed as parameter. 
 
+has the event in the queue
+
 
 \begin{DoxyParams}{Parameters}
 {\em event} & \\
@@ -113,7 +136,19 @@ Checks if the listener currently has the event passed as parameter.
 \begin{DoxyReturn}{Returns}
 true 
 
-false 
+false
+\end{DoxyReturn}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the event is in the queue 
+
+false if the event is not in the queue 
 \end{DoxyReturn}
 \Hypertarget{classEventListener_a316f6e24f1c252555507e18a956d4ad4}\label{classEventListener_a316f6e24f1c252555507e18a956d4ad4} 
 \index{EventListener@{EventListener}!popEvent@{popEvent}}
@@ -125,10 +160,19 @@ false
 
 Removes the first event in the queue of events. 
 
+pop the first event of the queue and handle it
+
 \begin{DoxyReturn}{Returns}
 true if the event whas successfully removed and executed, 
 
-false otherwise 
+false otherwise
+\end{DoxyReturn}
+
+
+\begin{DoxyReturn}{Returns}
+true if an event was poped 
+
+false if the queue is empty 
 \end{DoxyReturn}
 
 

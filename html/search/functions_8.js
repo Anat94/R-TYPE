@@ -20,9 +20,10 @@ var searchData=
   ['is_5fprimitive_17',['is_primitive',['../classbasic__json.html#ad650dd5a7e019b970abce3d8864b5654',1,'basic_json']]],
   ['is_5fstring_18',['is_string',['../classbasic__json.html#a007ecebde9a7d40714e300ce0ff52908',1,'basic_json']]],
   ['is_5fstructured_19',['is_structured',['../classbasic__json.html#a2d3a5f8761bc6f163f4119bddaf7b092',1,'basic_json']]],
-  ['ispressed_20',['isPressed',['../classButton.html#a6ed2a4b4e00facf5c42a11ecd1f4e1c7',1,'Button']]],
-  ['items_21',['items',['../classbasic__json.html#ac12884e86980aa85b6a9ffbb8b84de6a',1,'basic_json::items() noexcept'],['../classbasic__json.html#a3f2fdaf6048ea339c901b5208b93a64d',1,'basic_json::items() const noexcept']]],
-  ['iter_5fimpl_22',['iter_impl',['../classdetail_1_1iter__impl.html#a21ce449bdce08e15eaf8333322a81039',1,'detail::iter_impl::iter_impl(pointer object) noexcept'],['../classdetail_1_1iter__impl.html#af8d8847a82d9dab28bd4650ed13a7c90',1,'detail::iter_impl::iter_impl(const iter_impl&lt; const BasicJsonType &gt; &amp;other) noexcept'],['../classdetail_1_1iter__impl.html#a26079f33eb8a16683577cf3782558f26',1,'detail::iter_impl::iter_impl(const iter_impl&lt; typename std::remove_const&lt; BasicJsonType &gt;::type &gt; &amp;other) noexcept']]],
-  ['iteration_5fproxy_23',['iteration_proxy',['../classdetail_1_1iteration__proxy.html#abc711365efc12210a983fba0e39b5811',1,'detail::iteration_proxy']]],
-  ['iterator_5fwrapper_24',['iterator_wrapper',['../classbasic__json.html#ab8b4e0acdea49e5f0a77abdf1ce465d2',1,'basic_json::iterator_wrapper(reference ref) noexcept'],['../classbasic__json.html#a7c0314258e5347eade0c6851017bf5a5',1,'basic_json::iterator_wrapper(const_reference ref) noexcept']]]
+  ['isnameinbdd_20',['IsNameInBdd',['../classServer.html#af0a227e9300935e0815760a82fafc9b5',1,'Server']]],
+  ['ispressed_21',['isPressed',['../classButton.html#a6ed2a4b4e00facf5c42a11ecd1f4e1c7',1,'Button']]],
+  ['items_22',['items',['../classbasic__json.html#ac12884e86980aa85b6a9ffbb8b84de6a',1,'basic_json::items() noexcept'],['../classbasic__json.html#a3f2fdaf6048ea339c901b5208b93a64d',1,'basic_json::items() const noexcept']]],
+  ['iter_5fimpl_23',['iter_impl',['../classdetail_1_1iter__impl.html#a21ce449bdce08e15eaf8333322a81039',1,'detail::iter_impl::iter_impl(pointer object) noexcept'],['../classdetail_1_1iter__impl.html#af8d8847a82d9dab28bd4650ed13a7c90',1,'detail::iter_impl::iter_impl(const iter_impl&lt; const BasicJsonType &gt; &amp;other) noexcept'],['../classdetail_1_1iter__impl.html#a26079f33eb8a16683577cf3782558f26',1,'detail::iter_impl::iter_impl(const iter_impl&lt; typename std::remove_const&lt; BasicJsonType &gt;::type &gt; &amp;other) noexcept']]],
+  ['iteration_5fproxy_24',['iteration_proxy',['../classdetail_1_1iteration__proxy.html#abc711365efc12210a983fba0e39b5811',1,'detail::iteration_proxy']]],
+  ['iterator_5fwrapper_25',['iterator_wrapper',['../classbasic__json.html#ab8b4e0acdea49e5f0a77abdf1ce465d2',1,'basic_json::iterator_wrapper(reference ref) noexcept'],['../classbasic__json.html#a7c0314258e5347eade0c6851017bf5a5',1,'basic_json::iterator_wrapper(const_reference ref) noexcept']]]
 ];
