@@ -34,11 +34,11 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     return {0, 0};
 }
 
-// void Server::recieveThread() {
+// void Server::receiveThread() {
 //     asio::io_context& service = _service;
 //     for (int i = 0; i < 4; ++i)
 //         _tpool.emplace_back([this, &service]() { service.run(); });
-//     recieve_from_client();
+//     receive_from_client();
 // }
 
 void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp) {
@@ -97,7 +97,7 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         send_position_snapshots_for_all_players(pos, edp);
         ++resend_counter;
     }
-    recieve_from_client();
+    receive_from_client();
 };
 
 Server::Server(asio::io_context& service, int port, registry& ecs, EventListener& listener, std::mutex &mtx_)
@@ -105,7 +105,7 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
       _listener(listener),
-    //   _send_thread(&Server::recieveThread, this),
+    //   _send_thread(&Server::receiveThread, this),
       mtx(mtx_)
 {
     try {
@@ -218,14 +218,14 @@ void Server::send_highscore_to_specific_client(entity_t new_player)
     send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
 }
 
-std::vector<char> Server::recieve_raw_data_from_client()
+std::vector<char> Server::receive_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
     _socket.non_blocking(true);
     try {
         size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _remote_endpoint);
         receivedData.resize(bytesRead);
-        // std::cout << "RECIEVED FROM CLIENT: " << _remote_endpoint << "\n";
+        // std::cout << "receiveD FROM CLIENT: " << _remote_endpoint << "\n";
     } catch (std::exception &e) {
         // std::cout << e.what() << std::endl;
         receivedData.resize(0);
@@ -326,9 +326,9 @@ void Server::send_death_event_to_all_players(entity_t entity, sparse_array<compo
     send_data_to_all_clients(evt, _death_packets, edp);
 }
 
-void Server::recieve_from_client()
+void Server::receive_from_client()
 {
-    std::vector<char> client_msg = recieve_raw_data_from_client();
+    std::vector<char> client_msg = receive_raw_data_from_client();
     if (client_msg.size() < sizeof(BaseMessage)) {
         return;
     }
@@ -341,14 +341,14 @@ void Server::recieve_from_client()
     }
     // std::cout << "message id: " << baseMsg->id << std::endl;
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
-        throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+        throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
     // std::cout << "FINISHED RECIEVING\n";
     // mtx.unlock();
     return;
 }
 
-int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
+int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
@@ -412,13 +412,13 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     return 0;
 }
 
-int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
-    // std::cout << "New event recieved from: " << _remote_endpoint << std::endl;
-    // std::cout << "event recieved: " << event->event << std::endl;
+    // std::cout << "New event received from: " << _remote_endpoint << std::endl;
+    // std::cout << "event received: " << event->event << std::endl;
     // while (!_ecs.can_run_updates) continue;
     // _ecs.can_run_updates = false;
     std::pair<int, int> to_move = get_position_change_for_event(player_entity, event->event);
@@ -430,14 +430,14 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     return 0;
 }
 
-int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::receive_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     static_cast<void>(client_msg);
     static_cast<void>(player_entity);
     return 0;
 }
 
-int Server::recieve_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
+int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     _listener.addEvent(new DeathEvent(player_entity, 0));
     return 0;

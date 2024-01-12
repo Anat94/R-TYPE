@@ -53,7 +53,7 @@
 \DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{char}\ name3[20];}
 \DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{structHighScoreMessage}{HighScoreMessage}}(int16\_t\ id\_,\ std::string\ name1\_,\ std::string\ name2\_,\ std::string\ name3\_,\textcolor{keywordtype}{int}\ score1\_,\ \textcolor{keywordtype}{int}\ score2\_,\ \textcolor{keywordtype}{int}\ score3\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ score1(score1\_),\ score2(score2\_),\ score3(score3\_)\ \{}
-\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ name1\_.size();\ i++)\ \{}
@@ -79,7 +79,7 @@
 \DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ logintype;}
 \DoxyCodeLine{00076\ \ \ \ \ \mbox{\hyperlink{structLoginMessage}{LoginMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ password\_,\ \textcolor{keywordtype}{int}\ type\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ username(),\ password(),\ logintype(type\_)\ \{}
-\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
@@ -108,7 +108,7 @@
 \DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{char}\ username[20];}
 \DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{structFriendsMessage}{FriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ username()\ \{}
-\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
@@ -122,7 +122,7 @@
 \DoxyCodeLine{00118\ \ \ \ \ \textcolor{keywordtype}{char}\ friends[20];}
 \DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{structFriendsResponse}{FriendsResponse}}(int16\_t\ id\_,\ std::string\ friends\_,\ \textcolor{keywordtype}{int}\ packet\_id\_)\ \{}
 \DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ friends\_.size();\ i++)\ \{}
 \DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friends[i]\ =\ friends\_[i];}
 \DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
@@ -136,7 +136,7 @@
 \DoxyCodeLine{00132\ }
 \DoxyCodeLine{00133\ \ \ \ \ \mbox{\hyperlink{structAddFriendsMessage}{AddFriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ friendName\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ username(),\ friendName()\ \{}
-\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
@@ -144,7 +144,7 @@
 \DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
 \DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
-\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ friendName\_.size();\ i++)\ \{}
 \DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ friendName\_[i];}
 \DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
@@ -166,7 +166,7 @@
 \DoxyCodeLine{00162\ }
 \DoxyCodeLine{00163\ \ \ \ \ \mbox{\hyperlink{structRemoveFriendsMessage}{RemoveFriendsMessage}}(int16\_t\ id\_,\ std::string\ username\_,\ std::string\ friendName\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ username(),\ friendName()\ \{}
-\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
@@ -174,7 +174,7 @@
 \DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ username[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
 \DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ i\ =\ 0;}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ username\_.size();\ i++)\ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ friendName\_.size();\ i++)\ \{}
 \DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ friendName\_[i];}
 \DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ friendName[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
@@ -195,7 +195,7 @@
 \DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{char}\ content[256];}
 \DoxyCodeLine{00192\ }
 \DoxyCodeLine{00193\ \ \ \ \ \mbox{\hyperlink{structChatMessage}{ChatMessage}}(int16\_t\ id\_,\ std::string\ name\_,\ std::string\ content\_,\ \textcolor{keywordtype}{int}\ packet\_id\_)\ \{}
-\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ content\_.size();\ i++)\ \{}
@@ -211,12 +211,12 @@
 \DoxyCodeLine{00207\ \};}
 \DoxyCodeLine{00208\ }
 \DoxyCodeLine{00209\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structDrawableSnapshot}{DrawableSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
-\DoxyCodeLine{00210\ \ \ \ \ entity\_t\ entity;}
+\DoxyCodeLine{00210\ \ \ \ \ entity\_t\ entity\ =\ 0;}
 \DoxyCodeLine{00211\ \ \ \ \ \textcolor{keywordtype}{char}\ data[1024];}
 \DoxyCodeLine{00212\ }
 \DoxyCodeLine{00213\ \ \ \ \ \mbox{\hyperlink{structDrawableSnapshot}{DrawableSnapshot}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ std::string\ path,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
 \DoxyCodeLine{00214\ \ \ \ \ entity(entity\_)\ \{}
-\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
 \DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
 \DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
 \DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ path.size();\ i++)\ \{}
@@ -226,100 +226,121 @@
 \DoxyCodeLine{00222\ \ \ \ \ \};}
 \DoxyCodeLine{00223\ \};}
 \DoxyCodeLine{00224\ }
-\DoxyCodeLine{00225\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
-\DoxyCodeLine{00229\ \ \ \ \ entity\_t\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}};}
-\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[256];}
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordtype}{char}\ \_state[16];}
+\DoxyCodeLine{00225\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structScaleSnapshot}{ScaleSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00226\ \ \ \ \ entity\_t\ entity\ =\ 0;}
+\DoxyCodeLine{00227\ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Scale}{component::Scale}}\ data;}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \mbox{\hyperlink{structScaleSnapshot}{ScaleSnapshot}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ \mbox{\hyperlink{structcomponent_1_1Scale}{component::Scale}}\ data\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00230\ \ \ \ \ entity(entity\_),\ data(data\_)\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00233\ \ \ \ \ \};}
+\DoxyCodeLine{00234\ \};}
 \DoxyCodeLine{00235\ }
-\DoxyCodeLine{00236\ \ \ \ \ std::array<std::pair<char[16],\ std::pair<bool,\ std::pair<int,\ int>>>,\ 5>\ \_anims;}
-\DoxyCodeLine{00243\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}};}
-\DoxyCodeLine{00250\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}};}
-\DoxyCodeLine{00257\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}};}
-\DoxyCodeLine{00262\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}};}
-\DoxyCodeLine{00269\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}};}
-\DoxyCodeLine{00270\ }
-\DoxyCodeLine{00271\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&snapshot)\ \{}
-\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}};}
-\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}};}
-\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}};}
-\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}};}
-\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}};}
-\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}};}
-\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ snapshot.\_anims.size();\ i++)\ \{}
-\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ 0;}
-\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (j\ =\ 0;\ snapshot.\_anims[i].first[j]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ j++)\ \{}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ snapshot.\_anims[i].first[j];}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].second\ =\ snapshot.\_anims[i].second;}
-\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
-\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\_state[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
-\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ snapshot.\_state[i];}
-\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
-\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i];}
-\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
-\DoxyCodeLine{00296\ \ \ \ \ \};}
-\DoxyCodeLine{00297\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}(}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ int16\_t\ id\_,}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ entity\_t\ entity\_,}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&path,}
-\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ nbSprites,}
-\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ spriteSize,}
-\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ gaps,}
-\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ firstOffset,}
-\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ curretnIdx,}
-\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ animation\_t\ anims\_,}
-\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&state,}
-\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ packet\_id\_}
-\DoxyCodeLine{00309\ \ \ \ \ )\ :\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}(nbSprites),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}(spriteSize),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}(gaps),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}(firstOffset),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}(curretnIdx),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}(entity\_)\ \{}
-\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
-\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ 0;}
-\DoxyCodeLine{00312\ }
-\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
-\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
-\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ path.size();\ i++)\ \{}
-\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ path[i];}
-\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ state.size();\ i++)\ \{}
-\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ state[i];}
-\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&anim:\ anims\_)\ \{}
-\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ anim.first.size();\ i++)\ \{}
-\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].first[i]\ =\ anim.first[i];}
-\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].second\ =\ anim.second;}
-\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ ++j;}
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k\ =\ j;\ k\ <\ \_anims.size();\ ++k)}
-\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[k].first[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00332\ \ \ \ \ \};}
-\DoxyCodeLine{00333\ \};}
-\DoxyCodeLine{00334\ }
-\DoxyCodeLine{00335\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
-\DoxyCodeLine{00336\ \ \ \ \ entity\_t\ entity;}
-\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keywordtype}{char}\ state[16];}
-\DoxyCodeLine{00338\ }
-\DoxyCodeLine{00339\ \ \ \ \ \mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ std::string\ state\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ entity(entity\_)\ \{}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
-\DoxyCodeLine{00342\ }
-\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
-\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ state\_.size();\ i++)\ \{}
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ state\_[i];}
+\DoxyCodeLine{00236\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structDeathEventMessage}{DeathEventMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00237\ \ \ \ \ entity\_t\ entity\ =\ 0;}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \mbox{\hyperlink{structDeathEventMessage}{DeathEventMessage}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00240\ \ \ \ \ entity(entity\_)\ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00243\ \ \ \ \ \};}
+\DoxyCodeLine{00244\ \};}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ entity\_t\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}\ =\ 0;}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[256];}
+\DoxyCodeLine{00255\ \ \ \ \ \textcolor{keywordtype}{char}\ \_state[16];}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ std::array<std::pair<char[16],\ std::pair<bool,\ std::pair<int,\ int>>>,\ 5>\ \_anims;}
+\DoxyCodeLine{00264\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}\ =\ \{0,\ 0\};}
+\DoxyCodeLine{00271\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}\ =\ \{0,\ 0\};}
+\DoxyCodeLine{00278\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}\ =\ \{0,\ 0\};}
+\DoxyCodeLine{00283\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}\ =\ \{0,\ 0\};}
+\DoxyCodeLine{00290\ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}\ =\ \{0,\ 0\};}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}\ \&snapshot)\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}};}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}};}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}};}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}};}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}};}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}};}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ snapshot.\_anims.size();\ i++)\ \{}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ j\ =\ 0;}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (j\ =\ 0;\ snapshot.\_anims[i].first[j]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ j++)\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ snapshot.\_anims[i].first[j];}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].first[j]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[i].second\ =\ snapshot.\_anims[i].second;}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\_state[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ snapshot.\_state[i];}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ i++)\ \{}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ snapshot.\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i];}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00317\ \ \ \ \ \};}
+\DoxyCodeLine{00318\ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot}{AnimatedDrawableSnapshot}}(}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ int16\_t\ id\_,}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ entity\_t\ entity\_,}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&path,}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ nbSprites,}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ spriteSize,}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ gaps,}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ firstOffset,}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ curretnIdx,}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ animation\_t\ anims\_,}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&state,}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ packet\_id\_}
+\DoxyCodeLine{00330\ \ \ \ \ )\ :\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\_nbSprites}}(nbSprites),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\_spriteSize}}(spriteSize),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\_gaps}}(gaps),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\_firstOffset}}(firstOffset),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\_currentIdx}}(curretnIdx),\ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}}(entity\_)\ \{}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ j\ =\ 0;}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ path.size();\ i++)\ \{}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ path[i];}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\_path}}[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ state.size();\ i++)\ \{}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \_state[i]\ =\ state[i];}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \_state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \&anim:\ anims\_)\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ anim.first.size();\ i++)\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].first[i]\ =\ anim.first[i];}
 \DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \};}
-\DoxyCodeLine{00350\ \};}
-\DoxyCodeLine{00351\ }
-\DoxyCodeLine{00352\ }
-\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//NETWORK\_HPP}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[j].second\ =\ anim.second;}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ ++j;}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ k\ =\ j;\ k\ <\ \_anims.size();\ ++k)}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \_anims[k].first[0]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00353\ \ \ \ \ \};}
+\DoxyCodeLine{00354\ \};}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structBaseMessage}{BaseMessage}}\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ entity\_t\ entity\ =\ 0;}
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordtype}{char}\ state[16];}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \mbox{\hyperlink{structAnimatedStateUpdateMessage}{AnimatedStateUpdateMessage}}(int16\_t\ id\_,\ entity\_t\ entity\_,\ std::string\ state\_,\ \textcolor{keywordtype}{int}\ packet\_id\_):}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ entity(entity\_)\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ 0;}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ id\_;}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ packet\_id\ =\ packet\_id\_;}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ i\ <\ state\_.size();\ i++)\ \{}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ state\_[i];}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ state[i]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00371\ \};}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00374\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//NETWORK\_HPP}}
 
 \end{DoxyCode}
