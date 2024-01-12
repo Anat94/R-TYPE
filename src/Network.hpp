@@ -327,7 +327,7 @@ struct AnimatedDrawableSnapshot: public BaseMessage {
         animation_t anims_,
         const std::string &state,
         int packet_id_
-    ) : _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx), entity(entity_) {
+    ) : entity(entity_), _nbSprites(nbSprites), _spriteSize(spriteSize), _gaps(gaps), _firstOffset(firstOffset), _currentIdx(curretnIdx) {
         size_t i = 0;
         size_t j = 0;
 

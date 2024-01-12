@@ -122,6 +122,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             _ecs.add_component(new_player, component::Controllable());
             _ecs.add_component(new_player, component::Clickable());
             _ecs.add_component(new_player, component::ServerEntity(snapshot->entity));
+            _ecs.add_component(new_player, component::Health(100));
             // std::cout << snapshot->data.x << ", " << snapshot->data.y << std::endl;
         }
     } catch (const std::exception &ex) {
@@ -298,7 +299,7 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
         return -1;
     AnimatedStateUpdateMessage *snapshot = reinterpret_cast<AnimatedStateUpdateMessage *>(server_msg.data());
     sparse_array<component::AnimatedDrawable> &drawables = _ecs.get_components<component::AnimatedDrawable>();
-    sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
+    // sparse_array<component::ServerEntity> &servEntities = _ecs.get_components<component::ServerEntity>();
     while (!can_read)
         continue;
     try {
@@ -444,6 +445,8 @@ void Client::createEnemy(std::pair<float, float> pos, std::pair<float, float> ve
     _ecs.add_component(_newEnemy, component::Velocity(vel.first, vel.second));
     _ecs.add_component(_newEnemy, component::Drawable(path_to_texture));
     _ecs.add_component(_newEnemy, component::Health(health));
+    _ecs.add_component(_newEnemy, component::HurtsOnCollision(_newEnemy));
+    _ecs.add_component(_newEnemy, component::Damage(50));
 
     _enemiesQueue.push(_newEnemy);
 }
