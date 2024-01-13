@@ -29,7 +29,7 @@ class SFMLDrawSystem : public ISystems {
          * @param pos position of the draw object
          * @param hit hit box object
          * @param par parallax object
-         */
+        */
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Hitbox> &hit, sparse_array<component::Parallax> &par) {
             if (!_window->isOpen())
                 return;
