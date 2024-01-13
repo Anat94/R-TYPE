@@ -40,20 +40,13 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     return {0, 0};
 }
 
-// void Server::receiveThread() {
-//     asio::io_context& service = _service;
-//     for (int i = 0; i < 4; ++i)
-//         _tpool.emplace_back([this, &service]() { service.run(); });
-//     receive_from_client();
-// }
-
 /**
- * @brief operator () overload
- *
- * @param dra drawable component
- * @param scl scale component
- * @param pos position component
- * @param edp endpoint component
+ * @brief operator that gets called when the ECS launches systems
+ * 
+ * @param dra drawables
+ * @param scl scales
+ * @param pos position
+ * @param edp endpoints
  */
 void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp) {
     if (resend_counter > 10) {
@@ -219,6 +212,11 @@ void Server::send_all_scale_to_player(entity_t entity)
     }
 }
 
+/**
+         * @brief Send all scales in the player's room, to the player 
+         *
+         * @param entity The entity
+         */
 void Server::send_all_scale_to_player_by_room(entity_t entity)
 {
     auto scale = _ecs.get_components<component::Scale>();
@@ -235,7 +233,7 @@ void Server::send_all_scale_to_player_by_room(entity_t entity)
 }
 
 /**
- * @brief Send data to all client
+ * @brief Send scale to all client
  *
  * @param entity The entity
  * @param scl scale component
@@ -252,6 +250,11 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
 }
 
+/**
+         * @brief send all the drawables in a player's room, to a specific player
+         * 
+         * @param player player to send drawables to
+         */
 void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
 {
     auto drawables = _ecs.get_components<component::Drawable>();
@@ -385,6 +388,12 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
     }
 }
 
+/**
+ * @brief send animated drawables in a player's room to a specific player
+ * 
+ * @param entity player to send the drawables dto
+ * @param dra all animated drawables
+ */
 void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
     auto rooms = _ecs.get_components<component::Room>();
@@ -414,7 +423,7 @@ void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity
  * @brief send animated drawable snapshot to specific player
  * 
  * @param entity entity to send
- * @param dra drawable to send
+ * @param dra all animated drawables
  */
 void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
@@ -469,7 +478,7 @@ void Server::send_death_event_to_all_players(entity_t entity, sparse_array<compo
 }
 
 /**
- * @brief receive from client
+ * @brief receive info over udp network from client
  *
  */
 void Server::receive_from_client()
@@ -494,6 +503,13 @@ void Server::receive_from_client()
     return;
 }
 
+/**
+ * @brief receive an event of room joining from the client
+ * 
+ * @param client_msg raw client message unparsed.
+ * @param _ 
+ * @return packet id of the received message
+ */
 int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
 {
     RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
@@ -513,6 +529,13 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
     return 0;
 }
 
+/**
+ * @brief receive an event of room creation from the client
+ * 
+ * @param client_msg raw client message unparsed.
+ * @param _ 
+ * @return packet id of the received message
+ */
 int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
     RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
 
@@ -798,6 +821,16 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
     }
 }
 
+/**
+ * @brief send data to all clients by their room
+ *
+ * @tparam T the type of the data
+ * @param structure the data
+ * @param packets_to_send the packets to send
+ * @param edp endpoint component
+ * @param rms all rooms
+ * @param room room to send data to
+*/
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
     for (size_t i = 0; i < edp.size(); i++) {

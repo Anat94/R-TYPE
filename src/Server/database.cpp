@@ -47,8 +47,20 @@ bool Server::IsNameInBdd(std::string name)
 }
 
 
+/**
+ * @brief Highscore object
+ * 
+ */
 struct HighScore {
+    /**
+     * @brief name of the player
+     * 
+     */
     std::string name;
+    /**
+     * @brief score of the player
+     * 
+     */
     int score;
 };
 
@@ -130,15 +142,6 @@ void Server::connectToDB() {
     } else {
         std::cerr << "Database opened successfully" << std::endl;
     }
-    // std::string sql12 = "DELETE FROM FRIENDS";
-    // char *zErrMsg = 0;
-    // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
-    // if (rc != SQLITE_OK) {
-    //     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-    //     sqlite3_free(zErrMsg);
-    // } else {
-    //     fprintf(stdout, "Records created successfully\n");
-    // }
 }
 
 /**
@@ -354,8 +357,20 @@ bool Server::removeFriend(std::string name, std::string friendName) {
     return true;
 }
 
+/**
+ * @brief Callback data structure
+ * 
+ */
 struct CallbackData {
+    /**
+     * @brief pointer to the server object
+     * 
+     */
     Server* server;
+    /**
+     * @brief list of friends
+     * 
+     */
     std::vector<Friendship>* friends;
 };
 
