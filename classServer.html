@@ -76,134 +76,1729 @@ $(function() {
   <div class="headertitle"><div class="title">Server Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for Server:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classServer.png" alt=""/>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae48e1a083c8eda23d58a3d0eb4689a10"><td class="memItemLeft" align="right" valign="top"><a id="ae48e1a083c8eda23d58a3d0eb4689a10" name="ae48e1a083c8eda23d58a3d0eb4689a10"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Server</b> (asio::io_context &amp;service, int port, <a class="el" href="classregistry.html">registry</a> &amp;ecs, <a class="el" href="classEventListener.html">EventListener</a> &amp;listener)</td></tr>
-<tr class="separator:ae48e1a083c8eda23d58a3d0eb4689a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebaa15526c89fca9a172b3366b6d67ac"><td class="memItemLeft" align="right" valign="top"><a id="aebaa15526c89fca9a172b3366b6d67ac" name="aebaa15526c89fca9a172b3366b6d67ac"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_from_client</b> ()</td></tr>
-<tr class="separator:aebaa15526c89fca9a172b3366b6d67ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a830bddc2e68572a85904caf1ef1b5b25"><td class="memItemLeft" align="right" valign="top"><a id="a830bddc2e68572a85904caf1ef1b5b25" name="a830bddc2e68572a85904caf1ef1b5b25"></a>
-entity_t&#160;</td><td class="memItemRight" valign="bottom"><b>get_player_entity_from_connection_address</b> (udp::endpoint)</td></tr>
+<tr class="memitem:aba715f3e4719f392ee559d48de30bd1b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#aba715f3e4719f392ee559d48de30bd1b">Server</a> (asio::io_context &amp;service, int port, <a class="el" href="classregistry.html">registry</a> &amp;ecs, <a class="el" href="classEventListener.html">EventListener</a> &amp;listener, std::mutex &amp;mtx)</td></tr>
+<tr class="memdesc:aba715f3e4719f392ee559d48de30bd1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classServer.html">Server</a>:: <a class="el" href="classServer.html">Server</a> object.  <br /></td></tr>
+<tr class="separator:aba715f3e4719f392ee559d48de30bd1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b3aa2579cb1c8cd1d069582c14d0fa6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4b3aa2579cb1c8cd1d069582c14d0fa6">~Server</a> ()</td></tr>
+<tr class="memdesc:a4b3aa2579cb1c8cd1d069582c14d0fa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="classServer.html">Server</a>:: <a class="el" href="classServer.html">Server</a> object.  <br /></td></tr>
+<tr class="separator:a4b3aa2579cb1c8cd1d069582c14d0fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a666dd0969b3f486fc08aa5f19b5438de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a666dd0969b3f486fc08aa5f19b5438de">receive_from_client</a> ()</td></tr>
+<tr class="memdesc:a666dd0969b3f486fc08aa5f19b5438de"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive from client  <br /></td></tr>
+<tr class="separator:a666dd0969b3f486fc08aa5f19b5438de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3f897e544d75125f4b9b41a0030ccd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad3f897e544d75125f4b9b41a0030ccd3">operator()</a> (<a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; &amp;dra, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Scale.html">component::Scale</a> &gt; &amp;scl, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Position.html">component::Position</a> &gt; &amp;pos, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:ad3f897e544d75125f4b9b41a0030ccd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator () overload  <br /></td></tr>
+<tr class="separator:ad3f897e544d75125f4b9b41a0030ccd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a830bddc2e68572a85904caf1ef1b5b25"><td class="memItemLeft" align="right" valign="top">entity_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a830bddc2e68572a85904caf1ef1b5b25">get_player_entity_from_connection_address</a> (udp::endpoint)</td></tr>
+<tr class="memdesc:a830bddc2e68572a85904caf1ef1b5b25"><td class="mdescLeft">&#160;</td><td class="mdescRight">get player entity from connection address  <br /></td></tr>
 <tr class="separator:a830bddc2e68572a85904caf1ef1b5b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9039585c177a2aae8d736b50fb488815"><td class="memItemLeft" align="right" valign="top"><a id="a9039585c177a2aae8d736b50fb488815" name="a9039585c177a2aae8d736b50fb488815"></a>
-entity_t&#160;</td><td class="memItemRight" valign="bottom"><b>connect_player</b> (udp::endpoint player_endpoint)</td></tr>
+<tr class="memitem:a9039585c177a2aae8d736b50fb488815"><td class="memItemLeft" align="right" valign="top">entity_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a9039585c177a2aae8d736b50fb488815">connect_player</a> (udp::endpoint player_endpoint)</td></tr>
+<tr class="memdesc:a9039585c177a2aae8d736b50fb488815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a player to the server.  <br /></td></tr>
 <tr class="separator:a9039585c177a2aae8d736b50fb488815"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb4383edf10dd70ebdbb5190a3da59fc"><td class="memItemLeft" align="right" valign="top"><a id="aeb4383edf10dd70ebdbb5190a3da59fc" name="aeb4383edf10dd70ebdbb5190a3da59fc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_position_snapshots_for_all_players</b> ()</td></tr>
-<tr class="separator:aeb4383edf10dd70ebdbb5190a3da59fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5058ff2189a2d893773b17cc9ba29b65"><td class="memItemLeft" align="right" valign="top"><a id="a5058ff2189a2d893773b17cc9ba29b65" name="a5058ff2189a2d893773b17cc9ba29b65"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_animated_drawable_snapshots_for_specific_player</b> (entity_t entity)</td></tr>
-<tr class="separator:a5058ff2189a2d893773b17cc9ba29b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4bc3645885ed2d7d84de8a83576d9dc"><td class="memItemLeft" align="right" valign="top"><a id="aa4bc3645885ed2d7d84de8a83576d9dc" name="aa4bc3645885ed2d7d84de8a83576d9dc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_animated_drawable_snapshot_to_all_players</b> (entity_t entity)</td></tr>
-<tr class="separator:aa4bc3645885ed2d7d84de8a83576d9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcb3d8898fe689271cfe2d71629d55c1"><td class="memItemLeft" align="right" valign="top"><a id="adcb3d8898fe689271cfe2d71629d55c1" name="adcb3d8898fe689271cfe2d71629d55c1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_animated_drawable_update_to_all_clients</b> (entity_t entity, std::string state)</td></tr>
-<tr class="separator:adcb3d8898fe689271cfe2d71629d55c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1166af7b1be0bc15feb3ac55a1fd4411"><td class="memItemLeft" align="right" valign="top"><a id="a1166af7b1be0bc15feb3ac55a1fd4411" name="a1166af7b1be0bc15feb3ac55a1fd4411"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_entity_drawable_to_all_players</b> (entity_t entity)</td></tr>
-<tr class="separator:a1166af7b1be0bc15feb3ac55a1fd4411"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5d167d434386f86e7c722a9efa87694"><td class="memItemLeft" align="right" valign="top"><a id="aa5d167d434386f86e7c722a9efa87694" name="aa5d167d434386f86e7c722a9efa87694"></a>
-std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_raw_data_from_client</b> ()</td></tr>
-<tr class="separator:aa5d167d434386f86e7c722a9efa87694"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="memItemLeft" align="right" valign="top"><a id="a3842e9e551ed67c60e2c7bbacbad93f6" name="a3842e9e551ed67c60e2c7bbacbad93f6"></a>
-std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_position_change_for_event</b> (entity_t entity, int event)</td></tr>
+<tr class="memitem:a807b714745de14b9e23e5d69cb7eff4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a807b714745de14b9e23e5d69cb7eff4e">send_death_event_to_all_players</a> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:a807b714745de14b9e23e5d69cb7eff4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">send death event to all players  <br /></td></tr>
+<tr class="separator:a807b714745de14b9e23e5d69cb7eff4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d65b6d208de28d7cace924d057c6e2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a6d65b6d208de28d7cace924d057c6e2b">send_all_scale_to_player</a> (entity_t entity)</td></tr>
+<tr class="memdesc:a6d65b6d208de28d7cace924d057c6e2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send all scale to player.  <br /></td></tr>
+<tr class="separator:a6d65b6d208de28d7cace924d057c6e2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf95ed02bf45b62072ee3dd84050ba33"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#abf95ed02bf45b62072ee3dd84050ba33">send_scale_to_all_players</a> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Scale.html">component::Scale</a> &gt; &amp;scl, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:abf95ed02bf45b62072ee3dd84050ba33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send data to all client.  <br /></td></tr>
+<tr class="separator:abf95ed02bf45b62072ee3dd84050ba33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad21324a87964dec10c1018e0a1babfd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad21324a87964dec10c1018e0a1babfd0">send_position_snapshots_for_all_players</a> (<a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Position.html">component::Position</a> &gt; &amp;pos, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:ad21324a87964dec10c1018e0a1babfd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send position snapshots for all players.  <br /></td></tr>
+<tr class="separator:ad21324a87964dec10c1018e0a1babfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7534d3d9c171cb34bdf183dab55520b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad7534d3d9c171cb34bdf183dab55520b">send_animated_drawable_snapshots_for_specific_player</a> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; dra)</td></tr>
+<tr class="memdesc:ad7534d3d9c171cb34bdf183dab55520b"><td class="mdescLeft">&#160;</td><td class="mdescRight">send animated drawable snapshot to specific player  <br /></td></tr>
+<tr class="separator:ad7534d3d9c171cb34bdf183dab55520b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43f9eb998d7f08a231320d4030e80206"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a43f9eb998d7f08a231320d4030e80206">send_animated_drawable_snapshot_to_all_players</a> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; &amp;dra, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:a43f9eb998d7f08a231320d4030e80206"><td class="mdescLeft">&#160;</td><td class="mdescRight">send animated drawable update to all client  <br /></td></tr>
+<tr class="separator:a43f9eb998d7f08a231320d4030e80206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c4e80468bac097f1f918c00c1daa0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a59c4e80468bac097f1f918c00c1daa0d">send_animated_drawable_update_to_all_clients</a> (entity_t entity, std::string state, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:a59c4e80468bac097f1f918c00c1daa0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">send animated drawable update to all clients  <br /></td></tr>
+<tr class="separator:a59c4e80468bac097f1f918c00c1daa0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae37a729c3a8205e5b35e4370a87e450e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ae37a729c3a8205e5b35e4370a87e450e">send_entity_drawable_to_all_players</a> (entity_t entity, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Drawable.html">component::Drawable</a> &gt; &amp;dra, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:ae37a729c3a8205e5b35e4370a87e450e"><td class="mdescLeft">&#160;</td><td class="mdescRight">send drawable to all clients  <br /></td></tr>
+<tr class="separator:ae37a729c3a8205e5b35e4370a87e450e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5069e37491d3a911d283bab2e283c4bd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a5069e37491d3a911d283bab2e283c4bd">receive_raw_data_from_client</a> ()</td></tr>
+<tr class="memdesc:a5069e37491d3a911d283bab2e283c4bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive data from client  <br /></td></tr>
+<tr class="separator:a5069e37491d3a911d283bab2e283c4bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="memItemLeft" align="right" valign="top">std::pair&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a3842e9e551ed67c60e2c7bbacbad93f6">get_position_change_for_event</a> (entity_t entity, int event)</td></tr>
+<tr class="memdesc:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">get position change for event  <br /></td></tr>
 <tr class="separator:a3842e9e551ed67c60e2c7bbacbad93f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad406751be1518f32759816c6431431bf"><td class="memItemLeft" align="right" valign="top"><a id="ad406751be1518f32759816c6431431bf" name="ad406751be1518f32759816c6431431bf"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_client_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:ad406751be1518f32759816c6431431bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4523a6af5aab14cd5e3d44ba6eb6f30"><td class="memItemLeft" align="right" valign="top"><a id="ab4523a6af5aab14cd5e3d44ba6eb6f30" name="ab4523a6af5aab14cd5e3d44ba6eb6f30"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_connection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:ab4523a6af5aab14cd5e3d44ba6eb6f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af36f54b19807d9c229a09ec28b162a37"><td class="memItemLeft" align="right" valign="top"><a id="af36f54b19807d9c229a09ec28b162a37" name="af36f54b19807d9c229a09ec28b162a37"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_disconnection_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:af36f54b19807d9c229a09ec28b162a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56e303be7c6647ba385f6df7e12551db"><td class="memItemLeft" align="right" valign="top"><a id="a56e303be7c6647ba385f6df7e12551db" name="a56e303be7c6647ba385f6df7e12551db"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recieve_packet_confirm</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
-<tr class="separator:a56e303be7c6647ba385f6df7e12551db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1022d0ca971961d9172b56ae31d2ed60"><td class="memItemLeft" align="right" valign="top"><a id="a1022d0ca971961d9172b56ae31d2ed60" name="a1022d0ca971961d9172b56ae31d2ed60"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_login_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memitem:ac195d260d11951243dfa089064a7a56d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ac195d260d11951243dfa089064a7a56d">receive_client_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:ac195d260d11951243dfa089064a7a56d"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive client event  <br /></td></tr>
+<tr class="separator:ac195d260d11951243dfa089064a7a56d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dac4e8c262cc36f45524b461d021906"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a7dac4e8c262cc36f45524b461d021906">receive_connection_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:a7dac4e8c262cc36f45524b461d021906"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive connection event  <br /></td></tr>
+<tr class="separator:a7dac4e8c262cc36f45524b461d021906"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac56929da6a3e0c859b63d506710f97a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ac56929da6a3e0c859b63d506710f97a0">receive_disconnection_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:ac56929da6a3e0c859b63d506710f97a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive disconnection event  <br /></td></tr>
+<tr class="separator:ac56929da6a3e0c859b63d506710f97a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac5395dcc20ba967055e3c8cab5b42e5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#aac5395dcc20ba967055e3c8cab5b42e5">receive_packet_confirm</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:aac5395dcc20ba967055e3c8cab5b42e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive packet confirm  <br /></td></tr>
+<tr class="separator:aac5395dcc20ba967055e3c8cab5b42e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1022d0ca971961d9172b56ae31d2ed60"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a1022d0ca971961d9172b56ae31d2ed60">receive_login_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:a1022d0ca971961d9172b56ae31d2ed60"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive login event  <br /></td></tr>
 <tr class="separator:a1022d0ca971961d9172b56ae31d2ed60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99c4ac08fc4d9dd901f9ffb9a819c00f"><td class="memItemLeft" align="right" valign="top"><a id="a99c4ac08fc4d9dd901f9ffb9a819c00f" name="a99c4ac08fc4d9dd901f9ffb9a819c00f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_friend_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memitem:a99c4ac08fc4d9dd901f9ffb9a819c00f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a99c4ac08fc4d9dd901f9ffb9a819c00f">receive_friend_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:a99c4ac08fc4d9dd901f9ffb9a819c00f"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive friend event  <br /></td></tr>
 <tr class="separator:a99c4ac08fc4d9dd901f9ffb9a819c00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cbd1f27ef95ffab43364ff1ddb4b247"><td class="memItemLeft" align="right" valign="top"><a id="a8cbd1f27ef95ffab43364ff1ddb4b247" name="a8cbd1f27ef95ffab43364ff1ddb4b247"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_add_friend_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memitem:a8cbd1f27ef95ffab43364ff1ddb4b247"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a8cbd1f27ef95ffab43364ff1ddb4b247">receive_add_friend_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:a8cbd1f27ef95ffab43364ff1ddb4b247"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive add friend event  <br /></td></tr>
 <tr class="separator:a8cbd1f27ef95ffab43364ff1ddb4b247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b9209c3ab0925b055a99fe1f744ea1d"><td class="memItemLeft" align="right" valign="top"><a id="a4b9209c3ab0925b055a99fe1f744ea1d" name="a4b9209c3ab0925b055a99fe1f744ea1d"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_remove_friend_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memitem:a4b9209c3ab0925b055a99fe1f744ea1d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4b9209c3ab0925b055a99fe1f744ea1d">receive_remove_friend_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:a4b9209c3ab0925b055a99fe1f744ea1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive remove friend event  <br /></td></tr>
 <tr class="separator:a4b9209c3ab0925b055a99fe1f744ea1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6c933a021e2bdb53f28e3ff1d41e55f"><td class="memItemLeft" align="right" valign="top"><a id="ad6c933a021e2bdb53f28e3ff1d41e55f" name="ad6c933a021e2bdb53f28e3ff1d41e55f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>receive_chat_event</b> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memitem:ad6c933a021e2bdb53f28e3ff1d41e55f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad6c933a021e2bdb53f28e3ff1d41e55f">receive_chat_event</a> (std::vector&lt; char &gt; &amp;, entity_t)</td></tr>
+<tr class="memdesc:ad6c933a021e2bdb53f28e3ff1d41e55f"><td class="mdescLeft">&#160;</td><td class="mdescRight">receive chat event  <br /></td></tr>
 <tr class="separator:ad6c933a021e2bdb53f28e3ff1d41e55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ba41e08407ac74efdc59b26465f9c34"><td class="memTemplParams" colspan="2"><a id="a2ba41e08407ac74efdc59b26465f9c34" name="a2ba41e08407ac74efdc59b26465f9c34"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2ba41e08407ac74efdc59b26465f9c34"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>send_data_to_all_clients</b> (T &amp;structure, std::vector&lt; T &gt; &amp;packets_to_send)</td></tr>
-<tr class="separator:a2ba41e08407ac74efdc59b26465f9c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ea01b242d6ff82a7c50d1573b5dbfe5"><td class="memTemplParams" colspan="2"><a id="a0ea01b242d6ff82a7c50d1573b5dbfe5" name="a0ea01b242d6ff82a7c50d1573b5dbfe5"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0ea01b242d6ff82a7c50d1573b5dbfe5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>send_data_to_all_clients_except_me</b> (T &amp;structure)</td></tr>
-<tr class="separator:a0ea01b242d6ff82a7c50d1573b5dbfe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ef98d310e698700e905a4f505ed9a96"><td class="memTemplParams" colspan="2"><a id="a7ef98d310e698700e905a4f505ed9a96" name="a7ef98d310e698700e905a4f505ed9a96"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7ef98d310e698700e905a4f505ed9a96"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>send_data_to_client_by_entity</b> (T &amp;structure, entity_t entity)</td></tr>
+<tr class="memitem:a9ddf5d7738cb0d1d1f7a1c7c08580cc9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9ddf5d7738cb0d1d1f7a1c7c08580cc9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classServer.html#a9ddf5d7738cb0d1d1f7a1c7c08580cc9">send_data_to_all_clients</a> (T &amp;structure, std::vector&lt; T &gt; &amp;packets_to_send, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:a9ddf5d7738cb0d1d1f7a1c7c08580cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">send data to all clients  <br /></td></tr>
+<tr class="separator:a9ddf5d7738cb0d1d1f7a1c7c08580cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68ee20b0875835a4a1c9bcee47bfccde"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a68ee20b0875835a4a1c9bcee47bfccde"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classServer.html#a68ee20b0875835a4a1c9bcee47bfccde">send_data_to_all_clients_except_me</a> (T &amp;structure, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;edp)</td></tr>
+<tr class="memdesc:a68ee20b0875835a4a1c9bcee47bfccde"><td class="mdescLeft">&#160;</td><td class="mdescRight">send data to all clients except me  <br /></td></tr>
+<tr class="separator:a68ee20b0875835a4a1c9bcee47bfccde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ef98d310e698700e905a4f505ed9a96"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7ef98d310e698700e905a4f505ed9a96"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classServer.html#a7ef98d310e698700e905a4f505ed9a96">send_data_to_client_by_entity</a> (T &amp;structure, entity_t entity)</td></tr>
+<tr class="memdesc:a7ef98d310e698700e905a4f505ed9a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">send data to specific client  <br /></td></tr>
 <tr class="separator:a7ef98d310e698700e905a4f505ed9a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2367e00ed8dbb87eacec73af9cbb2910"><td class="memItemLeft" align="right" valign="top"><a id="a2367e00ed8dbb87eacec73af9cbb2910" name="a2367e00ed8dbb87eacec73af9cbb2910"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sendPositionpacketsPeriodically</b> ()</td></tr>
-<tr class="separator:a2367e00ed8dbb87eacec73af9cbb2910"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad81387bb02683d1b4a3db241451a69d9"><td class="memItemLeft" align="right" valign="top"><a id="ad81387bb02683d1b4a3db241451a69d9" name="ad81387bb02683d1b4a3db241451a69d9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>connectToDB</b> ()</td></tr>
+<tr class="memitem:ad81387bb02683d1b4a3db241451a69d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad81387bb02683d1b4a3db241451a69d9">connectToDB</a> ()</td></tr>
+<tr class="memdesc:ad81387bb02683d1b4a3db241451a69d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect to database.  <br /></td></tr>
 <tr class="separator:ad81387bb02683d1b4a3db241451a69d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0937d05a0181cd6f4c45effef66ba8e2"><td class="memItemLeft" align="right" valign="top"><a id="a0937d05a0181cd6f4c45effef66ba8e2" name="a0937d05a0181cd6f4c45effef66ba8e2"></a>
-<a class="el" href="structHighScoreMessage.html">HighScoreMessage</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getHighScore</b> ()</td></tr>
+<tr class="memitem:a0937d05a0181cd6f4c45effef66ba8e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structHighScoreMessage.html">HighScoreMessage</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a0937d05a0181cd6f4c45effef66ba8e2">getHighScore</a> ()</td></tr>
+<tr class="memdesc:a0937d05a0181cd6f4c45effef66ba8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the High Score on db.  <br /></td></tr>
 <tr class="separator:a0937d05a0181cd6f4c45effef66ba8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac29d8e8b11053fccc5b43c0334744e1e"><td class="memItemLeft" align="right" valign="top"><a id="ac29d8e8b11053fccc5b43c0334744e1e" name="ac29d8e8b11053fccc5b43c0334744e1e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addHighScore</b> (std::string name, int score)</td></tr>
+<tr class="memitem:ac29d8e8b11053fccc5b43c0334744e1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ac29d8e8b11053fccc5b43c0334744e1e">addHighScore</a> (std::string name, int score)</td></tr>
+<tr class="memdesc:ac29d8e8b11053fccc5b43c0334744e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback add get high score.  <br /></td></tr>
 <tr class="separator:ac29d8e8b11053fccc5b43c0334744e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0a227e9300935e0815760a82fafc9b5"><td class="memItemLeft" align="right" valign="top"><a id="af0a227e9300935e0815760a82fafc9b5" name="af0a227e9300935e0815760a82fafc9b5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsNameInBdd</b> (std::string name)</td></tr>
+<tr class="memitem:af0a227e9300935e0815760a82fafc9b5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#af0a227e9300935e0815760a82fafc9b5">IsNameInBdd</a> (std::string name)</td></tr>
+<tr class="memdesc:af0a227e9300935e0815760a82fafc9b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if name is in bdd.  <br /></td></tr>
 <tr class="separator:af0a227e9300935e0815760a82fafc9b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ccd04c6922b167fddb4781c34cc3f9c"><td class="memItemLeft" align="right" valign="top"><a id="a3ccd04c6922b167fddb4781c34cc3f9c" name="a3ccd04c6922b167fddb4781c34cc3f9c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>signUp</b> (std::string name, std::string password)</td></tr>
+<tr class="memitem:a3ccd04c6922b167fddb4781c34cc3f9c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a3ccd04c6922b167fddb4781c34cc3f9c">signUp</a> (std::string name, std::string password)</td></tr>
+<tr class="memdesc:a3ccd04c6922b167fddb4781c34cc3f9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback check if user exist.  <br /></td></tr>
 <tr class="separator:a3ccd04c6922b167fddb4781c34cc3f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2afdd6fd650281ef35bb2b71adfa746b"><td class="memItemLeft" align="right" valign="top"><a id="a2afdd6fd650281ef35bb2b71adfa746b" name="a2afdd6fd650281ef35bb2b71adfa746b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkIfUserExist</b> (std::string name, std::string password)</td></tr>
+<tr class="memitem:a2afdd6fd650281ef35bb2b71adfa746b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a2afdd6fd650281ef35bb2b71adfa746b">checkIfUserExist</a> (std::string name, std::string password)</td></tr>
+<tr class="memdesc:a2afdd6fd650281ef35bb2b71adfa746b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if user exist.  <br /></td></tr>
 <tr class="separator:a2afdd6fd650281ef35bb2b71adfa746b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4013a9962aebde6ef9c9890f95f24d1f"><td class="memItemLeft" align="right" valign="top"><a id="a4013a9962aebde6ef9c9890f95f24d1f" name="a4013a9962aebde6ef9c9890f95f24d1f"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>makePersonnalID</b> ()</td></tr>
+<tr class="memitem:a4013a9962aebde6ef9c9890f95f24d1f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4013a9962aebde6ef9c9890f95f24d1f">makePersonnalID</a> ()</td></tr>
+<tr class="memdesc:a4013a9962aebde6ef9c9890f95f24d1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">make personnal ID  <br /></td></tr>
 <tr class="separator:a4013a9962aebde6ef9c9890f95f24d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19c683a28bc1bf676dbd92c2e9cf6254"><td class="memItemLeft" align="right" valign="top"><a id="a19c683a28bc1bf676dbd92c2e9cf6254" name="a19c683a28bc1bf676dbd92c2e9cf6254"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>signIn</b> (std::string name, std::string password)</td></tr>
+<tr class="memitem:a19c683a28bc1bf676dbd92c2e9cf6254"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a19c683a28bc1bf676dbd92c2e9cf6254">signIn</a> (std::string name, std::string password)</td></tr>
+<tr class="memdesc:a19c683a28bc1bf676dbd92c2e9cf6254"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signin the user.  <br /></td></tr>
 <tr class="separator:a19c683a28bc1bf676dbd92c2e9cf6254"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99b5bbad63f0a8f519ef55f21b313b59"><td class="memItemLeft" align="right" valign="top"><a id="a99b5bbad63f0a8f519ef55f21b313b59" name="a99b5bbad63f0a8f519ef55f21b313b59"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>addFriend</b> (std::string name, std::string friendId)</td></tr>
+<tr class="memitem:a99b5bbad63f0a8f519ef55f21b313b59"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a99b5bbad63f0a8f519ef55f21b313b59">addFriend</a> (std::string name, std::string friendId)</td></tr>
+<tr class="memdesc:a99b5bbad63f0a8f519ef55f21b313b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">add friends  <br /></td></tr>
 <tr class="separator:a99b5bbad63f0a8f519ef55f21b313b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abce4f20a7620c4268171a8973f3eaf82"><td class="memItemLeft" align="right" valign="top"><a id="abce4f20a7620c4268171a8973f3eaf82" name="abce4f20a7620c4268171a8973f3eaf82"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkIfFriendshipExist</b> (std::string name, std::string friendId)</td></tr>
+<tr class="memitem:abce4f20a7620c4268171a8973f3eaf82"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#abce4f20a7620c4268171a8973f3eaf82">checkIfFriendshipExist</a> (std::string name, std::string friendId)</td></tr>
+<tr class="memdesc:abce4f20a7620c4268171a8973f3eaf82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if friendship exist.  <br /></td></tr>
 <tr class="separator:abce4f20a7620c4268171a8973f3eaf82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad05e01f9f44c0a03e8f7f7bca871ad23"><td class="memItemLeft" align="right" valign="top"><a id="ad05e01f9f44c0a03e8f7f7bca871ad23" name="ad05e01f9f44c0a03e8f7f7bca871ad23"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>removeFriend</b> (std::string name, std::string friendName)</td></tr>
+<tr class="memitem:ad05e01f9f44c0a03e8f7f7bca871ad23"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad05e01f9f44c0a03e8f7f7bca871ad23">removeFriend</a> (std::string name, std::string friendName)</td></tr>
+<tr class="memdesc:ad05e01f9f44c0a03e8f7f7bca871ad23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove friends.  <br /></td></tr>
 <tr class="separator:ad05e01f9f44c0a03e8f7f7bca871ad23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cc5ab46f1249b49d6681d851938902a"><td class="memItemLeft" align="right" valign="top"><a id="a6cc5ab46f1249b49d6681d851938902a" name="a6cc5ab46f1249b49d6681d851938902a"></a>
-std::vector&lt; <a class="el" href="structFriendship.html">Friendship</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>displayFriends</b> (std::string name, entity_t player_entity)</td></tr>
-<tr class="separator:a6cc5ab46f1249b49d6681d851938902a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33d897fc5cb607a135f802339ca9cac4"><td class="memItemLeft" align="right" valign="top"><a id="a33d897fc5cb607a135f802339ca9cac4" name="a33d897fc5cb607a135f802339ca9cac4"></a>
-<a class="el" href="structFriendship.html">Friendship</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getFriendsData</b> (std::string id)</td></tr>
-<tr class="separator:a33d897fc5cb607a135f802339ca9cac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10e6b8c7832b6b6bd47f5e826ce90848"><td class="memItemLeft" align="right" valign="top"><a id="a10e6b8c7832b6b6bd47f5e826ce90848" name="a10e6b8c7832b6b6bd47f5e826ce90848"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_highscore_to_specific_client</b> (entity_t)</td></tr>
+<tr class="memitem:a1074d5db01c55f308431f1d5bdeaa005"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a1074d5db01c55f308431f1d5bdeaa005">displayFriends</a> (std::string name, entity_t player_entity)</td></tr>
+<tr class="memdesc:a1074d5db01c55f308431f1d5bdeaa005"><td class="mdescLeft">&#160;</td><td class="mdescRight">Display friends.  <br /></td></tr>
+<tr class="separator:a1074d5db01c55f308431f1d5bdeaa005"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10e6b8c7832b6b6bd47f5e826ce90848"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a10e6b8c7832b6b6bd47f5e826ce90848">send_highscore_to_specific_client</a> (entity_t)</td></tr>
+<tr class="memdesc:a10e6b8c7832b6b6bd47f5e826ce90848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send highscore to specific client.  <br /></td></tr>
 <tr class="separator:a10e6b8c7832b6b6bd47f5e826ce90848"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad63ddf82722c4f18dd750b994107d11c"><td class="memItemLeft" align="right" valign="top"><a id="ad63ddf82722c4f18dd750b994107d11c" name="ad63ddf82722c4f18dd750b994107d11c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>send_all_entity_drawables_to_specific_player</b> (entity_t player)</td></tr>
+<tr class="memitem:ad63ddf82722c4f18dd750b994107d11c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad63ddf82722c4f18dd750b994107d11c">send_all_entity_drawables_to_specific_player</a> (entity_t player)</td></tr>
+<tr class="memdesc:ad63ddf82722c4f18dd750b994107d11c"><td class="mdescLeft">&#160;</td><td class="mdescRight">send all entity drawables to specific player  <br /></td></tr>
 <tr class="separator:ad63ddf82722c4f18dd750b994107d11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0946feca1c2a91cf9474b39c8041fd82"><td class="memTemplParams" colspan="2"><a id="a0946feca1c2a91cf9474b39c8041fd82" name="a0946feca1c2a91cf9474b39c8041fd82"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a0946feca1c2a91cf9474b39c8041fd82"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>resend_packets</b> (std::vector&lt; T &gt; &amp;)</td></tr>
-<tr class="separator:a0946feca1c2a91cf9474b39c8041fd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4543ef0f01910fa324a8c3482530b983"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4543ef0f01910fa324a8c3482530b983"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classServer.html#a4543ef0f01910fa324a8c3482530b983">resend_packets</a> (std::vector&lt; T &gt; &amp;, <a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;)</td></tr>
+<tr class="memdesc:a4543ef0f01910fa324a8c3482530b983"><td class="mdescLeft">&#160;</td><td class="mdescRight">resend packets  <br /></td></tr>
+<tr class="separator:a4543ef0f01910fa324a8c3482530b983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aba715f3e4719f392ee559d48de30bd1b" name="aba715f3e4719f392ee559d48de30bd1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba715f3e4719f392ee559d48de30bd1b">&#9670;&#160;</a></span>Server()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Server::Server </td>
+          <td>(</td>
+          <td class="paramtype">asio::io_context &amp;&#160;</td>
+          <td class="paramname"><em>service</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classregistry.html">registry</a> &amp;&#160;</td>
+          <td class="paramname"><em>ecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEventListener.html">EventListener</a> &amp;&#160;</td>
+          <td class="paramname"><em>listener</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::mutex &amp;&#160;</td>
+          <td class="paramname"><em>mtx_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classServer.html">Server</a>:: <a class="el" href="classServer.html">Server</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">service</td><td>The server's io_context </td></tr>
+    <tr><td class="paramname">port</td><td>The port to listen to </td></tr>
+    <tr><td class="paramname">ecs</td><td>The server's registry </td></tr>
+    <tr><td class="paramname">listener</td><td>The server's event listener </td></tr>
+    <tr><td class="paramname">mtx_</td><td>The server's mutex </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b3aa2579cb1c8cd1d069582c14d0fa6" name="a4b3aa2579cb1c8cd1d069582c14d0fa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b3aa2579cb1c8cd1d069582c14d0fa6">&#9670;&#160;</a></span>~Server()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Server::~Server </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroy the <a class="el" href="classServer.html">Server</a>:: <a class="el" href="classServer.html">Server</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a99b5bbad63f0a8f519ef55f21b313b59" name="a99b5bbad63f0a8f519ef55f21b313b59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99b5bbad63f0a8f519ef55f21b313b59">&#9670;&#160;</a></span>addFriend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::addFriend </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>friendId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>add friends </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>your name </td></tr>
+    <tr><td class="paramname">friendId</td><td>name of the friend </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success </dd>
+<dd>
+false if failed </dd></dl>
+
+</div>
+</div>
+<a id="ac29d8e8b11053fccc5b43c0334744e1e" name="ac29d8e8b11053fccc5b43c0334744e1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac29d8e8b11053fccc5b43c0334744e1e">&#9670;&#160;</a></span>addHighScore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::addHighScore </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>score</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback add get high score. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>data return of the request </td></tr>
+    <tr><td class="paramname">argc</td><td>number of column </td></tr>
+    <tr><td class="paramname">argv</td><td>data of the column </td></tr>
+    <tr><td class="paramname">azColName</td><td>name of the column </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 </dd></dl>
+
+</div>
+</div>
+<a id="abce4f20a7620c4268171a8973f3eaf82" name="abce4f20a7620c4268171a8973f3eaf82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce4f20a7620c4268171a8973f3eaf82">&#9670;&#160;</a></span>checkIfFriendshipExist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::checkIfFriendshipExist </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>friendId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if friendship exist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the user </td></tr>
+    <tr><td class="paramname">friendId</td><td>name of the friend </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true friendship exist </dd>
+<dd>
+false friendship does not exist </dd></dl>
+
+</div>
+</div>
+<a id="a2afdd6fd650281ef35bb2b71adfa746b" name="a2afdd6fd650281ef35bb2b71adfa746b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2afdd6fd650281ef35bb2b71adfa746b">&#9670;&#160;</a></span>checkIfUserExist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::checkIfUserExist </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if user exist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the user </td></tr>
+    <tr><td class="paramname">password</td><td>password of the user </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true user exist </dd>
+<dd>
+false user doesn't exist </dd></dl>
+
+</div>
+</div>
+<a id="a9039585c177a2aae8d736b50fb488815" name="a9039585c177a2aae8d736b50fb488815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9039585c177a2aae8d736b50fb488815">&#9670;&#160;</a></span>connect_player()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">entity_t Server::connect_player </td>
+          <td>(</td>
+          <td class="paramtype">udp::endpoint&#160;</td>
+          <td class="paramname"><em>player_endpoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Connect a player to the server. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>The player's data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>entity_t The player's entity </dd></dl>
+
+</div>
+</div>
+<a id="ad81387bb02683d1b4a3db241451a69d9" name="ad81387bb02683d1b4a3db241451a69d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad81387bb02683d1b4a3db241451a69d9">&#9670;&#160;</a></span>connectToDB()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::connectToDB </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Connect to database. </p>
+
+</div>
+</div>
+<a id="a1074d5db01c55f308431f1d5bdeaa005" name="a1074d5db01c55f308431f1d5bdeaa005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1074d5db01c55f308431f1d5bdeaa005">&#9670;&#160;</a></span>displayFriends()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Server::displayFriends </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Display friends. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the user </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; list of friends </dd></dl>
+
+</div>
+</div>
+<a id="a830bddc2e68572a85904caf1ef1b5b25" name="a830bddc2e68572a85904caf1ef1b5b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a830bddc2e68572a85904caf1ef1b5b25">&#9670;&#160;</a></span>get_player_entity_from_connection_address()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">entity_t Server::get_player_entity_from_connection_address </td>
+          <td>(</td>
+          <td class="paramtype">udp::endpoint&#160;</td>
+          <td class="paramname"><em>endpoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get player entity from connection address </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">endpoint</td><td>endpoint of the player </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>entity_t the player's entity </dd>
+<dd>
+-1 if not found </dd></dl>
+
+</div>
+</div>
+<a id="a3842e9e551ed67c60e2c7bbacbad93f6" name="a3842e9e551ed67c60e2c7bbacbad93f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3842e9e551ed67c60e2c7bbacbad93f6">&#9670;&#160;</a></span>get_position_change_for_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt; int, int &gt; Server::get_position_change_for_event </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>event</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>get position change for event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>the entity </td></tr>
+    <tr><td class="paramname">event</td><td>the event </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::pair&lt;int, int&gt; the position change </dd></dl>
+
+</div>
+</div>
+<a id="a0937d05a0181cd6f4c45effef66ba8e2" name="a0937d05a0181cd6f4c45effef66ba8e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0937d05a0181cd6f4c45effef66ba8e2">&#9670;&#160;</a></span>getHighScore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structHighScoreMessage.html">HighScoreMessage</a> Server::getHighScore </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the High Score on db. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structHighScoreMessage.html">HighScoreMessage</a> high score message </dd></dl>
+
+</div>
+</div>
+<a id="af0a227e9300935e0815760a82fafc9b5" name="af0a227e9300935e0815760a82fafc9b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0a227e9300935e0815760a82fafc9b5">&#9670;&#160;</a></span>IsNameInBdd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::IsNameInBdd </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if name is in bdd. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true name is in bdd </dd>
+<dd>
+false name is not in bdd </dd></dl>
+
+</div>
+</div>
+<a id="a4013a9962aebde6ef9c9890f95f24d1f" name="a4013a9962aebde6ef9c9890f95f24d1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4013a9962aebde6ef9c9890f95f24d1f">&#9670;&#160;</a></span>makePersonnalID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Server::makePersonnalID </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>make personnal ID </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string personnal ID </dd></dl>
+
+</div>
+</div>
+<a id="ad3f897e544d75125f4b9b41a0030ccd3" name="ad3f897e544d75125f4b9b41a0030ccd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3f897e544d75125f4b9b41a0030ccd3">&#9670;&#160;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::operator() </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Scale.html">component::Scale</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>scl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Position.html">component::Position</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>operator () overload </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dra</td><td>drawable component </td></tr>
+    <tr><td class="paramname">scl</td><td>scale component </td></tr>
+    <tr><td class="paramname">pos</td><td>position component </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8cbd1f27ef95ffab43364ff1ddb4b247" name="a8cbd1f27ef95ffab43364ff1ddb4b247"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cbd1f27ef95ffab43364ff1ddb4b247">&#9670;&#160;</a></span>receive_add_friend_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_add_friend_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive add friend event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>message from client </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd>
+<dd>
+int -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="ad6c933a021e2bdb53f28e3ff1d41e55f" name="ad6c933a021e2bdb53f28e3ff1d41e55f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6c933a021e2bdb53f28e3ff1d41e55f">&#9670;&#160;</a></span>receive_chat_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_chat_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive chat event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>message from client </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd>
+<dd>
+int -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="ac195d260d11951243dfa089064a7a56d" name="ac195d260d11951243dfa089064a7a56d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac195d260d11951243dfa089064a7a56d">&#9670;&#160;</a></span>receive_client_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_client_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive client event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd>
+<dd>
+int -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="a7dac4e8c262cc36f45524b461d021906" name="a7dac4e8c262cc36f45524b461d021906"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dac4e8c262cc36f45524b461d021906">&#9670;&#160;</a></span>receive_connection_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_connection_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive connection event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd></dl>
+
+</div>
+</div>
+<a id="ac56929da6a3e0c859b63d506710f97a0" name="ac56929da6a3e0c859b63d506710f97a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac56929da6a3e0c859b63d506710f97a0">&#9670;&#160;</a></span>receive_disconnection_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_disconnection_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive disconnection event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd></dl>
+
+</div>
+</div>
+<a id="a99c4ac08fc4d9dd901f9ffb9a819c00f" name="a99c4ac08fc4d9dd901f9ffb9a819c00f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99c4ac08fc4d9dd901f9ffb9a819c00f">&#9670;&#160;</a></span>receive_friend_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_friend_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive friend event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd>
+<dd>
+int -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="a666dd0969b3f486fc08aa5f19b5438de" name="a666dd0969b3f486fc08aa5f19b5438de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a666dd0969b3f486fc08aa5f19b5438de">&#9670;&#160;</a></span>receive_from_client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::receive_from_client </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive from client </p>
+
+</div>
+</div>
+<a id="a1022d0ca971961d9172b56ae31d2ed60" name="a1022d0ca971961d9172b56ae31d2ed60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1022d0ca971961d9172b56ae31d2ed60">&#9670;&#160;</a></span>receive_login_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_login_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive login event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd></dl>
+
+</div>
+</div>
+<a id="aac5395dcc20ba967055e3c8cab5b42e5" name="aac5395dcc20ba967055e3c8cab5b42e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac5395dcc20ba967055e3c8cab5b42e5">&#9670;&#160;</a></span>receive_packet_confirm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_packet_confirm </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive packet confirm </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>the client message </td></tr>
+    <tr><td class="paramname">_</td><td>the entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 </dd></dl>
+
+</div>
+</div>
+<a id="a5069e37491d3a911d283bab2e283c4bd" name="a5069e37491d3a911d283bab2e283c4bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5069e37491d3a911d283bab2e283c4bd">&#9670;&#160;</a></span>receive_raw_data_from_client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; char &gt; Server::receive_raw_data_from_client </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive data from client </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;char&gt; the data received </dd></dl>
+
+</div>
+</div>
+<a id="a4b9209c3ab0925b055a99fe1f744ea1d" name="a4b9209c3ab0925b055a99fe1f744ea1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9209c3ab0925b055a99fe1f744ea1d">&#9670;&#160;</a></span>receive_remove_friend_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::receive_remove_friend_event </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>client_msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player_entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>receive remove friend event </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">client_msg</td><td>message from client </td></tr>
+    <tr><td class="paramname">player_entity</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 on success </dd>
+<dd>
+int -1 on failure </dd></dl>
+
+</div>
+</div>
+<a id="ad05e01f9f44c0a03e8f7f7bca871ad23" name="ad05e01f9f44c0a03e8f7f7bca871ad23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad05e01f9f44c0a03e8f7f7bca871ad23">&#9670;&#160;</a></span>removeFriend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::removeFriend </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>friendName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove friends. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>your name </td></tr>
+    <tr><td class="paramname">friendId</td><td>name of the friend </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success </dd>
+<dd>
+false if failed </dd></dl>
+
+</div>
+</div>
+<a id="a4543ef0f01910fa324a8c3482530b983" name="a4543ef0f01910fa324a8c3482530b983"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4543ef0f01910fa324a8c3482530b983">&#9670;&#160;</a></span>resend_packets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::resend_packets </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>packets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>resend packets </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of the data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">packets</td><td>the packets to resend </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad63ddf82722c4f18dd750b994107d11c" name="ad63ddf82722c4f18dd750b994107d11c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad63ddf82722c4f18dd750b994107d11c">&#9670;&#160;</a></span>send_all_entity_drawables_to_specific_player()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_all_entity_drawables_to_specific_player </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>player</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send all entity drawables to specific player </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">player</td><td>the player entity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6d65b6d208de28d7cace924d057c6e2b" name="a6d65b6d208de28d7cace924d057c6e2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d65b6d208de28d7cace924d057c6e2b">&#9670;&#160;</a></span>send_all_scale_to_player()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_all_scale_to_player </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send all scale to player. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a43f9eb998d7f08a231320d4030e80206" name="a43f9eb998d7f08a231320d4030e80206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43f9eb998d7f08a231320d4030e80206">&#9670;&#160;</a></span>send_animated_drawable_snapshot_to_all_players()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_animated_drawable_snapshot_to_all_players </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send animated drawable update to all client </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>entity to send </td></tr>
+    <tr><td class="paramname">dra</td><td>drawable to send </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad7534d3d9c171cb34bdf183dab55520b" name="ad7534d3d9c171cb34bdf183dab55520b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7534d3d9c171cb34bdf183dab55520b">&#9670;&#160;</a></span>send_animated_drawable_snapshots_for_specific_player()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_animated_drawable_snapshots_for_specific_player </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1AnimatedDrawable.html">component::AnimatedDrawable</a> &gt;&#160;</td>
+          <td class="paramname"><em>dra</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send animated drawable snapshot to specific player </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>entity to send </td></tr>
+    <tr><td class="paramname">dra</td><td>drawable to send </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a59c4e80468bac097f1f918c00c1daa0d" name="a59c4e80468bac097f1f918c00c1daa0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59c4e80468bac097f1f918c00c1daa0d">&#9670;&#160;</a></span>send_animated_drawable_update_to_all_clients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_animated_drawable_update_to_all_clients </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send animated drawable update to all clients </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>entity to send </td></tr>
+    <tr><td class="paramname">state</td><td>state to send </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9ddf5d7738cb0d1d1f7a1c7c08580cc9" name="a9ddf5d7738cb0d1d1f7a1c7c08580cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ddf5d7738cb0d1d1f7a1c7c08580cc9">&#9670;&#160;</a></span>send_data_to_all_clients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_data_to_all_clients </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>packets_to_send</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send data to all clients </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of the data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">structure</td><td>the data </td></tr>
+    <tr><td class="paramname">packets_to_send</td><td>the packets to send </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a68ee20b0875835a4a1c9bcee47bfccde" name="a68ee20b0875835a4a1c9bcee47bfccde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68ee20b0875835a4a1c9bcee47bfccde">&#9670;&#160;</a></span>send_data_to_all_clients_except_me()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_data_to_all_clients_except_me </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send data to all clients except me </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of the data </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">structure</td><td>the data </td></tr>
+    <tr><td class="paramname">entity</td><td>the entity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7ef98d310e698700e905a4f505ed9a96" name="a7ef98d310e698700e905a4f505ed9a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ef98d310e698700e905a4f505ed9a96">&#9670;&#160;</a></span>send_data_to_client_by_entity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_data_to_client_by_entity </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>structure</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>send data to specific client </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>structure type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">structure</td><td>structure to send </td></tr>
+    <tr><td class="paramname">entity</td><td>entity to send to </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a807b714745de14b9e23e5d69cb7eff4e" name="a807b714745de14b9e23e5d69cb7eff4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a807b714745de14b9e23e5d69cb7eff4e">&#9670;&#160;</a></span>send_death_event_to_all_players()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_death_event_to_all_players </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send death event to all players </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>entity to send </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae37a729c3a8205e5b35e4370a87e450e" name="ae37a729c3a8205e5b35e4370a87e450e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae37a729c3a8205e5b35e4370a87e450e">&#9670;&#160;</a></span>send_entity_drawable_to_all_players()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_entity_drawable_to_all_players </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Drawable.html">component::Drawable</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dra</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send drawable to all clients </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>entity to send </td></tr>
+    <tr><td class="paramname">dra</td><td>drawable to send </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a10e6b8c7832b6b6bd47f5e826ce90848" name="a10e6b8c7832b6b6bd47f5e826ce90848"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10e6b8c7832b6b6bd47f5e826ce90848">&#9670;&#160;</a></span>send_highscore_to_specific_client()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_highscore_to_specific_client </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>new_player</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send highscore to specific client. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">new_player</td><td>The player's entity </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad21324a87964dec10c1018e0a1babfd0" name="ad21324a87964dec10c1018e0a1babfd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad21324a87964dec10c1018e0a1babfd0">&#9670;&#160;</a></span>send_position_snapshots_for_all_players()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_position_snapshots_for_all_players </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Position.html">component::Position</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send position snapshots for all players. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>position component </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abf95ed02bf45b62072ee3dd84050ba33" name="abf95ed02bf45b62072ee3dd84050ba33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf95ed02bf45b62072ee3dd84050ba33">&#9670;&#160;</a></span>send_scale_to_all_players()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Server::send_scale_to_all_players </td>
+          <td>(</td>
+          <td class="paramtype">entity_t&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Scale.html">component::Scale</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>scl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classsparse__array.html">sparse_array</a>&lt; <a class="el" href="structcomponent_1_1Endpoint.html">component::Endpoint</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>edp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send data to all client. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The entity </td></tr>
+    <tr><td class="paramname">scl</td><td>scale component </td></tr>
+    <tr><td class="paramname">edp</td><td>endpoint component </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a19c683a28bc1bf676dbd92c2e9cf6254" name="a19c683a28bc1bf676dbd92c2e9cf6254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19c683a28bc1bf676dbd92c2e9cf6254">&#9670;&#160;</a></span>signIn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::signIn </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Signin the user. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>name of the user </td></tr>
+    <tr><td class="paramname">password</td><td>password of the user </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true user signed in </dd>
+<dd>
+false user does not signed in </dd></dl>
+
+</div>
+</div>
+<a id="a3ccd04c6922b167fddb4781c34cc3f9c" name="a3ccd04c6922b167fddb4781c34cc3f9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ccd04c6922b167fddb4781c34cc3f9c">&#9670;&#160;</a></span>signUp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Server::signUp </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback check if user exist. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>data return of the request </td></tr>
+    <tr><td class="paramname">argc</td><td>number of column </td></tr>
+    <tr><td class="paramname">argv</td><td>data of the column </td></tr>
+    <tr><td class="paramname">azColName</td><td>name of the column </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int 0 </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/Server/<a class="el" href="Server_8hpp_source.html">Server.hpp</a></li>
 <li>src/Server/database.cpp</li>
