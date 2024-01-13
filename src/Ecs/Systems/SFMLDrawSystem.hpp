@@ -16,9 +16,10 @@ class SFMLDrawSystem : public ISystems {
     public:
         SFMLDrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
 
-        void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Clickable> &cli, sparse_array<component::Hitbox> &hit) {
+        void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Hitbox> &hit, sparse_array<component::Parallax> &par) {
             if (!_window->isOpen())
                 return;
+            sf::Vector2u windowSize = _window->getSize();
             for (size_t i = 0; i < dra.size(); ++i) {
                 if (dra[i].has_value() && _toDraw.find(dra[i]->_path) == _toDraw.end()) {
                     std::unique_ptr<sf::Texture> t = std::make_unique<sf::Texture>();
@@ -33,14 +34,18 @@ class SFMLDrawSystem : public ISystems {
             }
             for (size_t i = 0; i < dra.size(); ++i) {
                 if (pos[i].has_value() && dra[i].has_value() && _toDraw.find(dra[i]->_path) != _toDraw.end()) {
-                    _toDraw[dra[i]->_path].second->setPosition(pos[i]->x, pos[i]->y);
-                    if (hit[i].has_value() && cli[i].has_value()) {
-                        if (hit[i]->contains(*pos[i], _mousePos->x, _mousePos->y)) {
-                            _toDraw[dra[i]->_path].second->setScale(0.3f, 0.3f);
-                        } else
-                            _toDraw[dra[i]->_path].second->setScale(0.1f, 0.1f);
+                    if (par[i].has_value()) {
+                        sf::FloatRect spriteBounds = _toDraw[dra[i]->_path].second->getGlobalBounds();
+                        if ((pos[i]->x + spriteBounds.width) <= 0)
+                            pos[i]->x += windowSize.x;
+                        _toDraw[dra[i]->_path].second->setPosition(pos[i]->x, pos[i]->y);
+                        _window->draw((*_toDraw[dra[i]->_path].second));
+                        _toDraw[dra[i]->_path].second->setPosition(pos[i]->x + windowSize.x, pos[i]->y);
+                        _window->draw((*_toDraw[dra[i]->_path].second));
+                    } else {
+                        _toDraw[dra[i]->_path].second->setPosition(pos[i]->x, pos[i]->y);
+                        _window->draw((*_toDraw[dra[i]->_path].second));
                     }
-                    _window->draw((*_toDraw[dra[i]->_path].second));
                 }
             }
         };
