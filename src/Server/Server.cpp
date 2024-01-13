@@ -93,6 +93,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
             }
         }
         send_position_snapshots_for_all_players(pos, edp);
+        send_health_to_specific_client(pos, edp);
+        send_score_to_specific_client(pos, edp);
         ++resend_counter;
     }
     recieve_from_client();
@@ -249,6 +251,36 @@ std::vector<char> Server::recieve_raw_data_from_client()
     }
 
     return receivedData;
+}
+
+void Server::send_health_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
+{
+    auto &health = _ecs.get_components<component::Health>();
+    auto player = _ecs.get_components<component::Endpoint>();
+    for (size_t i = 0; i < pos.size(); i++) {
+        if (player[i].has_value() && health[i].has_value()) {
+            HealthMessage to_send(23, health[i].value()._health, _packet_id);
+            printf("health ======== %d\n", health[i].value()._health);
+            _packet_id++;
+            _health_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+        }
+    }
+}
+
+void Server::send_score_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
+{
+    auto score = _ecs.get_components<component::Score>();
+    auto player = _ecs.get_components<component::Endpoint>();
+    for (size_t i = 0; i < pos.size(); i++) {
+        if (player[i].has_value() && score[i].has_value()) {
+            ScoreMessage to_send(24, score[i]->_score, _packet_id);
+            printf("score ======== %d\n", score[i]->_score);
+            _packet_id++;
+            _score_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+        }
+    }
 }
 
 void Server::send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
@@ -519,7 +551,7 @@ int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t _)
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name));
+    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name)) << std::endl;
     return 0;
 }
 

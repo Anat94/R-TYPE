@@ -61,6 +61,8 @@ class Server: public ISystems {
         void send_all_scale_to_player_by_room(entity_t entity);
         void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
         void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
+        void send_health_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
+        void send_score_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
         void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
@@ -130,6 +132,8 @@ class Server: public ISystems {
         std::vector<RoomCreationMessage> _room_creation_packets;
         std::vector<RoomJoinMessage> _room_join_packets;
         std::unordered_map<int, udp::endpoint> _resend_packets_endpoints;
+        std::vector<HealthMessage> _health_packets_to_send;
+        std::vector<ScoreMessage> _score_packets_to_send;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;

@@ -150,48 +150,28 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 
 void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
-    //! remove enemy
-    try {
-        r.get_components<component::Controllable>()[_ents.first]; // see if the entity is the player
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.remove_component<component::AnimatedDrawable>(_ents.first);
-            r.remove_component<component::ServerEntity>(_ents.first);
-            r.kill_entity(_ents.first);
-            auto &killer_score = r.get_components<component::Score>()[_ents.second];
-            if (killer_score.has_value())
-                killer_score->_score += 10;
-        }
-        return;
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a player
-    }
-    try {
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::AnimatedDrawable>(_ents.first);
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::ServerEntity>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Room>(_ents.first);
-            r.remove_component<component::Hitbox>(_ents.first);
-            r.remove_component<component::AnimatedDrawable>(_ents.first);
-            r.remove_component<component::HurtsOnCollision>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Pierce>(_ents.first);
+    //! remove entity
+    bool is_player = r.get_components<component::Controllable>()[_ents.first].has_value();
+    r.remove_component<component::Scale>(_ents.first);
+    r.remove_component<component::Score>(_ents.first);
+    r.remove_component<component::Damage>(_ents.first);
+    r.remove_component<component::Health>(_ents.first);
+    r.remove_component<component::Hitbox>(_ents.first);
+    r.remove_component<component::Pierce>(_ents.first);
+    r.remove_component<component::Heading>(_ents.first);
+    r.remove_component<component::Position>(_ents.first);
+    r.remove_component<component::Velocity>(_ents.first);
+    r.remove_component<component::Drawable>(_ents.first);
+    r.remove_component<component::Rotation>(_ents.first);
+    r.remove_component<component::ResetOnMove>(_ents.first);
+    r.remove_component<component::ServerEntity>(_ents.first);
+    r.remove_component<component::Controllable>(_ents.first);
+    r.remove_component<component::HurtsOnCollision>(_ents.first);
+    r.remove_component<component::AnimatedDrawable>(_ents.first);
 
-            r.kill_entity(_ents.first);
-        }
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a projectile
+    auto &killer_score = r.get_components<component::Score>()[_ents.second];
+    if (killer_score.has_value() && is_player) {
+        killer_score->_score += 10;
     }
 }
 
@@ -203,11 +183,12 @@ void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 {
     entity_t enemy = r.spawn_entity();
-
     r.add_component<component::Position>(enemy, component::Position(_pos.x, _pos.y));
     r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
     r.add_component<component::Scale>(enemy, component::Scale(_scale));
     r.add_component<component::Health>(enemy, component::Health(_health));
+    r.add_component<component::Damage>(enemy, component::Damage(50));
+    r.add_component<component::HurtsOnCollision>(enemy, component::HurtsOnCollision(-1));
     if (_roomName.size() != 0)
         r.add_component<component::Room>(enemy, component::Room(_roomName));
     r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
@@ -223,6 +204,7 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
+    std::cerr << "shot === " << shot << std::endl;
 
     try {
         auto player_hit = r.get_components<component::Hitbox>()[_ents.first];

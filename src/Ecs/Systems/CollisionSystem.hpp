@@ -28,8 +28,9 @@ class CollisionSystem : public ISystems {
                             CollisionEvent* new_event = new CollisionEvent(first_ent_idx, second_ent_idx);
                             if (_listener->hasEvent(new_event))
                                 delete new_event;
-                            else
+                            else {
                                 _listener->addEvent(new_event);
+                            }
                         }
                     }
                 }

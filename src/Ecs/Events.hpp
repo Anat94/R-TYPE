@@ -72,13 +72,15 @@ class AEvent : public IEvent {
         {
             if (dynamic_cast<const AEvent*>(&other) != nullptr) {
                 const AEvent &otherAEvent = dynamic_cast<const AEvent&>(other);
-                return _ents == otherAEvent._ents;
+                if ((_ents.first == otherAEvent._ents.first && _ents.second == otherAEvent._ents.second)
+                    || (_ents.first == otherAEvent._ents.second && _ents.second == otherAEvent._ents.first))
+                    return true;
             }
             return false;
         };
         /**
          * @brief Main function of the Event, used to aply changes on the registery passed as paramter
-         * 
+         *
          * @param r registery_t object, containig the game instance and objects
          * @param listener the event listener, used to create new events from this one when needed
          */

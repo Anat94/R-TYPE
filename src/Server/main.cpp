@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
     while (true) {
         mtx.lock();
         ecs.run_systems();
-        listener.popEvent();
+        while (listener.popEvent());
         mtx.unlock();
     }
     return 0;

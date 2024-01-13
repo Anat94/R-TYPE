@@ -121,6 +121,8 @@ class Client {
         int receive_chat_event(std::vector<char> &server_msg);
         int recieve_room_creation_event(std::vector<char> &server_msg);
         int receive_room_join_event(std::vector<char> &server_msg);
+        int receive_health_event(std::vector<char> &server_msg);
+        int receive_score_event(std::vector<char> &server_msg);
         void displayScoreBoardMenu();
         void handleInput(sf::Event &event);
         entity_t init_new_entity(entity_t srvEntity);
@@ -199,7 +201,9 @@ class Client {
             {15, &Client::recieve_scale_snapshot_update},
             {16, &Client::recieve_death_event},
             {21, &Client::recieve_room_creation_event},
-            {22, &Client::receive_room_join_event}
+            {22, &Client::receive_room_join_event},
+            {23, &Client::receive_health_event},
+            {24, &Client::receive_score_event},
         };
         sf::Vector2i _mouse_position;
         sf::Text _mouse_position_text;
