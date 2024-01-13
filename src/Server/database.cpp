@@ -47,8 +47,20 @@ bool Server::IsNameInBdd(std::string name)
 }
 
 
+/**
+ * @brief Highscore object
+ * 
+ */
 struct HighScore {
+    /**
+     * @brief name of the player
+     * 
+     */
     std::string name;
+    /**
+     * @brief score of the player
+     * 
+     */
     int score;
 };
 
@@ -345,8 +357,20 @@ bool Server::removeFriend(std::string name, std::string friendName) {
     return true;
 }
 
+/**
+ * @brief Callback data structure
+ * 
+ */
 struct CallbackData {
+    /**
+     * @brief pointer to the server object
+     * 
+     */
     Server* server;
+    /**
+     * @brief list of friends
+     * 
+     */
     std::vector<Friendship>* friends;
 };
 

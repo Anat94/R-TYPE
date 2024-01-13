@@ -80,6 +80,12 @@ int Client::receive_high_score(std::vector<char> &server_msg)
 
 }
 
+/**
+ * @brief receive from the server a room join event
+ * 
+ * @param server_msg raw server message
+ * @return int 
+ */
 int Client::receive_room_join_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(RoomJoinMessage))
@@ -93,6 +99,12 @@ int Client::receive_room_join_event(std::vector<char> &server_msg)
     return snapshot->id;
 }
 
+/**
+ * @brief receive from the server a room creation event
+ * 
+ * @param server_msg raw server message
+ * @return int 
+ */
 int Client::recieve_room_creation_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(RoomCreationMessage))
@@ -131,6 +143,12 @@ int Client::receive_death_event(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief Get client entity from the server's entity
+ * 
+ * @param srvEntity server entity
+ * @return client entity
+ */
 entity_t Client::get_entity_from_server_entity(entity_t srvEntity)
 {
     auto &srv = _ecs.get_components<component::ServerEntity>();
@@ -178,6 +196,12 @@ int Client::receive_position_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
+/**
+ * @brief initialize a new entity
+ * 
+ * @param srvEntity server entity to initialize for
+ * @return created entity 
+ */
 entity_t Client::init_new_entity(entity_t srvEntity)
 {
     entity_t new_entity = _ecs.spawn_entity();
@@ -541,6 +565,10 @@ void Client::send_to_server(const T& structure) {
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
 }
 
+/**
+ * @brief display on-screen texts.
+ * 
+ */
 void Client::displayTexts()
 {
     _window.draw(_score_text);
@@ -828,7 +856,6 @@ void Client::initClass()
     _background = _ecs.spawn_entity();
     // entity_t _background2 = _ecs.spawn_entity();
     // entity_t _background3 = _ecs.spawn_entity();
-    _btn_play = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("assets/parallax-space-background.png"));
     _ecs.add_component(_background, component::Parallax(1, 0));
