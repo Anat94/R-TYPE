@@ -55,7 +55,6 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
             player1_pla->x += _pos.first;
             player1_pla->y += _pos.second;
         }
-        std::cout << "updated position: x: " << player1_pla.value().x << ", y: " << player1_pla.value().y << std::endl;
     } catch (const std::exception &e) {
         e.what();
     }
@@ -162,6 +161,7 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
             r.remove_component<component::Damage>(_ents.first);
             r.remove_component<component::Hitbox>(_ents.first);
             r.remove_component<component::AnimatedDrawable>(_ents.first);
+            r.remove_component<component::ServerEntity>(_ents.first);
             r.kill_entity(_ents.first);
             auto &killer_score = r.get_components<component::Score>()[_ents.second];
             if (killer_score.has_value())
@@ -177,6 +177,16 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
             r.remove_component<component::Velocity>(_ents.first);
             r.remove_component<component::AnimatedDrawable>(_ents.first);
             r.remove_component<component::Position>(_ents.first);
+            r.remove_component<component::ServerEntity>(_ents.first);
+            r.remove_component<component::Scale>(_ents.first);
+            r.remove_component<component::Health>(_ents.first);
+            r.remove_component<component::Room>(_ents.first);
+            r.remove_component<component::Hitbox>(_ents.first);
+            r.remove_component<component::AnimatedDrawable>(_ents.first);
+            r.remove_component<component::HurtsOnCollision>(_ents.first);
+            r.remove_component<component::Damage>(_ents.first);
+            r.remove_component<component::Pierce>(_ents.first);
+
             r.kill_entity(_ents.first);
         }
     } catch (const std::exception &e) {
@@ -198,6 +208,9 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
     r.add_component<component::Scale>(enemy, component::Scale(_scale));
     r.add_component<component::Health>(enemy, component::Health(_health));
+    if (_roomName.size() != 0)
+        r.add_component<component::Room>(enemy, component::Room(_roomName));
+    std::cout << "room name for enemy: " << _roomName << std::endl;
     r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
     r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable(_animatedDrawable._path, _animatedDrawable._nbSprites, _animatedDrawable._spriteSize, _animatedDrawable._gaps, _animatedDrawable._firstOffset, _animatedDrawable._currentIdx));
 
@@ -217,6 +230,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
         auto player_p = r.get_components<component::Position>()[_ents.first];
         auto player_h = r.get_components<component::Heading>()[_ents.first];
         auto player_d = r.get_components<component::Damage>()[_ents.first];
+        auto player_room = r.get_components<component::Room>()[_ents.first];
 
         if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value()) {
             component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 2)));
@@ -224,6 +238,9 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component(shot, component::HurtsOnCollision(_ents.first));
             r.add_component(shot, component::Damage(player_d->_damage));
             r.add_component(shot, component::Scale(2.0f));
+            if (player_room.has_value())
+                r.add_component<component::Room>(shot, component::Room(player_room->_name));
+            std::cout << "room name for enemy: " << player_room->_name << std::endl;
             r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
             auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
             tmp->addAnimation("idle", {0, 3}, true);

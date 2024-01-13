@@ -151,6 +151,54 @@ namespace component {
     };
 
     /**
+     * @brief Room structure for the player's room
+     * 
+     */
+    struct Room {
+        /**
+         * @brief room name
+         * 
+         */
+        std::string _name;
+        /**
+         * @brief Construct a new Room Object
+         * 
+         * @param name name of the room
+         */
+        Room(std::string name) : _name(name) {};
+    };
+
+    /**
+     * @brief user's name
+     * 
+    */
+    struct Username {
+        /**
+         * @brief user's name
+         * 
+         */
+        std::string _name;
+        /**
+         * @brief Construct a new Username Object
+         * 
+         * @param name name of the room
+         */
+        Username(std::string name) : _name(name) {};
+    };
+
+    /**
+     * @brief Host Component name
+     * 
+    */
+    struct Host {
+        /**
+         * @brief Construct a new Username Object
+         * 
+         */
+        Host() {};
+    };
+
+    /**
      * @brief ResetOnMove structure to know if the velocity of an entity shouldbe reset after moving
      * 
      */
