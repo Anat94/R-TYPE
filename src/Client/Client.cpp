@@ -39,16 +39,31 @@
 
 bool can_read = true;
 
-std::vector<char> Client::recieve_raw_data_from_client()
+/**
+ * @brief Receive data from the server and store them
+ *
+ * @return std::vector<char>
+ */
+
+std::vector<char> Client::receive_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
+
     size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _server_endpoint);
 
     receivedData.resize(bytesRead);
+
     return receivedData;
 }
 
-int Client::recieve_high_score(std::vector<char> &server_msg)
+/**
+ * @brief get best 3 highscores from server
+ *
+ * @param server_msg The message from the server
+ * @return The packet id
+ */
+
+int Client::receive_high_score(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(HighScoreMessage))
         return -1;
@@ -92,7 +107,14 @@ int Client::recieve_room_creation_event(std::vector<char> &server_msg)
     return snapshot->id;
 }
 
-int Client::recieve_death_event(std::vector<char> &server_msg)
+/**
+ * @brief get when a player dead
+ *
+ * @param server_msg The message from the server
+ * @return The packet id
+ */
+
+int Client::receive_death_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DeathEventMessage))
         return -1;
@@ -122,7 +144,14 @@ entity_t Client::get_entity_from_server_entity(entity_t srvEntity)
     return 0;
 }
 
-int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
+/**
+ * @brief get the player position from the server
+ *
+ * @param server_msg The message from the server
+ * @return int The packet id
+ */
+
+int Client::receive_position_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(SnapshotPosition))
         return -1;
@@ -135,8 +164,8 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
         if (real_entity > 0 && pos[real_entity].has_value()) {
             if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
                 std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
-            pos[real_entity]->x = snapshot->data.x;
-            pos[real_entity]->y = snapshot->data.y;
+                pos[real_entity]->x = snapshot->data.x;
+                pos[real_entity]->y = snapshot->data.y;
             }
         } else {
             if (real_entity == 0)
@@ -157,7 +186,13 @@ entity_t Client::init_new_entity(entity_t srvEntity)
     return new_entity;
 }
 
-int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
+/**
+ * @brief get the scale from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
+int Client::receive_scale_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(ScaleSnapshot))
         return -1;
@@ -181,7 +216,13 @@ int Client::recieve_scale_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
-int Client::recieve_login_response(std::vector<char> &server_msg)
+/**
+ * @brief while login, this get the login response from server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
+int Client::receive_login_response(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(LoginResponse))
         return -1;
@@ -208,6 +249,12 @@ int Client::recieve_login_response(std::vector<char> &server_msg)
     return -1;
 }
 
+/**
+ * @brief get friends from server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(FriendsResponse))
         return -1;
@@ -216,6 +263,12 @@ int Client::receive_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief response of adding friends from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(AddFriendsResponse))
         return -1;
@@ -227,6 +280,12 @@ int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief reponse of removing friends from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(RemoveFriendsResponse))
         return -1;
@@ -238,6 +297,12 @@ int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
     return friends->packet_id;
 }
 
+/**
+ * @brief receive a chat from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 int Client::receive_chat_event(std::vector<char> &server_msg) {
     if (server_msg.size() < sizeof(ChatMessage))
         return -1;
@@ -253,7 +318,13 @@ int Client::receive_chat_event(std::vector<char> &server_msg) {
     return chat->packet_id;
 }
 
-int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
+/**
+ * @brief receive thr drawable from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
+int Client::receive_drawable_snapshot_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(DrawableSnapshot))
         return -1;
@@ -277,7 +348,13 @@ int Client::recieve_drawable_snapshot_update(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
-int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
+/**
+ * @brief receive the animated drawable from the server
+ * 
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
+int Client::receive_animated_drawable_snapshot(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(AnimatedDrawableSnapshot))
         return -1;
@@ -307,7 +384,13 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
     return snapshot->packet_id;
 }
 
-int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg)
+/**
+ * @brief receive animation update from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
+int Client::receive_animated_drawable_state_update(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(AnimatedStateUpdateMessage))
         return -1;
@@ -326,11 +409,17 @@ int Client::recieve_animated_drawable_state_update(std::vector<char> &server_msg
     return snapshot->packet_id;
 }
 
+/**
+ * @brief Receuve event from the server
+ *
+ * @param server_msg The message from the server
+ * @return int  The packet id
+ */
 void Client::receive()
 {
     if (prgrmstop)
         exit(0);
-    std::vector<char> server_msg = recieve_raw_data_from_client();
+    std::vector<char> server_msg = receive_raw_data_from_client();
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
@@ -340,7 +429,7 @@ void Client::receive()
             check_if_packet_exist = 1;
     }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
-        throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+        throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
     if (check_if_packet_exist == 0) {
         (this->*_messageParser[baseMsg->id])(server_msg);
@@ -356,6 +445,15 @@ void Client::receive()
     receive();
 }
 
+/**
+ * @brief Construct a new Client:: Client object
+ *
+ * @param ip ip to connect
+ * @param port port to connect
+ * @param listener event listener
+ * @param ecs ecs registry
+ * @param mtx_ mutex for thread safety
+ */
 Client::Client(std::string ip, int port, EventListener &listener, registry &ecs, std::mutex &mtx_)
     : _io_context(),
       _socket(_io_context, udp::endpoint(udp::v4(), 0)),
@@ -418,6 +516,11 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     receiveThread = std::thread(&Client::receive, this);
 }
 
+
+/**
+ * @brief Destroy the Client:: Client object
+ *
+ */
 Client::~Client()
 {
     _font.~Font();
@@ -427,6 +530,12 @@ Client::~Client()
         receiveThread.join();
 }
 
+/**
+ * @brief send a structure to the server
+ *
+ * @tparam T
+ * @param structure stucture to send
+ */
 template <typename T>
 void Client::send_to_server(const T& structure) {
     _socket.send_to(asio::buffer(&structure, sizeof(structure)), _server_endpoint);
@@ -440,6 +549,11 @@ void Client::displayTexts()
     _window.draw(_mouse_position_text);
 }
 
+/**
+ * @brief manage event of the window
+ *
+ * @return int 0 if no error, 1 on error or on window close
+ */
 int Client::manageEvent()
 {
     while (_window.pollEvent(_event)) {
@@ -490,6 +604,10 @@ int Client::manageEvent()
     return 0;
 }
 
+/**
+ * @brief Display the scoreboard menu
+ *
+ */
 void Client::displayScoreBoardMenu()
 {
     _window.draw(_highScoreDisplay.trophy1.sprite);
@@ -503,6 +621,11 @@ void Client::displayScoreBoardMenu()
     _window.draw(_highScoreDisplay.score3);
 }
 
+/**
+ * @brief Handle input from the user
+ *
+ * @param event Event of the window
+ */
 void Client::handleInput(sf::Event& event) {
     if (event.type == sf::Event::TextEntered ) {
         if (event.text.unicode < 128) {
@@ -516,6 +639,10 @@ void Client::handleInput(sf::Event& event) {
     }
 }
 
+/**
+ * @brief manage the client cli at the beginning of the program
+ *
+ */
 void Client::manageCli()
 {
     std::string input;
@@ -668,6 +795,11 @@ void Client::manageCli()
     }
 }
 
+
+/**
+ * @brief Init client class
+ *
+ */
 void Client::initClass()
 {
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
@@ -717,6 +849,11 @@ void Client::initClass()
     _ecs.add_system<component::Parallax, component::Position>(*par_sys);
 }
 
+/**
+ * @brief run the client window
+ *
+ * @return int return 0
+ */
 int Client::run()
 {
     manageCli();

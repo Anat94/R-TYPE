@@ -31,6 +31,12 @@ using asio::ip::udp;
 
 EventListener listener;
 
+/**
+ * @brief error handling
+ *
+ * @param nb_args number of arguments
+ * @return int 0 if success
+ */
 int error_handling(int nb_args)
 {
     if (nb_args != 2)
@@ -38,6 +44,27 @@ int error_handling(int nb_args)
     return 0;
 }
 
+/**
+ * @brief login system
+ *
+ * @param pos the position
+ * @param vel the velocity
+ */
+void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
+    for (auto&& [_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
+        std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
+            << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
+    }
+}
+
+/**
+ * @brief main function
+ *
+ * @param argc number of arguments
+ * @param argv arguments given
+ * @return int 0 if success
+ * @return int 84 if failure
+ */
 int main(int argc, char *argv[]) {
     std::mutex mtx;
     sf::Event event;

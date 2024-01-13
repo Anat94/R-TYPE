@@ -28,6 +28,14 @@
 
 using asio::ip::udp;
 
+/**
+ * @brief main function
+ *
+ * @param argc number of arguments
+ * @param argv tab of arguments
+ * @return int  0 if success
+ *              84 if error
+ */
 int main(int argc, char** argv) {
     std::string tmp_username;
     registry ecs;

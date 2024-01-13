@@ -32,23 +32,23 @@
 \DoxyCodeLine{00028\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classButton}{Button}}\ \{}
 \DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{public}:}
 \DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton}{Button}}(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y,\ \textcolor{keywordtype}{float}\ width,\ \textcolor{keywordtype}{float}\ height,\ sf::Font\&\ font,\ std::string\ text,\ sf::Color\ textColor,\ sf::Color\ idleColor,\ sf::Color\ hoverColor,\ sf::Color\ activeColor);}
-\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton}{\string~Button}}();}
-\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ update(\textcolor{keyword}{const}\ sf::Vector2f\&\ mousePos);}
-\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ render(sf::RenderWindow\&\ window);}
-\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isPressed()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ setState(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ state);}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classButton_a2a001eb9c3cc8ae54768a850dd345002}{\string~Button}}();}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_a19d9bd9b85d997709ee94f77f44d81a5}{update}}(\textcolor{keyword}{const}\ sf::Vector2f\&\ mousePos);}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_a6f25fee1789b53d94fd3601197fe8961}{render}}(sf::RenderWindow\&\ window);}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classButton_a6ed2a4b4e00facf5c42a11ecd1f4e1c7}{isPressed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classButton_a596a26b4ab67fc2d5d44184386787492}{setState}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ state);}
 \DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ }
 \DoxyCodeLine{00037\ }
 \DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ sf::RectangleShape\ shape;}
-\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ sf::Text\ text;}
-\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ sf::Color\ textColor;}
-\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ sf::Color\ idleColor;}
-\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ sf::Color\ hoverColor;}
-\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ sf::Color\ activeColor;}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ sf::RectangleShape\ shape\ =\ sf::RectangleShape();}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ sf::Text\ text\ =\ sf::Text();}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ sf::Color\ textColor\ =\ sf::Color();}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ sf::Color\ idleColor\ =\ sf::Color();}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ sf::Color\ hoverColor\ =\ sf::Color();}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ sf::Color\ activeColor\ =\ sf::Color();}
 \DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isButtonPressed;}
-\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isButtonHover;}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isButtonPressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isButtonHover\ =\ \textcolor{keyword}{false};}
 \DoxyCodeLine{00048\ \};}
 \DoxyCodeLine{00049\ }
 \DoxyCodeLine{00050\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !BUTTON\_HPP\_\ */}\textcolor{preprocessor}{}}
