@@ -210,7 +210,6 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     r.add_component<component::Health>(enemy, component::Health(_health));
     if (_roomName.size() != 0)
         r.add_component<component::Room>(enemy, component::Room(_roomName));
-    std::cout << "room name for enemy: " << _roomName << std::endl;
     r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
     r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable(_animatedDrawable._path, _animatedDrawable._nbSprites, _animatedDrawable._spriteSize, _animatedDrawable._gaps, _animatedDrawable._firstOffset, _animatedDrawable._currentIdx));
 
@@ -240,7 +239,6 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component(shot, component::Scale(2.0f));
             if (player_room.has_value())
                 r.add_component<component::Room>(shot, component::Room(player_room->_name));
-            std::cout << "room name for enemy: " << player_room->_name << std::endl;
             r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
             auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
             tmp->addAnimation("idle", {0, 3}, true);
