@@ -645,6 +645,9 @@ void Client::manageCli()
             }
         } else if (command == "WHOAMI") {
             std::cout << "You are " << _username << std::endl;
+        } else if (command == "SHOWGAME") {
+            std::cout << "GAME 1: Rtype" << std::endl;
+            std::cout << "GAME 2: Plateformeur" << std::endl;
         } else if (command == "HELP") {
             std::cout << "Available commands:" << std::endl;
             std::cout << "START: Start the game" << std::endl;
@@ -653,6 +656,7 @@ void Client::manageCli()
             std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
             std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
             std::cout << "WHOAMI: Show who you are" << std::endl;
+            std::cout << "SHOWGAME: Show all game available" << std::endl; 
             std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
             std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
             std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;
