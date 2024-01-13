@@ -32,7 +32,11 @@ using entity_t = size_t;
 */
 class registry {
     public:
+        /**
+         * @brief mutex used to avoid concurrent thread issues
+        */
         std::mutex *mtx;
+        // vv TO DELETE vv
         bool can_run_updates = true;
         /**
          * @brief Register a component to the registry, creates an sparse_array for the corresponding component passed in template

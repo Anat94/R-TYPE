@@ -181,8 +181,7 @@ class SpawnEnemy : public AEvent {
          * @param gotTouched entity id that got touched in the event
          * @param touched entity id that touched during the event
          */
-        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> anims):
-        _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
+        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> anims, std::string roomName): _roomName(roomName), _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
         /**
          * @brief Handles the event based on the registry objects
          * 
@@ -194,6 +193,7 @@ class SpawnEnemy : public AEvent {
         component::AnimatedDrawable _animatedDrawable;
         int _health = 200;
         float _scale = 6.0f;
+        std::string _roomName = "";
         component::Velocity _vel = {-8.0f, 0.0f};
         component::Position _pos = {1920, 500};
         std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> _anims;
