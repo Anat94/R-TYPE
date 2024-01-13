@@ -55,9 +55,10 @@ class Server: public ISystems {
         void receive_from_client();
         void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
-        entity_t connect_player(udp::endpoint player_endpoint);
+        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
         void send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp);
         void send_all_scale_to_player(entity_t entity);
+        void send_all_scale_to_player_by_room(entity_t entity);
         void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
         void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
@@ -75,6 +76,8 @@ class Server: public ISystems {
         int receive_add_friend_event(std::vector<char>&, entity_t);
         int receive_remove_friend_event(std::vector<char>&, entity_t);
         int receive_chat_event(std::vector<char>&, entity_t);
+        int receive_room_creation_event(std::vector<char>&, entity_t);
+        int receive_room_join_event(std::vector<char>&, entity_t);
         template <typename T>
         void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
@@ -87,22 +90,16 @@ class Server: public ISystems {
          * @param entity entity to send to
          */
         template <typename T>
+        void send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room);
+        template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
-            std::cout << "GONNA SEND TO SPECIFC\n";
-            auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
-            // while (!can_send) continue;
-            // can_send = false;
-            // while (!can_mod) continue;
+            auto &endpoint = _ecs.get_components<component::Endpoint>()[entity];
             if (!endpoint.has_value()) {
                 std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
-                // can_send = true;
                 return;
             }
-            // can_mod = false;
+            _resend_packets_endpoints[structure.packet_id] = endpoint->_endpoint;
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
-            // can_mod = true;
-            // can_send = true;
-            std::cout << "FINISHED SENDING TO SPECIFC\n";
         }
         void connectToDB();
         HighScoreMessage getHighScore();
@@ -118,6 +115,8 @@ class Server: public ISystems {
         std::vector<std::string> displayFriends(std::string name, entity_t player_entity);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
+        void send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
+        void send_all_entity_drawables_to_specific_player_by_room(entity_t player);
         template <typename T>
         void resend_packets(std::vector<T> &, sparse_array<component::Endpoint> &);
     private:
@@ -133,6 +132,9 @@ class Server: public ISystems {
         std::vector<FriendsResponse> _friends_response_packets;
         std::vector<ChatMessage> _chat_packets;
         std::vector<ScaleSnapshot> _scale_packets;
+        std::vector<RoomCreationMessage> _room_creation_packets;
+        std::vector<RoomJoinMessage> _room_join_packets;
+        std::unordered_map<int, udp::endpoint> _resend_packets_endpoints;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
@@ -147,20 +149,21 @@ class Server: public ISystems {
             {2, &Server::receive_connection_event},
             {3, &Server::receive_disconnection_event},
             {5, &Server::receive_packet_confirm},
+            {12, &Server::receive_chat_event},
             {17, &Server::receive_login_event},
             {18, &Server::receive_friend_event},
             {19, &Server::receive_add_friend_event},
             {20, &Server::receive_remove_friend_event},
-            {21, &Server::receive_chat_event},
+            {21, &Server::receive_room_creation_event},
+            {22, &Server::receive_room_join_event},
         };
+        std::unordered_map<std::string, std::string> _lobbies;
         std::string _event;
         std::thread _send_thread;
         sqlite3 *_db;
         int _highScore = 0;
         std::string _nameForHighScore = "";
         bool can_mod = true;
-        bool can_send = true;
-        bool can_read = true;
         std::mutex &mtx;
         std::vector<entity_t> animatedDrawableRegistered = {};
         std::vector<entity_t> entitiesAlive = {};

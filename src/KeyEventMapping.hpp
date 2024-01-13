@@ -11,6 +11,9 @@
     #include <iostream>
     #include <unordered_map>
 
+/**
+ * @brief mapping of keyboard keys to an integer representing their ID
+*/
 static std::unordered_map<std::string, int> KeyIds = {
     {"A", 0},
     {"B", 1},
@@ -61,6 +64,9 @@ static std::unordered_map<std::string, int> KeyIds = {
     {"Tab", 46},
 };
 
+/**
+ * @brief map of SFML events mapped to keyboard keys.
+*/
 static std::unordered_map<sf::Keyboard::Key, std::string> SFMLKeys = {
     {sf::Keyboard::A, "A"},
     {sf::Keyboard::B, "B"},

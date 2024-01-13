@@ -29,9 +29,8 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, 30};
     }
-    // animatedDrawable->_state = "idle";
-    if (prevState != animatedDrawable->_state)
-        send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
+    animatedDrawable->_state = "idle";
+    send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
     if (event == KeyIds["Left"])
         return {-30, 0};
     if (event == KeyIds["Right"])
@@ -64,7 +63,9 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<AnimatedStateUpdateMessage>(_animated_drawable_update_packets, edp);
         resend_packets<HighScoreMessage>(_highscore_packets, edp);
         resend_packets<ScaleSnapshot>(_scale_packets, edp);
-        resend_packets<DeathEventMessage>(_death_packets,edp);
+        resend_packets<DeathEventMessage>(_death_packets, edp);
+        resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
+        resend_packets<RoomJoinMessage>(_room_join_packets, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -75,10 +76,7 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
                 auto &endpoint = _ecs.get_components<component::Endpoint>()[i];
                 animatedDrawableRegistered.push_back(i);
                 if (!endpoint.has_value()) {
-                    // while (!can_send) continue;
-                    // can_send = false;
                     send_animated_drawable_snapshot_to_all_players(i, dra, edp);
-                    // can_send = true;
                 }
             }
         }
@@ -134,19 +132,6 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
 {
     try {
         connectToDB();
-        // signUp("Jacques", "Jacques");
-        // signIn("admin", "admin");
-        // addHighScore("admin", 100);
-        // addHighScore("Anatole", 110);
-        // addHighScore("Pierre", 80);
-        // addHighScore("Jacques", 90);
-        // getHighScore();
-        // addFriend("admin", "9AEPR4G1XK");
-        // addFriend("Anatole", "Pierre");
-        // addFriend("Anatole", "admin");
-        // addFriend("Jacques", "tests");
-        // removeFriend("admin", "9AEPR4G1XK");
-        // displayFriends("admin");
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
     }
@@ -175,15 +160,15 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
  * @brief Connect a player to the server
  *
  * @param data The player's data
+ * @param username The player's username
+ * @param room_name The player's room name
  * @return entity_t The player's entity
  */
-entity_t Server::connect_player(udp::endpoint player_endpoint)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
-    can_send = false;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-    can_send = true;
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
     _ecs.add_component(new_player, component::Heading());
@@ -195,6 +180,10 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     tmp->addAnimation("move down", {2, 0}, false);
     tmp->_state = "idle";
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
+    _ecs.add_component(new_player, component::Room(room_name));
+    _ecs.add_component(new_player, component::Username(username));
+    if (username == _lobbies[room_name])
+        _ecs.add_component(new_player, component::Host());
     _ecs.add_component(new_player, component::Scale(6.0f));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
@@ -202,11 +191,12 @@ entity_t Server::connect_player(udp::endpoint player_endpoint)
     _ecs.add_component(new_player, component::Score());
 
     std::cout << "New player connected !" << std::endl;
-    send_animated_drawable_snapshots_for_specific_player(new_player, _ecs.get_components<component::AnimatedDrawable>());
+    send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
     send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
-    send_all_entity_drawables_to_specific_player(new_player);
+    send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
-    send_all_scale_to_player(new_player);
+    send_all_scale_to_player_by_room(new_player);
+    send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
     return new_player;
 }
 
@@ -221,6 +211,21 @@ void Server::send_all_scale_to_player(entity_t entity)
 
     for (int i = 0; i < scale.size(); ++i) {
         if (!scale[i].has_value())
+            continue;
+        ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
+        _scale_packets.push_back(to_send);
+        _packet_id++;
+        send_data_to_client_by_entity(to_send, entity);
+    }
+}
+
+void Server::send_all_scale_to_player_by_room(entity_t entity)
+{
+    auto scale = _ecs.get_components<component::Scale>();
+    auto rooms = _ecs.get_components<component::Room>();
+
+    for (int i = 0; i < scale.size(); ++i) {
+        if (!scale[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
             continue;
         ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
         _packet_id++;
@@ -243,7 +248,23 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     if (!scale.has_value())
         return;
     ScaleSnapshot to_send(15, entity, *scale, 0);
-    send_data_to_all_clients(to_send, _scale_packets, edp);
+    auto &rooms = _ecs.get_components<component::Room>();
+    send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
+}
+
+void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
+{
+    auto drawables = _ecs.get_components<component::Drawable>();
+    auto rooms = _ecs.get_components<component::Room>();
+
+    for (int i = 0; i < drawables.size(); ++i) {
+        if (!drawables[i].has_value() || !rooms[player].has_value() || !rooms[i].has_value() || (rooms[player]->_name != rooms[i]->_name))
+            continue;
+        DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
+        _packet_id += 1;
+        _drawable_packets.push_back(to_send);
+        send_data_to_client_by_entity(to_send, player);
+    }
 }
 
 /**
@@ -254,9 +275,10 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
 {
     auto drawables = _ecs.get_components<component::Drawable>();
+    auto rooms = _ecs.get_components<component::Room>();
 
     for (int i = 0; i < drawables.size(); ++i) {
-        if (!drawables[i].has_value())
+        if (!drawables[i].has_value() || !rooms[player].has_value() || !rooms[i].has_value() || (rooms[player]->_name != rooms[i]->_name))
             continue;
         DrawableSnapshot to_send(6, player, drawables[i].value()._path, _packet_id);
         _packet_id += 1;
@@ -303,9 +325,6 @@ std::vector<char> Server::receive_raw_data_from_client()
  */
 void Server::send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
 {
-    // while (!can_send) continue;
-    // while (!_ecs.can_run_updates) continue;
-    // _ecs.can_run_updates = false;
     std::vector<SnapshotPosition> to_send = {};
     for (size_t i = 0; i < pos.size(); i++) {
         if (pos[i].has_value()) {
@@ -314,7 +333,8 @@ void Server::send_position_snapshots_for_all_players(sparse_array<component::Pos
         }
     }
     for (SnapshotPosition &pos: to_send) {
-        send_data_to_all_clients<SnapshotPosition>(pos, _position_packets, edp);
+        auto &rooms = _ecs.get_components<component::Room>();
+        send_data_to_all_clients_by_room(pos, _position_packets, edp, rooms, rooms[pos.entity]->_name);
     }
 }
 
@@ -332,7 +352,8 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
         return;
     }
     AnimatedStateUpdateMessage to_send(14, entity, state, 0);
-    send_data_to_all_clients(to_send, _animated_drawable_update_packets, edp);
+    auto &rooms = _ecs.get_components<component::Room>();
+    send_data_to_all_clients_by_room(to_send, _animated_drawable_update_packets, edp, rooms, rooms[entity]->_name);
 }
 
 /**
@@ -357,10 +378,35 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
             animatedDrawable->_currentIdx,
             animatedDrawable->_anims,
             animatedDrawable->_state,
-            0
+            _packet_id
         );
-        // while (!can_send) continue;
-        send_data_to_all_clients(snap_ad, _animated_drawable_packets, edp);
+        auto &rooms = _ecs.get_components<component::Room>();
+        send_data_to_all_clients_by_room(snap_ad, _animated_drawable_packets, edp, rooms, rooms[entity]->_name);
+    }
+}
+
+void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
+{
+    auto rooms = _ecs.get_components<component::Room>();
+    for (size_t i = 0; i < dra.size(); i++) {
+        if (!dra[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
+            continue;
+        AnimatedDrawableSnapshot snap_ad(
+            13,
+            i,
+            dra[i].value()._path,
+            dra[i].value()._nbSprites,
+            dra[i].value()._spriteSize,
+            dra[i].value()._gaps,
+            dra[i].value()._firstOffset,
+            dra[i].value()._currentIdx,
+            dra[i].value()._anims,
+            dra[i].value()._state,
+            _packet_id
+        );
+        _packet_id++;
+        _animated_drawable_packets.push_back(snap_ad);
+        send_data_to_client_by_entity(snap_ad, entity);
     }
 }
 
@@ -405,7 +451,8 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
 {
     component::Drawable drawable = dra[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, 0);
-    send_data_to_all_clients<DrawableSnapshot>(to_send, _drawable_packets, edp);
+    auto &rooms = _ecs.get_components<component::Room>();
+    send_data_to_all_clients_by_room(to_send, _drawable_packets, edp, rooms, rooms[entity]->_name);
 }
 
 /**
@@ -417,7 +464,8 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
     DeathEventMessage evt(16, entity, 0);
-    send_data_to_all_clients(evt, _death_packets, edp);
+    auto &rooms = _ecs.get_components<component::Room>();
+    send_data_to_all_clients_by_room(evt, _death_packets, edp, rooms, rooms[entity]->_name);
 }
 
 /**
@@ -433,13 +481,56 @@ void Server::receive_from_client()
     entity_t player_entity = get_player_entity_from_connection_address(_remote_endpoint);
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(client_msg.data());
 
-    if (player_entity == -1) {
-        player_entity = connect_player(_remote_endpoint);
+    if (player_entity == -1 || baseMsg->id == 5) {
+        if (baseMsg->id == 5 || baseMsg->id == 17 || baseMsg->id == 21 || baseMsg->id == 22 || baseMsg->id == 2) {
+            (this->*_messageParser[baseMsg->id])(client_msg, 1);
+            return;
+        } else
+            return;
     }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
     return;
+}
+
+int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
+{
+    RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
+
+    if (_lobbies.find(std::string(joinMsg->room_name)) == _lobbies.end()) {
+        RoomJoinMessage to_send(22, "", _packet_id);
+        _packet_id++;
+        // _room_join_packets.push_back(to_send);
+        _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
+        return -1;
+    }
+    RoomJoinMessage to_send(22, std::string(joinMsg->room_name), _packet_id);
+    _packet_id++;
+    _room_join_packets.push_back(to_send);
+    _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
+    _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
+    return 0;
+}
+
+int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
+    RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
+
+    if (_lobbies.find(std::string(creationMsg->room_name)) != _lobbies.end()) {
+        RoomCreationMessage to_send(21, "", "", _packet_id);
+        _packet_id++;
+        _room_creation_packets.push_back(to_send);
+        _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
+        _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
+        return -1;
+    }
+    _lobbies[std::string(creationMsg->room_name)] = std::string(creationMsg->username);
+    RoomCreationMessage to_send(21, std::string(creationMsg->username), std::string(creationMsg->room_name), _packet_id);
+    _packet_id++;
+    _room_creation_packets.push_back(to_send);
+    _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
+    _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
+    return 0;
 }
 
 /**
@@ -453,7 +544,6 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
-    // while (!can_mod) continue;
     _position_packets.erase(
         std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
             return snapshot.packet_id == id;
@@ -510,6 +600,20 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         ),
         _death_packets.end()
     );
+    _room_creation_packets.erase(
+        std::remove_if(_room_creation_packets.begin(), _room_creation_packets.end(), [id](const RoomCreationMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _room_creation_packets.end()
+    );
+    _room_join_packets.erase(
+        std::remove_if(_room_join_packets.begin(), _room_join_packets.end(), [id](const RoomJoinMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _room_join_packets.end()
+    );
     return 0;
 }
 
@@ -526,14 +630,11 @@ int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
-    // while (!_ecs.can_run_updates) continue;
-    // _ecs.can_run_updates = false;
     std::pair<int, int> to_move = get_position_change_for_event(player_entity, event->event);
     if (to_move.first != 0 || to_move.second != 0) {
         _listener.addEvent(new UpdatePositionEvent(player_entity, to_move));
         _listener.addEvent(new PositionStayInWindowBounds(player_entity, {0, 1920, 0, 1080}));
     }
-    // _ecs.can_run_updates = true;
     return 0;
 }
 
@@ -546,8 +647,10 @@ int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_
  */
 int Server::receive_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
-    static_cast<void>(client_msg);
-    static_cast<void>(player_entity);
+    if (client_msg.size() < sizeof(JoinGameMessage))
+        return -1;
+    JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
+    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name));
     return 0;
 }
 
@@ -575,15 +678,13 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     if (client_msg.size() < sizeof(LoginMessage))
         return -1;
     LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     bool response = true;
     if (snapshot->logintype == 0)
         response = signUp(snapshot->username, snapshot->password);
     else if (snapshot->logintype == 1)
         response = signIn(snapshot->username, snapshot->password);
     LoginResponse resp(8, response, snapshot->logintype, _packet_id);
-    send_data_to_client_by_entity<LoginResponse>(resp, player_entity);
+    _socket.send_to(asio::buffer(&resp, sizeof(LoginResponse)), _remote_endpoint);
     _packet_id += 1;
     return 0;
 }
@@ -602,8 +703,6 @@ int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_
         return -1;
     }
     FriendsMessage *snapshot = reinterpret_cast<FriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     std::vector<std::string> friends = displayFriends(snapshot->username, player_entity);
     _packet_id++;
     return 0;
@@ -622,8 +721,6 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
     if (client_msg.size() < sizeof(AddFriendsMessage))
         return -1;
     AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     std::cout << snapshot->friendName << std::endl;
     std::cout << snapshot->username << std::endl;
     bool response = addFriend(snapshot->username, snapshot->friendName);
@@ -645,8 +742,6 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
     if (client_msg.size() < sizeof(RemoveFriendsMessage))
         return -1;
     RemoveFriendsMessage *snapshot = reinterpret_cast<RemoveFriendsMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     bool response = removeFriend(snapshot->username, snapshot->friendName);
     RemoveFriendsResponse resp(11, response, _packet_id);
     send_data_to_client_by_entity<RemoveFriendsResponse>(resp, player_entity);
@@ -666,11 +761,10 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     if (client_msg.size() < sizeof(ChatMessage))
         return -1;
     ChatMessage *snapshot = reinterpret_cast<ChatMessage *>(client_msg.data());
-    while (!can_read)
-        continue;
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    // while (!can_send) continue;
-    send_data_to_all_clients<ChatMessage>(reponse, _chat_packets, _ecs.get_components<component::Endpoint>());
+    
+    auto &rooms = _ecs.get_components<component::Room>();
+    send_data_to_all_clients_by_room(reponse, _chat_packets, _ecs.get_components<component::Endpoint>(), rooms, rooms[player_entity]->_name);
     return 0;
 }
 
@@ -693,7 +787,6 @@ Server::~Server() {
  */
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp) {
-    can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value()) {
             structure.packet_id = _packet_id;
@@ -703,7 +796,21 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
         }
     }
-    can_send = true;
+}
+
+template <typename T>
+void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)))) { //  || !rms[i].has_value()
+            structure.packet_id = _packet_id;
+            _packet_id += 1;
+            if (edp[i].has_value()) {
+                packets_to_send.push_back(structure);
+                _resend_packets_endpoints[structure.packet_id] = edp[i]->_endpoint;
+                _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
+            }
+        }
+    }
 }
 
 /**
@@ -715,18 +822,12 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
  */
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp) {
-    // while (!can_send) continue;
-    // can_send = false;
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && edp[i].value()._endpoint != _remote_endpoint) {
-            // while (!can_mod) continue;
-            // can_mod = false;
             if (edp[i].has_value())
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
-            // can_mod = true;
         }
     }
-    // can_send = true;
 }
 
 /**
@@ -739,9 +840,6 @@ void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<compo
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets, sparse_array<component::Endpoint> &edp) {
     for (auto& packet : packets) {
-        for (size_t i = 0; i < edp.size(); i++) {
-            if (edp[i].has_value())
-                _socket.send_to(asio::buffer(&packet, sizeof(packet)), edp[i]->_endpoint);
-        }
+        _socket.send_to(asio::buffer(&packet, sizeof(packet)), _resend_packets_endpoints[packet.packet_id]);
     }
 }

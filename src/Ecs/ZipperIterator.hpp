@@ -54,7 +54,7 @@ class zipper_iterator {
          * @param it_tuple tuple containing iterators for the templated containers
          * @param max maximum size of the iterator range
          * @param idx current index of the iterator_tuple previously passed in parameter
-         */
+        */
         zipper_iterator(const iterator_tuple& it_tuple, size_t max, size_t idx): _current(it_tuple), _max(max), _idx(idx) {}
         /**
          * @brief Copy constructor for the zipper_iterator

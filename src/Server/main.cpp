@@ -91,6 +91,11 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::HurtsOnCollision>();
     ecs.register_component<component::AnimatedDrawable>();
     ecs.register_component<component::Endpoint>();
+    ecs.register_component<component::Room>();
+    ecs.register_component<component::Username>();
+    ecs.register_component<component::Host>();
+    entity_t decoy = ecs.spawn_entity();
+    ecs.add_component<component::Room>(decoy, component::Room("__"));
 
     listener.addRegistry(ecs);
 
@@ -98,10 +103,10 @@ int main(int argc, char *argv[]) {
     ecs.add_system<component::Position, component::Velocity>(*pos_sys);
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
-    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
-    ecs.add_system<component::Position, component::Health, component::Endpoint>(*engen_sys);
+    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 2);
+    ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room>(*engen_sys);
     CollisionSystem *col_sys = new CollisionSystem(&listener);
-    ecs.add_system<component::Hitbox, component::Position>(*col_sys);
+    ecs.add_system<component::Hitbox, component::Position, component::Room>(*col_sys);
     asio::io_context service;
     Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
     service.run();
