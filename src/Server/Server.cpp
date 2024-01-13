@@ -59,6 +59,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<DeathEventMessage>(_death_packets, edp);
         resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
         resend_packets<RoomJoinMessage>(_room_join_packets, edp);
+        resend_packets<ScoreMessage>(_score_packets_to_send, edp);
+        resend_packets<HealthMessage>(_health_packets_to_send, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -101,6 +103,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
             }
         }
         send_position_snapshots_for_all_players(pos, edp);
+        send_health_to_specific_client(edp);
+        send_score_to_specific_client(edp);
         ++resend_counter;
     }
     receive_from_client();
@@ -161,6 +165,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
+    std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
@@ -318,6 +323,44 @@ std::vector<char> Server::receive_raw_data_from_client()
     }
 
     return receivedData;
+}
+
+/**
+ * @brief send health to a specific player
+ * 
+ * @param edp all endpoints
+ */
+void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &edp)
+{
+    auto &health = _ecs.get_components<component::Health>();
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && health[i].has_value()) {
+            HealthMessage to_send(23, health[i].value()._health, _packet_id);
+            printf("health ======== %d\n", health[i].value()._health);
+            _packet_id++;
+            _health_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+        }
+    }
+}
+
+/**
+ * @brief send score to a specific player
+ * 
+ * @param edp all endpoints
+ */
+void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
+{
+    auto &score = _ecs.get_components<component::Score>();
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && score[i].has_value()) {
+            ScoreMessage to_send(24, score[i]->_score, _packet_id);
+            printf("score ======== %d\n", score[i]->_score);
+            _packet_id++;
+            _score_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+        }
+    }
 }
 
 /**
@@ -556,6 +599,18 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
+template <typename T>
+void Server::erase_packet_if_exists(std::vector<T> &packets, int id)
+{
+    packets.erase(
+        std::remove_if(packets.begin(), packets.end(), [id](const T& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        packets.end()
+    );
+}
+
 /**
  * @brief receive packet confirm
  *
@@ -567,76 +622,18 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
-    _position_packets.erase(
-        std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _position_packets.end()
-    );
-    _drawable_packets.erase(
-        std::remove_if(_drawable_packets.begin(), _drawable_packets.end(), [id](const DrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _drawable_packets.end()
-    );
-    _highscore_packets.erase(
-        std::remove_if(_highscore_packets.begin(), _highscore_packets.end(), [id](const HighScoreMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _highscore_packets.end()
-    );
-    _animated_drawable_packets.erase(
-        std::remove_if(_animated_drawable_packets.begin(), _animated_drawable_packets.end(), [id](const AnimatedDrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_packets.end()
-    );
-    _animated_drawable_update_packets.erase(
-        std::remove_if(_animated_drawable_update_packets.begin(), _animated_drawable_update_packets.end(), [id](const AnimatedStateUpdateMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_update_packets.end()
-    );
-    _chat_packets.erase(
-        std::remove_if(_chat_packets.begin(), _chat_packets.end(), [id](const ChatMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _chat_packets.end()
-    );
-    _scale_packets.erase(
-        std::remove_if(_scale_packets.begin(), _scale_packets.end(), [id](const ScaleSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _scale_packets.end()
-    );
-    _death_packets.erase(
-        std::remove_if(_death_packets.begin(), _death_packets.end(), [id](const DeathEventMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _death_packets.end()
-    );
-    _room_creation_packets.erase(
-        std::remove_if(_room_creation_packets.begin(), _room_creation_packets.end(), [id](const RoomCreationMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_creation_packets.end()
-    );
-    _room_join_packets.erase(
-        std::remove_if(_room_join_packets.begin(), _room_join_packets.end(), [id](const RoomJoinMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_join_packets.end()
-    );
+    erase_packet_if_exists(_position_packets, id);
+    erase_packet_if_exists(_drawable_packets, id);
+    erase_packet_if_exists(_highscore_packets, id);
+    erase_packet_if_exists(_animated_drawable_packets, id);
+    erase_packet_if_exists(_animated_drawable_update_packets, id);
+    erase_packet_if_exists(_chat_packets, id);
+    erase_packet_if_exists(_scale_packets, id);
+    erase_packet_if_exists(_death_packets, id);
+    erase_packet_if_exists(_room_creation_packets, id);
+    erase_packet_if_exists(_room_join_packets, id);
+    erase_packet_if_exists(_score_packets_to_send, id);
+    erase_packet_if_exists(_health_packets_to_send, id);
     return 0;
 }
 
@@ -673,7 +670,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name));
+    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name)) << std::endl;
     return 0;
 }
 

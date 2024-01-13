@@ -12,6 +12,7 @@
     #include <unordered_map>
     #include <asio.hpp>
     #include "../Errors.hpp"
+    #include "../Timer.hpp"
 
 using asio::ip::udp;
 using entity_t = size_t;
@@ -130,6 +131,30 @@ namespace component {
          * @param health the health to be set
          */
         Health(int health) : _health(health) {};
+    };
+
+    /**
+     * @brief Shield component
+     * 
+     */
+    struct Shield {
+        /**
+         * @brief timer to time the shield's effect
+         * 
+         */
+        Timer timer;
+        /**
+         * @brief sheild duration
+         * 
+         */
+        int totalTime = 3000;
+        /**
+         * @brief construct a Shield element
+         * 
+         * @param time sheild duration
+         * 
+         */
+        Shield(int time = 3000): totalTime(time), timer() {};
     };
 
     /**

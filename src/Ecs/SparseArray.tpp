@@ -177,8 +177,7 @@ inline void sparse_array<Component>::erase(size_type pos)
 {
     if (pos < _data.size()) {
         _data[pos].reset();
-    } else
-        throw std::out_of_range("🤥: out of range for erase");
+    }
 }
 
 /**

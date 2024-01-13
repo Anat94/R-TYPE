@@ -81,7 +81,9 @@ class AEvent : public IEvent {
         {
             if (dynamic_cast<const AEvent*>(&other) != nullptr) {
                 const AEvent &otherAEvent = dynamic_cast<const AEvent&>(other);
-                return _ents == otherAEvent._ents;
+                if ((_ents.first == otherAEvent._ents.first && _ents.second == otherAEvent._ents.second)
+                    || (_ents.first == otherAEvent._ents.second && _ents.second == otherAEvent._ents.first))
+                    return true;
             }
             return false;
         };
@@ -253,6 +255,27 @@ class DeathEvent : public AEvent {
          * @param touched the entity id that touched during the event
          */
         DeathEvent(entity_t gotTouched, entity_t touched) { _ents = {gotTouched, touched}; };
+        /**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+        void handleEvent(registry &r, EventListener &listener);
+};
+
+/**
+ * @brief Event that removes a shield off an entity
+ * 
+ */
+class RemoveShieldEvent: public AEvent {
+    public:
+        /**
+         * @brief Construct a new Remove Shield Event Object
+         * 
+         * @param gotTouched entity to remove shield for
+         */
+        RemoveShieldEvent(entity_t toRemove) { _ents = {toRemove, 0}; };
         /**
          * @brief Handles the event based on the registry objects
          * 
