@@ -87,21 +87,13 @@ class Server: public ISystems {
         void send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room);
         template <typename T>
         void send_data_to_client_by_entity(T& structure, entity_t entity) {
-            std::cout << "GONNA SEND TO SPECIFC\n";
-            auto endpoint = _ecs.get_components<component::Endpoint>()[entity];
-            // while (!can_send) continue;
-            // can_send = false;
-            // while (!can_mod) continue;
+            auto &endpoint = _ecs.get_components<component::Endpoint>()[entity];
             if (!endpoint.has_value()) {
                 std::cout << "INVALID ENDPOINT FOR ENTITY: " << entity << std::endl;
-                // can_send = true;
                 return;
             }
-            // can_mod = false;
+            _resend_packets_endpoints[structure.packet_id] = endpoint->_endpoint;
             _socket.send_to(asio::buffer(&structure, sizeof(structure)), endpoint->_endpoint);
-            // can_mod = true;
-            // can_send = true;
-            std::cout << "FINISHED SENDING TO SPECIFC\n";
         }
         void connectToDB();
         HighScoreMessage getHighScore();
@@ -137,6 +129,7 @@ class Server: public ISystems {
         std::vector<ScaleSnapshot> _scale_packets;
         std::vector<RoomCreationMessage> _room_creation_packets;
         std::vector<RoomJoinMessage> _room_join_packets;
+        std::unordered_map<int, udp::endpoint> _resend_packets_endpoints;
         std::array<char, 1024> _buf;
         // asio::io_service &_service;
         asio::io_context &_service;
