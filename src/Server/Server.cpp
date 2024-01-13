@@ -40,21 +40,6 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     return {0, 0};
 }
 
-// void Server::receiveThread() {
-//     asio::io_context& service = _service;
-//     for (int i = 0; i < 4; ++i)
-//         _tpool.emplace_back([this, &service]() { service.run(); });
-//     receive_from_client();
-// }
-
-/**
- * @brief operator () overload
- *
- * @param dra drawable component
- * @param scl scale component
- * @param pos position component
- * @param edp endpoint component
- */
 void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp) {
     if (resend_counter > 10) {
         resend_packets<SnapshotPosition>(_position_packets, edp);

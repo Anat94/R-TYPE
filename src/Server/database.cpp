@@ -130,15 +130,6 @@ void Server::connectToDB() {
     } else {
         std::cerr << "Database opened successfully" << std::endl;
     }
-    // std::string sql12 = "DELETE FROM FRIENDS";
-    // char *zErrMsg = 0;
-    // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
-    // if (rc != SQLITE_OK) {
-    //     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-    //     sqlite3_free(zErrMsg);
-    // } else {
-    //     fprintf(stdout, "Records created successfully\n");
-    // }
 }
 
 /**
