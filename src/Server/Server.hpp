@@ -52,7 +52,7 @@ class Server: public ISystems {
     public:
         Server(asio::io_context& service, int port, registry &ecs, EventListener &listener, std::mutex &mtx);
         ~Server();
-        void recieve_from_client();
+        void receive_from_client();
         void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
         entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
@@ -65,13 +65,12 @@ class Server: public ISystems {
         void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
         void send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp);
-        void recieveThread();
-        std::vector<char> recieve_raw_data_from_client();
+        std::vector<char> receive_raw_data_from_client();
         std::pair<int, int> get_position_change_for_event(entity_t entity, int event);
-        int recieve_client_event(std::vector<char> &, entity_t);
-        int recieve_connection_event(std::vector<char> &, entity_t);
-        int recieve_disconnection_event(std::vector<char> &, entity_t);
-        int recieve_packet_confirm(std::vector<char> &, entity_t);
+        int receive_client_event(std::vector<char> &, entity_t);
+        int receive_connection_event(std::vector<char> &, entity_t);
+        int receive_disconnection_event(std::vector<char> &, entity_t);
+        int receive_packet_confirm(std::vector<char> &, entity_t);
         int receive_login_event(std::vector<char> &, entity_t);
         int receive_friend_event(std::vector<char> &, entity_t);
         int receive_add_friend_event(std::vector<char>&, entity_t);
@@ -83,6 +82,13 @@ class Server: public ISystems {
         void send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp);
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
+        /**
+         * @brief send data to specific client
+         *
+         * @tparam T structure type
+         * @param structure structure to send
+         * @param entity entity to send to
+         */
         template <typename T>
         void send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room);
         template <typename T>
@@ -107,7 +113,6 @@ class Server: public ISystems {
         bool checkIfFriendshipExist(std::string name, std::string friendId);
         bool removeFriend(std::string name, std::string friendName);
         std::vector<std::string> displayFriends(std::string name, entity_t player_entity);
-        Friendship getFriendsData(std::string id);
         void send_highscore_to_specific_client(entity_t);
         void send_all_entity_drawables_to_specific_player(entity_t player);
         void send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
@@ -140,10 +145,10 @@ class Server: public ISystems {
         asio::ip::udp::socket _socket;
         int _packet_id = 0;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {1, &Server::recieve_client_event},
-            {2, &Server::recieve_connection_event},
-            {3, &Server::recieve_disconnection_event},
-            {5, &Server::recieve_packet_confirm},
+            {1, &Server::receive_client_event},
+            {2, &Server::receive_connection_event},
+            {3, &Server::receive_disconnection_event},
+            {5, &Server::receive_packet_confirm},
             {12, &Server::receive_chat_event},
             {17, &Server::receive_login_event},
             {18, &Server::receive_friend_event},

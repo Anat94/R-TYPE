@@ -14,8 +14,20 @@
 
 class CollisionSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Collision System object
+         *
+         * @param listener  Listener to add events
+         */
         CollisionSystem(EventListener *listener) : _listener(listener) {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra   List of hitboxes
+         * @param pos   List of positions
+         * @param rms   List of rooms
+         */
         void operator()(sparse_array<component::Hitbox> &dra, sparse_array<component::Position> &pos, sparse_array<component::Room> &rms) {
             std::vector<std::string> allRooms = RoomUtils::GetAll(rms);
             for (size_t i = 0; i < allRooms.size(); ++i) {

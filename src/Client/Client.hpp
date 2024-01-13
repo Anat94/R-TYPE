@@ -98,23 +98,47 @@ class Client {
 
         void displayTexts();
 
+        /**
+         * @brief Increase the level
+         *
+         */
         void addLevel() { _level++; }
+
+        /**
+         * @brief Increase the score
+         *
+         */
         void addScore() { _score++; }
+
+        /**
+         * @brief Decrease the lives
+         *
+         */
         void decreaseLives() { _lives--; }
+
+        /**
+         * @brief Increase the lives
+         *
+         */
         void increaseLives() { _lives++; }
+
+        /**
+         * @brief Get the level
+         *
+         * @return int
+         */
         void setLevel(int level) { _level = level; }
-        bool hasPendingMessages() const;
         int manageEvent();
         void receive();
-        int recieve_position_snapshot_update(std::vector<char> &);
-        int recieve_scale_snapshot_update(std::vector<char> &);
-        std::vector<char> recieve_raw_data_from_client();
-        int recieve_death_event(std::vector<char> &server_msg);
-        int recieve_high_score(std::vector<char> &server_msg);
-        int recieve_login_response(std::vector<char> &server_msg);
-        int recieve_drawable_snapshot_update(std::vector<char> &server_msg);
-        int recieve_animated_drawable_snapshot(std::vector<char> &server_msg);
-        int recieve_animated_drawable_state_update(std::vector<char> &server_msg);
+        int receive_position_snapshot_update(std::vector<char> &);
+        int receive_scale_snapshot_update(std::vector<char> &);
+        std::vector<char> receive_raw_data_from_client();
+        int receive_death_event(std::vector<char> &server_msg);
+        int receive_high_score(std::vector<char> &server_msg);
+        int receive_login_response(std::vector<char> &server_msg);
+        int receive_drawable_snapshot_update(std::vector<char> &server_msg);
+        int receive_animated_drawable_snapshot(std::vector<char> &server_msg);
+        int receive_animated_drawable_state_update(std::vector<char> &server_msg);
         int receive_friends_reponse(std::vector<char> &server_msg);
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
@@ -135,7 +159,7 @@ class Client {
         udp::endpoint _server_endpoint;
         std::string _username;
         //Content for network
-        SnapshotPosition _recieve_structure;
+        SnapshotPosition _receive_structure;
         std::array<char, 1024> _receiveBuffer;
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
@@ -186,18 +210,18 @@ class Client {
         std::thread receiveThread;
         std::queue<entity_t> _enemiesQueue;
         std::map<int16_t, messageParserHandle> _messageParser = {
-            {4, &Client::recieve_position_snapshot_update},
-            {6, &Client::recieve_drawable_snapshot_update},
-            {7, &Client::recieve_high_score},
-            {8, &Client::recieve_login_response},
+            {4, &Client::receive_position_snapshot_update},
+            {6, &Client::receive_drawable_snapshot_update},
+            {7, &Client::receive_high_score},
+            {8, &Client::receive_login_response},
             {9, &Client::receive_friends_reponse},
             {10, &Client::receive_add_friends_reponse},
             {11, &Client::receive_remove_friends_reponse},
             {12, &Client::receive_chat_event},
-            {13, &Client::recieve_animated_drawable_snapshot},
-            {14, &Client::recieve_animated_drawable_state_update},
-            {15, &Client::recieve_scale_snapshot_update},
-            {16, &Client::recieve_death_event},
+            {13, &Client::receive_animated_drawable_snapshot},
+            {14, &Client::receive_animated_drawable_state_update},
+            {15, &Client::receive_scale_snapshot_update},
+            {16, &Client::receive_death_event},
             {21, &Client::recieve_room_creation_event},
             {22, &Client::receive_room_join_event}
         };

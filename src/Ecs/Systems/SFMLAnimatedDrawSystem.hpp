@@ -11,8 +11,22 @@
 
 class SFMLAnimatedDrawSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new SFML Animated Draw System object
+         *
+         * @param window    Window to draw on
+         * @param mousePos  Mouse position
+         */
         SFMLAnimatedDrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param ani   List of animated drawables
+         * @param pos   List of positions
+         * @param sca   List of scales
+         * @param rot   List of rotations
+         */
         void operator()(sparse_array<component::AnimatedDrawable> &ani, sparse_array<component::Position> &pos, sparse_array<component::Scale> &sca, sparse_array<component::Rotation> &rot)
         {
             if (!_window->isOpen())

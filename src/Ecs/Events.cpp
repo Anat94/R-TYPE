@@ -7,30 +7,52 @@
 
 #include "Events.hpp"
 
+/**
+ * @brief  add an event to the queue
+ *
+ * @param event event to add
+ * @return true if the event was added
+ */
 bool EventListener::addEvent(IEvent *event)
 {
     _events.push(event);
     return true;
 }
 
+/**
+ * @brief  pop the first event of the queue and handle it
+ *
+ * @return true if an event was poped
+ * @return false if the queue is empty
+ */
 bool EventListener::popEvent()
 {
     if (!_events.empty()) {
-        // _reg->can_run_updates = false;
         IEvent* event = _events.front();
         _events.pop();
         event->handleEvent(*_reg, *this);
-        // _reg->can_run_updates = true;
         return true;
     } else
         return false;
 }
 
+/**
+ * @brief add a registry to the event listener
+ * 
+ * @param reg reference to the registry
+ */
 void EventListener::addRegistry(registry &reg)
 {
     _reg = &reg;
 }
 
+/**
+ * @brief has the event in the queue
+ *
+ * @param event event to check
+ * @return true if the event is in the queue
+ * @return false if the event is not in the queue
+ */
 bool EventListener::hasEvent(IEvent *event)
 {
     const std::type_info& eventType = typeid(*(event));
@@ -45,6 +67,12 @@ bool EventListener::hasEvent(IEvent *event)
     return false;
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -60,6 +88,12 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -78,6 +112,12 @@ void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listene
     }
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -148,6 +188,12 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+ * @brief event to handle the death of an entity
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
     //! remove enemy
@@ -195,11 +241,23 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+ * @brief event to handle the death of an entity
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // Todo: ping all other to connect new player
 }
 
+/**
+ * @brief event to handle the spawn of an entity
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 {
     entity_t enemy = r.spawn_entity();
@@ -220,6 +278,12 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     tmp1->_state = "idle";
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
@@ -255,11 +319,23 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // lance la fonction qui est passer en seconde dans _ents
 }
 
+/**
+ * @brief handle the event
+ *
+ * @param r registry to use
+ * @param listener event listener to use
+ */
 void HoverBtnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // chnage la couleur du bouton
