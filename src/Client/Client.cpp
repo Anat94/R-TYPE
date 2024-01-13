@@ -416,6 +416,7 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
     _chatEntity._chatTextInput.setPosition(50, 920);
     _chatEntity._chatTextInput.setFillColor(sf::Color::Black);
     receiveThread = std::thread(&Client::receive, this);
+    SelectedGame = "Rtype";
 }
 
 Client::~Client()
@@ -648,6 +649,18 @@ void Client::manageCli()
         } else if (command == "SHOWGAME") {
             std::cout << "GAME 1: Rtype" << std::endl;
             std::cout << "GAME 2: Plateformeur" << std::endl;
+        } else if (command == "GAMESELECTED") {
+            std::cout << "Game selected: " << SelectedGame << std::endl;
+        } else if (command == "SETGAME") {
+            if (params != "") {
+                if (params == "Rtype" || params == "Plateformeur") {
+                    SelectedGame = params;
+                    std::cout << "Game selected: " << params << std::endl;
+                } else
+                    std::cout << "Usage: SETGAME [Rtype | Plateformeur]" << std::endl;
+            } else {
+                std::cout << "Usage: SETGAME [Rtype | Plateformeur]" << std::endl;
+            }
         } else if (command == "HELP") {
             std::cout << "Available commands:" << std::endl;
             std::cout << "START: Start the game" << std::endl;
@@ -656,7 +669,9 @@ void Client::manageCli()
             std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
             std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
             std::cout << "WHOAMI: Show who you are" << std::endl;
-            std::cout << "SHOWGAME: Show all game available" << std::endl; 
+            std::cout << "SHOWGAME: Show all game available" << std::endl;
+            std::cout << "GAMESELECTED: Show the game selected" << std::endl; 
+            std::cout << "SETGAME: Set the game to start" << std::endl;
             std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
             std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
             std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;

@@ -216,6 +216,7 @@ class Client {
         bool prgrmstop = false;
         bool _logged_in = false;
         std::vector<int> _packets_received;
+        std::string SelectedGame;
 };
 
 #endif // CLIENT_HPP
