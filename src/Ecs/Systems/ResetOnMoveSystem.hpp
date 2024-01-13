@@ -11,10 +11,20 @@
 
 class ResetOnMoveSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Reset On Move System object
+         * 
+         */
         ResetOnMoveSystem() {
             timer.restart();
         };
 
+        /**
+         * @brief operator ()
+         *
+         * @param vel velocity of the entity
+         * @param res res of the entity
+         */
         void operator()(sparse_array<component::Velocity> &vel, sparse_array<component::ResetOnMove> &res) {
             if (timer.getElapsedTime() > threshold) {
                 timer.restart();

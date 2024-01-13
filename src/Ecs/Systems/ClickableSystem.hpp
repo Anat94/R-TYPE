@@ -11,6 +11,11 @@
 
 class ClickableSystem : public ISystems {
     public:
+    /**
+     * @brief Construct a new Clickable System object
+     *
+     * @param mousePos The mouse position
+     */
         ClickableSystem(sf::Vector2i *mousePos) : _mousePos(mousePos) {};
 
         void operator()(sparse_array<component::Clickable> &cli, sparse_array<component::Hitbox> &hit) {

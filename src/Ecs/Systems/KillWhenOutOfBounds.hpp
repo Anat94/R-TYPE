@@ -14,10 +14,22 @@
 
 class KillWhenOutOfBounds: public ISystems {
     public:
+        /**
+         * @brief Construct a new Kill When Out Of Bounds object
+         *
+         * @param listener  Listener to add events
+         * @param bounds    Bounds of the map
+         */
         KillWhenOutOfBounds(EventListener *listener, component::Position bounds) : _listener(listener), _bounds(bounds) {
             timer.restart();
         };
 
+        /**
+         * @brief operator ()
+         *
+         * @param pos position of the entity
+         * @param vel velocity of the entity
+         */
         void operator()(sparse_array<component::Position> &pos,sparse_array<component::Velocity> &vel) {
             if (timer.getElapsedTime() > 250) {
                 for (auto &&[idx, v, p] : zipper<sparse_array<component::Velocity>, sparse_array<component::Position>>(vel, pos)) {
