@@ -30,6 +30,7 @@
 #include "../Ecs/Systems/SFMLAnimatedDrawSystem.hpp"
 #include "../Ecs/Systems/SFMLTextDrawSystem.hpp"
 #include "../Ecs/Systems/SFMLDrawSystem.hpp"
+#include "../Ecs/Systems/ParallaxSystem.hpp"
 #include "../Ecs/Systems/RotationSystem.hpp"
 #include "../Ecs/Systems/ControlSystem.hpp"
 #include "../Ecs/Systems/ScaleSystem.hpp"
@@ -682,6 +683,7 @@ void Client::initClass()
     _ecs.register_component<component::Pierce>();
     _ecs.register_component<component::Heading>();
     _ecs.register_component<component::Drawable>();
+    _ecs.register_component<component::Parallax>();
     _ecs.register_component<component::Position>();
     _ecs.register_component<component::Rotation>();
     _ecs.register_component<component::Velocity>();
@@ -692,16 +694,27 @@ void Client::initClass()
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
     _background = _ecs.spawn_entity();
+    // entity_t _background2 = _ecs.spawn_entity();
+    // entity_t _background3 = _ecs.spawn_entity();
     _btn_play = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
-    _ecs.add_component(_background, component::Drawable("./assets/background.jpg"));
+    _ecs.add_component(_background, component::Drawable("assets/parallax-space-background.png"));
+    _ecs.add_component(_background, component::Parallax(1, 0));
+    // _ecs.add_component(_background2, component::Position(0.0f, 0.0f));
+    // _ecs.add_component(_background2, component::Drawable("assets/parallax-space-stars.png"));
+    // _ecs.add_component(_background2, component::Parallax(1, 1));
+    // _ecs.add_component(_background3, component::Position(0.0f, 0.0f));
+    // _ecs.add_component(_background3, component::Drawable("assets/parallax-space-far-planets.png"));
+    // _ecs.add_component(_background3, component::Parallax(1, 2));
     if (!_music.openFromFile("./assets/game_music.ogg"))
         throw SFMLError("Music not found");
     _listener.addRegistry(_ecs);
     SFMLDrawSystem *draw_sys = new SFMLDrawSystem(&_window, &_mouse_position);
-    _ecs.add_system<component::Drawable, component::Position, component::Clickable, component::Hitbox>(*draw_sys);
+    _ecs.add_system<component::Drawable, component::Position, component::Hitbox, component::Parallax>(*draw_sys);
     SFMLAnimatedDrawSystem *tmp_draw_sys = new SFMLAnimatedDrawSystem(&_window, &_mouse_position);
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
+    ParallaxSystem *par_sys = new ParallaxSystem();
+    _ecs.add_system<component::Parallax, component::Position>(*par_sys);
 }
 
 int Client::run()

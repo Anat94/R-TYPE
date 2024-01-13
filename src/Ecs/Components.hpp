@@ -557,6 +557,30 @@ namespace component {
         int _size;
         Text(const std::string &text, int size = 30) : _text(text), _size(size) {};
     };
+
+    /**
+     * @brief Parallax structure to know if a Drawable is a parallax
+     * 
+     */
+    struct Parallax {
+        /**
+         * @brief group id to refer to the correct parallax
+         * 
+         */
+        int _group;
+        /**
+         * @brief number representing the z-index of the element for the parallax
+         * 
+         */
+        int _index;
+        /**
+         * @brief Construct a new Parallax object
+         * 
+         * @param group the group id of the parallax 
+         * @param index the z-index of the element for the parallax
+         */
+        Parallax(int group, int index = 0) : _group(group), _index(index) {};
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
