@@ -51,6 +51,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<DeathEventMessage>(_death_packets, edp);
         resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
         resend_packets<RoomJoinMessage>(_room_join_packets, edp);
+        resend_packets<ScoreMessage>(_score_packets_to_send, edp);
+        resend_packets<HealthMessage>(_health_packets_to_send, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -93,8 +95,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
             }
         }
         send_position_snapshots_for_all_players(pos, edp);
-        send_health_to_specific_client(pos, edp);
-        send_score_to_specific_client(pos, edp);
+        send_health_to_specific_client(edp);
+        send_score_to_specific_client(edp);
         ++resend_counter;
     }
     recieve_from_client();
@@ -131,6 +133,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
+    std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
@@ -253,12 +256,11 @@ std::vector<char> Server::recieve_raw_data_from_client()
     return receivedData;
 }
 
-void Server::send_health_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
+void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
     auto &health = _ecs.get_components<component::Health>();
-    auto player = _ecs.get_components<component::Endpoint>();
-    for (size_t i = 0; i < pos.size(); i++) {
-        if (player[i].has_value() && health[i].has_value()) {
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && health[i].has_value()) {
             HealthMessage to_send(23, health[i].value()._health, _packet_id);
             printf("health ======== %d\n", health[i].value()._health);
             _packet_id++;
@@ -268,12 +270,11 @@ void Server::send_health_to_specific_client(sparse_array<component::Position> &p
     }
 }
 
-void Server::send_score_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
+void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
-    auto player = _ecs.get_components<component::Endpoint>();
-    auto score = _ecs.get_components<component::Score>();
-    for (size_t i = 0; i < pos.size(); i++) {
-        if (player[i].has_value() && score[i].has_value()) {
+    auto &score = _ecs.get_components<component::Score>();
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && score[i].has_value()) {
             ScoreMessage to_send(24, score[i]->_score, _packet_id);
             printf("score ======== %d\n", score[i]->_score);
             _packet_id++;
@@ -529,6 +530,20 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
         }
         ),
         _room_join_packets.end()
+    );
+    _score_packets_to_send.erase(
+        std::remove_if(_score_packets_to_send.begin(), _score_packets_to_send.end(), [id](const ScoreMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _score_packets_to_send.end()
+    );
+    _health_packets_to_send.erase(
+        std::remove_if(_health_packets_to_send.begin(), _health_packets_to_send.end(), [id](const HealthMessage& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        _health_packets_to_send.end()
     );
     return 0;
 }

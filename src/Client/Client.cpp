@@ -332,9 +332,12 @@ int Client::receive_health_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(HealthMessage))
         return 84;
+    std::cout << "JUST RECIEVED NEW HEALTH\n";
     HealthMessage *snapshot = reinterpret_cast<HealthMessage *>(server_msg.data());
     try {
         _lives = snapshot->health;
+        _lives_text.setString("Health: " + std::to_string(_lives));
+        std::cout << "SET NEW HEALTH B)\n";
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -371,7 +374,9 @@ void Client::receive()
         throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
     if (check_if_packet_exist == 0) {
+        std::cout << "GONNA PARSE: " << baseMsg->id << "\n";
         (this->*_messageParser[baseMsg->id])(server_msg);
+        std::cout << "FINISHED PARSE: " << baseMsg->id << "\n";
         if (_packets_received.size() > 1000)
             _packets_received.erase(_packets_received.begin());
         _packets_received.push_back(baseMsg->packet_id);
@@ -721,6 +726,7 @@ void Client::initClass()
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
+    _ecs.register_component<component::Shield>();
     _background = _ecs.spawn_entity();
     entity_t _background2 = _ecs.spawn_entity();
     entity_t _background3 = _ecs.spawn_entity();

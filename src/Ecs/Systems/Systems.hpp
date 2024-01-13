@@ -25,8 +25,16 @@
         #include "../Events.hpp"
     #endif
 
+/**
+ * @brief Pure Virtual Interface for the Systems
+ * 
+ */
 class ISystems {
     public:
+        /**
+         * @brief Destroy the ISystems object
+         * 
+         */
         virtual ~ISystems() = default;
 };
 

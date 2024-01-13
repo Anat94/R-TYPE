@@ -781,6 +781,10 @@ struct RoomJoinMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief structure to send health over network
+ * 
+ */
 struct HealthMessage : public BaseMessage {
     /**
      * @brief Health of the player
@@ -802,6 +806,10 @@ struct HealthMessage : public BaseMessage {
     };
 };
 
+/**
+ * @brief structure to send score over network
+ * 
+ */
 struct ScoreMessage : public BaseMessage {
     /**
      * @brief Score of the player

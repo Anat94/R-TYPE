@@ -93,6 +93,7 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
         if (player1_h.has_value() && player2_hurt.has_value()
             && player2_d.has_value()) {
             player1_h->_health -= player2_d->_damage;
+            r.add_component<component::Shield>(_ents.first, component::Shield(3000));
             if (player1_h->_health <= 0) {
                 DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
                 if (listener.hasEvent(new_event))
@@ -102,7 +103,7 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
             }
             player2_p->_pierce -= 1;
             if (player2_p->_pierce == 0) {
-                DeathEvent *new_event = new DeathEvent(_ents.second, -1);
+                DeathEvent *new_event = new DeathEvent(_ents.second, 0);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -134,7 +135,7 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
             }
             player1_p->_pierce -= 1;
             if (player1_p->_pierce == 0) {
-                DeathEvent *new_event = new DeathEvent(_ents.first, -1);
+                DeathEvent *new_event = new DeathEvent(_ents.first, 0);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -151,7 +152,6 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
     //! remove entity
-    bool is_player = r.get_components<component::Controllable>()[_ents.first].has_value();
     r.remove_component<component::Scale>(_ents.first);
     r.remove_component<component::Score>(_ents.first);
     r.remove_component<component::Damage>(_ents.first);
@@ -168,9 +168,11 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
     r.remove_component<component::Controllable>(_ents.first);
     r.remove_component<component::HurtsOnCollision>(_ents.first);
     r.remove_component<component::AnimatedDrawable>(_ents.first);
+    r.remove_component<component::Shield>(_ents.first);
 
     auto &killer_score = r.get_components<component::Score>()[_ents.second];
-    if (killer_score.has_value() && is_player) {
+    if (killer_score.has_value()) {
+        std::cout << "UPDATED SCORE OF +10\n";
         killer_score->_score += 10;
     }
 }
@@ -180,6 +182,11 @@ void SpawnEvent::handleEvent(registry &r, EventListener &listener)
     // Todo: ping all other to connect new player
 }
 
+void RemoveShieldEvent::handleEvent(registry &r, EventListener &listener)
+{
+    r.remove_component<component::Shield>(_ents.first);
+}
+
 void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 {
     entity_t enemy = r.spawn_entity();
@@ -187,7 +194,7 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
     r.add_component<component::Scale>(enemy, component::Scale(_scale));
     r.add_component<component::Health>(enemy, component::Health(_health));
-    r.add_component<component::Damage>(enemy, component::Damage(50));
+    r.add_component<component::Damage>(enemy, component::Damage(20));
     r.add_component<component::HurtsOnCollision>(enemy, component::HurtsOnCollision(-1));
     if (_roomName.size() != 0)
         r.add_component<component::Room>(enemy, component::Room(_roomName));

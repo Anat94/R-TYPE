@@ -61,8 +61,8 @@ class Server: public ISystems {
         void send_all_scale_to_player_by_room(entity_t entity);
         void send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp);
         void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
-        void send_health_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
-        void send_score_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
+        void send_health_to_specific_client(sparse_array<component::Endpoint> &edp);
+        void send_score_to_specific_client(sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra);
         void send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp);
         void send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp);
