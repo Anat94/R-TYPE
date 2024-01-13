@@ -132,11 +132,11 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
     try {
         entity_t real_entity = get_entity_from_server_entity(snapshot->entity);
         if (real_entity > 0 && pos[real_entity].has_value()) {
-            // if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
-            //     std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
+            if (std::abs(pos[real_entity]->x - snapshot->data.x) < MAX_POSITION_MOVE_THRESHOLD &&
+                std::abs(pos[real_entity]->y - snapshot->data.y) < MAX_POSITION_MOVE_THRESHOLD) {
             pos[real_entity]->x = snapshot->data.x;
             pos[real_entity]->y = snapshot->data.y;
-            // }
+            }
         } else {
             if (real_entity == 0)
                 real_entity = init_new_entity(snapshot->entity);
@@ -286,13 +286,12 @@ int Client::recieve_animated_drawable_snapshot(std::vector<char> &server_msg)
         continue;
     try {
         entity_t real_entity = get_entity_from_server_entity(snapshot->entity);
-        std::cout << "real entity: " << real_entity << std::endl;
         if (real_entity > 0 && drawables[real_entity].has_value()) {
             drawables[real_entity]->_state = std::string(snapshot->_state);
         } else {
             if (real_entity == 0)
                 real_entity = init_new_entity(snapshot->entity);
-            std::cout << "after new entity init: " << real_entity << std::endl;
+            std::cout << "just received animated drawable\n";
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
             auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
             for (size_t i = 0; i < snapshot->_anims.size(); i++) {

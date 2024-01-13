@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     ecs.add_system<component::Position, component::Velocity>(*pos_sys);
     KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
     ecs.add_system<component::Position, component::Velocity>(*kill_sys);
-    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 3);
+    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 2);
     ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room>(*engen_sys);
     CollisionSystem *col_sys = new CollisionSystem(&listener);
     ecs.add_system<component::Hitbox, component::Position, component::Room>(*col_sys);
