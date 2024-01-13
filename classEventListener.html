@@ -185,7 +185,6 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds an event passed as parameter to the queue of events. </p>
-<p>add an event to the queue</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">event</td><td>the event to add </td></tr>
@@ -194,14 +193,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the event was successfully added, </dd>
 <dd>
-false otherwise</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>event to add </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the event was added </dd></dl>
+false otherwise </dd></dl>
 
 </div>
 </div>
@@ -222,16 +214,9 @@ false otherwise</dd></dl>
 </div><div class="memdoc">
 
 <p>Stores the regitry_t object inside of the listener. </p>
-<p>add a registry to the event listener</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">reg</td><td>the registry_t instance pointer</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">reg</td><td>reference to the registry </td></tr>
+    <tr><td class="paramname">reg</td><td>the registry_t instance pointer </td></tr>
   </table>
   </dd>
 </dl>
@@ -255,7 +240,6 @@ false otherwise</dd></dl>
 </div><div class="memdoc">
 
 <p>Checks if the listener currently has the event passed as parameter. </p>
-<p>has the event in the queue</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">event</td><td></td></tr>
@@ -264,16 +248,7 @@ false otherwise</dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true </dd>
 <dd>
-false</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">event</td><td>event to check </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the event is in the queue </dd>
-<dd>
-false if the event is not in the queue </dd></dl>
+false </dd></dl>
 
 </div>
 </div>
@@ -293,13 +268,9 @@ false if the event is not in the queue </dd></dl>
 </div><div class="memdoc">
 
 <p>Removes the first event in the queue of events. </p>
-<p>pop the first event of the queue and handle it</p>
 <dl class="section return"><dt>Returns</dt><dd>true if the event whas successfully removed and executed, </dd>
 <dd>
-false otherwise</dd></dl>
-<dl class="section return"><dt>Returns</dt><dd>true if an event was poped </dd>
-<dd>
-false if the queue is empty </dd></dl>
+false otherwise </dd></dl>
 
 </div>
 </div>
