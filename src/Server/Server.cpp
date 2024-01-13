@@ -157,6 +157,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
     send_all_scale_to_player_by_room(new_player);
+    send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
     return new_player;
 }
 
@@ -168,8 +169,8 @@ void Server::send_all_scale_to_player(entity_t entity)
         if (!scale[i].has_value())
             continue;
         ScaleSnapshot to_send(15, i, *scale[i], _packet_id);
-        _packet_id++;
         _scale_packets.push_back(to_send);
+        _packet_id++;
         send_data_to_client_by_entity(to_send, entity);
     }
 }
@@ -271,9 +272,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
         std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
         return;
     }
-    // std::cout << "sending update\n";
     AnimatedStateUpdateMessage to_send(14, entity, state, 0);
-    // std::cout << "sending animated drawable update\n";
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(to_send, _animated_drawable_update_packets, edp, rooms, rooms[entity]->_name);
 }
@@ -293,9 +292,8 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
             animatedDrawable->_currentIdx,
             animatedDrawable->_anims,
             animatedDrawable->_state,
-            0
+            _packet_id
         );
-        auto &pos = _ecs.get_components<component::Position>()[entity];
         auto &rooms = _ecs.get_components<component::Room>();
         send_data_to_all_clients_by_room(snap_ad, _animated_drawable_packets, edp, rooms, rooms[entity]->_name);
     }
@@ -401,6 +399,7 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
     RoomJoinMessage to_send(22, std::string(joinMsg->room_name), _packet_id);
     _packet_id++;
     _room_join_packets.push_back(to_send);
+    _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
     _socket.send_to(asio::buffer(&to_send, sizeof(RoomJoinMessage)), _remote_endpoint);
     return 0;
 }
@@ -412,6 +411,7 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
         RoomCreationMessage to_send(21, "", "", _packet_id);
         _packet_id++;
         _room_creation_packets.push_back(to_send);
+        _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
         _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
         return -1;
     }
@@ -419,6 +419,7 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
     RoomCreationMessage to_send(21, std::string(creationMsg->username), std::string(creationMsg->room_name), _packet_id);
     _packet_id++;
     _room_creation_packets.push_back(to_send);
+    _resend_packets_endpoints[to_send.packet_id] = _remote_endpoint;
     _socket.send_to(asio::buffer(&to_send, sizeof(RoomCreationMessage)), _remote_endpoint);
     return 0;
 }
@@ -611,12 +612,14 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
     for (size_t i = 0; i < edp.size(); i++) {
-        if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)) || !rms[i].has_value())) {
+        if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)))) { //  || !rms[i].has_value()
             structure.packet_id = _packet_id;
             _packet_id += 1;
-            packets_to_send.push_back(structure);
-            if (edp[i].has_value())
+            if (edp[i].has_value()) {
+                packets_to_send.push_back(structure);
+                _resend_packets_endpoints[structure.packet_id] = edp[i]->_endpoint;
                 _socket.send_to(asio::buffer(&structure, sizeof(structure)), edp[i]->_endpoint);
+            }
         }
     }
 }
@@ -634,9 +637,6 @@ void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<compo
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets, sparse_array<component::Endpoint> &edp) {
     for (auto& packet : packets) {
-        for (size_t i = 0; i < edp.size(); i++) {
-            if (edp[i].has_value())
-                _socket.send_to(asio::buffer(&packet, sizeof(packet)), edp[i]->_endpoint);
-        }
+        _socket.send_to(asio::buffer(&packet, sizeof(packet)), _resend_packets_endpoints[packet.packet_id]);
     }
 }
