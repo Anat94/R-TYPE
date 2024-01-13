@@ -266,11 +266,11 @@ void Server::send_health_to_specific_client(sparse_array<component::Position> &p
             send_data_to_client_by_entity(to_send, i);
         }
     }
+    auto score = _ecs.get_components<component::Score>();
 }
 
 void Server::send_score_to_specific_client(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
 {
-    auto score = _ecs.get_components<component::Score>();
     auto player = _ecs.get_components<component::Endpoint>();
     for (size_t i = 0; i < pos.size(); i++) {
         if (player[i].has_value() && score[i].has_value()) {

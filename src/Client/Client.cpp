@@ -755,12 +755,12 @@ int Client::run()
     _music.setVolume(25);
     _lives = 0; // ((player1_h.has_value()) ? (player1_h->_health) : (0));
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));
-    _score_text.setString("Score: " + std::to_string(_score));
-    _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
     mtx.unlock();
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
+        _score_text.setString("Score: " + std::to_string(_score));
+        _lives_text.setString("Health: " + std::to_string(_lives));
         _window.clear();
         mtx.lock();
         if (manageEvent())
