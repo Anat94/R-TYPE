@@ -308,6 +308,12 @@ class Server: public ISystems {
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
         /**
+         * @brief Erase packets from their respective resend array when confirmation message is received.
+         * 
+         */
+        template <typename T>
+        void erase_packet_if_exists(std::vector<T> &packets, int id);
+        /**
          * @brief send data to all clients by their room
          *
          * @tparam T the type of the data

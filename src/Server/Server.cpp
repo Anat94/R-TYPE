@@ -599,6 +599,18 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
+template <typename T>
+void Server::erase_packet_if_exists(std::vector<T> &packets, int id)
+{
+    packets.erase(
+        std::remove_if(packets.begin(), packets.end(), [id](const T& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        packets.end()
+    );
+}
+
 /**
  * @brief receive packet confirm
  *
@@ -610,90 +622,18 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
-    _position_packets.erase(
-        std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _position_packets.end()
-    );
-    _drawable_packets.erase(
-        std::remove_if(_drawable_packets.begin(), _drawable_packets.end(), [id](const DrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _drawable_packets.end()
-    );
-    _highscore_packets.erase(
-        std::remove_if(_highscore_packets.begin(), _highscore_packets.end(), [id](const HighScoreMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _highscore_packets.end()
-    );
-    _animated_drawable_packets.erase(
-        std::remove_if(_animated_drawable_packets.begin(), _animated_drawable_packets.end(), [id](const AnimatedDrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_packets.end()
-    );
-    _animated_drawable_update_packets.erase(
-        std::remove_if(_animated_drawable_update_packets.begin(), _animated_drawable_update_packets.end(), [id](const AnimatedStateUpdateMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_update_packets.end()
-    );
-    _chat_packets.erase(
-        std::remove_if(_chat_packets.begin(), _chat_packets.end(), [id](const ChatMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _chat_packets.end()
-    );
-    _scale_packets.erase(
-        std::remove_if(_scale_packets.begin(), _scale_packets.end(), [id](const ScaleSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _scale_packets.end()
-    );
-    _death_packets.erase(
-        std::remove_if(_death_packets.begin(), _death_packets.end(), [id](const DeathEventMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _death_packets.end()
-    );
-    _room_creation_packets.erase(
-        std::remove_if(_room_creation_packets.begin(), _room_creation_packets.end(), [id](const RoomCreationMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_creation_packets.end()
-    );
-    _room_join_packets.erase(
-        std::remove_if(_room_join_packets.begin(), _room_join_packets.end(), [id](const RoomJoinMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_join_packets.end()
-    );
-    _score_packets_to_send.erase(
-        std::remove_if(_score_packets_to_send.begin(), _score_packets_to_send.end(), [id](const ScoreMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _score_packets_to_send.end()
-    );
-    _health_packets_to_send.erase(
-        std::remove_if(_health_packets_to_send.begin(), _health_packets_to_send.end(), [id](const HealthMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _health_packets_to_send.end()
-    );
+    erase_packet_if_exists(_position_packets, id);
+    erase_packet_if_exists(_drawable_packets, id);
+    erase_packet_if_exists(_highscore_packets, id);
+    erase_packet_if_exists(_animated_drawable_packets, id);
+    erase_packet_if_exists(_animated_drawable_update_packets, id);
+    erase_packet_if_exists(_chat_packets, id);
+    erase_packet_if_exists(_scale_packets, id);
+    erase_packet_if_exists(_death_packets, id);
+    erase_packet_if_exists(_room_creation_packets, id);
+    erase_packet_if_exists(_room_join_packets, id);
+    erase_packet_if_exists(_score_packets_to_send, id);
+    erase_packet_if_exists(_health_packets_to_send, id);
     return 0;
 }
 
