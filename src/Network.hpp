@@ -781,4 +781,54 @@ struct RoomJoinMessage: public BaseMessage {
     };
 };
 
+/**
+ * @brief structure to send health over network
+ * 
+ */
+struct HealthMessage : public BaseMessage {
+    /**
+     * @brief Health of the player
+    */
+    int health;
+
+    /**
+     * @brief constructor initializing the following parameters
+     *
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message
+     * @param health_ Health of the player
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
+    HealthMessage(int16_t id_, int health_, int packet_id_)
+    {
+        id = id_;
+        packet_id = packet_id_;
+        health = health_;
+    };
+};
+
+/**
+ * @brief structure to send score over network
+ * 
+ */
+struct ScoreMessage : public BaseMessage {
+    /**
+     * @brief Score of the player
+    */
+    int score;
+
+    /**
+     * @brief constructor initializing the following parameters
+     *
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message
+     * @param score_ Score of the player
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
+    ScoreMessage(int16_t id_, int score_, int packet_id_)
+    {
+        id = id_;
+        packet_id = packet_id_;
+        score = score_;
+    };
+};
+
 #endif //NETWORK_HPP

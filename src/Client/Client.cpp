@@ -137,6 +137,7 @@ int Client::receive_death_event(std::vector<char> &server_msg)
         entity_t real_entity = get_entity_from_server_entity(snapshot->entity);
         if (real_entity > 0)
             _listener.addEvent(new DeathEvent(real_entity, -1));
+        printf("SEXEEEEEEEEEEEEEEEEEEEE SANDERO\n");
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -207,6 +208,7 @@ entity_t Client::init_new_entity(entity_t srvEntity)
     entity_t new_entity = _ecs.spawn_entity();
     _ecs.add_component(new_entity, component::ServerEntity(srvEntity));
     _ecs.add_component(new_entity, component::Health(100));
+    _ecs.add_component(new_entity, component::Score());
     return new_entity;
 }
 
@@ -434,6 +436,47 @@ int Client::receive_animated_drawable_state_update(std::vector<char> &server_msg
 }
 
 /**
+ * @brief receive health event from the server
+ * 
+ * @param server_msg raw server message
+ * @return packet id
+ */
+int Client::receive_health_event(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(HealthMessage))
+        return 84;
+    std::cout << "JUST RECIEVED NEW HEALTH\n";
+    HealthMessage *snapshot = reinterpret_cast<HealthMessage *>(server_msg.data());
+    try {
+        _lives = snapshot->health;
+        _lives_text.setString("Health: " + std::to_string(_lives));
+        std::cout << "SET NEW HEALTH B)\n";
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+/**
+ * @brief receive score event from the server
+ * 
+ * @param server_msg raw server message
+ * @return packet id
+ */
+int Client::receive_score_event(std::vector<char> &server_msg)
+{
+    if (server_msg.size() < sizeof(ScoreMessage))
+        return 84;
+    ScoreMessage *snapshot = reinterpret_cast<ScoreMessage *>(server_msg.data());
+    try {
+        _score = snapshot->score;
+    } catch (const std::exception &ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    return snapshot->packet_id;
+}
+
+/**
  * @brief Receuve event from the server
  *
  * @param server_msg The message from the server
@@ -456,7 +499,9 @@ void Client::receive()
         throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
     if (check_if_packet_exist == 0) {
+        std::cout << "GONNA PARSE: " << baseMsg->id << "\n";
         (this->*_messageParser[baseMsg->id])(server_msg);
+        std::cout << "FINISHED PARSE: " << baseMsg->id << "\n";
         if (_packets_received.size() > 1000)
             _packets_received.erase(_packets_received.begin());
         _packets_received.push_back(baseMsg->packet_id);
@@ -853,18 +898,19 @@ void Client::initClass()
     _ecs.register_component<component::ServerEntity>();
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
+    _ecs.register_component<component::Shield>();
     _background = _ecs.spawn_entity();
-    // entity_t _background2 = _ecs.spawn_entity();
-    // entity_t _background3 = _ecs.spawn_entity();
+    entity_t _background2 = _ecs.spawn_entity();
+    entity_t _background3 = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("assets/parallax-space-background.png"));
     _ecs.add_component(_background, component::Parallax(1, 0));
-    // _ecs.add_component(_background2, component::Position(0.0f, 0.0f));
-    // _ecs.add_component(_background2, component::Drawable("assets/parallax-space-stars.png"));
-    // _ecs.add_component(_background2, component::Parallax(1, 1));
-    // _ecs.add_component(_background3, component::Position(0.0f, 0.0f));
-    // _ecs.add_component(_background3, component::Drawable("assets/parallax-space-far-planets.png"));
-    // _ecs.add_component(_background3, component::Parallax(1, 2));
+    _ecs.add_component(_background2, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background2, component::Drawable("assets/parallax-space-stars.png"));
+    _ecs.add_component(_background2, component::Parallax(1, 1));
+    _ecs.add_component(_background3, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background3, component::Drawable("assets/parallax-space-far-planets.png"));
+    _ecs.add_component(_background3, component::Parallax(1, 2));
     if (!_music.openFromFile("./assets/game_music.ogg"))
         throw SFMLError("Music not found");
     _listener.addRegistry(_ecs);
@@ -891,12 +937,12 @@ int Client::run()
     _music.setVolume(25);
     _lives = 0; // ((player1_h.has_value()) ? (player1_h->_health) : (0));
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));
-    _score_text.setString("Score: " + std::to_string(_score));
-    _lives_text.setString("Health: " + std::to_string(_lives));
     _lives_text.setPosition(1750, 10);
     mtx.unlock();
     while (true) {
         _mouse_position = sf::Mouse::getPosition(_window);
+        _score_text.setString("Score: " + std::to_string(_score));
+        _lives_text.setString("Health: " + std::to_string(_lives));
         _window.clear();
         mtx.lock();
         if (manageEvent())

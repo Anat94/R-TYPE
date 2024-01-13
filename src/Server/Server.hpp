@@ -147,6 +147,8 @@ class Server: public ISystems {
          * @param edp endpoint component
          */
         void send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
+        void send_health_to_specific_client(sparse_array<component::Endpoint> &edp);
+        void send_score_to_specific_client(sparse_array<component::Endpoint> &edp);
         /**
          * @brief send animated drawable snapshot to specific player
          * 
@@ -175,7 +177,7 @@ class Server: public ISystems {
          *
          * @param entity entity to send
          * @param dra all drawables
-         * @param edp ell endpoints
+         * @param edp all endpoints
          */
         void send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp);
         /**
@@ -305,6 +307,12 @@ class Server: public ISystems {
          */
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
+        /**
+         * @brief Erase packets from their respective resend array when confirmation message is received.
+         * 
+         */
+        template <typename T>
+        void erase_packet_if_exists(std::vector<T> &packets, int id);
         /**
          * @brief send data to all clients by their room
          *
@@ -537,10 +545,21 @@ class Server: public ISystems {
          */
         std::vector<RoomJoinMessage> _room_join_packets;
         /**
+         * @brief health packets to resend through network if not confirmed
+         * 
+         */
+        std::vector<HealthMessage> _health_packets_to_send;
+        /**
+         * @brief score packets to resend through network if not confirmed
+         * 
+         */
+        std::vector<ScoreMessage> _score_packets_to_send;
+        /**
          * @brief endpoints associated to packet_ids to know what endpoint sent what packet at the moment of the resend
          * 
          */
         std::unordered_map<int, udp::endpoint> _resend_packets_endpoints;
+        // asio::io_service &_service;
         /**
          * @brief ASIO contect service
          * 
