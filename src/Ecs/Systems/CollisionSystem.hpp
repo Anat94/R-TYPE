@@ -12,10 +12,26 @@
     #include "../Events.hpp"
     #include "../RoomUtils.hpp"
 
+/**
+ * @brief collision system
+ * 
+ */
 class CollisionSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Collision System object
+         *
+         * @param listener  Listener to add events
+         */
         CollisionSystem(EventListener *listener) : _listener(listener), timer() {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra   List of hitboxes
+         * @param pos   List of positions
+         * @param rms   List of rooms
+         */
         void operator()(sparse_array<component::Hitbox> &dra, sparse_array<component::Position> &pos, sparse_array<component::Room> &rms, sparse_array<component::Shield> &shd) {
             if (timer.getElapsedTime() > 100) {
                 std::vector<std::string> allRooms = RoomUtils::GetAll(rms);
@@ -40,7 +56,15 @@ class CollisionSystem : public ISystems {
             }
         };
     private:
+    /**
+     * @brief Event listener
+     * 
+     */
         EventListener *_listener;
+        /**
+         * @brief timer
+         * 
+         */
         Timer timer;
 };
 

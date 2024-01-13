@@ -13,8 +13,20 @@
 
 class ButtonSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Button System object
+         *
+         * @param listener Listener to add events
+         * @param window Window to get mouse position
+         */
         ButtonSystem(EventListener *listener, sf::RenderWindow &window) : _listener(listener), _window(window) {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param buttons List of buttons
+         * @param positions List of positions
+         */
         void operator()(sparse_array<component::Button> &buttons, sparse_array<component::Position> &positions) {
             sf::Vector2i mousePosition = sf::Mouse::getPosition(_window);
 

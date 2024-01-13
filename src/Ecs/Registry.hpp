@@ -186,18 +186,11 @@ class registry {
         /**
          * @brief run all the systems on the registry
          * 
-         * @param content DrawableContent structure containing sf::RenderWindow, and sf::Event
-         * 
         */
         void run_systems() {
-            // while (!can_run_updates) continue;
-            // can_run_updates = false;
-            // std::cout << "handling systems\n";
             for (auto& system : systems) {
                 system(*this);
             }
-            // std::cout << "finished handling systems\n";
-            // can_run_updates = true;
         }
 
     private:

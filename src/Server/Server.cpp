@@ -8,6 +8,13 @@
 #include "Server.hpp"
 #include "KeyEventMapping.hpp"
 
+/**
+ * @brief get position change for event
+ *
+ * @param entity the entity
+ * @param event the event
+ * @return std::pair<int, int> the position change
+ */
 std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int event)
 {
     auto &animatedDrawable = _ecs.get_components<component::AnimatedDrawable>()[entity];
@@ -33,13 +40,14 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     return {0, 0};
 }
 
-// void Server::recieveThread() {
-//     asio::io_context& service = _service;
-//     for (int i = 0; i < 4; ++i)
-//         _tpool.emplace_back([this, &service]() { service.run(); });
-//     recieve_from_client();
-// }
-
+/**
+ * @brief operator that gets called when the ECS launches systems
+ * 
+ * @param dra drawables
+ * @param scl scales
+ * @param pos position
+ * @param edp endpoints
+ */
 void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp) {
     if (resend_counter > 10) {
         resend_packets<SnapshotPosition>(_position_packets, edp);
@@ -99,15 +107,24 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         send_score_to_specific_client(edp);
         ++resend_counter;
     }
-    recieve_from_client();
+    receive_from_client();
 };
 
+/**
+ * @brief Construct a new Server:: Server object
+ *
+ * @param service The server's io_context
+ * @param port The port to listen to
+ * @param ecs The server's registry
+ * @param listener The server's event listener
+ * @param mtx_ The server's mutex
+ */
 Server::Server(asio::io_context& service, int port, registry& ecs, EventListener& listener, std::mutex &mtx_)
     : _service(service),
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
       _listener(listener),
-    //   _send_thread(&Server::recieveThread, this),
+    //   _send_thread(&Server::receiveThread, this),
       mtx(mtx_)
 {
     try {
@@ -117,6 +134,13 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
     }
 }
 
+/**
+ * @brief get player entity from connection address
+ *
+ * @param endpoint endpoint of the player
+ * @return entity_t the player's entity
+ * @return -1 if not found
+ */
 entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoint)
 {
     sparse_array<component::Endpoint> all_endpoints = _ecs.get_components<component::Endpoint>();
@@ -129,6 +153,14 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
     return -1;
 }
 
+/**
+ * @brief Connect a player to the server
+ *
+ * @param data The player's data
+ * @param username The player's username
+ * @param room_name The player's room name
+ * @return entity_t The player's entity
+ */
 entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
 {
     std::cout << "Connection" << std::endl;
@@ -166,6 +198,11 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     return new_player;
 }
 
+/**
+ * @brief Send all scale to player
+ *
+ * @param entity The entity
+ */
 void Server::send_all_scale_to_player(entity_t entity)
 {
     auto scale = _ecs.get_components<component::Scale>();
@@ -180,6 +217,11 @@ void Server::send_all_scale_to_player(entity_t entity)
     }
 }
 
+/**
+         * @brief Send all scales in the player's room, to the player 
+         *
+         * @param entity The entity
+         */
 void Server::send_all_scale_to_player_by_room(entity_t entity)
 {
     auto scale = _ecs.get_components<component::Scale>();
@@ -195,6 +237,13 @@ void Server::send_all_scale_to_player_by_room(entity_t entity)
     }
 }
 
+/**
+ * @brief Send scale to all client
+ *
+ * @param entity The entity
+ * @param scl scale component
+ * @param edp endpoint component
+ */
 void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp)
 {
     auto scale = scl[entity];
@@ -206,6 +255,11 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
 }
 
+/**
+         * @brief send all the drawables in a player's room, to a specific player
+         * 
+         * @param player player to send drawables to
+         */
 void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
 {
     auto drawables = _ecs.get_components<component::Drawable>();
@@ -221,6 +275,11 @@ void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t playe
     }
 }
 
+/**
+ * @brief send all entity drawables to specific player
+ *
+ * @param player the player entity
+ */
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
 {
     auto drawables = _ecs.get_components<component::Drawable>();
@@ -236,13 +295,23 @@ void Server::send_all_entity_drawables_to_specific_player(entity_t player)
     }
 }
 
+/**
+ * @brief Send highscore to specific client
+ *
+ * @param new_player The player's entity
+ */
 void Server::send_highscore_to_specific_client(entity_t new_player)
 {
     HighScoreMessage highscoreMsg = getHighScore();
     send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
 }
 
-std::vector<char> Server::recieve_raw_data_from_client()
+/**
+ * @brief receive data from client
+ *
+ * @return std::vector<char>  the data received
+ */
+std::vector<char> Server::receive_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
     _socket.non_blocking(true);
@@ -256,6 +325,11 @@ std::vector<char> Server::recieve_raw_data_from_client()
     return receivedData;
 }
 
+/**
+ * @brief send health to a specific player
+ * 
+ * @param edp all endpoints
+ */
 void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
     auto &health = _ecs.get_components<component::Health>();
@@ -270,6 +344,11 @@ void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &e
     }
 }
 
+/**
+ * @brief send score to a specific player
+ * 
+ * @param edp all endpoints
+ */
 void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
     auto &score = _ecs.get_components<component::Score>();
@@ -284,6 +363,12 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
     }
 }
 
+/**
+ * @brief Send position snapshots for all players
+ *
+ * @param pos position component
+ * @param edp endpoint component
+ */
 void Server::send_position_snapshots_for_all_players(sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp)
 {
     std::vector<SnapshotPosition> to_send = {};
@@ -299,6 +384,13 @@ void Server::send_position_snapshots_for_all_players(sparse_array<component::Pos
     }
 }
 
+/**
+ * @brief send animated drawable update to all clients
+ *
+ * @param entity entity to send
+ * @param state state to send
+ * @param edp endpoint component
+ */
 void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp)
 {
     if (state.size() > 15) {
@@ -310,6 +402,13 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
     send_data_to_all_clients_by_room(to_send, _animated_drawable_update_packets, edp, rooms, rooms[entity]->_name);
 }
 
+/**
+ * @brief send animated drawable update to all client
+ *
+ * @param entity entity to send
+ * @param dra drawable to send
+ * @param edp endpoint component
+ */
 void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp)
 {
     auto &animatedDrawable = dra[entity];
@@ -332,6 +431,12 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
     }
 }
 
+/**
+ * @brief send animated drawables in a player's room to a specific player
+ * 
+ * @param entity player to send the drawables dto
+ * @param dra all animated drawables
+ */
 void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
     auto rooms = _ecs.get_components<component::Room>();
@@ -357,6 +462,12 @@ void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity
     }
 }
 
+/**
+ * @brief send animated drawable snapshot to specific player
+ * 
+ * @param entity entity to send
+ * @param dra all animated drawables
+ */
 void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
     for (size_t i = 0; i < dra.size(); i++) {
@@ -381,6 +492,13 @@ void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entit
     }
 }
 
+/**
+ * @brief send drawable to all clients
+ *
+ * @param entity entity to send
+ * @param dra drawable to send
+ * @param edp endpoint component
+ */
 void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp)
 {
     component::Drawable drawable = dra[entity].value();
@@ -389,6 +507,12 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
     send_data_to_all_clients_by_room(to_send, _drawable_packets, edp, rooms, rooms[entity]->_name);
 }
 
+/**
+ * @brief send death event to all players
+ *
+ * @param entity entity to send
+ * @param edp endpoint component
+ */
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
     DeathEventMessage evt(16, entity, 0);
@@ -396,9 +520,13 @@ void Server::send_death_event_to_all_players(entity_t entity, sparse_array<compo
     send_data_to_all_clients_by_room(evt, _death_packets, edp, rooms, rooms[entity]->_name);
 }
 
-void Server::recieve_from_client()
+/**
+ * @brief receive info over udp network from client
+ *
+ */
+void Server::receive_from_client()
 {
-    std::vector<char> client_msg = recieve_raw_data_from_client();
+    std::vector<char> client_msg = receive_raw_data_from_client();
     if (client_msg.size() < sizeof(BaseMessage)) {
         return;
     }
@@ -413,11 +541,18 @@ void Server::recieve_from_client()
             return;
     }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
-        throw ArgumentError("ERROR: Invalid event recieved: " + std::to_string(baseMsg->id) + ".");
+        throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     (this->*_messageParser[baseMsg->id])(client_msg, player_entity);
     return;
 }
 
+/**
+ * @brief receive an event of room joining from the client
+ * 
+ * @param client_msg raw client message unparsed.
+ * @param _ 
+ * @return packet id of the received message
+ */
 int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
 {
     RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
@@ -437,6 +572,13 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
     return 0;
 }
 
+/**
+ * @brief receive an event of room creation from the client
+ * 
+ * @param client_msg raw client message unparsed.
+ * @param _ 
+ * @return packet id of the received message
+ */
 int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
     RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
 
@@ -457,7 +599,14 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
-int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
+/**
+ * @brief receive packet confirm
+ *
+ * @param client_msg the client message
+ * @param _ the entity
+ * @return int 0
+ */
+int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
@@ -548,7 +697,15 @@ int Server::recieve_packet_confirm(std::vector<char> & client_msg, entity_t _) {
     return 0;
 }
 
-int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_entity)
+/**
+ * @brief receive client event
+ *
+ * @param client_msg the client message
+ * @param player_entity the player entity
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
+int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
@@ -561,7 +718,14 @@ int Server::recieve_client_event(std::vector<char> &client_msg, entity_t player_
     return 0;
 }
 
-int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t _)
+/**
+ * @brief receive connection event
+ *
+ * @param client_msg the client message
+ * @param player_entity the player entity
+ * @return int 0 on success
+ */
+int Server::receive_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
@@ -570,12 +734,26 @@ int Server::recieve_connection_event(std::vector<char> &client_msg, entity_t _)
     return 0;
 }
 
-int Server::recieve_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
+/**
+ * @brief receive disconnection event
+ *
+ * @param client_msg the client message
+ * @param player_entity the player entity
+ * @return int 0 on success
+ */
+int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     _listener.addEvent(new DeathEvent(player_entity, 0));
     return 0;
 }
 
+/**
+ * @brief receive login event
+ *
+ * @param client_msg the client message
+ * @param player_entity the player entity
+ * @return int 0 on success
+ */
 int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_entity) {
     if (client_msg.size() < sizeof(LoginMessage))
         return -1;
@@ -591,6 +769,14 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
     return 0;
 }
 
+/**
+ * @brief receive friend event
+ *
+ * @param client_msg the client message
+ * @param player_entity the player entity
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(FriendsMessage)) {
@@ -602,6 +788,14 @@ int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_
     return 0;
 }
 
+/**
+ * @brief receive add friend event
+ *
+ * @param client_msg message from client
+ * @param player_entity the player entity
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
 int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(AddFriendsMessage))
@@ -615,6 +809,14 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
     return 0;
 }
 
+/**
+ * @brief receive remove friend event
+ *
+ * @param client_msg message from client
+ * @param player_entity the player entity
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
 int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(RemoveFriendsMessage))
@@ -626,6 +828,14 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
+/**
+ * @brief receive chat event
+ *
+ * @param client_msg message from client
+ * @param player_entity the player entity
+ * @return int 0 on success
+ * @return int -1 on failure
+ */
 int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_entity)
 {
     if (client_msg.size() < sizeof(ChatMessage))
@@ -638,11 +848,23 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
     return 0;
 }
 
+/**
+ * @brief Destroy the Server:: Server object
+ *
+ */
 Server::~Server() {
     // if (_send_thread.joinable())
     //     _send_thread.join();
 }
 
+/**
+ * @brief send data to all clients
+ *
+ * @tparam T the type of the data
+ * @param structure the data
+ * @param packets_to_send the packets to send
+ * @param edp endpoint component
+ */
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp) {
     for (size_t i = 0; i < edp.size(); i++) {
@@ -656,6 +878,16 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
     }
 }
 
+/**
+ * @brief send data to all clients by their room
+ *
+ * @tparam T the type of the data
+ * @param structure the data
+ * @param packets_to_send the packets to send
+ * @param edp endpoint component
+ * @param rms all rooms
+ * @param room room to send data to
+*/
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
     for (size_t i = 0; i < edp.size(); i++) {
@@ -671,6 +903,13 @@ void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& pack
     }
 }
 
+/**
+ * @brief send data to all clients except me
+ *
+ * @tparam T the type of the data
+ * @param structure the data
+ * @param entity the entity
+ */
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp) {
     for (size_t i = 0; i < edp.size(); i++) {
@@ -681,6 +920,13 @@ void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<compo
     }
 }
 
+/**
+ * @brief resend packets
+ *
+ * @tparam T the type of the data
+ * @param packets the packets to resend
+ * @param edp endpoint component
+ */
 template <typename T>
 void Server::resend_packets(std::vector<T> &packets, sparse_array<component::Endpoint> &edp) {
     for (auto& packet : packets) {

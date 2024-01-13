@@ -7,30 +7,53 @@
 
 #include "Events.hpp"
 
+/**
+         * @brief Adds an event passed as parameter to the queue of events
+         * 
+         * @param event the event to add
+         * @return true if the event was successfully added,
+         * @return false otherwise
+         */
 bool EventListener::addEvent(IEvent *event)
 {
     _events.push(event);
     return true;
 }
 
+/**
+         * @brief Removes the first event in the queue of events
+         * 
+         * @return true if the event whas successfully removed and executed,
+         * @return false otherwise
+         */
 bool EventListener::popEvent()
 {
     if (!_events.empty()) {
-        // _reg->can_run_updates = false;
         IEvent* event = _events.front();
         _events.pop();
         event->handleEvent(*_reg, *this);
-        // _reg->can_run_updates = true;
         return true;
     } else
         return false;
 }
 
+/**
+         * @brief Stores the regitry_t object inside of the listener
+         * 
+         * @param reg the registry_t instance pointer
+         */
 void EventListener::addRegistry(registry &reg)
 {
     _reg = &reg;
 }
 
+/**
+         * @brief Checks if the listener currently has the event passed as parameter
+         * 
+         * @param event 
+         * @return true 
+         * @return false 
+         */
 bool EventListener::hasEvent(IEvent *event)
 {
     const std::type_info& eventType = typeid(*(event));
@@ -45,6 +68,12 @@ bool EventListener::hasEvent(IEvent *event)
     return false;
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -60,6 +89,12 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+         * @brief Handle to keep an entity within window bounds
+         * 
+         * @param r registery_t object, containig the game instance and objects
+         * @param listener the event listener, used to create new events from this one when needed
+         */
 void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -78,6 +113,12 @@ void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listene
     }
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -149,6 +190,12 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
     //! remove entity
@@ -177,6 +224,12 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // Todo: ping all other to connect new player
@@ -187,6 +240,12 @@ void RemoveShieldEvent::handleEvent(registry &r, EventListener &listener)
     r.remove_component<component::Shield>(_ents.first);
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 {
     entity_t enemy = r.spawn_entity();
@@ -208,6 +267,12 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     tmp1->_state = "idle";
 }
 
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
@@ -244,11 +309,23 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
     }
 }
 
+/**
+ * @brief Handles the event based on the registry objects
+ * 
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+*/
 void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // lance la fonction qui est passer en seconde dans _ents
 }
 
+/**
+     * @brief Handles the event based on the registry objects
+     * 
+     * @param r the registry_t object used to store the game engine resources
+     * @param listener the event listener used to create new events if needed
+     */
 void HoverBtnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // chnage la couleur du bouton
