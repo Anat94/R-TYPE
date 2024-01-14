@@ -28,6 +28,7 @@
 #include "../Ecs/Systems/EnemyGeneration.hpp"
 #include "../Ecs/Systems/ShieldSystem.hpp"
 #include "../Ecs/Systems/KillOnTimerSystem.hpp"
+#include "../Ecs/Systems/AutomaticShootSystem.hpp"
 
 using asio::ip::udp;
 
@@ -86,6 +87,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Shield>();
     ecs.register_component<component::KillOnTimer>();
     ecs.register_component<component::ShootCounter>();
+    ecs.register_component<component::AutoShoot>();
     entity_t decoy = ecs.spawn_entity();
     ecs.add_component<component::Room>(decoy, component::Room("__"));
 
@@ -103,6 +105,8 @@ int main(int argc, char *argv[]) {
     ecs.add_system<component::Shield>(*shd_sys);
     KillOnTimerSystem *kot_sys = new KillOnTimerSystem(&listener);
     ecs.add_system<component::KillOnTimer>(*kot_sys);
+    AutomaticShootSystem *ash_sys = new AutomaticShootSystem(&listener, 1500);
+    ecs.add_system<component::AutoShoot>(*ash_sys);
     asio::io_context service;
     Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
     service.run();

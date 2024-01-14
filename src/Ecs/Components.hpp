@@ -194,6 +194,17 @@ namespace component {
     };
 
     /**
+     * @brief automatic shooting
+     * 
+    */
+    struct AutoShoot {
+        /**
+         * @brief Construct a new Username Object
+         */
+        AutoShoot() {};
+    };
+
+    /**
      * @brief user's name
      * 
     */
