@@ -893,6 +893,8 @@ void Client::initClass()
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
     _ecs.register_component<component::Shield>();
+    _ecs.register_component<component::ShootCounter>();
+    _ecs.register_component<component::KillOnTimer>();
     _background = _ecs.spawn_entity();
     entity_t _background2 = _ecs.spawn_entity();
     entity_t _background3 = _ecs.spawn_entity();
