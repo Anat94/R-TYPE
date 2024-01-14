@@ -153,6 +153,9 @@ endif()
 
 add_executable(server
         src/Ecs/Events.cpp
+        src/Ecs/StageManager.cpp
+        src/Ecs/ModelManager.cpp
+        src/Ecs/MapManager.cpp
         src/Server/Server.cpp
         src/Server/main.cpp
         src/Server/database.cpp
@@ -199,6 +202,9 @@ target_compile_features(server PRIVATE cxx_std_20)
 
 add_library(ecs STATIC
                 src/Ecs/Events.cpp
+                src/Ecs/StageManager.cpp
+                src/Ecs/ModelManager.cpp
+                src/Ecs/MapManager.cpp
         )
 target_link_libraries(ecs asio)
 target_include_directories(ecs PRIVATE cxx_std_20)
