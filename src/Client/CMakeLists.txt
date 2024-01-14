@@ -30,3 +30,32 @@ if(UNIX)
             ${CMAKE_SOURCE_DIR}/
     )
 endif()
+if (WIN32)
+        message("COPYING LIBRARIES")
+        message(${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-audio-d-2.dll)
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-audio-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-graphics-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-system-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-window-d-2.dll
+                ${CMAKE_SOURCE_DIR}/Debug
+        )
+        add_custom_command(TARGET client POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_SOURCE_DIR}/src/Client/assets
+                ${CMAKE_SOURCE_DIR}/Debug/assets
+        )
+endif()
