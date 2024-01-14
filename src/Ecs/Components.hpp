@@ -727,6 +727,18 @@ namespace component {
          */
         CampaignMode(const std::string& room_name) : _room_name(room_name) {};
     };
+
+    /**
+     * @brief SurvivesOutOfBound structure to know if an entity can survive going out of the screen
+     * 
+     */
+    struct SurvivesOutOfBound {
+        /**
+         * @brief boolean value to know if the entity can survive going out of the screen
+         * 
+         */
+        bool survives = true;
+    };
 };
 
 #endif /* !COMPONENTS_HPP_ */
