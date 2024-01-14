@@ -132,9 +132,11 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
       _listener(listener),
-    //   _send_thread(&Server::receiveThread, this),
       mtx(mtx_),
-    _logger(SERVER)
+      _stageManager(listener, ecs),
+      _modelManager(listener, ecs),
+      _mapManager(listener, ecs),
+      _logger(SERVER)
 {
     try {
         _logger.log(SERVER, "Server started on port " + std::to_string(port));
@@ -186,7 +188,7 @@ int Server::get_amount_of_players_in_room(std::string room_name)
  * @param room_name The player's room name
  * @return entity_t The player's entity
  */
-entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator, int room_mode)
 {
     entity_t new_player = _ecs.spawn_entity();
     std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
@@ -212,8 +214,14 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     }
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
-    if (username == _lobbies[room_name])
+    _ecs.add_component(new_player, component::Username(username));
+    if (username == _lobbies[room_name]) {
         _ecs.add_component(new_player, component::Host());
+        if (room_mode) {
+            _ecs.add_component(new_player, component::CampaignMode(room_name));
+            loadLevels(room_name);
+        }
+    }
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
     if (!is_spectator) send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
@@ -716,7 +724,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->spectator_mode) << std::endl;
+    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->spectator_mode, msg->room_mode) << std::endl;
     return 0;
 }
 
@@ -846,8 +854,6 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
  */
 Server::~Server() {
     _logger.log(SERVER, "Destroying server");
-    // if (_send_thread.joinable())
-    //     _send_thread.join();
 }
 
 /**
@@ -927,5 +933,36 @@ template <typename T>
 void Server::resend_packets(std::vector<T> &packets, sparse_array<component::Endpoint> &edp) {
     for (auto& packet : packets) {
         _socket.send_to(asio::buffer(&packet, sizeof(packet)), _resend_packets_endpoints[packet.packet_id]);
+    }
+}
+
+void Server::loadLevels(const std::string &room_name)
+{
+    _stageManager.loadStages(room_name);
+    _modelManager.loadModels(room_name);
+    _mapManager.loadMaps(room_name);
+
+    std::vector<std::string> titles = _stageManager.getStageNamesForRoom(room_name);
+    std::unordered_map<std::string, std::vector<std::string>> enemies = _stageManager.getEnemiesForRoom(room_name);
+    std::unordered_map<std::string, std::vector<component::Drawable>> bg = _stageManager.getBackgroundsForRoom(room_name);
+
+    std::unordered_map<std::string, std::vector<component::Position>> enemies_positions = _mapManager.getEnemiesPositionForRoom(room_name);
+
+    std::unordered_map<std::string, component::AnimatedDrawable> drawables = _modelManager.getModelsForRoom(room_name);
+
+    std::string current_stage = titles[0];
+    
+    for (auto enemy : enemies[current_stage]) {
+        auto aliases = _modelManager.getAliasesForEntity(enemy);
+        auto anims = _modelManager.getAnimsForEntity(enemy);
+        auto props = _modelManager.getPropertiesForEntity(enemy);
+        auto draw = drawables[enemy];
+        for (auto alias : aliases) {
+            auto pos = enemies_positions[alias];
+            for (auto p : pos) {
+                std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
+                _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name));
+            }
+        }
     }
 }

@@ -2,6 +2,9 @@
 
 add_library(ecs STATIC
                 Events.cpp
+                StageManager.cpp
+                MapManager.cpp
+                ModelManager.cpp
         )
 target_link_libraries(ecs
                 asio
