@@ -19,6 +19,7 @@ target_link_libraries(client
         sfml-system
         sfml-window
         asio
+        ${CMAKE_SOURCE_DIR}/libecs.a
 )
 target_compile_options(client PRIVATE -Wall)
 
