@@ -197,7 +197,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
         _ecs.add_component(new_player, component::ResetOnMove());
         _ecs.add_component(new_player, component::Controllable());
         _ecs.add_component(new_player, component::Heading());
-        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20 * (get_amount_of_players_in_room(room_name) % 5)}));
+        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3 + (20 * (get_amount_of_players_in_room(room_name) % 5))}));
         _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
         auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
         tmp->addAnimation("idle", {2, 2}, false);
@@ -400,7 +400,6 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
-            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
             addHighScore(username[i]->_name, score[i]->_score);
         }
     }
@@ -961,7 +960,7 @@ void Server::loadLevels(const std::string &room_name)
                 auto pos = enemies_positions[alias];
                 for (auto p : pos) {
                     std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
-                    _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
+                    _listener.addEvent(new SpawnEnemy(props.damage, props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
                 }
             }
         }
