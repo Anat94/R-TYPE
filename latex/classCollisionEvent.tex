@@ -1,5 +1,5 @@
-\doxysection{Collision\+Event Class Reference}
-\hypertarget{classCollisionEvent}{}\label{classCollisionEvent}\index{CollisionEvent@{CollisionEvent}}
+\hypertarget{classCollisionEvent}{}\doxysection{Collision\+Event Class Reference}
+\label{classCollisionEvent}\index{CollisionEvent@{CollisionEvent}}
 
 
 Collision event class.  
@@ -15,48 +15,21 @@ Inheritance diagram for Collision\+Event\+:\begin{figure}[H]
 \includegraphics[height=3.000000cm]{classCollisionEvent}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classCollisionEvent_a669274962a215c8e018c858ff92b28f7}{Collision\+Event}} (entity\+\_\+t got\+Touched, entity\+\_\+t touched)
 \begin{DoxyCompactList}\small\item\em Construct a new Collision Event object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
 \begin{DoxyCompactList}\small\item\em Handles the event based on the registry objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classAEvent}{AEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_ad3824df16d31a5f97f3afe91336448d6}{get}} () const
-\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const override
-\begin{DoxyCompactList}\small\item\em operator== allows comparison between two events \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\begin{DoxyCompactList}\small\item\em Main function of the Event, used to aply changes on the registery passed as paramter. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classIEvent}{IEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{\texorpdfstring{$\sim$}{\string~}\+IEvent}} ()=default
-\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classIEvent}{IEvent} object. \end{DoxyCompactList}\item 
-virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{get}} () const =0
-\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
-virtual bool \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const =0
-\item 
-virtual void \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classAEvent}{AEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\+\_\+ents}}
-\begin{DoxyCompactList}\small\item\em The two main objects id responsible for the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
 
 
 \doxysubsection{Detailed Description}
 Collision event class. 
 
-
-
 \doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classCollisionEvent_a669274962a215c8e018c858ff92b28f7}\label{classCollisionEvent_a669274962a215c8e018c858ff92b28f7} 
+\mbox{\Hypertarget{classCollisionEvent_a669274962a215c8e018c858ff92b28f7}\label{classCollisionEvent_a669274962a215c8e018c858ff92b28f7}} 
 \index{CollisionEvent@{CollisionEvent}!CollisionEvent@{CollisionEvent}}
 \index{CollisionEvent@{CollisionEvent}!CollisionEvent@{CollisionEvent}}
 \doxysubsubsection{\texorpdfstring{CollisionEvent()}{CollisionEvent()}}
@@ -76,7 +49,7 @@ Construct a new Collision Event object.
 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}\label{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f} 
+\mbox{\Hypertarget{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}\label{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}} 
 \index{CollisionEvent@{CollisionEvent}!handleEvent@{handleEvent}}
 \index{handleEvent@{handleEvent}!CollisionEvent@{CollisionEvent}}
 \doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
@@ -86,22 +59,11 @@ Construct a new Collision Event object.
 
 Handles the event based on the registry objects. 
 
-handle the event
-
 
 \begin{DoxyParams}{Parameters}
 {\em r} & the registry\+\_\+t object used to store the game engine resources \\
 \hline
-{\em listener} & the event listener used to create new events if needed\\
-\hline
-\end{DoxyParams}
-
-
-
-\begin{DoxyParams}{Parameters}
-{\em r} & registry to use \\
-\hline
-{\em listener} & event listener to use \\
+{\em listener} & the event listener used to create new events if needed \\
 \hline
 \end{DoxyParams}
 

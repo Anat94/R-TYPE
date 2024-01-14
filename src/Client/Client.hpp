@@ -36,6 +36,7 @@
     #include "../Errors.hpp"
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Logger/logger.hpp"
 
 /**
  * @brief check state of player in game (e.g. in chat, in highscore menu, playing, ...)
@@ -204,33 +205,199 @@ class Client {
         /**
          * @brief Get the level
          *
-         * @return int
+         * @return void
          */
         void setLevel(int level) { _level = level; }
+
+        /**
+         * @brief manage sfml event
+         *
+         * @return int
+         */
         int manageEvent();
+
+        /**
+         * @brief Receive event from the server
+         *
+         * @return void
+         */
         void receive();
+
+        /**
+         * @brief Position snapshot update from server
+         *
+         * @return int
+         */
         int receive_position_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Scale snapshot update from server
+         *
+         * @return int
+         */
         int receive_scale_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Receive data from the server and store them
+         *
+         * @return std::vector<char>
+         */
         std::vector<char> receive_raw_data_from_client();
+
+        /**
+         * @brief get when a player dead
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_death_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief get best 3 highscores from server
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_high_score(std::vector<char> &server_msg);
+
+        /**
+         * @brief while login, this get the login response from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_login_response(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive thr drawable from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_drawable_snapshot_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive the animated drawable from the server
+         * 
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_snapshot(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive animation update from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_state_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief get friends from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief response of adding friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_add_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief reponse of removing friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive a chat from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_chat_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room creation event
+         *
+         * @param server_msg raw server message
+         * @return int
+         */
         int recieve_room_creation_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room join event
+         * 
+         * @param server_msg raw server message
+         * @return int 
+         */
         int receive_room_join_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive health event from the server
+         *
+         * @param server_msg raw server message
+         * @return packet id
+         */
         int receive_health_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive score event from the server
+         * 
+         * @param server_msg raw server message
+         * @return packet id
+         */
         int receive_score_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief Display the scoreboard menu
+         *
+         * @return void
+         */
         void displayScoreBoardMenu();
+
+        /**
+         * @brief Handle input from the user
+         *
+         * @param event Event of the window
+         */
         void handleInput(sf::Event &event);
+
+        /**
+         * @brief initialize a new entity
+         * 
+         * @param srvEntity server entity to initialize for
+         * @return created entity 
+         */
         entity_t init_new_entity(entity_t srvEntity);
+
+        /**
+         * @brief manage the client cli at the beginning of the program
+         *
+         * @return void
+         */
         void manageCli();
+
+        /**
+         * @brief Init client class
+         *
+         * @return void
+         */
         void initClass();
+
+        /**
+         * @brief Get client entity from the server's entity
+         * 
+         * @param srvEntity server entity
+         * @return client entity
+         */
         entity_t get_entity_from_server_entity(entity_t srvEntity);
     private:
         /**
@@ -457,6 +624,12 @@ class Client {
          * 
          */
         std::vector<int> _packets_received;
+
+        /**
+         * @brief Class to display debug
+         * 
+         */
+        Logger _logger;
 };
 
 #endif // CLIENT_HPP

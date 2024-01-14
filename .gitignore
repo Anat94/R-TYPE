@@ -22,3 +22,4 @@ db.txt
 my_tests
 sqlite3/
 lib/
+db/rtype.db
