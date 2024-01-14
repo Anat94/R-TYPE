@@ -394,7 +394,6 @@ int Client::receive_animated_drawable_snapshot(std::vector<char> &server_msg)
         } else {
             if (real_entity == 0)
                 real_entity = init_new_entity(snapshot->entity);
-            std::cout << "just received animated drawable\n";
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
             auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
             for (size_t i = 0; i < snapshot->_anims.size(); i++) {
@@ -894,6 +893,8 @@ void Client::initClass()
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
     _ecs.register_component<component::Shield>();
+    _ecs.register_component<component::ShootCounter>();
+    _ecs.register_component<component::KillOnTimer>();
     _background = _ecs.spawn_entity();
     entity_t _background2 = _ecs.spawn_entity();
     entity_t _background3 = _ecs.spawn_entity();
