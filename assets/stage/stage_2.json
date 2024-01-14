@@ -1,0 +1,16 @@
+{
+    "name": "A less fresh start",
+    "map": "stage_2.txt",
+    "texture": [
+        "assets/parallax-space-background.png",
+        "assets/parallax-space-stars.png",
+        "assets/parallax-space-far-planets.png"
+    ],
+    "enemy": [
+        "soldier",
+        "zuzz"
+    ],
+    "win_condition": [
+        "survive"
+    ]
+}

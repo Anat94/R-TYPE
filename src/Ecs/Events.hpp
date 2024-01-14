@@ -255,7 +255,7 @@ class SpawnEnemy : public AEvent {
          * @param gotTouched entity id that got touched in the event
          * @param touched entity id that touched during the event
          */
-        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> anims, std::string roomName): _roomName(roomName), _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
+        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, animation_t anims, std::string roomName, bool survives_ = false): _roomName(roomName), _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims), survives(survives_) { _ents = {-1, -1}; };
         /**
          * @brief Handles the event based on the registry objects
          * 
@@ -298,7 +298,12 @@ class SpawnEnemy : public AEvent {
          * @brief sprite animations of the new enemy
          * 
          */
-        std::unordered_map<std::string, std::pair<std::pair<int, int>, bool>> _anims;
+        animation_t _anims;
+        /**
+         * @brief boolean value to know if the entity does survive not being on screen
+         * 
+         */
+        bool survives;
 };
 
 /**
@@ -491,6 +496,24 @@ class ClickBtnEvent : public AEvent {
      * @param listener the event listener used to create new events if needed
      */
     void handleEvent(registry &r, EventListener &listener);
+};
+
+class RemoveSurvivesEvent : public AEvent {
+    public:
+        /**
+         * @brief Construct a new RemoveSurvivesEvent object
+         * 
+         * @param ent the entity id that loses its survival component
+         */
+        RemoveSurvivesEvent(entity_t ent) { _ents = {ent, -1}; };
+
+        /**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+        void handleEvent(registry &r, EventListener &listener);
 };
 
 #endif /* !EVENT_HPP_ */

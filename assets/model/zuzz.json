@@ -1,0 +1,24 @@
+{
+    "name": "zuzz",
+    "aliases": [
+        "z",
+        "Z"
+    ],
+    "type": "animated_entity",
+    "health": 100,
+    "velocity": -30,
+    "damage": 10,
+    "scale": 5,
+    "texture": "temp/assets/textures/sprites/r-typesheet14.gif",
+    "number_of_sprites": 5,
+    "sprite_size": [48, 47],
+    "gaps": [2, 0],
+    "offset": [1, 2],
+    "animations": [
+        {
+            "name": "idle",
+            "sprites": [4, 0],
+            "reset": true
+        }
+    ]
+}

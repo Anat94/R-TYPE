@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['negation_0',['negation',['../structdetail_1_1negation.html',1,'detail']]],
-  ['nonesuch_1',['nonesuch',['../structdetail_1_1nonesuch.html',1,'detail']]]
+  ['make_5fvoid_874',['make_void',['../structdetail_1_1make__void.html',1,'detail']]],
+  ['menu_875',['Menu',['../classMenu.html',1,'']]]
 ];
