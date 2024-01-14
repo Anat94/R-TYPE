@@ -1,21 +1,26 @@
-[14/1/2024 18:16:33] Client is starting
-[14/1/2024 18:16:38] Client is connected successfully
-[14/1/2024 18:16:40] Received create command
-[14/1/2024 18:16:40] Received room creation event
-[14/1/2024 18:16:42] Received start command
-[14/1/2024 18:16:42] Window created
-[14/1/2024 18:16:42] Received high score
-[14/1/2024 18:16:50] Received death event
-[14/1/2024 18:16:50] Received death event
-[14/1/2024 18:16:50] Received death event
-[14/1/2024 18:16:51] Received death event
-[14/1/2024 18:16:51] Received death event
-[14/1/2024 18:16:51] Received death event
-[14/1/2024 18:16:53] Received death event
-[14/1/2024 18:16:54] Received death event
-[14/1/2024 18:16:54] Received death event
-[14/1/2024 18:16:54] Received death event
-[14/1/2024 18:16:54] Received death event
-[14/1/2024 18:16:55] Received death event
-[14/1/2024 18:16:56] Received death event
-[14/1/2024 18:16:56] Client is stopping
+[14/1/2024 22:57:16] Client is starting
+[14/1/2024 22:57:19] Client is connected successfully
+[14/1/2024 22:57:21] Received create command
+[14/1/2024 22:57:21] Received room creation event
+[14/1/2024 22:57:22] Received start command
+[14/1/2024 22:57:22] Window created
+[14/1/2024 22:57:22] Received high score
+[14/1/2024 22:57:29] Received death event
+[14/1/2024 22:57:29] Received death event
+[14/1/2024 22:57:29] Received death event
+[14/1/2024 22:57:30] Received death event
+[14/1/2024 22:57:30] Received death event
+[14/1/2024 22:57:31] Received death event
+[14/1/2024 22:57:31] Received death event
+[14/1/2024 22:57:32] Received death event
+[14/1/2024 22:57:32] Received death event
+[14/1/2024 22:57:32] Received death event
+[14/1/2024 22:57:33] Received death event
+[14/1/2024 22:57:35] Received death event
+[14/1/2024 22:57:35] Received death event
+[14/1/2024 22:57:35] Received death event
+[14/1/2024 22:57:36] Received death event
+[14/1/2024 22:57:38] Received death event
+[14/1/2024 22:57:40] Received death event
+[14/1/2024 22:57:40] Received death event
+[14/1/2024 22:57:41] Client is stopping

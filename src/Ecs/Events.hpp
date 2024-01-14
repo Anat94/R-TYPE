@@ -255,7 +255,7 @@ class SpawnEnemy : public AEvent {
          * @param gotTouched entity id that got touched in the event
          * @param touched entity id that touched during the event
          */
-        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, animation_t anims, std::string roomName, bool autoShoot): automaticShooting(autoShoot), _roomName(roomName), _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
+        SpawnEnemy(int health, float scale, component::Velocity vel, component::Position pos, component::AnimatedDrawable animatedDrawable, animation_t anims, std::string roomName, bool autoShoot = false): automaticShooting(autoShoot), _roomName(roomName), _animatedDrawable(animatedDrawable), _health(health), _scale(scale), _vel(vel._dx, vel._dy), _pos(pos.x, pos.y), _anims(anims) { _ents = {-1, -1}; };
         /**
          * @brief Handles the event based on the registry objects
          * 

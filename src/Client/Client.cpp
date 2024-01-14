@@ -213,6 +213,7 @@ entity_t Client::init_new_entity(entity_t srvEntity)
     _ecs.add_component(new_entity, component::ServerEntity(srvEntity));
     _ecs.add_component(new_entity, component::Health(100));
     _ecs.add_component(new_entity, component::Score());
+    _ecs.add_component(new_entity, component::Scale(6.0f));
     return new_entity;
 }
 

@@ -533,9 +533,9 @@ namespace component {
          */
         bool isTouching(const Position &pos1, const Position &pos2, const Hitbox &other) {
             return (pos1.x < (pos2.x + other._size.x) &&
-                    (pos1.x + other._size.x) > pos2.x &&
+                    pos1.x > pos2.x &&
                     pos1.y < (pos2.y + other._size.y) &&
-                    (pos1.y + other._size.y) > pos2.y);
+                    pos1.y > pos2.y);
         };
         /**
          * @brief check if hitbox contains position
