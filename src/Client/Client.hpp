@@ -299,18 +299,105 @@ class Client {
          * @return int  The packet id
          */
         int receive_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief response of adding friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_add_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief reponse of removing friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive a chat from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_chat_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room creation event
+         *
+         * @param server_msg raw server message
+         * @return int
+         */
         int recieve_room_creation_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room join event
+         * 
+         * @param server_msg raw server message
+         * @return int 
+         */
         int receive_room_join_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive health event from the server
+         *
+         * @param server_msg raw server message
+         * @return packet id
+         */
         int receive_health_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive score event from the server
+         * 
+         * @param server_msg raw server message
+         * @return packet id
+         */
         int receive_score_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief Display the scoreboard menu
+         *
+         * @return void
+         */
         void displayScoreBoardMenu();
+
+        /**
+         * @brief Handle input from the user
+         *
+         * @param event Event of the window
+         */
         void handleInput(sf::Event &event);
+
+        /**
+         * @brief initialize a new entity
+         * 
+         * @param srvEntity server entity to initialize for
+         * @return created entity 
+         */
         entity_t init_new_entity(entity_t srvEntity);
+
+        /**
+         * @brief manage the client cli at the beginning of the program
+         *
+         * @return void
+         */
         void manageCli();
+
+        /**
+         * @brief Init client class
+         *
+         * @return void
+         */
         void initClass();
+
+        /**
+         * @brief Get client entity from the server's entity
+         * 
+         * @param srvEntity server entity
+         * @return client entity
+         */
         entity_t get_entity_from_server_entity(entity_t srvEntity);
     private:
         /**
