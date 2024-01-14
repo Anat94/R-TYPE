@@ -1,20 +1,67 @@
-\doxysection{Database\+Error Class Reference}
-\hypertarget{classDatabaseError}{}\label{classDatabaseError}\index{DatabaseError@{DatabaseError}}
+\hypertarget{classDatabaseError}{}\doxysection{Database\+Error Class Reference}
+\label{classDatabaseError}\index{DatabaseError@{DatabaseError}}
+
+
+Custom Database \mbox{\hyperlink{classError}{Error}} class.  
+
+
+
+
+{\ttfamily \#include $<$Errors.\+hpp$>$}
+
 Inheritance diagram for Database\+Error\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{classDatabaseError}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classDatabaseError_a2fa4b0bebe1aeeeda6cfbe9b33bb5d47}\label{classDatabaseError_a2fa4b0bebe1aeeeda6cfbe9b33bb5d47} 
-{\bfseries Database\+Error} (std\+::string message)
-\item 
-\Hypertarget{classDatabaseError_a7d0f225cc0186b1308e9c104ac636c0d}\label{classDatabaseError_a7d0f225cc0186b1308e9c104ac636c0d} 
-const char \texorpdfstring{$\ast$}{*} {\bfseries what} () const noexcept
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classDatabaseError_a2fa4b0bebe1aeeeda6cfbe9b33bb5d47}{Database\+Error}} (std\+::string message)
+\begin{DoxyCompactList}\small\item\em Constructor to call in a \char`\"{}throw\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classDatabaseError_a045130991832027dddaf0f9e173ed550}\label{classDatabaseError_a045130991832027dddaf0f9e173ed550}} 
+\mbox{\hyperlink{classDatabaseError_a045130991832027dddaf0f9e173ed550}{$\sim$\+Database\+Error}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the structure. \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{classDatabaseError_a3d9234dcc88b0da3033bc9c03b029879}{what}} () const noexcept
+\begin{DoxyCompactList}\small\item\em used to get the error message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Custom Database \mbox{\hyperlink{classError}{Error}} class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDatabaseError_a2fa4b0bebe1aeeeda6cfbe9b33bb5d47}\label{classDatabaseError_a2fa4b0bebe1aeeeda6cfbe9b33bb5d47}} 
+\index{DatabaseError@{DatabaseError}!DatabaseError@{DatabaseError}}
+\index{DatabaseError@{DatabaseError}!DatabaseError@{DatabaseError}}
+\doxysubsubsection{\texorpdfstring{DatabaseError()}{DatabaseError()}}
+{\footnotesize\ttfamily Database\+Error\+::\+Database\+Error (\begin{DoxyParamCaption}\item[{std\+::string}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor to call in a \char`\"{}throw\char`\"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & error message \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDatabaseError_a3d9234dcc88b0da3033bc9c03b029879}\label{classDatabaseError_a3d9234dcc88b0da3033bc9c03b029879}} 
+\index{DatabaseError@{DatabaseError}!what@{what}}
+\index{what@{what}!DatabaseError@{DatabaseError}}
+\doxysubsubsection{\texorpdfstring{what()}{what()}}
+{\footnotesize\ttfamily const char$\ast$ Database\+Error\+::what (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+used to get the error message. 
+
+\begin{DoxyReturn}{Returns}
+string containing the error message. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

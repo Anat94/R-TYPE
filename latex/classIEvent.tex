@@ -1,5 +1,5 @@
-\doxysection{IEvent Class Reference}
-\hypertarget{classIEvent}{}\label{classIEvent}\index{IEvent@{IEvent}}
+\hypertarget{classIEvent}{}\doxysection{IEvent Class Reference}
+\label{classIEvent}\index{IEvent@{IEvent}}
 
 
 Main event interface, used for creating events instances.  
@@ -12,46 +12,33 @@ Main event interface, used for creating events instances.
 Inheritance diagram for IEvent\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=11.000000cm]{classIEvent}
+\includegraphics[height=12.000000cm]{classIEvent}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{\texorpdfstring{$\sim$}{\string~}\+IEvent}} ()=default
-\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classIEvent}{IEvent} object. \end{DoxyCompactList}\item 
-virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{get}} () const =0
+\mbox{\Hypertarget{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}\label{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}} 
+virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{$\sim$\+IEvent}} ()=default
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classIEvent}{IEvent}} object. \end{DoxyCompactList}\item 
+virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}{get}} () const =0
 \begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
 virtual bool \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const =0
-\item 
+\begin{DoxyCompactList}\small\item\em verifies if other Ievent is equal to current one \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}\label{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}} 
 virtual void \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em event handler called when it is popped from the event queue \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Main event interface, used for creating events instances. 
 
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}\label{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d} 
-\index{IEvent@{IEvent}!````~IEvent@{\texorpdfstring{$\sim$}{\string~}IEvent}}
-\index{````~IEvent@{\texorpdfstring{$\sim$}{\string~}IEvent}!IEvent@{IEvent}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IEvent()}{\string~IEvent()}}
-{\footnotesize\ttfamily virtual IEvent\+::\texorpdfstring{$\sim$}{\string~}\+IEvent (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
-
-
-
-Destroy the \doxylink{classIEvent}{IEvent} object. 
-
-
-
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}\label{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59} 
+\mbox{\Hypertarget{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}\label{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}} 
 \index{IEvent@{IEvent}!get@{get}}
 \index{get@{get}!IEvent@{IEvent}}
 \doxysubsubsection{\texorpdfstring{get()}{get()}}
-{\footnotesize\ttfamily virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ IEvent\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+{\footnotesize\ttfamily virtual std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ IEvent\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
 
 
@@ -62,24 +49,21 @@ std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$
 \end{DoxyReturn}
 
 
-Implemented in \mbox{\hyperlink{classAEvent_ad3824df16d31a5f97f3afe91336448d6}{AEvent}}.
+Implemented in \mbox{\hyperlink{classAEvent_aae61c3d66a44cdfa208642bb495571e1}{AEvent}}.
 
-\Hypertarget{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}\label{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1} 
-\index{IEvent@{IEvent}!handleEvent@{handleEvent}}
-\index{handleEvent@{handleEvent}!IEvent@{IEvent}}
-\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
-{\footnotesize\ttfamily virtual void IEvent\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{r,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
-
-
-
-Implemented in \mbox{\hyperlink{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}{Collision\+Event}}, \mbox{\hyperlink{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}{Spawn\+Enemy}}, \mbox{\hyperlink{classDeathEvent_a940a23b261cc52393d431ac6c5b4ca06}{Death\+Event}}, \mbox{\hyperlink{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}{Spawn\+Event}}, \mbox{\hyperlink{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}{Update\+Position\+Event}}, \mbox{\hyperlink{classPositionStayInWindowBounds_a83a760a12a7409626b23622e384e59c6}{Position\+Stay\+In\+Window\+Bounds}}, \mbox{\hyperlink{classShootEvent_ac6f6a2fd8d4d6330b8644a1e95de9756}{Shoot\+Event}}, and \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{AEvent}}.
-
-\Hypertarget{classIEvent_ac0454a3291e5f49988507c04fd2a904b}\label{classIEvent_ac0454a3291e5f49988507c04fd2a904b} 
+\mbox{\Hypertarget{classIEvent_ac0454a3291e5f49988507c04fd2a904b}\label{classIEvent_ac0454a3291e5f49988507c04fd2a904b}} 
 \index{IEvent@{IEvent}!operator==@{operator==}}
 \index{operator==@{operator==}!IEvent@{IEvent}}
 \doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
 {\footnotesize\ttfamily virtual bool IEvent\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIEvent}{IEvent}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
 
+
+
+verifies if other Ievent is equal to current one 
+
+\begin{DoxyReturn}{Returns}
+std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ 
+\end{DoxyReturn}
 
 
 Implemented in \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{AEvent}}.

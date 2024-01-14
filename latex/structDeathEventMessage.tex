@@ -1,30 +1,56 @@
-\doxysection{Death\+Event\+Message Struct Reference}
-\hypertarget{structDeathEventMessage}{}\label{structDeathEventMessage}\index{DeathEventMessage@{DeathEventMessage}}
+\hypertarget{structDeathEventMessage}{}\doxysection{Death\+Event\+Message Struct Reference}
+\label{structDeathEventMessage}\index{DeathEventMessage@{DeathEventMessage}}
+
+
+encapsulates a death event for given entity  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Death\+Event\+Message\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structDeathEventMessage}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structDeathEventMessage_a8c3fa227269366bba9fc1fbefb25d8ff}\label{structDeathEventMessage_a8c3fa227269366bba9fc1fbefb25d8ff} 
-{\bfseries Death\+Event\+Message} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structDeathEventMessage_a8c3fa227269366bba9fc1fbefb25d8ff}{Death\+Event\+Message}} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structDeathEventMessage_a272c73edcb5b4ffc3f57de74290c2303}\label{structDeathEventMessage_a272c73edcb5b4ffc3f57de74290c2303} 
-entity\+\_\+t {\bfseries entity} = 0
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structDeathEventMessage_a272c73edcb5b4ffc3f57de74290c2303}\label{structDeathEventMessage_a272c73edcb5b4ffc3f57de74290c2303}} 
+entity\+\_\+t \mbox{\hyperlink{structDeathEventMessage_a272c73edcb5b4ffc3f57de74290c2303}{entity}} = 0
+\begin{DoxyCompactList}\small\item\em Entity that died. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates a death event for given entity 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structDeathEventMessage_a8c3fa227269366bba9fc1fbefb25d8ff}\label{structDeathEventMessage_a8c3fa227269366bba9fc1fbefb25d8ff}} 
+\index{DeathEventMessage@{DeathEventMessage}!DeathEventMessage@{DeathEventMessage}}
+\index{DeathEventMessage@{DeathEventMessage}!DeathEventMessage@{DeathEventMessage}}
+\doxysubsubsection{\texorpdfstring{DeathEventMessage()}{DeathEventMessage()}}
+{\footnotesize\ttfamily Death\+Event\+Message\+::\+Death\+Event\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{entity\+\_\+t}]{entity\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em entity\+\_\+} & Entity that died. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

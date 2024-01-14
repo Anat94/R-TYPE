@@ -1,17 +1,14 @@
 var searchData=
 [
-  ['scale_0',['Scale',['../structcomponent_1_1Scale.html',1,'component']]],
-  ['scalesnapshot_1',['ScaleSnapshot',['../structScaleSnapshot.html',1,'']]],
-  ['score_2',['Score',['../structcomponent_1_1Score.html',1,'component']]],
-  ['serializer_3',['serializer',['../classdetail_1_1serializer.html',1,'detail']]],
-  ['server_4',['Server',['../classServer.html',1,'']]],
-  ['serverentity_5',['ServerEntity',['../structcomponent_1_1ServerEntity.html',1,'component']]],
-  ['sfmlerror_6',['SFMLError',['../classSFMLError.html',1,'']]],
-  ['shootevent_7',['ShootEvent',['../classShootEvent.html',1,'']]],
-  ['snapshotposition_8',['SnapshotPosition',['../structSnapshotPosition.html',1,'']]],
-  ['span_5finput_5fadapter_9',['span_input_adapter',['../classdetail_1_1span__input__adapter.html',1,'detail']]],
-  ['sparse_5farray_10',['sparse_array',['../classsparse__array.html',1,'']]],
-  ['spawnenemy_11',['SpawnEnemy',['../classSpawnEnemy.html',1,'']]],
-  ['spawnevent_12',['SpawnEvent',['../classSpawnEvent.html',1,'']]],
-  ['static_5fconst_13',['static_const',['../structdetail_1_1static__const.html',1,'detail']]]
+  ['random_897',['Random',['../classRandom.html',1,'']]],
+  ['registry_898',['registry',['../classregistry.html',1,'']]],
+  ['removefriendsmessage_899',['RemoveFriendsMessage',['../structRemoveFriendsMessage.html',1,'']]],
+  ['removefriendsresponse_900',['RemoveFriendsResponse',['../structRemoveFriendsResponse.html',1,'']]],
+  ['removeshieldevent_901',['RemoveShieldEvent',['../classRemoveShieldEvent.html',1,'']]],
+  ['resetonmove_902',['ResetOnMove',['../structcomponent_1_1ResetOnMove.html',1,'component']]],
+  ['room_903',['Room',['../structcomponent_1_1Room.html',1,'component']]],
+  ['roomcreationmessage_904',['RoomCreationMessage',['../structRoomCreationMessage.html',1,'']]],
+  ['roomjoinmessage_905',['RoomJoinMessage',['../structRoomJoinMessage.html',1,'']]],
+  ['roomutils_906',['RoomUtils',['../classRoomUtils.html',1,'']]],
+  ['rotation_907',['Rotation',['../structcomponent_1_1Rotation.html',1,'component']]]
 ];
