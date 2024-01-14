@@ -187,6 +187,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Health(100));
     _ecs.add_component(new_player, component::Damage(20));
     _ecs.add_component(new_player, component::Score());
+    _ecs.add_component(new_player, component::ShootCounter());
 
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
