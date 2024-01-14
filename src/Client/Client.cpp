@@ -690,7 +690,7 @@ void Client::manageCli()
                 std::cout << "You must be in a room to start the game - see HELP" << std::endl;
                 continue;
             }
-            JoinGameMessage to_send(2, _username, _room_name, _packet_id);
+            JoinGameMessage to_send(2, _username, _room_name, _room_mode, _packet_id);
             _packet_id++;
             send_to_server(to_send);
             return;
@@ -773,22 +773,47 @@ void Client::manageCli()
         } else if (command == "WHOAMI") {
             std::cout << "You are " << _username << std::endl;
         } else if (command == "HELP") {
-            std::cout << "Available commands:" << std::endl;
-            std::cout << "START: Start the game" << std::endl;
-            std::cout << "CREATE [room_name]: Create a room" << std::endl;
-            std::cout << "JOIN [room_name]: Join a room" << std::endl;
-            std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
-            std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
-            std::cout << "WHOAMI: Show who you are" << std::endl;
-            std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
-            std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
-            std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;
-            std::cout << "CHAT [message]: Send a message to all your friends" << std::endl;
-            std::cout << "HIGHSCORE: Display the highscore" << std::endl;
-            std::cout << "CLEAR: Clear the terminal" << std::endl;
-            std::cout << "EXIT: Exit the game" << std::endl;
+            if (!params.empty() && params == "SET") {
+                std::cout << "SET [rule] [value]: modifies a rule to the value" << std::endl;
+                std::cout << "Rules available:" << std::endl;
+                std::cout << " - mode 0|1: sets the mode to infinite (0) or campaign (1)" << std::endl;
+            } else {
+                std::cout << "Available commands:" << std::endl;
+                std::cout << "START: Start the game" << std::endl;
+                std::cout << "CREATE [room_name]: Create a room" << std::endl;
+                std::cout << "JOIN [room_name]: Join a room" << std::endl;
+                std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
+                std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
+                std::cout << "WHOAMI: Show who you are" << std::endl;
+                std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
+                std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
+                std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;
+                std::cout << "CHAT [message]: Send a message to all your friends" << std::endl;
+                std::cout << "HIGHSCORE: Display the highscore" << std::endl;
+                std::cout << "CLEAR: Clear the terminal" << std::endl;
+                std::cout << "EXIT: Exit the game" << std::endl;
+            }
         } else if (command == "CLEAR") {
             system("clear");
+        } else if(command == "SET") {
+            if (params == "" || param2 == "") {
+                std::cout << "Usage: SET [rule] [value]" << std::endl;
+                continue;
+            } else {
+                if (_username == "") {
+                    std::cout << "You must be connected to run this command - see HELP" << std::endl;
+                    continue;
+                }
+                if (params != "mode") {
+                    std::cout << "Invalid rule - see HELP SET" << std::endl;
+                    continue;
+                }
+                if (!std::atoi(param2.c_str()) || 1 < std::atoi(param2.c_str())) {
+                    std::cout << "Invalid value for SET - see HELP SET" << std::endl;
+                    continue;
+                } else
+                    _room_mode = std::atoi(param2.c_str());
+            }
         } else {
             std::cout << "Command not found" << std::endl;
         }

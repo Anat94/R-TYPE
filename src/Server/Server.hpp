@@ -23,24 +23,25 @@
 //#pragma warning(disable: 4355)
 //#pragma warning(disable: 5220)
 //#pragma warning(disable: 5039)
-    #include "../Ecs/Events.hpp"
-    #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
     #include <thread>
     #include <chrono>
     #include <mutex>
     #include <array>
     #include <asio.hpp>
+    #include <sqlite3.h>
     #include <functional>
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
     #include "../Ecs/Events.hpp"
     #include "../Ecs/ZipperIterator.hpp"
     #include "../Ecs/Systems/CollisionSystem.hpp"
     #include "../Ecs/Systems/ControlSystem.hpp"
     #include "../Ecs/Systems/PositionSystem.hpp"
     #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
-    #include <sqlite3.h>
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Ecs/Managers.hpp"
 
 struct Friendship {
     std::string name;
@@ -170,6 +171,9 @@ class Server: public ISystems {
         std::vector<entity_t> scalesRegistered = {};
         Timer timer;
         int resend_counter = 0;
+        StageManager _stageManager;
+        ModelManager _modelManager;
+        MapManager _mapManager;
 };
 
 #endif // SERVER_HPP

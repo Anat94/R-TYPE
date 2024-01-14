@@ -230,6 +230,7 @@ class Client {
         HighScoreDisplay _highScoreDisplay;
         inGameState _state;
         int _packet_id = 0;
+        int _room_mode = 0;
         std::string friendLists;
         bool friendListFinish = false;
         ChatEntity _chatEntity;

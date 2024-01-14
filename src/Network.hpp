@@ -726,6 +726,10 @@ struct JoinGameMessage: public BaseMessage {
      * @brief Room Name
     */
     char room_name[32];
+    /**
+     * @brief Room mode (0: infinite, 1: campaign)
+     */
+    int room_mode;
 
     /**
      * @brief constructor initializing the following parameters
@@ -733,14 +737,16 @@ struct JoinGameMessage: public BaseMessage {
      * @param id_ id of the message that is going to be sent through the network. Identifies the type of message.
      * @param username_ Username of host.
      * @param room_name_ Room Name
+     * @param room_mode_ Mode of the room
      * @param packet_id_ packet id of the message, used to identify individual packets
     */
-    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, int packet_id_)
+    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, int room_mode_, int packet_id_)
     {
         size_t i = 0;
 
         id = id_;
         packet_id = packet_id_;
+        room_mode = room_mode_;
         for (; i < username_.size(); i++) {
             username[i] = username[i];
         }
