@@ -308,6 +308,13 @@ class Server: public ISystems {
         template <typename T>
         void send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp);
         /**
+         * @brief Get the amount of players in a room
+         * 
+         * @param room_name room name
+         * @return number of players in room
+         */
+        int get_amount_of_players_in_room(std::string room_name);
+        /**
          * @brief Erase packets from their respective resend array when confirmation message is received.
          * 
          */
