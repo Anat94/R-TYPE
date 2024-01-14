@@ -742,7 +742,7 @@ void Client::initClass()
     _ecs.add_component(_joueur, component::Position(100.0f, 600.0f));
     _ecs.add_component(_joueur, component::Scale(0.5f));
     _ecs.add_component(_joueur, component::Jump());
-    _ecs.add_component(_joueur, component::AnimatedDrawable("assets/ennemy.png"));
+    _ecs.add_component(_joueur, component::AnimatedDrawable("assets/ennemy.png", {2, 1}, {1199, 872}, {1, 0}, {0, 0}, {0, 0}));
 
     JumpSystem *jump_sys = new JumpSystem(&_event);
     _ecs.add_system<component::Position, component::Jump>(*jump_sys);
