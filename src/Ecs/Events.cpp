@@ -8,12 +8,12 @@
 #include "Events.hpp"
 
 /**
-         * @brief Adds an event passed as parameter to the queue of events
-         * 
-         * @param event the event to add
-         * @return true if the event was successfully added,
-         * @return false otherwise
-         */
+ * @brief Adds an event passed as parameter to the queue of events
+ *
+ * @param event the event to add
+ * @return true if the event was successfully added,
+ * @return false otherwise
+ */
 bool EventListener::addEvent(IEvent *event)
 {
     _events.push(event);
@@ -21,11 +21,11 @@ bool EventListener::addEvent(IEvent *event)
 }
 
 /**
-         * @brief Removes the first event in the queue of events
-         * 
-         * @return true if the event whas successfully removed and executed,
-         * @return false otherwise
-         */
+ * @brief Removes the first event in the queue of events
+ *
+ * @return true if the event whas successfully removed and executed,
+ * @return false otherwise
+ */
 bool EventListener::popEvent()
 {
     if (!_events.empty()) {
@@ -38,22 +38,22 @@ bool EventListener::popEvent()
 }
 
 /**
-         * @brief Stores the regitry_t object inside of the listener
-         * 
-         * @param reg the registry_t instance pointer
-         */
+ * @brief Stores the regitry_t object inside of the listener
+ *
+ * @param reg the registry_t instance pointer
+ */
 void EventListener::addRegistry(registry &reg)
 {
     _reg = &reg;
 }
 
 /**
-         * @brief Checks if the listener currently has the event passed as parameter
-         * 
-         * @param event 
-         * @return true 
-         * @return false 
-         */
+ * @brief Checks if the listener currently has the event passed as parameter
+ *
+ * @param event
+ * @return true
+ * @return false
+ */
 bool EventListener::hasEvent(IEvent *event)
 {
     const std::type_info& eventType = typeid(*(event));
@@ -69,11 +69,11 @@ bool EventListener::hasEvent(IEvent *event)
 }
 
 /**
-         * @brief Handles the event based on the registry objects
-         * 
-         * @param r the registry_t object used to store the game engine resources
-         * @param listener the event listener used to create new events if needed
-         */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
 void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -90,11 +90,11 @@ void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-         * @brief Handle to keep an entity within window bounds
-         * 
-         * @param r registery_t object, containig the game instance and objects
-         * @param listener the event listener, used to create new events from this one when needed
-         */
+ * @brief Handle to keep an entity within window bounds
+ *
+ * @param r registery_t object, containig the game instance and objects
+ * @param listener the event listener, used to create new events from this one when needed
+ */
 void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listener)
 {
     try {
@@ -215,16 +215,15 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-         * @brief Handles the event based on the registry objects
-         * 
-         * @param r the registry_t object used to store the game engine resources
-         * @param listener the event listener used to create new events if needed
-         */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
 void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
     //! remove entity
     r.remove_component<component::Scale>(_ents.first);
-    r.remove_component<component::Score>(_ents.first);
     r.remove_component<component::Damage>(_ents.first);
     r.remove_component<component::Health>(_ents.first);
     r.remove_component<component::Hitbox>(_ents.first);
@@ -236,7 +235,7 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
     r.remove_component<component::Rotation>(_ents.first);
     r.remove_component<component::ResetOnMove>(_ents.first);
     r.remove_component<component::ServerEntity>(_ents.first);
-    r.remove_component<component::Controllable>(_ents.first);
+    // r.remove_component<component::Controllable>(_ents.first);
     r.remove_component<component::HurtsOnCollision>(_ents.first);
     r.remove_component<component::AnimatedDrawable>(_ents.first);
     r.remove_component<component::Shield>(_ents.first);
@@ -250,11 +249,11 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-         * @brief Handles the event based on the registry objects
-         * 
-         * @param r the registry_t object used to store the game engine resources
-         * @param listener the event listener used to create new events if needed
-         */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
 void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // Todo: ping all other to connect new player
@@ -266,11 +265,11 @@ void RemoveShieldEvent::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-         * @brief Handles the event based on the registry objects
-         * 
-         * @param r the registry_t object used to store the game engine resources
-         * @param listener the event listener used to create new events if needed
-         */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
 void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 {
     entity_t enemy = r.spawn_entity();
@@ -293,11 +292,11 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-         * @brief Handles the event based on the registry objects
-         * 
-         * @param r the registry_t object used to store the game engine resources
-         * @param listener the event listener used to create new events if needed
-         */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+*/
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
@@ -376,7 +375,7 @@ void IncrementNbShoots::handleEvent(registry &r, EventListener &listener)
 
 /**
  * @brief Handles the event based on the registry objects
- * 
+ *
  * @param r the registry_t object used to store the game engine resources
  * @param listener the event listener used to create new events if needed
 */
@@ -387,7 +386,7 @@ void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
 
 /**
      * @brief Handles the event based on the registry objects
-     * 
+     *
      * @param r the registry_t object used to store the game engine resources
      * @param listener the event listener used to create new events if needed
      */
