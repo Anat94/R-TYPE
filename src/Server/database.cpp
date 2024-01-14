@@ -85,6 +85,7 @@ static int callbackGetHighScore(void* data, int argc, char** argv, char** azColN
  * @return HighScoreMessage high score message
  */
 HighScoreMessage Server::getHighScore() {
+    _logger.log("Getting best high scores");
     const std::string tableName = "HighScore";
     std::string sql = "SELECT * FROM " + tableName + " ORDER BY score DESC LIMIT 3;";
     char *zErrMsg = 0;
@@ -111,6 +112,7 @@ HighScoreMessage Server::getHighScore() {
  * @return int 0
  */
 void Server::addHighScore(std::string name, int score) {
+    _logger.log("Adding high score from " + name + " : " + std::to_string(score));
     const std::string tableName = "HighScore";
     std::string sql;
     if (IsNameInBdd(name) == true) {
@@ -134,6 +136,7 @@ void Server::addHighScore(std::string name, int score) {
  *
  */
 void Server::connectToDB() {
+    _logger.log("Connecting to database");
     int rc;
     rc = sqlite3_open("db/rtype.db", &_db);
     if (rc) {
@@ -212,6 +215,7 @@ bool Server::checkIfUserExist(std::string name, std::string password) {
  * @return int 0
  */
 bool Server::signUp(std::string name, std::string password) {
+    _logger.log("User " + name + " is signing up");
     const std::string tableName = "USERS";
     if (checkIfUserExist(name, password) == true) {
         std::cout << "User already exist" << std::endl;
@@ -254,6 +258,7 @@ static int callbackSignIn(void *data, int argc, char** argv, char** azColName) {
  * @return false user does not signed in
  */
 bool Server::signIn(std::string name, std::string password) {
+    _logger.log("User " + name + " is signing in");
     std::cout << "username :" << name << std::endl;
     std::cout << "password :" << password << std::endl;
     const std::string tableName = "USERS";
@@ -321,6 +326,7 @@ bool Server::checkIfFriendshipExist(std::string name, std::string friendId) {
  * @return false if failed
  */
 bool Server::addFriend(std::string name, std::string friendId) {
+    _logger.log("User " + name + " is adding " + friendId + " as friend");
     if (checkIfFriendshipExist(name, friendId) == true) {
         std::cout << "Friendship already exist" << std::endl;
         return false;
@@ -346,6 +352,7 @@ bool Server::addFriend(std::string name, std::string friendId) {
  * @return false if failed
  */
 bool Server::removeFriend(std::string name, std::string friendName) {
+    _logger.log("User " + name + " is removing " + friendName + " as friend");
     std::string sql = "DELETE FROM FRIENDS WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
     char *zErrMsg = 0;
     int rc = sqlite3_exec(_db, sql.c_str(), NULL, 0, &zErrMsg);
@@ -397,6 +404,7 @@ static int callbackDisplayFriends(void *data, int argc, char** argv, char** azCo
  * @return std::vector<std::string> list of friends
  */
 std::vector<std::string> Server::displayFriends(std::string name, entity_t player_entity) {
+    _logger.log("User " + name + " is displaying friends");
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
     char *zErrMsg = 0;
