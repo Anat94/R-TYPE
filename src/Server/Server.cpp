@@ -176,41 +176,42 @@ int Server::get_amount_of_players_in_room(std::string room_name)
  * @param room_name The player's room name
  * @return entity_t The player's entity
  */
-entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
     std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
-    _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-    _ecs.add_component(new_player, component::ResetOnMove());
-    _ecs.add_component(new_player, component::Controllable());
-    _ecs.add_component(new_player, component::Heading());
-    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20 * get_amount_of_players_in_room(room_name)}));
-    _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
-    auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
-    tmp->addAnimation("idle", {2, 2}, false);
-    tmp->addAnimation("move up", {2, 4}, false);
-    tmp->addAnimation("move down", {2, 0}, false);
-    tmp->_state = "idle";
+    if (!is_spectator) {
+        _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
+        _ecs.add_component(new_player, component::ResetOnMove());
+        _ecs.add_component(new_player, component::Controllable());
+        _ecs.add_component(new_player, component::Heading());
+        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20 * (get_amount_of_players_in_room(room_name) % 5)}));
+        _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
+        auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
+        tmp->addAnimation("idle", {2, 2}, false);
+        tmp->addAnimation("move up", {2, 4}, false);
+        tmp->addAnimation("move down", {2, 0}, false);
+        tmp->_state = "idle";
+        _ecs.add_component(new_player, component::Username(username));
+        _ecs.add_component(new_player, component::Scale(6.0f));
+        _ecs.add_component(new_player, component::Rotation(90));
+        _ecs.add_component(new_player, component::Health(100));
+        _ecs.add_component(new_player, component::Damage(20));
+        _ecs.add_component(new_player, component::Score());
+        _ecs.add_component(new_player, component::ShootCounter());
+    }
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
-    _ecs.add_component(new_player, component::Username(username));
     if (username == _lobbies[room_name])
         _ecs.add_component(new_player, component::Host());
-    _ecs.add_component(new_player, component::Scale(6.0f));
-    _ecs.add_component(new_player, component::Rotation(90));
-    _ecs.add_component(new_player, component::Health(100));
-    _ecs.add_component(new_player, component::Damage(20));
-    _ecs.add_component(new_player, component::Score());
-    _ecs.add_component(new_player, component::ShootCounter());
-
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
-    send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
+    if (!is_spectator) send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
     send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
     send_all_scale_to_player_by_room(new_player);
-    send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
+    if (!is_spectator) send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
     return new_player;
 }
 
@@ -684,7 +685,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name)) << std::endl;
+    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->spectator_mode) << std::endl;
     return 0;
 }
 
