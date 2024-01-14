@@ -137,7 +137,6 @@ int Client::receive_death_event(std::vector<char> &server_msg)
         entity_t real_entity = get_entity_from_server_entity(snapshot->entity);
         if (real_entity > 0)
             _listener.addEvent(new DeathEvent(real_entity, -1));
-        printf("SEXEEEEEEEEEEEEEEEEEEEE SANDERO\n");
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -395,7 +394,6 @@ int Client::receive_animated_drawable_snapshot(std::vector<char> &server_msg)
         } else {
             if (real_entity == 0)
                 real_entity = init_new_entity(snapshot->entity);
-            std::cout << "just received animated drawable\n";
             _ecs.add_component(real_entity, component::AnimatedDrawable(snapshot->_path, snapshot->_nbSprites, snapshot->_spriteSize, snapshot->_gaps, snapshot->_firstOffset, snapshot->_currentIdx));
             auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[real_entity];
             for (size_t i = 0; i < snapshot->_anims.size(); i++) {
@@ -445,12 +443,10 @@ int Client::receive_health_event(std::vector<char> &server_msg)
 {
     if (server_msg.size() < sizeof(HealthMessage))
         return 84;
-    std::cout << "JUST RECIEVED NEW HEALTH\n";
     HealthMessage *snapshot = reinterpret_cast<HealthMessage *>(server_msg.data());
     try {
         _lives = snapshot->health;
         _lives_text.setString("Health: " + std::to_string(_lives));
-        std::cout << "SET NEW HEALTH B)\n";
     } catch (const std::exception &ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -499,9 +495,7 @@ void Client::receive()
         throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
     mtx.lock();
     if (check_if_packet_exist == 0) {
-        std::cout << "GONNA PARSE: " << baseMsg->id << "\n";
         (this->*_messageParser[baseMsg->id])(server_msg);
-        std::cout << "FINISHED PARSE: " << baseMsg->id << "\n";
         if (_packets_received.size() > 1000)
             _packets_received.erase(_packets_received.begin());
         _packets_received.push_back(baseMsg->packet_id);

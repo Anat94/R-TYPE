@@ -116,7 +116,6 @@ void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listene
 
 void CreateExplosionEvent::handleEvent(registry &r, EventListener &listener)
 {
-    std::cout << "IN CREATE EXPLOSION EVENT ! " << e_type << std::endl;
     if (e_type == 1) {
         entity_t enemy = r.spawn_entity();
         r.add_component<component::Position>(enemy, component::Position(genPos.x, genPos.y));
@@ -155,11 +154,9 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
             r.add_component<component::Shield>(_ents.first, component::Shield(3000));
             if (player1_h->_health <= 0) {
                 auto &room = r.get_components<component::Room>()[_ents.second];
-                std::cout << "DEATH EVENT FOR ENEMY\n";
                 DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
                 auto &posToSend = r.get_components<component::Position>()[_ents.second];
                 CreateExplosionEvent *exp_event = new CreateExplosionEvent(*posToSend, 1, room->_name);
-                std::cout << "CREATED EXPLOSION EVENT\n";
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
