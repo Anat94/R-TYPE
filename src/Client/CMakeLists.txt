@@ -2,7 +2,6 @@
 
 include_directories(include src src/Client)
 add_executable(client
-        ../Ecs/Events.cpp
         Menu.cpp
         Client.cpp
         Game.cpp

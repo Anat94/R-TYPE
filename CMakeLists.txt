@@ -146,7 +146,7 @@ if(NOT googletest_POPULATED)
 endif()
 
 
-add_subdirectory(src/Client)
 add_subdirectory(src/Ecs)
+add_subdirectory(src/Client)
 add_subdirectory(src/Server)
 add_subdirectory(tests)
