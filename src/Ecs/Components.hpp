@@ -629,6 +629,7 @@ namespace component {
          * 
          */
         animation_t _anims;
+        AnimatedDrawable() {};
         /**
          * @brief Construct a new Animated Drawable object
          * 
@@ -707,6 +708,24 @@ namespace component {
          * @param index the z-index of the element for the parallax
          */
         Parallax(int group, int index = 0) : _group(group), _index(index) {};
+    };
+
+    /**
+     * @brief CampaignMode structure to know if a room is in a campaign
+     * 
+     */
+    struct CampaignMode {
+        /**
+         * @brief name of the room in ccampaign mode
+         * 
+         */
+        std::string _room_name;
+        /**
+         * @brief Construct a new Campaign Mode object
+         * 
+         * @param room_name the name of the room to set
+         */
+        CampaignMode(const std::string& room_name) : _room_name(room_name) {};
     };
 };
 

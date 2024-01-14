@@ -23,24 +23,25 @@
 //#pragma warning(disable: 4355)
 //#pragma warning(disable: 5220)
 //#pragma warning(disable: 5039)
-    #include "../Ecs/Events.hpp"
-    #include "../Ecs/ZipperIterator.hpp"
     #include <iostream>
     #include <thread>
     #include <chrono>
     #include <mutex>
     #include <array>
     #include <asio.hpp>
+    #include <sqlite3.h>
     #include <functional>
+    #include "../Ecs/Events.hpp"
+    #include "../Ecs/ZipperIterator.hpp"
     #include "../Ecs/Events.hpp"
     #include "../Ecs/ZipperIterator.hpp"
     #include "../Ecs/Systems/CollisionSystem.hpp"
     #include "../Ecs/Systems/ControlSystem.hpp"
     #include "../Ecs/Systems/PositionSystem.hpp"
     #include "../Ecs/Systems/ResetOnMoveSystem.hpp"
-    #include <sqlite3.h>
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Ecs/Managers.hpp"
     #include "../Logger/logger.hpp"
 
 /**
@@ -113,7 +114,7 @@ class Server: public ISystems {
          * @param room_name The player's room name
          * @return entity_t The player's entity
          */
-        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator);
+        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator, int room_mode);
         /**
          * @brief send death event to all players
          *
@@ -483,6 +484,11 @@ class Server: public ISystems {
         void resend_packets(std::vector<T> &, sparse_array<component::Endpoint> &);
     private:
         /**
+         * @brief load stages in campaign mode for the room
+         * 
+         */
+        void loadLevels(const std::string& room_name);
+        /**
          * @brief death packets to resend through network if not confirmed
          * 
          */
@@ -665,7 +671,9 @@ class Server: public ISystems {
          * 
          */
         int resend_counter = 0;
-
+        StageManager _stageManager;
+        ModelManager _modelManager;
+        MapManager _mapManager;
         Logger _logger;
 };
 

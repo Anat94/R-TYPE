@@ -575,6 +575,11 @@ class Client {
          */
         int _packet_id = 0;
         /**
+         * @brief Mode of the room. (0 infinite, 1 campaign)
+         * 
+         */
+        int _room_mode = 0;
+        /**
          * @brief friend list
          * 
          */
