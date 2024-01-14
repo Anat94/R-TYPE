@@ -1,5 +1,4 @@
 # COMPILATION FOR CLIENT
-
 include_directories(include src src/Client)
 add_executable(client
         Menu.cpp
