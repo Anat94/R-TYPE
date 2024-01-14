@@ -10,8 +10,8 @@
         #define MAX_BUF_SIZE 11024
 
 #include <asio.hpp>
-#include "../Ecs/Events.hpp"
-#include "../Ecs/Components.hpp"
+#include "Ecs/Events.hpp"
+#include "Ecs/Components.hpp"
 using asio::ip::udp;
 
 

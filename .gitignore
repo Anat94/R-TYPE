@@ -14,7 +14,6 @@ ZERO_CHECK*
 *.sln
 *.filters
 x64
-Debug
 *.dir
 *.smn
 asio*

@@ -6,7 +6,7 @@
 */
 
 #include "Server.hpp"
-#include "KeyEventMapping.hpp"
+#include "../KeyEventMapping.hpp"
 
 /**
  * @brief get position change for event
