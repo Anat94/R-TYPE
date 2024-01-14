@@ -289,6 +289,9 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
         tmp1->addAnimation(anim.first, anim.second.second, anim.second.first);
     }
     tmp1->_state = "idle";
+
+    if (survives)
+        r.add_component(enemy, component::SurvivesOutOfBound());
 }
 
 /**
@@ -385,12 +388,17 @@ void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
 }
 
 /**
-     * @brief Handles the event based on the registry objects
-     *
-     * @param r the registry_t object used to store the game engine resources
-     * @param listener the event listener used to create new events if needed
-     */
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
 void HoverBtnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // chnage la couleur du bouton
+}
+
+void RemoveSurvivesEvent::handleEvent(registry &r, EventListener &listener)
+{
+    r.remove_component<component::SurvivesOutOfBound>(_ents.first);
 }

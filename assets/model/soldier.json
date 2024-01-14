@@ -6,7 +6,7 @@
     ],
     "type": "animated_entity",
     "health": 50,
-    "velocity": -8,
+    "velocity": -20,
     "damage": 10,
     "scale": 6,
     "texture": "temp/assets/textures/sprites/r-typesheet5.gif",

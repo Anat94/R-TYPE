@@ -951,18 +951,18 @@ void Server::loadLevels(const std::string &room_name)
 
     std::unordered_map<std::string, component::AnimatedDrawable> drawables = _modelManager.getModelsForRoom(room_name);
 
-    std::string current_stage = titles[0];
-    
-    for (auto enemy : enemies[current_stage]) {
-        auto aliases = _modelManager.getAliasesForEntity(enemy);
-        auto anims = _modelManager.getAnimsForEntity(enemy);
-        auto props = _modelManager.getPropertiesForEntity(enemy);
-        auto draw = drawables[enemy];
-        for (auto alias : aliases) {
-            auto pos = enemies_positions[alias];
-            for (auto p : pos) {
-                std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
-                _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name));
+    for (auto stage : titles) {
+        for (auto enemy : enemies[stage]) {
+            auto aliases = _modelManager.getAliasesForEntity(enemy);
+            auto anims = _modelManager.getAnimsForEntity(enemy);
+            auto props = _modelManager.getPropertiesForEntity(enemy);
+            auto draw = drawables[enemy];
+            for (auto alias : aliases) {
+                auto pos = enemies_positions[alias];
+                for (auto p : pos) {
+                    std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
+                    _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
+                }
             }
         }
     }
