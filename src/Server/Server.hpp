@@ -41,6 +41,7 @@
     #include <sqlite3.h>
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Logger/logger.hpp"
 
 /**
  * @brief Friendship object
@@ -664,6 +665,8 @@ class Server: public ISystems {
          * 
          */
         int resend_counter = 0;
+
+        Logger _logger;
 };
 
 #endif // SERVER_HPP

@@ -65,6 +65,7 @@ std::vector<char> Client::receive_raw_data_from_client()
 
 int Client::receive_high_score(std::vector<char> &server_msg)
 {
+    _logger.log(CLIENT, "Received high score");
     if (server_msg.size() < sizeof(HighScoreMessage))
         return -1;
     HighScoreMessage *snapshot = reinterpret_cast<HighScoreMessage *>(server_msg.data());
@@ -88,6 +89,7 @@ int Client::receive_high_score(std::vector<char> &server_msg)
  */
 int Client::receive_room_join_event(std::vector<char> &server_msg)
 {
+    _logger.log(CLIENT, "Received room join event");
     if (server_msg.size() < sizeof(RoomJoinMessage))
         return -1;
     RoomJoinMessage *snapshot = reinterpret_cast<RoomJoinMessage *>(server_msg.data());
@@ -101,12 +103,13 @@ int Client::receive_room_join_event(std::vector<char> &server_msg)
 
 /**
  * @brief receive from the server a room creation event
- * 
+ *
  * @param server_msg raw server message
- * @return int 
+ * @return int
  */
 int Client::recieve_room_creation_event(std::vector<char> &server_msg)
 {
+    _logger.log(CLIENT, "Received room creation event");
     if (server_msg.size() < sizeof(RoomCreationMessage))
         return -1;
     RoomCreationMessage *snapshot = reinterpret_cast<RoomCreationMessage *>(server_msg.data());
@@ -128,6 +131,7 @@ int Client::recieve_room_creation_event(std::vector<char> &server_msg)
 
 int Client::receive_death_event(std::vector<char> &server_msg)
 {
+    _logger.log(CLIENT, "Received death event");
     if (server_msg.size() < sizeof(DeathEventMessage))
         return -1;
     DeathEventMessage *snapshot = reinterpret_cast<DeathEventMessage *>(server_msg.data());
@@ -249,26 +253,27 @@ int Client::receive_scale_snapshot_update(std::vector<char> &server_msg)
  */
 int Client::receive_login_response(std::vector<char> &server_msg)
 {
+
     if (server_msg.size() < sizeof(LoginResponse))
         return -1;
     LoginResponse *login = reinterpret_cast<LoginResponse *>(server_msg.data());
     if (login->response == true && login->logintype == 1) {
         std::cout << "Connected" << std::endl;
         _logged_in = true;
-        // _state = GAME;
+        _logger.log(CLIENT, "Client is connected successfully");
         return login->packet_id;
     } else if (login->response == false  && login->logintype == 1) {
         std::cout << "Wrong credentials" << std::endl;
-        // _state = MENU;
+        _logger.log(CLIENT, "Client is not connected");
         return login->packet_id;
     } else if (login->response == true && login->logintype == 0) {
         std::cout << "Registered" << std::endl;
-        // _state = GAME;
+        _logger.log(CLIENT, "Client is registered successfully");
         _logged_in = true;
         return login->packet_id;
     } else if (login->response == false && login->logintype == 0) {
         std::cout << "An error occured whil registring" << std::endl;
-        // _state = GAME;
+        _logger.log(CLIENT, "Client is not registered");
         return login->packet_id;
     }
     return -1;
@@ -281,6 +286,7 @@ int Client::receive_login_response(std::vector<char> &server_msg)
  * @return int  The packet id
  */
 int Client::receive_friends_reponse(std::vector<char> &server_msg) {
+    _logger.log(CLIENT, "Received friends response");
     if (server_msg.size() < sizeof(FriendsResponse))
         return -1;
     FriendsResponse *friends = reinterpret_cast<FriendsResponse *>(server_msg.data());
@@ -295,6 +301,7 @@ int Client::receive_friends_reponse(std::vector<char> &server_msg) {
  * @return int  The packet id
  */
 int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
+    _logger.log(CLIENT, "Received add friends response");
     if (server_msg.size() < sizeof(AddFriendsResponse))
         return -1;
     AddFriendsResponse *friends = reinterpret_cast<AddFriendsResponse *>(server_msg.data());
@@ -312,6 +319,7 @@ int Client::receive_add_friends_reponse(std::vector<char> &server_msg) {
  * @return int  The packet id
  */
 int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
+    _logger.log(CLIENT, "Received remove friends response");
     if (server_msg.size() < sizeof(RemoveFriendsResponse))
         return -1;
     RemoveFriendsResponse *friends = reinterpret_cast<RemoveFriendsResponse *>(server_msg.data());
@@ -328,7 +336,9 @@ int Client::receive_remove_friends_reponse(std::vector<char> &server_msg) {
  * @param server_msg The message from the server
  * @return int  The packet id
  */
-int Client::receive_chat_event(std::vector<char> &server_msg) {
+int Client::receive_chat_event(std::vector<char> &server_msg)
+{
+    _logger.log(CLIENT, "Received chat event");
     if (server_msg.size() < sizeof(ChatMessage))
         return -1;
     ChatMessage *chat = reinterpret_cast<ChatMessage *>(server_msg.data());
@@ -435,7 +445,7 @@ int Client::receive_animated_drawable_state_update(std::vector<char> &server_msg
 
 /**
  * @brief receive health event from the server
- * 
+ *
  * @param server_msg raw server message
  * @return packet id
  */
@@ -523,8 +533,10 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
       _server_endpoint(udp::endpoint(asio::ip::make_address(ip), port)),
       _listener(listener),
       _ecs(ecs),
-      mtx(mtx_)
+      mtx(mtx_),
+      _logger(CLIENT)
 {
+    _logger.log(CLIENT, "Client is starting");
     _score = 0;
     _lives = 0;
     _level = 1;
@@ -586,6 +598,7 @@ Client::Client(std::string ip, int port, EventListener &listener, registry &ecs,
  */
 Client::~Client()
 {
+    _logger.log(CLIENT, "Client is stopping");
     _font.~Font();
     _music.stop();
     prgrmstop = true;
@@ -606,7 +619,7 @@ void Client::send_to_server(const T& structure) {
 
 /**
  * @brief display on-screen texts.
- * 
+ *
  */
 void Client::displayTexts()
 {
@@ -749,6 +762,7 @@ void Client::manageCli()
                 _username = params;
             }
         } else if (command == "START") {
+            _logger.log(CLIENT, "Received start command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -762,6 +776,7 @@ void Client::manageCli()
             send_to_server(to_send);
             return;
         } else if (command == "CREATE") {
+            _logger.log(CLIENT, "Received create command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -774,6 +789,7 @@ void Client::manageCli()
             _packet_id++;
             send_to_server<RoomCreationMessage>(to_send);
         } else if (command == "JOIN") {
+            _logger.log(CLIENT, "Received join command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -786,6 +802,7 @@ void Client::manageCli()
             _packet_id++;
             send_to_server<RoomJoinMessage>(to_send);
         } else if (command == "LIST_FRIENDS") {
+            _logger.log(CLIENT, "Received list friends command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -801,6 +818,7 @@ void Client::manageCli()
             }
             std::cout << friendLists;
         } else if (command == "ADD_FRIENDS") {
+            _logger.log(CLIENT, "Received add friends command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -813,6 +831,7 @@ void Client::manageCli()
                 std::cout << "Usage: ADD_FRIENDS [name]" << std::endl;
             }
         } else if (command == "REMOVE_FRIENDS") {
+            _logger.log(CLIENT, "Received remove friends command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -826,6 +845,7 @@ void Client::manageCli()
                 std::cout << "Usage: REMOVE_FRIENDS [name]" << std::endl;
             }
         } else if (command == "CHAT") {
+            _logger.log(CLIENT, "Received chat command");
             if (_username == "") {
                 std::cout << "You must be connected to run this command - see HELP" << std::endl;
                 continue;
@@ -870,6 +890,7 @@ void Client::manageCli()
 void Client::initClass()
 {
     _window.create(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "R-Type");
+    _logger.log(CLIENT, "Window created");
     _window.setFramerateLimit(60);
     _send_structure.id = 2;
     send_to_server(_send_structure);

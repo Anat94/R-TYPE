@@ -21,22 +21,30 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     std::string prevState = animatedDrawable->_state;
     if (event == KeyIds["Up"]) {
         animatedDrawable->_state = "move up";
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving up");
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, -30};
     }
     if (event == KeyIds["Down"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving down");
         animatedDrawable->_state = "move down";
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, 30};
     }
     animatedDrawable->_state = "idle";
     send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
-    if (event == KeyIds["Left"])
+    if (event == KeyIds["Left"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving left");
         return {-30, 0};
-    if (event == KeyIds["Right"])
+    }
+    if (event == KeyIds["Right"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving right");
         return {30, 0};
-    if (event == KeyIds["Space"])
+    }
+    if (event == KeyIds["Space"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is shooting");
         _listener.addEvent(new ShootEvent(entity, -1));
+    }
     return {0, 0};
 }
 
@@ -125,9 +133,11 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       _ecs(ecs),
       _listener(listener),
     //   _send_thread(&Server::receiveThread, this),
-      mtx(mtx_)
+      mtx(mtx_),
+    _logger(SERVER)
 {
     try {
+        _logger.log(SERVER, "Server started on port " + std::to_string(port));
         connectToDB();
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
@@ -164,7 +174,7 @@ int Server::get_amount_of_players_in_room(std::string room_name)
                 ++counter;
         }
     }
-    std::cout << "AMOUNT OF PLAYERS IN ROOM: " << counter << std::endl;
+    _logger.log(SERVER, "Amount of players in room " + room_name + ": " + std::to_string(counter));
     return counter;
 }
 
@@ -178,10 +188,7 @@ int Server::get_amount_of_players_in_room(std::string room_name)
  */
 entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
 {
-    std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
-    std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
-    std::cout << "Name = "<< username << std::endl;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
@@ -196,7 +203,6 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
     _ecs.add_component(new_player, component::Username(username));
-    std::cout << new_player << "Name2 = "<< _ecs.get_components<component::Username>()[new_player]->_name << std::endl;
     if (username == _lobbies[room_name])
         _ecs.add_component(new_player, component::Host());
     _ecs.add_component(new_player, component::Scale(6.0f));
@@ -206,13 +212,13 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Score());
     _ecs.add_component(new_player, component::ShootCounter());
 
-    std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
     send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
     send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
     send_all_scale_to_player_by_room(new_player);
     send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
+    _logger.log(SERVER, "Player " + std::to_string(new_player) + ": " + username +"is  connected");
     return new_player;
 }
 
@@ -223,6 +229,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
  */
 void Server::send_all_scale_to_player(entity_t entity)
 {
+    _logger.log(SERVER, "Sending all scales to player " + std::to_string(entity));
     auto scale = _ecs.get_components<component::Scale>();
 
     for (int i = 0; i < scale.size(); ++i) {
@@ -236,12 +243,13 @@ void Server::send_all_scale_to_player(entity_t entity)
 }
 
 /**
-         * @brief Send all scales in the player's room, to the player 
-         *
-         * @param entity The entity
-         */
+ * @brief Send all scales in the player's room, to the player
+ *
+ * @param entity The entity
+ */
 void Server::send_all_scale_to_player_by_room(entity_t entity)
 {
+    _logger.log(SERVER, "Sending all scales to player " + std::to_string(entity));
     auto scale = _ecs.get_components<component::Scale>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -264,6 +272,7 @@ void Server::send_all_scale_to_player_by_room(entity_t entity)
  */
 void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending scale to all players");
     auto scale = scl[entity];
 
     if (!scale.has_value())
@@ -280,6 +289,7 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
          */
 void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
 {
+    _logger.log(SERVER, "Sending all drawables to player " + std::to_string(player));
     auto drawables = _ecs.get_components<component::Drawable>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -300,6 +310,7 @@ void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t playe
  */
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
 {
+    _logger.log(SERVER, "Sending all drawables to player " + std::to_string(player));
     auto drawables = _ecs.get_components<component::Drawable>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -320,6 +331,7 @@ void Server::send_all_entity_drawables_to_specific_player(entity_t player)
  */
 void Server::send_highscore_to_specific_client(entity_t new_player)
 {
+    _logger.log(SERVER, "Sending highscore to player " + std::to_string(new_player));
     HighScoreMessage highscoreMsg = getHighScore();
     send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
 }
@@ -339,7 +351,6 @@ std::vector<char> Server::receive_raw_data_from_client()
     } catch (std::exception &e) {
         receivedData.resize(0);
     }
-
     return receivedData;
 }
 
@@ -353,6 +364,7 @@ void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &e
     auto &health = _ecs.get_components<component::Health>();
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && health[i].has_value()) {
+            _logger.log(SERVER, "Sending health to player " + std::to_string(i) + ": " + std::to_string(health[i].value()._health));
             HealthMessage to_send(23, health[i].value()._health, _packet_id);
             _packet_id++;
             _health_packets_to_send.push_back(to_send);
@@ -372,6 +384,7 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
     auto username = _ecs.get_components<component::Username>();
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && score[i].has_value()) {
+            _logger.log(SERVER, "Sending score to player "+ std::to_string(i) + ": " + std::to_string(score[i]->_score));
             ScoreMessage to_send(24, score[i]->_score, _packet_id);
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
@@ -381,6 +394,7 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
         }
     }
 }
+
 
 /**
  * @brief Send position snapshots for all players
@@ -412,6 +426,7 @@ void Server::send_position_snapshots_for_all_players(sparse_array<component::Pos
  */
 void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending animated drawable update to all players");
     if (state.size() > 15) {
         std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
         return;
@@ -430,6 +445,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
  */
 void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to all players");
     auto &animatedDrawable = dra[entity];
     if (animatedDrawable.has_value()) {
         AnimatedDrawableSnapshot snap_ad(
@@ -452,12 +468,13 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
 
 /**
  * @brief send animated drawables in a player's room to a specific player
- * 
+ *
  * @param entity player to send the drawables dto
  * @param dra all animated drawables
  */
 void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to player " + std::to_string(entity));
     auto rooms = _ecs.get_components<component::Room>();
     for (size_t i = 0; i < dra.size(); i++) {
         if (!dra[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
@@ -483,12 +500,13 @@ void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity
 
 /**
  * @brief send animated drawable snapshot to specific player
- * 
+ *
  * @param entity entity to send
  * @param dra all animated drawables
  */
 void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to player " + std::to_string(entity));
     for (size_t i = 0; i < dra.size(); i++) {
         if (dra[i].has_value()) {
             AnimatedDrawableSnapshot snap_ad(
@@ -520,6 +538,7 @@ void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entit
  */
 void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending drawable to all players");
     component::Drawable drawable = dra[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, 0);
     auto &rooms = _ecs.get_components<component::Room>();
@@ -534,6 +553,7 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
  */
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending death event to all players");
     DeathEventMessage evt(16, entity, 0);
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(evt, _death_packets, edp, rooms, rooms[entity]->_name);
@@ -567,13 +587,14 @@ void Server::receive_from_client()
 
 /**
  * @brief receive an event of room joining from the client
- * 
+ *
  * @param client_msg raw client message unparsed.
- * @param _ 
+ * @param _
  * @return packet id of the received message
  */
 int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
 {
+    _logger.log(SERVER, "Receiving room join event");
     RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
 
     if (_lobbies.find(std::string(joinMsg->room_name)) == _lobbies.end()) {
@@ -593,12 +614,13 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
 
 /**
  * @brief receive an event of room creation from the client
- * 
+ *
  * @param client_msg raw client message unparsed.
- * @param _ 
+ * @param _
  * @return packet id of the received message
  */
 int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
+    _logger.log(SERVER, "Receiving room creation event");
     RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
 
     if (_lobbies.find(std::string(creationMsg->room_name)) != _lobbies.end()) {
@@ -638,6 +660,7 @@ void Server::erase_packet_if_exists(std::vector<T> &packets, int id)
  * @return int 0
  */
 int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
+    _logger.log(SERVER, "Receiving packet confirm");
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
@@ -666,6 +689,7 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
  */
 int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving client event");
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
@@ -686,6 +710,7 @@ int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_
  */
 int Server::receive_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving connection event");
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
@@ -702,6 +727,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
  */
 int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving disconnection event");
     _listener.addEvent(new DeathEvent(player_entity, 0));
     return 0;
 }
@@ -714,6 +740,7 @@ int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t 
  * @return int 0 on success
  */
 int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_entity) {
+    _logger.log(SERVER, "Receiving login event");
     if (client_msg.size() < sizeof(LoginMessage))
         return -1;
     LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
@@ -738,6 +765,7 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
  */
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving friend event");
     if (client_msg.size() < sizeof(FriendsMessage)) {
         return -1;
     }
@@ -757,6 +785,7 @@ int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_
  */
 int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving add friend event");
     if (client_msg.size() < sizeof(AddFriendsMessage))
         return -1;
     AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
@@ -778,6 +807,7 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
  */
 int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving remove friend event");
     if (client_msg.size() < sizeof(RemoveFriendsMessage))
         return -1;
     RemoveFriendsMessage *snapshot = reinterpret_cast<RemoveFriendsMessage *>(client_msg.data());
@@ -797,11 +827,12 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
  */
 int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving chat event");
     if (client_msg.size() < sizeof(ChatMessage))
         return -1;
     ChatMessage *snapshot = reinterpret_cast<ChatMessage *>(client_msg.data());
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    
+
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(reponse, _chat_packets, _ecs.get_components<component::Endpoint>(), rooms, rooms[player_entity]->_name);
     return 0;
@@ -812,6 +843,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
  *
  */
 Server::~Server() {
+    _logger.log(SERVER, "Destroying server");
     // if (_send_thread.joinable())
     //     _send_thread.join();
 }
@@ -826,6 +858,7 @@ Server::~Server() {
  */
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp) {
+    _logger.log(SERVER, "Sending data to all clients");
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value()) {
             structure.packet_id = _packet_id;
@@ -849,6 +882,7 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
 */
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
+    _logger.log(SERVER, "Sending data to all clients for " + room);
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)))) { //  || !rms[i].has_value()
             structure.packet_id = _packet_id;
@@ -871,6 +905,7 @@ void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& pack
  */
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp) {
+    _logger.log(SERVER, "Sending data to all clients except me");
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && edp[i].value()._endpoint != _remote_endpoint) {
             if (edp[i].has_value())
