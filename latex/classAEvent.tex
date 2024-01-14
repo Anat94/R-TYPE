@@ -1,5 +1,5 @@
-\doxysection{AEvent Class Reference}
-\hypertarget{classAEvent}{}\label{classAEvent}\index{AEvent@{AEvent}}
+\hypertarget{classAEvent}{}\doxysection{AEvent Class Reference}
+\label{classAEvent}\index{AEvent@{AEvent}}
 
 
 Abstract class for events.  
@@ -12,32 +12,22 @@ Abstract class for events.
 Inheritance diagram for AEvent\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[height=11.000000cm]{classAEvent}
+\includegraphics[height=12.000000cm]{classAEvent}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_ad3824df16d31a5f97f3afe91336448d6}{get}} () const
+std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_aae61c3d66a44cdfa208642bb495571e1}{get}} () const
 \begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const override
 \begin{DoxyCompactList}\small\item\em operator== allows comparison between two events \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\begin{DoxyCompactList}\small\item\em Main function of the Event, used to aply changes on the registery passed as paramter. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classIEvent}{IEvent}}}
+\begin{DoxyCompactList}\small\item\em Handle to keep an entity within window bounds. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{\texorpdfstring{$\sim$}{\string~}\+IEvent}} ()=default
-\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classIEvent}{IEvent} object. \end{DoxyCompactList}\item 
-virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{get}} () const =0
-\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
-virtual bool \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const =0
-\item 
-virtual void \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Protected Attributes}
-\begin{DoxyCompactItemize}
-\item 
+\mbox{\Hypertarget{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}\label{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}} 
 std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\+\_\+ents}}
 \begin{DoxyCompactList}\small\item\em The two main objects id responsible for the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -48,11 +38,11 @@ Abstract class for events.
 Implementing operator== 
 
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classAEvent_ad3824df16d31a5f97f3afe91336448d6}\label{classAEvent_ad3824df16d31a5f97f3afe91336448d6} 
+\mbox{\Hypertarget{classAEvent_aae61c3d66a44cdfa208642bb495571e1}\label{classAEvent_aae61c3d66a44cdfa208642bb495571e1}} 
 \index{AEvent@{AEvent}!get@{get}}
 \index{get@{get}!AEvent@{AEvent}}
 \doxysubsubsection{\texorpdfstring{get()}{get()}}
-{\footnotesize\ttfamily std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ AEvent\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ AEvent\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 
 
@@ -63,9 +53,9 @@ std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$
 \end{DoxyReturn}
 
 
-Implements \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{IEvent}}.
+Implements \mbox{\hyperlink{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}{IEvent}}.
 
-\Hypertarget{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}\label{classAEvent_a5fb7336a5e208376b6987ade7db49ba9} 
+\mbox{\Hypertarget{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}\label{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}} 
 \index{AEvent@{AEvent}!handleEvent@{handleEvent}}
 \index{handleEvent@{handleEvent}!AEvent@{AEvent}}
 \doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
@@ -73,7 +63,7 @@ Implements \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{IEven
 
 
 
-Main function of the Event, used to aply changes on the registery passed as paramter. 
+Handle to keep an entity within window bounds. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -84,13 +74,13 @@ Main function of the Event, used to aply changes on the registery passed as para
 \end{DoxyParams}
 
 
-Implements \mbox{\hyperlink{classIEvent}{IEvent}}.
+Implements \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{IEvent}}.
 
 
 
-Implemented in \mbox{\hyperlink{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}{Collision\+Event}}, \mbox{\hyperlink{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}{Spawn\+Enemy}}, \mbox{\hyperlink{classDeathEvent_a940a23b261cc52393d431ac6c5b4ca06}{Death\+Event}}, \mbox{\hyperlink{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}{Spawn\+Event}}, \mbox{\hyperlink{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}{Update\+Position\+Event}}, \mbox{\hyperlink{classPositionStayInWindowBounds_a83a760a12a7409626b23622e384e59c6}{Position\+Stay\+In\+Window\+Bounds}}, and \mbox{\hyperlink{classShootEvent_ac6f6a2fd8d4d6330b8644a1e95de9756}{Shoot\+Event}}.
+Implemented in \mbox{\hyperlink{classShootEvent_ac6f6a2fd8d4d6330b8644a1e95de9756}{Shoot\+Event}}, \mbox{\hyperlink{classPositionStayInWindowBounds_a83a760a12a7409626b23622e384e59c6}{Position\+Stay\+In\+Window\+Bounds}}, \mbox{\hyperlink{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}{Update\+Position\+Event}}, \mbox{\hyperlink{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}{Spawn\+Event}}, \mbox{\hyperlink{classRemoveShieldEvent_a743e8922c9066dff1196b677b8f1fefe}{Remove\+Shield\+Event}}, \mbox{\hyperlink{classDeathEvent_a940a23b261cc52393d431ac6c5b4ca06}{Death\+Event}}, \mbox{\hyperlink{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}{Spawn\+Enemy}}, \mbox{\hyperlink{classIncrementNbShoots_a6f68628e7148b635901a569b83a93e02}{Increment\+Nb\+Shoots}}, \mbox{\hyperlink{classCreateExplosionEvent_a5b61ad093d8782d8fdff7753b34e3cb7}{Create\+Explosion\+Event}}, and \mbox{\hyperlink{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}{Collision\+Event}}.
 
-\Hypertarget{classAEvent_aa3918d23f109d0d2153237f0b2f86117}\label{classAEvent_aa3918d23f109d0d2153237f0b2f86117} 
+\mbox{\Hypertarget{classAEvent_aa3918d23f109d0d2153237f0b2f86117}\label{classAEvent_aa3918d23f109d0d2153237f0b2f86117}} 
 \index{AEvent@{AEvent}!operator==@{operator==}}
 \index{operator==@{operator==}!AEvent@{AEvent}}
 \doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
@@ -112,20 +102,7 @@ false otherwise
 \end{DoxyReturn}
 
 
-Implements \mbox{\hyperlink{classIEvent}{IEvent}}.
-
-
-
-\doxysubsection{Member Data Documentation}
-\Hypertarget{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}\label{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6} 
-\index{AEvent@{AEvent}!\_ents@{\_ents}}
-\index{\_ents@{\_ents}!AEvent@{AEvent}}
-\doxysubsubsection{\texorpdfstring{\_ents}{\_ents}}
-{\footnotesize\ttfamily std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ AEvent\+::\+\_\+ents\hspace{0.3cm}{\ttfamily [protected]}}
-
-
-
-The two main objects id responsible for the event. 
+Implements \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{IEvent}}.
 
 
 

@@ -1,38 +1,25 @@
-\doxysection{Click\+Btn\+Event Class Reference}
-\hypertarget{classClickBtnEvent}{}\label{classClickBtnEvent}\index{ClickBtnEvent@{ClickBtnEvent}}
+\hypertarget{classClickBtnEvent}{}\doxysection{Click\+Btn\+Event Class Reference}
+\label{classClickBtnEvent}\index{ClickBtnEvent@{ClickBtnEvent}}
+
+
+event when a button is clicked.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
 Inheritance diagram for Click\+Btn\+Event\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=3.000000cm]{classClickBtnEvent}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Additional Inherited Members}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classAEvent}{AEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_ad3824df16d31a5f97f3afe91336448d6}{get}} () const
-\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const override
-\begin{DoxyCompactList}\small\item\em operator== allows comparison between two events \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\begin{DoxyCompactList}\small\item\em Main function of the Event, used to aply changes on the registery passed as paramter. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classIEvent}{IEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{\texorpdfstring{$\sim$}{\string~}\+IEvent}} ()=default
-\begin{DoxyCompactList}\small\item\em Destroy the \doxylink{classIEvent}{IEvent} object. \end{DoxyCompactList}\item 
-virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{get}} () const =0
-\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
-virtual bool \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const =0
-\item 
-virtual void \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
-\end{DoxyCompactItemize}
-\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classAEvent}{AEvent}}}
-\begin{DoxyCompactItemize}
-\item 
-std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\+\_\+ents}}
-\begin{DoxyCompactList}\small\item\em The two main objects id responsible for the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
 
+
+\doxysubsection{Detailed Description}
+event when a button is clicked. 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 

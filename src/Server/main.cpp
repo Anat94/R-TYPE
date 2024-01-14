@@ -26,6 +26,8 @@
 #include "../Errors.hpp"
 #include "../Ecs/Systems/KillWhenOutOfBounds.hpp"
 #include "../Ecs/Systems/EnemyGeneration.hpp"
+#include "../Ecs/Systems/ShieldSystem.hpp"
+#include "../Ecs/Systems/KillOnTimerSystem.hpp"
 
 using asio::ip::udp;
 
@@ -42,19 +44,6 @@ int error_handling(int nb_args)
     if (nb_args != 2)
         throw ArgumentError("./server <server_port>");
     return 0;
-}
-
-/**
- * @brief login system
- *
- * @param pos the position
- * @param vel the velocity
- */
-void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
-    for (auto&& [_, p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
-        std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
-            << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
-    }
 }
 
 /**
@@ -95,6 +84,9 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::ServerEntity>();
     ecs.register_component<component::AnimatedDrawable>();
     ecs.register_component<component::HurtsOnCollision>();
+    ecs.register_component<component::Shield>();
+    ecs.register_component<component::KillOnTimer>();
+    ecs.register_component<component::ShootCounter>();
     entity_t decoy = ecs.spawn_entity();
     ecs.add_component<component::Room>(decoy, component::Room("__"));
 
@@ -107,7 +99,11 @@ int main(int argc, char *argv[]) {
     EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 2);
     ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room, component::CampaignMode>(*engen_sys);
     CollisionSystem *col_sys = new CollisionSystem(&listener);
-    ecs.add_system<component::Hitbox, component::Position, component::Room>(*col_sys);
+    ecs.add_system<component::Hitbox, component::Position, component::Room, component::Shield>(*col_sys);
+    ShieldSystem *shd_sys = new ShieldSystem(&listener);
+    ecs.add_system<component::Shield>(*shd_sys);
+    KillOnTimerSystem *kot_sys = new KillOnTimerSystem(&listener);
+    ecs.add_system<component::KillOnTimer>(*kot_sys);
     asio::io_context service;
     Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
     service.run();
@@ -116,7 +112,7 @@ int main(int argc, char *argv[]) {
     while (true) {
         mtx.lock();
         ecs.run_systems();
-        listener.popEvent();
+        while (listener.popEvent());
         mtx.unlock();
     }
     return 0;

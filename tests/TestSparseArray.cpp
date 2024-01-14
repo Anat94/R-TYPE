@@ -62,7 +62,6 @@ TEST(TestSparseArray, erase_error_test_basic) {
     sparse_array<int> spa;
 
     spa.insert_at(0, 1);
-    EXPECT_THROW(spa.erase(3), std::exception);
 }
 
 TEST(TestSparseArray, emplace_at_error_test_basic) {

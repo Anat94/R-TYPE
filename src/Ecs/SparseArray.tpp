@@ -24,31 +24,20 @@
 //#pragma warning(disable: 5220)
 //#pragma warning(disable: 5039)
 
-/**
- * @brief Construct a new sparse array<Component>::sparse array object
- * 
- * @tparam Component template type
- * @param other component
- */
+
+/// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+/// @param other The second `sparse_array` object to copy from.
 template <typename Component>
 inline sparse_array<Component>::sparse_array(const sparse_array &other) : _data(other._data) {}
 
-/**
- * @brief Construct a new sparse array<Component>::sparse array object
- * 
- * @tparam Component template type
- * @param other component
- */
+/// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+/// @param other The second `sparse_array` object to copy from.
 template <typename Component>
 inline sparse_array<Component>::sparse_array(sparse_array &&other) noexcept : _data(std::move(other._data)) {}
 
-/**
- * @brief operator = for sparse array
- *
- * @tparam Component template type
- * @param other component
- * @return sparse_array<Component>& sparse array
- */
+/// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+/// @param other The `sparse_array` object to copy the values from.
+/// @return The current instance of the `sparse_array` object, filled with the values of the `other` object.
 template <typename Component>
 inline sparse_array<Component> &sparse_array<Component>::operator=(const sparse_array<Component> &other)
 {
@@ -57,13 +46,9 @@ inline sparse_array<Component> &sparse_array<Component>::operator=(const sparse_
     return *this;
 }
 
-/**
- * @brief operator = for sparse array
- *
- * @tparam Component template type
- * @param other component
- * @return sparse_array<Component>& sparse array
- */
+/// @brief Takes the values of the `other` object and copy them into the current `sparse_array` instance.
+/// @param other The `sparse_array` object to copy the values from.
+/// @return The current instance of the `sparse_array` object, filled with the values of the `other` object.
 template <typename Component>
 inline sparse_array<Component> &sparse_array<Component>::operator=(sparse_array<Component> &&other) noexcept
 {
@@ -72,13 +57,9 @@ inline sparse_array<Component> &sparse_array<Component>::operator=(sparse_array<
     return *this;
 }
 
-/**
- * @brief operator [] for sparse array
- *
- * @tparam Component template type
- * @param idx index
- * @return sparse_array<Component>::reference_type reference
- */
+/// @brief Gives you access to the element at the specified index.
+/// @param idx The index where you want to access the value.
+/// @return The value at the specified index.
 template<class Component>
 inline typename sparse_array<Component>::reference_type sparse_array<Component>::operator[](size_t idx)
 {
@@ -88,13 +69,9 @@ inline typename sparse_array<Component>::reference_type sparse_array<Component>:
     return _data[idx];
 }
 
-/**
- * @brief operator [] for sparse array
- *
- * @tparam Component template type
- * @param idx index
- * @return sparse_array<Component>::const_reference_type reference
- */
+/// @brief Gives you access to the element at the specified index.
+/// @param idx The index where you want to access the value.
+/// @return The value at the specified index.
 template <typename Component>
 inline typename sparse_array<Component>::const_reference_type sparse_array<Component>::operator[](size_t idx) const
 {
@@ -105,10 +82,9 @@ inline typename sparse_array<Component>::const_reference_type sparse_array<Compo
 }
 
 /**
- * @brief begin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::iterator iterator
+ * @brief get the beginning iterator of the sparse array
+ * 
+ * @returns beginning iterator of the sparse_array
  */
 template<class Component>
 inline typename sparse_array<Component>::iterator sparse_array<Component>::begin()
@@ -117,11 +93,10 @@ inline typename sparse_array<Component>::iterator sparse_array<Component>::begin
 }
 
 /**
- * @brief begin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::const_iterator iterator
- */
+         * @brief get the constant beginning iterator of the sparse array
+         * 
+         * @returns constant beginning iterator of the sparse_array
+         */
 template<class Component>
 inline typename sparse_array<Component>::const_iterator sparse_array<Component>::begin() const
 {
@@ -129,11 +104,10 @@ inline typename sparse_array<Component>::const_iterator sparse_array<Component>:
 }
 
 /**
- * @brief begin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::const_iterator iterator
- */
+         * @brief get the constant beginning iterator of the sparse array
+         * 
+         * @returns constant beginning iterator of the sparse_array
+         */
 template<class Component>
 inline typename sparse_array<Component>::const_iterator sparse_array<Component>::cbegin() const
 {
@@ -141,11 +115,10 @@ inline typename sparse_array<Component>::const_iterator sparse_array<Component>:
 }
 
 /**
- * @brief end for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::iterator iterator
- */
+         * @brief get the end iterator of the sparse array
+         * 
+         * @returns end iterator of the sparse_array
+         */
 template<class Component>
 inline typename sparse_array<Component>::iterator sparse_array<Component>::end()
 {
@@ -153,11 +126,10 @@ inline typename sparse_array<Component>::iterator sparse_array<Component>::end()
 }
 
 /**
- * @brief end for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::const_iterator iterator
- */
+         * @brief get the constant end iterator of the sparse array
+         * 
+         * @returns constant end iterator of the sparse_array
+         */
 template<class Component>
 inline typename sparse_array<Component>::const_iterator sparse_array<Component>::end() const
 {
@@ -165,11 +137,10 @@ inline typename sparse_array<Component>::const_iterator sparse_array<Component>:
 }
 
 /**
- * @brief end for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::const_iterator iterator
- */
+         * @brief get the constant end iterator of the sparse array
+         * 
+         * @returns constant end iterator of the sparse_array
+         */
 template<class Component>
 inline typename sparse_array<Component>::const_iterator sparse_array<Component>::cend() const
 {
@@ -177,67 +148,43 @@ inline typename sparse_array<Component>::const_iterator sparse_array<Component>:
 }
 
 /**
- * @brief rbegin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::reverse_iterator iterator
- */
+         * @brief resize the sparse array with a new size
+         * 
+         * @param new_size new wanted size of the sparse_array
+         */
 template <typename Component>
 void sparse_array<Component>::resize(size_type new_size) {
     _data.resize(new_size);
 }
 
 /**
- * @brief rbegin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::reverse_iterator iterator
- */
+         * @brief get the size of the sparse_array
+         * 
+         * @return size of the array
+         */
 template<class Component>
 inline typename sparse_array<Component>::size_type sparse_array<Component>::size() const
 {
     return _data.size();
 }
 
-// template<class Component>
-// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, const Component &value)
-// {
-//     if (pos >= _data.size())
-//         _data.resize(pos + 1);
-//     _data[pos] = value;
-//     return _data[pos];
-// }
-
-// template<class Component>
-// inline typename sparse_array<Component>::reference_type &sparse_array<Component>::insert_at(size_type pos, Component &&value)
-// {
-//     if (pos >= _data.size())
-//         _data.resize(pos + 1);
-//     _data[pos] = std::move(value);
-//     return _data[pos];
-// }
-
 /**
- * @brief rbegin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::reverse_iterator iterator
- */
+         * @brief erase a specific index of the sparse array
+         * 
+         */
 template<class Component>
 inline void sparse_array<Component>::erase(size_type pos)
 {
     if (pos < _data.size()) {
         _data[pos].reset();
-    } else
-        throw std::out_of_range("🤥: out of range for erase");
+    }
 }
 
 /**
- * @brief rbegin for sparse array
- *
- * @tparam Component template type
- * @return sparse_array<Component>::reverse_iterator iterator
- */
+         * @brief Get the index of a value
+         * 
+         * @return size_type 
+         */
 template<class Component>
 inline typename sparse_array<Component>::size_type sparse_array<Component>::get_index(sparse_array<Component>::value_type const &value) const
 {

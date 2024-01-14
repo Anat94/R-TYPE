@@ -14,7 +14,7 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: [linux, windows]
+    # needs: [linux, windows]
     steps:
 
       - name: Move Linux executables
@@ -26,8 +26,8 @@ jobs:
       - name: Move Windows executables
         run: |
           mkdir -p windows
-          cp Debug/client ./windows/
-          cp Debug/server ./windows/
+          cp Src/Client/Debug/client ./windows/
+          cp src/Server/Debug/server ./windows/
 
       - name: Archive the assets folder
         run: |

@@ -1,20 +1,67 @@
-\doxysection{Argument\+Error Class Reference}
-\hypertarget{classArgumentError}{}\label{classArgumentError}\index{ArgumentError@{ArgumentError}}
+\hypertarget{classArgumentError}{}\doxysection{Argument\+Error Class Reference}
+\label{classArgumentError}\index{ArgumentError@{ArgumentError}}
+
+
+Custom Argument \mbox{\hyperlink{classError}{Error}} class.  
+
+
+
+
+{\ttfamily \#include $<$Errors.\+hpp$>$}
+
 Inheritance diagram for Argument\+Error\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{classArgumentError}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classArgumentError_a4c9a1336c92a82b1ec338b13b3450b87}\label{classArgumentError_a4c9a1336c92a82b1ec338b13b3450b87} 
-{\bfseries Argument\+Error} (std\+::string message)
-\item 
-\Hypertarget{classArgumentError_a230dfc6e9240b1192bad5e5bb1f8eaa3}\label{classArgumentError_a230dfc6e9240b1192bad5e5bb1f8eaa3} 
-const char \texorpdfstring{$\ast$}{*} {\bfseries what} () const noexcept
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classArgumentError_a4c9a1336c92a82b1ec338b13b3450b87}{Argument\+Error}} (std\+::string message)
+\begin{DoxyCompactList}\small\item\em Constructor to call in a \char`\"{}throw\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classArgumentError_a7224bf7368869cc38ec64bba292b4ada}\label{classArgumentError_a7224bf7368869cc38ec64bba292b4ada}} 
+\mbox{\hyperlink{classArgumentError_a7224bf7368869cc38ec64bba292b4ada}{$\sim$\+Argument\+Error}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the structure. \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{classArgumentError_aa3897a8282cd8f24f9eaffcfbd23894b}{what}} () const noexcept
+\begin{DoxyCompactList}\small\item\em used to get the error message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Custom Argument \mbox{\hyperlink{classError}{Error}} class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classArgumentError_a4c9a1336c92a82b1ec338b13b3450b87}\label{classArgumentError_a4c9a1336c92a82b1ec338b13b3450b87}} 
+\index{ArgumentError@{ArgumentError}!ArgumentError@{ArgumentError}}
+\index{ArgumentError@{ArgumentError}!ArgumentError@{ArgumentError}}
+\doxysubsubsection{\texorpdfstring{ArgumentError()}{ArgumentError()}}
+{\footnotesize\ttfamily Argument\+Error\+::\+Argument\+Error (\begin{DoxyParamCaption}\item[{std\+::string}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor to call in a \char`\"{}throw\char`\"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & error message \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classArgumentError_aa3897a8282cd8f24f9eaffcfbd23894b}\label{classArgumentError_aa3897a8282cd8f24f9eaffcfbd23894b}} 
+\index{ArgumentError@{ArgumentError}!what@{what}}
+\index{what@{what}!ArgumentError@{ArgumentError}}
+\doxysubsubsection{\texorpdfstring{what()}{what()}}
+{\footnotesize\ttfamily const char$\ast$ Argument\+Error\+::what (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+used to get the error message. 
+
+\begin{DoxyReturn}{Returns}
+string containing the error message. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

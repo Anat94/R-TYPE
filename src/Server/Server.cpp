@@ -6,7 +6,7 @@
 */
 
 #include "Server.hpp"
-#include "KeyEventMapping.hpp"
+#include "../KeyEventMapping.hpp"
 
 /**
  * @brief get position change for event
@@ -21,39 +21,40 @@ std::pair<int, int> Server::get_position_change_for_event(entity_t entity, int e
     std::string prevState = animatedDrawable->_state;
     if (event == KeyIds["Up"]) {
         animatedDrawable->_state = "move up";
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving up");
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, -30};
     }
     if (event == KeyIds["Down"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving down");
         animatedDrawable->_state = "move down";
         send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
         return {0, 30};
     }
     animatedDrawable->_state = "idle";
     send_animated_drawable_update_to_all_clients(entity, animatedDrawable->_state, _ecs.get_components<component::Endpoint>());
-    if (event == KeyIds["Left"])
+    if (event == KeyIds["Left"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving left");
         return {-30, 0};
-    if (event == KeyIds["Right"])
+    }
+    if (event == KeyIds["Right"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is moving right");
         return {30, 0};
-    if (event == KeyIds["Space"])
+    }
+    if (event == KeyIds["Space"]) {
+        _logger.log(SERVER, "Player " + std::to_string(entity) + " is shooting");
         _listener.addEvent(new ShootEvent(entity, -1));
+    }
     return {0, 0};
 }
 
-// void Server::receiveThread() {
-//     asio::io_context& service = _service;
-//     for (int i = 0; i < 4; ++i)
-//         _tpool.emplace_back([this, &service]() { service.run(); });
-//     receive_from_client();
-// }
-
 /**
- * @brief operator () overload
- *
- * @param dra drawable component
- * @param scl scale component
- * @param pos position component
- * @param edp endpoint component
+ * @brief operator that gets called when the ECS launches systems
+ * 
+ * @param dra drawables
+ * @param scl scales
+ * @param pos position
+ * @param edp endpoints
  */
 void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp) {
     if (resend_counter > 10) {
@@ -66,6 +67,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
         resend_packets<DeathEventMessage>(_death_packets, edp);
         resend_packets<RoomCreationMessage>(_room_creation_packets, edp);
         resend_packets<RoomJoinMessage>(_room_join_packets, edp);
+        resend_packets<ScoreMessage>(_score_packets_to_send, edp);
+        resend_packets<HealthMessage>(_health_packets_to_send, edp);
         timer.restart();
         resend_counter = 0;
     }
@@ -108,6 +111,8 @@ void Server::operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_a
             }
         }
         send_position_snapshots_for_all_players(pos, edp);
+        send_health_to_specific_client(edp);
+        send_score_to_specific_client(edp);
         ++resend_counter;
     }
     receive_from_client();
@@ -130,9 +135,11 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       mtx(mtx_),
       _stageManager(listener, ecs),
       _modelManager(listener, ecs),
-      _mapManager(listener, ecs)
+      _mapManager(listener, ecs),
+      _logger(SERVER)
 {
     try {
+        _logger.log(SERVER, "Server started on port " + std::to_string(port));
         connectToDB();
     } catch (const std::exception& e) {
         std::cout<< "Exception: " << e.what() << std::endl;
@@ -158,6 +165,21 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
     return -1;
 }
 
+int Server::get_amount_of_players_in_room(std::string room_name)
+{
+    int counter = 0;
+    auto &all_players = _ecs.get_components<component::Endpoint>();
+    auto &all_rooms= _ecs.get_components<component::Room>();
+    for (size_t i = 0; i < all_players.size(); ++i) {
+        if (all_players[i].has_value() && all_rooms[i].has_value()) {
+            if (all_rooms[i]->_name == room_name)
+                ++counter;
+        }
+    }
+    _logger.log(SERVER, "Amount of players in room " + room_name + ": " + std::to_string(counter));
+    return counter;
+}
+
 /**
  * @brief Connect a player to the server
  *
@@ -166,21 +188,30 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
  * @param room_name The player's room name
  * @return entity_t The player's entity
  */
-entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, int room_mode)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator, int room_mode)
 {
-    std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
-    _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
-    _ecs.add_component(new_player, component::ResetOnMove());
-    _ecs.add_component(new_player, component::Controllable());
-    _ecs.add_component(new_player, component::Heading());
-    _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20}));
-    _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
-    auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
-    tmp->addAnimation("idle", {2, 2}, false);
-    tmp->addAnimation("move up", {2, 4}, false);
-    tmp->addAnimation("move down", {2, 0}, false);
-    tmp->_state = "idle";
+    std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
+    if (!is_spectator) {
+        _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
+        _ecs.add_component(new_player, component::ResetOnMove());
+        _ecs.add_component(new_player, component::Controllable());
+        _ecs.add_component(new_player, component::Heading());
+        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20 * (get_amount_of_players_in_room(room_name) % 5)}));
+        _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
+        auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
+        tmp->addAnimation("idle", {2, 2}, false);
+        tmp->addAnimation("move up", {2, 4}, false);
+        tmp->addAnimation("move down", {2, 0}, false);
+        tmp->_state = "idle";
+        _ecs.add_component(new_player, component::Username(username));
+        _ecs.add_component(new_player, component::Scale(6.0f));
+        _ecs.add_component(new_player, component::Rotation(90));
+        _ecs.add_component(new_player, component::Health(100));
+        _ecs.add_component(new_player, component::Damage(20));
+        _ecs.add_component(new_player, component::Score());
+        _ecs.add_component(new_player, component::ShootCounter());
+    }
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
     _ecs.add_component(new_player, component::Username(username));
@@ -191,19 +222,14 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
             loadLevels(room_name);
         }
     }
-    _ecs.add_component(new_player, component::Scale(6.0f));
-    _ecs.add_component(new_player, component::Rotation(90));
-    _ecs.add_component(new_player, component::Health(100));
-    _ecs.add_component(new_player, component::Damage(20));
-    _ecs.add_component(new_player, component::Score());
-
     std::cout << "New player connected !" << std::endl;
     send_animated_drawable_snapshots_for_specific_player_by_room(new_player, _ecs.get_components<component::AnimatedDrawable>());
-    send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
+    if (!is_spectator) send_animated_drawable_snapshot_to_all_players(new_player, _ecs.get_components<component::AnimatedDrawable>(), _ecs.get_components<component::Endpoint>());
     send_all_entity_drawables_to_specific_player_by_room(new_player);
     send_highscore_to_specific_client(new_player);
     send_all_scale_to_player_by_room(new_player);
-    send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
+    _logger.log(SERVER, "Player " + std::to_string(new_player) + ": " + username +"is  connected");
+    if (!is_spectator) send_scale_to_all_players(new_player, _ecs.get_components<component::Scale>(), _ecs.get_components<component::Endpoint>());
     return new_player;
 }
 
@@ -214,6 +240,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
  */
 void Server::send_all_scale_to_player(entity_t entity)
 {
+    _logger.log(SERVER, "Sending all scales to player " + std::to_string(entity));
     auto scale = _ecs.get_components<component::Scale>();
 
     for (int i = 0; i < scale.size(); ++i) {
@@ -226,8 +253,14 @@ void Server::send_all_scale_to_player(entity_t entity)
     }
 }
 
+/**
+ * @brief Send all scales in the player's room, to the player
+ *
+ * @param entity The entity
+ */
 void Server::send_all_scale_to_player_by_room(entity_t entity)
 {
+    _logger.log(SERVER, "Sending all scales to player " + std::to_string(entity));
     auto scale = _ecs.get_components<component::Scale>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -242,7 +275,7 @@ void Server::send_all_scale_to_player_by_room(entity_t entity)
 }
 
 /**
- * @brief Send data to all client
+ * @brief Send scale to all client
  *
  * @param entity The entity
  * @param scl scale component
@@ -250,6 +283,7 @@ void Server::send_all_scale_to_player_by_room(entity_t entity)
  */
 void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::Scale> &scl, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending scale to all players");
     auto scale = scl[entity];
 
     if (!scale.has_value())
@@ -259,8 +293,14 @@ void Server::send_scale_to_all_players(entity_t entity, sparse_array<component::
     send_data_to_all_clients_by_room(to_send, _scale_packets, edp, rooms, rooms[entity]->_name);
 }
 
+/**
+         * @brief send all the drawables in a player's room, to a specific player
+         * 
+         * @param player player to send drawables to
+         */
 void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t player)
 {
+    _logger.log(SERVER, "Sending all drawables to player " + std::to_string(player));
     auto drawables = _ecs.get_components<component::Drawable>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -281,6 +321,7 @@ void Server::send_all_entity_drawables_to_specific_player_by_room(entity_t playe
  */
 void Server::send_all_entity_drawables_to_specific_player(entity_t player)
 {
+    _logger.log(SERVER, "Sending all drawables to player " + std::to_string(player));
     auto drawables = _ecs.get_components<component::Drawable>();
     auto rooms = _ecs.get_components<component::Room>();
 
@@ -301,6 +342,7 @@ void Server::send_all_entity_drawables_to_specific_player(entity_t player)
  */
 void Server::send_highscore_to_specific_client(entity_t new_player)
 {
+    _logger.log(SERVER, "Sending highscore to player " + std::to_string(new_player));
     HighScoreMessage highscoreMsg = getHighScore();
     send_data_to_client_by_entity<HighScoreMessage>(highscoreMsg, new_player);
 }
@@ -320,9 +362,50 @@ std::vector<char> Server::receive_raw_data_from_client()
     } catch (std::exception &e) {
         receivedData.resize(0);
     }
-
     return receivedData;
 }
+
+/**
+ * @brief send health to a specific player
+ * 
+ * @param edp all endpoints
+ */
+void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &edp)
+{
+    auto &health = _ecs.get_components<component::Health>();
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && health[i].has_value()) {
+            _logger.log(SERVER, "Sending health to player " + std::to_string(i) + ": " + std::to_string(health[i].value()._health));
+            HealthMessage to_send(23, health[i].value()._health, _packet_id);
+            _packet_id++;
+            _health_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+        }
+    }
+}
+
+/**
+ * @brief send score to a specific player
+ * 
+ * @param edp all endpoints
+ */
+void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
+{
+    auto score = _ecs.get_components<component::Score>();
+    auto username = _ecs.get_components<component::Username>();
+    for (size_t i = 0; i < edp.size(); i++) {
+        if (edp[i].has_value() && score[i].has_value()) {
+            _logger.log(SERVER, "Sending score to player "+ std::to_string(i) + ": " + std::to_string(score[i]->_score));
+            ScoreMessage to_send(24, score[i]->_score, _packet_id);
+            _packet_id++;
+            _score_packets_to_send.push_back(to_send);
+            send_data_to_client_by_entity(to_send, i);
+            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
+            addHighScore(username[i]->_name, score[i]->_score);
+        }
+    }
+}
+
 
 /**
  * @brief Send position snapshots for all players
@@ -354,6 +437,7 @@ void Server::send_position_snapshots_for_all_players(sparse_array<component::Pos
  */
 void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::string state, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending animated drawable update to all players");
     if (state.size() > 15) {
         std::cout << "ERROR STATE SIZE TOO BIG TO BE STORED\n";
         return;
@@ -372,6 +456,7 @@ void Server::send_animated_drawable_update_to_all_clients(entity_t entity, std::
  */
 void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to all players");
     auto &animatedDrawable = dra[entity];
     if (animatedDrawable.has_value()) {
         AnimatedDrawableSnapshot snap_ad(
@@ -392,8 +477,15 @@ void Server::send_animated_drawable_snapshot_to_all_players(entity_t entity, spa
     }
 }
 
+/**
+ * @brief send animated drawables in a player's room to a specific player
+ *
+ * @param entity player to send the drawables dto
+ * @param dra all animated drawables
+ */
 void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to player " + std::to_string(entity));
     auto rooms = _ecs.get_components<component::Room>();
     for (size_t i = 0; i < dra.size(); i++) {
         if (!dra[i].has_value() || !rooms[entity].has_value() || !rooms[i].has_value() || (rooms[entity]->_name != rooms[i]->_name))
@@ -419,12 +511,13 @@ void Server::send_animated_drawable_snapshots_for_specific_player_by_room(entity
 
 /**
  * @brief send animated drawable snapshot to specific player
- * 
+ *
  * @param entity entity to send
- * @param dra drawable to send
+ * @param dra all animated drawables
  */
 void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entity, sparse_array<component::AnimatedDrawable> dra)
 {
+    _logger.log(SERVER, "Sending animated drawable snapshot to player " + std::to_string(entity));
     for (size_t i = 0; i < dra.size(); i++) {
         if (dra[i].has_value()) {
             AnimatedDrawableSnapshot snap_ad(
@@ -456,6 +549,7 @@ void Server::send_animated_drawable_snapshots_for_specific_player(entity_t entit
  */
 void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<component::Drawable> &dra, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending drawable to all players");
     component::Drawable drawable = dra[entity].value();
     DrawableSnapshot to_send(6, entity, drawable._path, 0);
     auto &rooms = _ecs.get_components<component::Room>();
@@ -470,13 +564,14 @@ void Server::send_entity_drawable_to_all_players(entity_t entity, sparse_array<c
  */
 void Server::send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp)
 {
+    _logger.log(SERVER, "Sending death event to all players");
     DeathEventMessage evt(16, entity, 0);
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(evt, _death_packets, edp, rooms, rooms[entity]->_name);
 }
 
 /**
- * @brief receive from client
+ * @brief receive info over udp network from client
  *
  */
 void Server::receive_from_client()
@@ -501,8 +596,16 @@ void Server::receive_from_client()
     return;
 }
 
+/**
+ * @brief receive an event of room joining from the client
+ *
+ * @param client_msg raw client message unparsed.
+ * @param _
+ * @return packet id of the received message
+ */
 int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
 {
+    _logger.log(SERVER, "Receiving room join event");
     RoomJoinMessage *joinMsg = reinterpret_cast<RoomJoinMessage *>(client_msg.data());
 
     if (_lobbies.find(std::string(joinMsg->room_name)) == _lobbies.end()) {
@@ -520,7 +623,15 @@ int Server::receive_room_join_event(std::vector<char>& client_msg, entity_t _)
     return 0;
 }
 
+/**
+ * @brief receive an event of room creation from the client
+ *
+ * @param client_msg raw client message unparsed.
+ * @param _
+ * @return packet id of the received message
+ */
 int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t _) {
+    _logger.log(SERVER, "Receiving room creation event");
     RoomCreationMessage *creationMsg = reinterpret_cast<RoomCreationMessage *>(client_msg.data());
 
     if (_lobbies.find(std::string(creationMsg->room_name)) != _lobbies.end()) {
@@ -540,6 +651,18 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
     return 0;
 }
 
+template <typename T>
+void Server::erase_packet_if_exists(std::vector<T> &packets, int id)
+{
+    packets.erase(
+        std::remove_if(packets.begin(), packets.end(), [id](const T& snapshot) {
+            return snapshot.packet_id == id;
+        }
+        ),
+        packets.end()
+    );
+}
+
 /**
  * @brief receive packet confirm
  *
@@ -548,79 +671,22 @@ int Server::receive_room_creation_event(std::vector<char>& client_msg, entity_t 
  * @return int 0
  */
 int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
+    _logger.log(SERVER, "Receiving packet confirm");
     ConfirmationMessage *confirmMsg = reinterpret_cast<ConfirmationMessage *>(client_msg.data());
     int id = confirmMsg->packet_id;
 
-    _position_packets.erase(
-        std::remove_if(_position_packets.begin(), _position_packets.end(), [id](const SnapshotPosition& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _position_packets.end()
-    );
-    _drawable_packets.erase(
-        std::remove_if(_drawable_packets.begin(), _drawable_packets.end(), [id](const DrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _drawable_packets.end()
-    );
-    _highscore_packets.erase(
-        std::remove_if(_highscore_packets.begin(), _highscore_packets.end(), [id](const HighScoreMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _highscore_packets.end()
-    );
-    _animated_drawable_packets.erase(
-        std::remove_if(_animated_drawable_packets.begin(), _animated_drawable_packets.end(), [id](const AnimatedDrawableSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_packets.end()
-    );
-    _animated_drawable_update_packets.erase(
-        std::remove_if(_animated_drawable_update_packets.begin(), _animated_drawable_update_packets.end(), [id](const AnimatedStateUpdateMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _animated_drawable_update_packets.end()
-    );
-    _chat_packets.erase(
-        std::remove_if(_chat_packets.begin(), _chat_packets.end(), [id](const ChatMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _chat_packets.end()
-    );
-    _scale_packets.erase(
-        std::remove_if(_scale_packets.begin(), _scale_packets.end(), [id](const ScaleSnapshot& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _scale_packets.end()
-    );
-    _death_packets.erase(
-        std::remove_if(_death_packets.begin(), _death_packets.end(), [id](const DeathEventMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _death_packets.end()
-    );
-    _room_creation_packets.erase(
-        std::remove_if(_room_creation_packets.begin(), _room_creation_packets.end(), [id](const RoomCreationMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_creation_packets.end()
-    );
-    _room_join_packets.erase(
-        std::remove_if(_room_join_packets.begin(), _room_join_packets.end(), [id](const RoomJoinMessage& snapshot) {
-            return snapshot.packet_id == id;
-        }
-        ),
-        _room_join_packets.end()
-    );
+    erase_packet_if_exists(_position_packets, id);
+    erase_packet_if_exists(_drawable_packets, id);
+    erase_packet_if_exists(_highscore_packets, id);
+    erase_packet_if_exists(_animated_drawable_packets, id);
+    erase_packet_if_exists(_animated_drawable_update_packets, id);
+    erase_packet_if_exists(_chat_packets, id);
+    erase_packet_if_exists(_scale_packets, id);
+    erase_packet_if_exists(_death_packets, id);
+    erase_packet_if_exists(_room_creation_packets, id);
+    erase_packet_if_exists(_room_join_packets, id);
+    erase_packet_if_exists(_score_packets_to_send, id);
+    erase_packet_if_exists(_health_packets_to_send, id);
     return 0;
 }
 
@@ -634,6 +700,7 @@ int Server::receive_packet_confirm(std::vector<char> & client_msg, entity_t _) {
  */
 int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving client event");
     if (client_msg.size() < sizeof(EventMessage))
         return -1;
     EventMessage *event = reinterpret_cast<EventMessage *>(client_msg.data());
@@ -654,10 +721,11 @@ int Server::receive_client_event(std::vector<char> &client_msg, entity_t player_
  */
 int Server::receive_connection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving connection event");
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->room_mode);
+    std::cerr << connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->spectator_mode, msg->room_mode) << std::endl;
     return 0;
 }
 
@@ -670,6 +738,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
  */
 int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving disconnection event");
     _listener.addEvent(new DeathEvent(player_entity, 0));
     return 0;
 }
@@ -682,6 +751,7 @@ int Server::receive_disconnection_event(std::vector<char> &client_msg, entity_t 
  * @return int 0 on success
  */
 int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_entity) {
+    _logger.log(SERVER, "Receiving login event");
     if (client_msg.size() < sizeof(LoginMessage))
         return -1;
     LoginMessage *snapshot = reinterpret_cast<LoginMessage *>(client_msg.data());
@@ -706,6 +776,7 @@ int Server::receive_login_event(std::vector<char> &client_msg, entity_t player_e
  */
 int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving friend event");
     if (client_msg.size() < sizeof(FriendsMessage)) {
         return -1;
     }
@@ -725,6 +796,7 @@ int Server::receive_friend_event(std::vector<char> &client_msg, entity_t player_
  */
 int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving add friend event");
     if (client_msg.size() < sizeof(AddFriendsMessage))
         return -1;
     AddFriendsMessage *snapshot = reinterpret_cast<AddFriendsMessage *>(client_msg.data());
@@ -746,6 +818,7 @@ int Server::receive_add_friend_event(std::vector<char>& client_msg, entity_t pla
  */
 int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving remove friend event");
     if (client_msg.size() < sizeof(RemoveFriendsMessage))
         return -1;
     RemoveFriendsMessage *snapshot = reinterpret_cast<RemoveFriendsMessage *>(client_msg.data());
@@ -765,11 +838,12 @@ int Server::receive_remove_friend_event(std::vector<char>& client_msg, entity_t 
  */
 int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_entity)
 {
+    _logger.log(SERVER, "Receiving chat event");
     if (client_msg.size() < sizeof(ChatMessage))
         return -1;
     ChatMessage *snapshot = reinterpret_cast<ChatMessage *>(client_msg.data());
     ChatMessage reponse(12, snapshot->name, snapshot->content, _packet_id);
-    
+
     auto &rooms = _ecs.get_components<component::Room>();
     send_data_to_all_clients_by_room(reponse, _chat_packets, _ecs.get_components<component::Endpoint>(), rooms, rooms[player_entity]->_name);
     return 0;
@@ -780,6 +854,7 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
  *
  */
 Server::~Server() {
+    _logger.log(SERVER, "Destroying server");
 }
 
 /**
@@ -792,6 +867,7 @@ Server::~Server() {
  */
 template <typename T>
 void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp) {
+    _logger.log(SERVER, "Sending data to all clients");
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value()) {
             structure.packet_id = _packet_id;
@@ -803,8 +879,19 @@ void Server::send_data_to_all_clients(T& structure, std::vector<T>& packets_to_s
     }
 }
 
+/**
+ * @brief send data to all clients by their room
+ *
+ * @tparam T the type of the data
+ * @param structure the data
+ * @param packets_to_send the packets to send
+ * @param edp endpoint component
+ * @param rms all rooms
+ * @param room room to send data to
+*/
 template <typename T>
 void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& packets_to_send, sparse_array<component::Endpoint> &edp, sparse_array<component::Room> &rms, std::string room) {
+    _logger.log(SERVER, "Sending data to all clients for " + room);
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && ((rms[i].has_value() && (rms[i]->_name == room)))) { //  || !rms[i].has_value()
             structure.packet_id = _packet_id;
@@ -827,6 +914,7 @@ void Server::send_data_to_all_clients_by_room(T& structure, std::vector<T>& pack
  */
 template <typename T>
 void Server::send_data_to_all_clients_except_me(T& structure, sparse_array<component::Endpoint> &edp) {
+    _logger.log(SERVER, "Sending data to all clients except me");
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && edp[i].value()._endpoint != _remote_endpoint) {
             if (edp[i].has_value())

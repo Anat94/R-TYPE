@@ -10,8 +10,8 @@
         #define MAX_BUF_SIZE 11024
 
 #include <asio.hpp>
-#include "../Ecs/Events.hpp"
-#include "../Ecs/Components.hpp"
+#include "Ecs/Events.hpp"
+#include "Ecs/Components.hpp"
 using asio::ip::udp;
 
 
@@ -731,6 +731,7 @@ struct JoinGameMessage: public BaseMessage {
      */
     int room_mode;
 
+    bool spectator_mode;
     /**
      * @brief constructor initializing the following parameters
      * 
@@ -740,7 +741,7 @@ struct JoinGameMessage: public BaseMessage {
      * @param room_mode_ Mode of the room
      * @param packet_id_ packet id of the message, used to identify individual packets
     */
-    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, int room_mode_, int packet_id_)
+    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, bool spectator_mode_, int room_mode_, int packet_id_): spectator_mode(spectator_mode_)
     {
         size_t i = 0;
 
@@ -784,6 +785,56 @@ struct RoomJoinMessage: public BaseMessage {
             room_name[i] = room_name_[i];
         }
         room_name[i] = '\0';
+    };
+};
+
+/**
+ * @brief structure to send health over network
+ * 
+ */
+struct HealthMessage : public BaseMessage {
+    /**
+     * @brief Health of the player
+    */
+    int health;
+
+    /**
+     * @brief constructor initializing the following parameters
+     *
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message
+     * @param health_ Health of the player
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
+    HealthMessage(int16_t id_, int health_, int packet_id_)
+    {
+        id = id_;
+        packet_id = packet_id_;
+        health = health_;
+    };
+};
+
+/**
+ * @brief structure to send score over network
+ * 
+ */
+struct ScoreMessage : public BaseMessage {
+    /**
+     * @brief Score of the player
+    */
+    int score;
+
+    /**
+     * @brief constructor initializing the following parameters
+     *
+     * @param id_ id of the message that is going to be sent through the network. Identifies the type of message
+     * @param score_ Score of the player
+     * @param packet_id_ packet id of the message, used to identify individual packets
+    */
+    ScoreMessage(int16_t id_, int score_, int packet_id_)
+    {
+        id = id_;
+        packet_id = packet_id_;
+        score = score_;
     };
 };
 

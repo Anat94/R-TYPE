@@ -1,30 +1,56 @@
-\doxysection{Add\+Friends\+Response Struct Reference}
-\hypertarget{structAddFriendsResponse}{}\label{structAddFriendsResponse}\index{AddFriendsResponse@{AddFriendsResponse}}
+\hypertarget{structAddFriendsResponse}{}\doxysection{Add\+Friends\+Response Struct Reference}
+\label{structAddFriendsResponse}\index{AddFriendsResponse@{AddFriendsResponse}}
+
+
+encapsulates the friend request response from the server to the player  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Add\+Friends\+Response\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structAddFriendsResponse}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structAddFriendsResponse_adba2de86edc0b3b81037f97788bfedc8}\label{structAddFriendsResponse_adba2de86edc0b3b81037f97788bfedc8} 
-{\bfseries Add\+Friends\+Response} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structAddFriendsResponse_adba2de86edc0b3b81037f97788bfedc8}{Add\+Friends\+Response}} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em Constructor initializing the following parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structAddFriendsResponse_a621cff59e9972ed134b7ad464532ae75}\label{structAddFriendsResponse_a621cff59e9972ed134b7ad464532ae75} 
-bool {\bfseries response}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structAddFriendsResponse_a621cff59e9972ed134b7ad464532ae75}\label{structAddFriendsResponse_a621cff59e9972ed134b7ad464532ae75}} 
+bool \mbox{\hyperlink{structAddFriendsResponse_a621cff59e9972ed134b7ad464532ae75}{response}}
+\begin{DoxyCompactList}\small\item\em response of the friend request, 1 if successfull, 0 if not. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates the friend request response from the server to the player 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structAddFriendsResponse_adba2de86edc0b3b81037f97788bfedc8}\label{structAddFriendsResponse_adba2de86edc0b3b81037f97788bfedc8}} 
+\index{AddFriendsResponse@{AddFriendsResponse}!AddFriendsResponse@{AddFriendsResponse}}
+\index{AddFriendsResponse@{AddFriendsResponse}!AddFriendsResponse@{AddFriendsResponse}}
+\doxysubsubsection{\texorpdfstring{AddFriendsResponse()}{AddFriendsResponse()}}
+{\footnotesize\ttfamily Add\+Friends\+Response\+::\+Add\+Friends\+Response (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{bool}]{success\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor initializing the following parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em success\+\_\+} & response of the friend request, 1 if successfull, 0 if not. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

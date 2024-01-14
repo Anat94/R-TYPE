@@ -14,7 +14,6 @@ ZERO_CHECK*
 *.sln
 *.filters
 x64
-Debug
 *.dir
 *.smn
 asio*
@@ -23,3 +22,4 @@ db.txt
 my_tests
 sqlite3/
 lib/
+db/rtype.db

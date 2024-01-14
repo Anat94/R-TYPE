@@ -1,5 +1,5 @@
-\doxysection{Event\+Listener Class Reference}
-\hypertarget{classEventListener}{}\label{classEventListener}\index{EventListener@{EventListener}}
+\hypertarget{classEventListener}{}\doxysection{Event\+Listener Class Reference}
+\label{classEventListener}\index{EventListener@{EventListener}}
 
 
 Real class declaration.  
@@ -9,68 +9,44 @@ Real class declaration.
 
 {\ttfamily \#include $<$Events.\+hpp$>$}
 
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\Hypertarget{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20}\label{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20}} 
 \mbox{\hyperlink{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20}{Event\+Listener}} ()
 \begin{DoxyCompactList}\small\item\em Construct a new Event Listener object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}{\texorpdfstring{$\sim$}{\string~}\+Event\+Listener}} ()=default
+\mbox{\Hypertarget{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}\label{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}} 
+\mbox{\hyperlink{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}{$\sim$\+Event\+Listener}} ()=default
 \begin{DoxyCompactList}\small\item\em Destroy the Event Listener object. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classEventListener_a682d1f11e033fb485637811887fec392}{add\+Event}} (\mbox{\hyperlink{classIEvent}{IEvent}} \texorpdfstring{$\ast$}{*}event)
+bool \mbox{\hyperlink{classEventListener_a682d1f11e033fb485637811887fec392}{add\+Event}} (\mbox{\hyperlink{classIEvent}{IEvent}} $\ast$event)
 \begin{DoxyCompactList}\small\item\em Adds an event passed as parameter to the queue of events. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classEventListener_a316f6e24f1c252555507e18a956d4ad4}{pop\+Event}} ()
 \begin{DoxyCompactList}\small\item\em Removes the first event in the queue of events. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}{add\+Registry}} (\mbox{\hyperlink{classregistry}{registry}} \&reg)
 \begin{DoxyCompactList}\small\item\em Stores the regitry\+\_\+t object inside of the listener. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{classEventListener_a6b3902728a263e3b5878dd04b239d425}{has\+Event}} (\mbox{\hyperlink{classIEvent}{IEvent}} \texorpdfstring{$\ast$}{*}event)
+bool \mbox{\hyperlink{classEventListener_a6b3902728a263e3b5878dd04b239d425}{has\+Event}} (\mbox{\hyperlink{classIEvent}{IEvent}} $\ast$event)
 \begin{DoxyCompactList}\small\item\em Checks if the listener currently has the event passed as parameter. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-std\+::queue$<$ \mbox{\hyperlink{classIEvent}{IEvent}} \texorpdfstring{$\ast$}{*} $>$ \mbox{\hyperlink{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}{\+\_\+events}}
+\mbox{\Hypertarget{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}\label{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}} 
+std\+::queue$<$ \mbox{\hyperlink{classIEvent}{IEvent}} $\ast$ $>$ \mbox{\hyperlink{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}{\+\_\+events}}
 \begin{DoxyCompactList}\small\item\em The (FIFO) queue of events. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 Real class declaration. 
 
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\Hypertarget{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20}\label{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20} 
-\index{EventListener@{EventListener}!EventListener@{EventListener}}
-\index{EventListener@{EventListener}!EventListener@{EventListener}}
-\doxysubsubsection{\texorpdfstring{EventListener()}{EventListener()}}
-{\footnotesize\ttfamily Event\+Listener\+::\+Event\+Listener (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Construct a new Event Listener object. 
-
-\Hypertarget{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}\label{classEventListener_a4984b3727ac41de6cdfa875dbc05580d} 
-\index{EventListener@{EventListener}!````~EventListener@{\texorpdfstring{$\sim$}{\string~}EventListener}}
-\index{````~EventListener@{\texorpdfstring{$\sim$}{\string~}EventListener}!EventListener@{EventListener}}
-\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}EventListener()}{\string~EventListener()}}
-{\footnotesize\ttfamily Event\+Listener\+::\texorpdfstring{$\sim$}{\string~}\+Event\+Listener (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-
-
-Destroy the Event Listener object. 
-
-
-
 \doxysubsection{Member Function Documentation}
-\Hypertarget{classEventListener_a682d1f11e033fb485637811887fec392}\label{classEventListener_a682d1f11e033fb485637811887fec392} 
+\mbox{\Hypertarget{classEventListener_a682d1f11e033fb485637811887fec392}\label{classEventListener_a682d1f11e033fb485637811887fec392}} 
 \index{EventListener@{EventListener}!addEvent@{addEvent}}
 \index{addEvent@{addEvent}!EventListener@{EventListener}}
 \doxysubsubsection{\texorpdfstring{addEvent()}{addEvent()}}
-{\footnotesize\ttfamily bool Event\+Listener\+::add\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIEvent}{IEvent}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Event\+Listener\+::add\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIEvent}{IEvent}} $\ast$}]{event }\end{DoxyParamCaption})}
 
 
 
 Adds an event passed as parameter to the queue of events. 
-
-add an event to the queue
 
 
 \begin{DoxyParams}{Parameters}
@@ -80,19 +56,9 @@ add an event to the queue
 \begin{DoxyReturn}{Returns}
 true if the event was successfully added, 
 
-false otherwise
+false otherwise 
 \end{DoxyReturn}
-
-
-
-\begin{DoxyParams}{Parameters}
-{\em event} & event to add \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-true if the event was added 
-\end{DoxyReturn}
-\Hypertarget{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}\label{classEventListener_a98b65ba5319b89b539da5a5fd265a01e} 
+\mbox{\Hypertarget{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}\label{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}} 
 \index{EventListener@{EventListener}!addRegistry@{addRegistry}}
 \index{addRegistry@{addRegistry}!EventListener@{EventListener}}
 \doxysubsubsection{\texorpdfstring{addRegistry()}{addRegistry()}}
@@ -102,31 +68,20 @@ true if the event was added
 
 Stores the regitry\+\_\+t object inside of the listener. 
 
-add a registry to the event listener
-
 
 \begin{DoxyParams}{Parameters}
-{\em reg} & the registry\+\_\+t instance pointer\\
+{\em reg} & the registry\+\_\+t instance pointer \\
 \hline
 \end{DoxyParams}
-
-
-
-\begin{DoxyParams}{Parameters}
-{\em reg} & reference to the registry \\
-\hline
-\end{DoxyParams}
-\Hypertarget{classEventListener_a6b3902728a263e3b5878dd04b239d425}\label{classEventListener_a6b3902728a263e3b5878dd04b239d425} 
+\mbox{\Hypertarget{classEventListener_a6b3902728a263e3b5878dd04b239d425}\label{classEventListener_a6b3902728a263e3b5878dd04b239d425}} 
 \index{EventListener@{EventListener}!hasEvent@{hasEvent}}
 \index{hasEvent@{hasEvent}!EventListener@{EventListener}}
 \doxysubsubsection{\texorpdfstring{hasEvent()}{hasEvent()}}
-{\footnotesize\ttfamily bool Event\+Listener\+::has\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIEvent}{IEvent}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool Event\+Listener\+::has\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIEvent}{IEvent}} $\ast$}]{event }\end{DoxyParamCaption})}
 
 
 
 Checks if the listener currently has the event passed as parameter. 
-
-has the event in the queue
 
 
 \begin{DoxyParams}{Parameters}
@@ -136,21 +91,9 @@ has the event in the queue
 \begin{DoxyReturn}{Returns}
 true 
 
-false
+false 
 \end{DoxyReturn}
-
-
-
-\begin{DoxyParams}{Parameters}
-{\em event} & event to check \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-true if the event is in the queue 
-
-false if the event is not in the queue 
-\end{DoxyReturn}
-\Hypertarget{classEventListener_a316f6e24f1c252555507e18a956d4ad4}\label{classEventListener_a316f6e24f1c252555507e18a956d4ad4} 
+\mbox{\Hypertarget{classEventListener_a316f6e24f1c252555507e18a956d4ad4}\label{classEventListener_a316f6e24f1c252555507e18a956d4ad4}} 
 \index{EventListener@{EventListener}!popEvent@{popEvent}}
 \index{popEvent@{popEvent}!EventListener@{EventListener}}
 \doxysubsubsection{\texorpdfstring{popEvent()}{popEvent()}}
@@ -160,33 +103,11 @@ false if the event is not in the queue
 
 Removes the first event in the queue of events. 
 
-pop the first event of the queue and handle it
-
 \begin{DoxyReturn}{Returns}
 true if the event whas successfully removed and executed, 
 
-false otherwise
+false otherwise 
 \end{DoxyReturn}
-
-
-\begin{DoxyReturn}{Returns}
-true if an event was poped 
-
-false if the queue is empty 
-\end{DoxyReturn}
-
-
-\doxysubsection{Member Data Documentation}
-\Hypertarget{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}\label{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72} 
-\index{EventListener@{EventListener}!\_events@{\_events}}
-\index{\_events@{\_events}!EventListener@{EventListener}}
-\doxysubsubsection{\texorpdfstring{\_events}{\_events}}
-{\footnotesize\ttfamily std\+::queue$<$\mbox{\hyperlink{classIEvent}{IEvent}}\texorpdfstring{$\ast$}{*}$>$ Event\+Listener\+::\+\_\+events}
-
-
-
-The (FIFO) queue of events. 
-
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

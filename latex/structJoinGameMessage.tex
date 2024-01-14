@@ -1,0 +1,66 @@
+\hypertarget{structJoinGameMessage}{}\doxysection{Join\+Game\+Message Struct Reference}
+\label{structJoinGameMessage}\index{JoinGameMessage@{JoinGameMessage}}
+
+
+contains the information necessary to start the game for the user  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Join\+Game\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structJoinGameMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structJoinGameMessage_a7f89b760e0bef8d79453db999af23f2e}{Join\+Game\+Message}} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, std\+::string room\+\_\+name\+\_\+, bool spectator\+\_\+mode\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structJoinGameMessage_aa2926ef0524d8af26858896708433c6e}\label{structJoinGameMessage_aa2926ef0524d8af26858896708433c6e}} 
+char \mbox{\hyperlink{structJoinGameMessage_aa2926ef0524d8af26858896708433c6e}{username}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Username of host. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structJoinGameMessage_aa0969e1a99af31ac669f3eff24a075ff}\label{structJoinGameMessage_aa0969e1a99af31ac669f3eff24a075ff}} 
+char \mbox{\hyperlink{structJoinGameMessage_aa0969e1a99af31ac669f3eff24a075ff}{room\+\_\+name}} \mbox{[}32\mbox{]}
+\begin{DoxyCompactList}\small\item\em Room Name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structJoinGameMessage_a6be96e0b8dac0c6e2c096058406ad073}\label{structJoinGameMessage_a6be96e0b8dac0c6e2c096058406ad073}} 
+bool {\bfseries spectator\+\_\+mode}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains the information necessary to start the game for the user 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structJoinGameMessage_a7f89b760e0bef8d79453db999af23f2e}\label{structJoinGameMessage_a7f89b760e0bef8d79453db999af23f2e}} 
+\index{JoinGameMessage@{JoinGameMessage}!JoinGameMessage@{JoinGameMessage}}
+\index{JoinGameMessage@{JoinGameMessage}!JoinGameMessage@{JoinGameMessage}}
+\doxysubsubsection{\texorpdfstring{JoinGameMessage()}{JoinGameMessage()}}
+{\footnotesize\ttfamily Join\+Game\+Message\+::\+Join\+Game\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{username\+\_\+,  }\item[{std\+::string}]{room\+\_\+name\+\_\+,  }\item[{bool}]{spectator\+\_\+mode\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em username\+\_\+} & Username of host. \\
+\hline
+{\em room\+\_\+name\+\_\+} & Room Name \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

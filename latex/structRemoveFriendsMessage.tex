@@ -1,33 +1,61 @@
-\doxysection{Remove\+Friends\+Message Struct Reference}
-\hypertarget{structRemoveFriendsMessage}{}\label{structRemoveFriendsMessage}\index{RemoveFriendsMessage@{RemoveFriendsMessage}}
+\hypertarget{structRemoveFriendsMessage}{}\doxysection{Remove\+Friends\+Message Struct Reference}
+\label{structRemoveFriendsMessage}\index{RemoveFriendsMessage@{RemoveFriendsMessage}}
+
+
+contains the information necessary to remove a friend from specified user  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Remove\+Friends\+Message\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structRemoveFriendsMessage}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structRemoveFriendsMessage_a9996ea75c53e4fcc10c69a7bbec0e246}\label{structRemoveFriendsMessage_a9996ea75c53e4fcc10c69a7bbec0e246} 
-{\bfseries Remove\+Friends\+Message} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, std\+::string friend\+Name\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structRemoveFriendsMessage_a9996ea75c53e4fcc10c69a7bbec0e246}{Remove\+Friends\+Message}} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, std\+::string friend\+Name\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structRemoveFriendsMessage_a4abf99c90e1ae33e85e885b099b50435}\label{structRemoveFriendsMessage_a4abf99c90e1ae33e85e885b099b50435} 
-char {\bfseries username} \mbox{[}20\mbox{]}
-\item 
-\Hypertarget{structRemoveFriendsMessage_a525e4466919d01d00cd0ab882cea6aef}\label{structRemoveFriendsMessage_a525e4466919d01d00cd0ab882cea6aef} 
-char {\bfseries friend\+Name} \mbox{[}20\mbox{]}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structRemoveFriendsMessage_a4abf99c90e1ae33e85e885b099b50435}\label{structRemoveFriendsMessage_a4abf99c90e1ae33e85e885b099b50435}} 
+char \mbox{\hyperlink{structRemoveFriendsMessage_a4abf99c90e1ae33e85e885b099b50435}{username}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Username of user. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structRemoveFriendsMessage_a525e4466919d01d00cd0ab882cea6aef}\label{structRemoveFriendsMessage_a525e4466919d01d00cd0ab882cea6aef}} 
+char \mbox{\hyperlink{structRemoveFriendsMessage_a525e4466919d01d00cd0ab882cea6aef}{friend\+Name}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Username of friend to remove. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains the information necessary to remove a friend from specified user 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structRemoveFriendsMessage_a9996ea75c53e4fcc10c69a7bbec0e246}\label{structRemoveFriendsMessage_a9996ea75c53e4fcc10c69a7bbec0e246}} 
+\index{RemoveFriendsMessage@{RemoveFriendsMessage}!RemoveFriendsMessage@{RemoveFriendsMessage}}
+\index{RemoveFriendsMessage@{RemoveFriendsMessage}!RemoveFriendsMessage@{RemoveFriendsMessage}}
+\doxysubsubsection{\texorpdfstring{RemoveFriendsMessage()}{RemoveFriendsMessage()}}
+{\footnotesize\ttfamily Remove\+Friends\+Message\+::\+Remove\+Friends\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{username\+\_\+,  }\item[{std\+::string}]{friend\+Name\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em username\+\_\+} & Username of user. \\
+\hline
+{\em friend\+Name\+\_\+} & Username of friend to remove. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

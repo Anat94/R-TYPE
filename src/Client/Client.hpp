@@ -36,51 +36,131 @@
     #include "../Errors.hpp"
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Logger/logger.hpp"
 
-struct data_struct {
-    int id;
-    sf::Event event;
-    int package_id;
-
-};
-
-enum Stage {
-    ONE,
-    TWO,
-    THREE,
-};
-
+/**
+ * @brief check state of player in game (e.g. in chat, in highscore menu, playing, ...)
+ * 
+ */
 enum inGameState {
     INGAME,
     INGAMEMENU,
     CHAT
 };
 
+/**
+ * @brief Trophy item object
+ * 
+ */
 struct Trophy {
+    /**
+     * @brief sprite for the trophy
+     * 
+     */
     sf::Sprite sprite;
+    /**
+     * @brief texture for the trophy
+     * 
+     */
     sf::Texture texture;
 };
 
+/**
+ * @brief High Score Display
+ * 
+ */
 struct HighScoreDisplay {
+    /**
+     * @brief Title of the menu
+     * 
+     */
     sf::Text title;
+    /**
+     * @brief name of the highest score
+     * 
+     */
     sf::Text name1;
+    /**
+     * @brief highest score
+     * 
+     */
     sf::Text score1;
+    /**
+     * @brief name of the 2nd highest score
+     * 
+     */
     sf::Text name2;
+    /**
+     * @brief 2nd highest score
+     * 
+     */
     sf::Text score2;
+    /**
+     * @brief name of the 3rd highest score
+     * 
+     */
     sf::Text name3;
+    /**
+     * @brief 3rd highest score
+     * 
+     */
     sf::Text score3;
+    /**
+     * @brief Trophy object 1
+     * 
+     */
     Trophy trophy1;
+    /**
+     * @brief Trophy object 2
+     * 
+     */
     Trophy trophy2;
 };
 
+/**
+ * @brief Chat Entity
+ * 
+ */
 struct ChatEntity {
+    /**
+     * @brief Rectangle englobing the chat
+     * 
+     */
     sf::RectangleShape _rectangle;
+    /**
+     * @brief vector of messages for the chat
+     * 
+     */
     std::vector<std::string> _chat;
+    /**
+     * @brief vector of chat texts
+     * 
+     */
     std::vector<sf::Text> _chatText;
+    /**
+     * @brief title of the chat
+     * 
+     */
     sf::Text _chatTitle;
+    /**
+     * @brief rectangle used for the input box
+     * 
+     */
     sf::RectangleShape _inputBox;
+    /**
+     * @brief input of the user
+     * 
+     */
     std::string _input;
+    /**
+     * @brief input of the user in SFML text format
+     * 
+     */
     sf::Text _chatTextInput;
+    /**
+     * @brief Clock for the chat
+     * 
+     */
     sf::Clock _clock;
 };
 
@@ -125,42 +205,230 @@ class Client {
         /**
          * @brief Get the level
          *
-         * @return int
+         * @return void
          */
         void setLevel(int level) { _level = level; }
+
+        /**
+         * @brief manage sfml event
+         *
+         * @return int
+         */
         int manageEvent();
+
+        /**
+         * @brief Receive event from the server
+         *
+         * @return void
+         */
         void receive();
+
+        /**
+         * @brief Position snapshot update from server
+         *
+         * @return int
+         */
         int receive_position_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Scale snapshot update from server
+         *
+         * @return int
+         */
         int receive_scale_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Receive data from the server and store them
+         *
+         * @return std::vector<char>
+         */
         std::vector<char> receive_raw_data_from_client();
+
+        /**
+         * @brief get when a player dead
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_death_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief get best 3 highscores from server
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_high_score(std::vector<char> &server_msg);
+
+        /**
+         * @brief while login, this get the login response from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_login_response(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive thr drawable from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_drawable_snapshot_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive the animated drawable from the server
+         * 
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_snapshot(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive animation update from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_state_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief get friends from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief response of adding friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_add_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief reponse of removing friends from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive a chat from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_chat_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room creation event
+         *
+         * @param server_msg raw server message
+         * @return int
+         */
         int recieve_room_creation_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive from the server a room join event
+         * 
+         * @param server_msg raw server message
+         * @return int 
+         */
         int receive_room_join_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive health event from the server
+         *
+         * @param server_msg raw server message
+         * @return packet id
+         */
+        int receive_health_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive score event from the server
+         * 
+         * @param server_msg raw server message
+         * @return packet id
+         */
+        int receive_score_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief Display the scoreboard menu
+         *
+         * @return void
+         */
         void displayScoreBoardMenu();
+
+        /**
+         * @brief Handle input from the user
+         *
+         * @param event Event of the window
+         */
         void handleInput(sf::Event &event);
+
+        /**
+         * @brief initialize a new entity
+         * 
+         * @param srvEntity server entity to initialize for
+         * @return created entity 
+         */
         entity_t init_new_entity(entity_t srvEntity);
+
+        /**
+         * @brief manage the client cli at the beginning of the program
+         *
+         * @return void
+         */
         void manageCli();
+
+        /**
+         * @brief Init client class
+         *
+         * @return void
+         */
         void initClass();
+
+        /**
+         * @brief Get client entity from the server's entity
+         * 
+         * @param srvEntity server entity
+         * @return client entity
+         */
         entity_t get_entity_from_server_entity(entity_t srvEntity);
     private:
-        //Content for network
+        /**
+         * @brief message containing client event that is going to be sent to the server
+         * 
+         */
         EventMessage _send_structure;
+        /**
+         * @brief ASIO context
+         * 
+         */
         asio::io_context _io_context;
+        /**
+         * @brief client socket
+         * 
+         */
         udp::socket _socket;
+        /**
+         * @brief server endpoint
+         * 
+         */
         udp::endpoint _server_endpoint;
+        /**
+         * @brief username of the client
+         * 
+         */
         std::string _username;
-        //Content for network
-        SnapshotPosition _receive_structure;
-        std::array<char, 1024> _receiveBuffer;
+        /**
+         * @brief list of SFML events for which to send to the server
+         * 
+         */
         std::vector<sf::Event::EventType> eventsToPrint = {
                 sf::Event::Closed,
                 sf::Event::Resized,
@@ -187,28 +455,81 @@ class Client {
                 sf::Event::SensorChanged
             };
         //Content for ECS
-        entity_t _player;
+        /**
+         * @brief background entity for the moving background
+         * 
+         */
         entity_t _background;
-        entity_t _enemy;
-        entity_t _btn_play;
         //Content for SFML
+        /**
+         * @brief SFML render window
+         * 
+         */
         sf::RenderWindow _window;
+        /**
+         * @brief SFML event
+         * 
+         */
         sf::Event _event;
+        /**
+         * @brief Global font used throughout the game display
+         * 
+         */
         sf::Font _font;
+        /**
+         * @brief Music played in the background
+         * 
+         */
         sf::Music _music;
-        //Content for gameplay
+        /**
+         * @brief Score of the player
+         * 
+         */
         int _score;
+        /**
+         * @brief health of the player
+         * 
+         */
         int _lives;
+        /**
+         * @brief current level of the player
+         * 
+         */
         int _level;
+        /**
+         * @brief score text to be displayed on screen
+         * 
+         */
         sf::Text _score_text;
+        /**
+         * @brief health text to be displayed on screen
+         * 
+         */
         sf::Text _lives_text;
+        /**
+         * @brief level text to be displayed on screen
+         * 
+         */
         sf::Text _level_text;
+        /**
+         * @brief reference to the ECS Listener
+         * 
+         */
         EventListener &_listener;
+        /**
+         * @brief reference to the ECS
+         * 
+         */
         registry &_ecs;
-        Stage _stage;
-        // content for enemys
+        /**
+         * @brief thread for reception of server messages
+         * 
+         */
         std::thread receiveThread;
-        std::queue<entity_t> _enemiesQueue;
+        /**
+         * @brief ids mapped to Client methods used to receive different server messages
+         * 
+         */
         std::map<int16_t, messageParserHandle> _messageParser = {
             {4, &Client::receive_position_snapshot_update},
             {6, &Client::receive_drawable_snapshot_update},
@@ -223,24 +544,97 @@ class Client {
             {15, &Client::receive_scale_snapshot_update},
             {16, &Client::receive_death_event},
             {21, &Client::recieve_room_creation_event},
-            {22, &Client::receive_room_join_event}
+            {22, &Client::receive_room_join_event},
+            {23, &Client::receive_health_event},
+            {24, &Client::receive_score_event},
         };
+        /**
+         * @brief mouse position on screen
+         * 
+         */
         sf::Vector2i _mouse_position;
+        /**
+         * @brief mouse position text
+         * 
+         */
+        bool spectator_mode = false;
         sf::Text _mouse_position_text;
+        /**
+         * @brief high score display structure
+         * 
+         */
         HighScoreDisplay _highScoreDisplay;
+        /**
+         * @brief state of the game
+         * 
+         */
         inGameState _state;
+        /**
+         * @brief next packet id available to attach to a packet to be sent on the server
+         * 
+         */
         int _packet_id = 0;
+        /**
+         * @brief Mode of the room. (0 infinite, 1 campaign)
+         * 
+         */
         int _room_mode = 0;
+        /**
+         * @brief friend list
+         * 
+         */
         std::string friendLists;
+        /**
+         * @brief represents if we are at the end of friend list sent by the server
+         * 
+         */
         bool friendListFinish = false;
+        /**
+         * @brief Chat entity
+         * 
+         */
         ChatEntity _chatEntity;
+        /**
+         * @brief reference to the mutex shared by the ECS and the Client
+         * 
+         */
         std::mutex &mtx;
+        /**
+         * @brief timer used to increase the interval during which a user can spam shoot
+         * 
+         */
         Timer shootTimer;
+        /**
+         * @brief timer used to create an interval between every movement
+         * 
+         */
         Timer moveTimer;
+        /**
+         * @brief room name of the client
+         * 
+         */
         std::string _room_name = "";
+        /**
+         * @brief indicates if the program is exiting
+         * 
+         */
         bool prgrmstop = false;
+        /**
+         * @brief indicates wether the user is logged in or not
+         * 
+         */
         bool _logged_in = false;
+        /**
+         * @brief vector containing packets received from the server
+         * 
+         */
         std::vector<int> _packets_received;
+
+        /**
+         * @brief Class to display debug
+         * 
+         */
+        Logger _logger;
 };
 
 #endif // CLIENT_HPP
