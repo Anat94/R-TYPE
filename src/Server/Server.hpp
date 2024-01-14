@@ -113,7 +113,7 @@ class Server: public ISystems {
          * @param room_name The player's room name
          * @return entity_t The player's entity
          */
-        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
+        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, bool is_spectator);
         /**
          * @brief send death event to all players
          *

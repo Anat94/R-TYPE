@@ -727,6 +727,7 @@ struct JoinGameMessage: public BaseMessage {
     */
     char room_name[32];
 
+    bool spectator_mode;
     /**
      * @brief constructor initializing the following parameters
      * 
@@ -735,7 +736,7 @@ struct JoinGameMessage: public BaseMessage {
      * @param room_name_ Room Name
      * @param packet_id_ packet id of the message, used to identify individual packets
     */
-    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, int packet_id_)
+    JoinGameMessage(int16_t id_, std::string username_, std::string room_name_, bool spectator_mode_, int packet_id_): spectator_mode(spectator_mode_)
     {
         size_t i = 0;
 

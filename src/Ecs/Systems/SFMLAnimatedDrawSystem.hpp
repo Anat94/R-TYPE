@@ -76,6 +76,12 @@ class SFMLAnimatedDrawSystem : public ISystems {
                     _window->draw((*_toDraw[i].second.second));
                 }
             }
+            for (auto &drawable : _toDraw) {
+                if (!ani[drawable.first].has_value()) {
+                    _toDraw.erase(drawable.first);
+                    break;
+                }
+            }
         };
     private:
         sf::RenderWindow *_window;

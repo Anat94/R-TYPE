@@ -49,8 +49,9 @@ std::vector<char> Client::receive_raw_data_from_client()
 {
     std::vector<char> receivedData(MAX_BUF_SIZE);
 
+    mtx.unlock();
     size_t bytesRead = _socket.receive_from(asio::buffer(receivedData), _server_endpoint);
-
+    mtx.lock();
     receivedData.resize(bytesRead);
 
     return receivedData;
@@ -490,12 +491,14 @@ int Client::receive_score_event(std::vector<char> &server_msg)
  */
 void Client::receive()
 {
+    mtx.lock();
     if (prgrmstop)
         exit(0);
     std::vector<char> server_msg = receive_raw_data_from_client();
     if (server_msg.size() < sizeof(BaseMessage))
         return;
     BaseMessage *baseMsg = reinterpret_cast<BaseMessage *>(server_msg.data());
+    
     int check_if_packet_exist = 0;
     for (const auto &element: _packets_received) {
         if (element == baseMsg->packet_id)
@@ -503,11 +506,8 @@ void Client::receive()
     }
     if (_messageParser.find(baseMsg->id) == _messageParser.end())
         throw ArgumentError("ERROR: Invalid event received: " + std::to_string(baseMsg->id) + ".");
-    mtx.lock();
     if (check_if_packet_exist == 0) {
         (this->*_messageParser[baseMsg->id])(server_msg);
-        if (_packets_received.size() > 1000)
-            _packets_received.erase(_packets_received.begin());
         _packets_received.push_back(baseMsg->packet_id);
     }
     ConfirmationMessage to_send;
@@ -771,7 +771,7 @@ void Client::manageCli()
                 std::cout << "You must be in a room to start the game - see HELP" << std::endl;
                 continue;
             }
-            JoinGameMessage to_send(2, _username, _room_name, _packet_id);
+            JoinGameMessage to_send(2, _username, _room_name, spectator_mode, _packet_id);
             _packet_id++;
             send_to_server(to_send);
             return;
@@ -801,6 +801,16 @@ void Client::manageCli()
             RoomJoinMessage to_send(22, params, _packet_id);
             _packet_id++;
             send_to_server<RoomJoinMessage>(to_send);
+        } else if (command == "SPECMODE") {
+            if (params.size() < 1) {
+                std::cout << "Usage: SPECMODE [1 || 0]" << std::endl;
+                continue;
+            }
+            try {
+                spectator_mode = std::stoi(params) == 1 ? true : false;
+            } catch( std::exception &e) {
+                std::cout << "Usage: SPECMODE [1 || 0]" << std::endl;
+            }
         } else if (command == "LIST_FRIENDS") {
             _logger.log(CLIENT, "Received list friends command");
             if (_username == "") {
@@ -958,12 +968,13 @@ int Client::run()
     mtx.unlock();
     while (_window.isOpen()) {
         _mouse_position = sf::Mouse::getPosition(_window);
+        mtx.lock();
         _score_text.setString("Score: " + std::to_string(_score));
         _lives_text.setString("Health: " + std::to_string(_lives));
-        _window.clear();
-        mtx.lock();
-        if (manageEvent())
+        if (manageEvent()) {
+            _window.close();
             break;
+        }
         if (_state == INGAMEMENU)
             displayScoreBoardMenu();
         else if (_state == INGAME || _state == CHAT) {
@@ -991,6 +1002,5 @@ int Client::run()
         mtx.unlock();
         _window.display();
     }
-    _window.close();
     return 0;
 }

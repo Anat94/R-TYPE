@@ -391,6 +391,7 @@ class Client {
          * @brief mouse position text
          * 
          */
+        bool spectator_mode = false;
         sf::Text _mouse_position_text;
         /**
          * @brief high score display structure
