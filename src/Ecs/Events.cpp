@@ -243,7 +243,6 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
 
     auto &killer_score = r.get_components<component::Score>()[_ents.second];
     if (killer_score.has_value()) {
-        std::cout << "UPDATED SCORE OF +10\n";
         killer_score->_score += 10;
     }
 }
