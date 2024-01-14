@@ -224,6 +224,13 @@ class Client {
         void receive();
 
         /**
+         * @brief Receive event from the server
+         *
+         * @return void
+         */
+        void receiveRecursive();
+
+        /**
          * @brief Position snapshot update from server
          *
          * @return int
@@ -243,6 +250,13 @@ class Client {
          * @return std::vector<char>
          */
         std::vector<char> receive_raw_data_from_client();
+
+        /**
+         * @brief Receive data from the server and store them
+         *
+         * @return std::vector<char>
+         */
+        std::vector<char> receive_raw_data_from_client_blocking();
 
         /**
          * @brief get when a player dead
