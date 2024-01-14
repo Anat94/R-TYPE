@@ -625,6 +625,10 @@ class Client {
          */
         std::vector<int> _packets_received;
 
+        /**
+         * @brief Class to display debug
+         * 
+         */
         Logger _logger;
 };
 
