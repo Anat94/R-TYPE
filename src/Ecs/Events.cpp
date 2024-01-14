@@ -241,6 +241,7 @@ void DeathEvent::handleEvent(registry &r, EventListener &listener)
     r.remove_component<component::Shield>(_ents.first);
     r.remove_component<component::ShootCounter>(_ents.first);
     r.remove_component<component::KillOnTimer>(_ents.first);
+    r.remove_component<component::AutoShoot>(_ents.first);
 
     auto &killer_score = r.get_components<component::Score>()[_ents.second];
     if (killer_score.has_value()) {
@@ -289,6 +290,48 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
         tmp1->addAnimation(anim.first, anim.second.first, anim.second.second);
     }
     tmp1->_state = "idle";
+    std::cout << automaticShooting << std::endl;
+    if (automaticShooting) {
+        r.add_component<component::AutoShoot>(enemy, component::AutoShoot());
+    }
+}
+
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+*/
+void EnemyShootEvent::handleEvent(registry &r, EventListener &listener)
+{
+    entity_t shot = r.spawn_entity();
+
+    try {
+        auto player_hit = r.get_components<component::Hitbox>()[_ents.first];
+        auto player_p = r.get_components<component::Position>()[_ents.first];
+        auto player_d = r.get_components<component::Damage>()[_ents.first];
+        auto player_room = r.get_components<component::Room>()[_ents.first];
+
+        if (player_hit.has_value() && player_d.has_value() && player_p.has_value()) {
+
+            component::Position top_left = component::Position(((player_p->x - player_hit->_size.x) - 1), (player_p->y + ((player_hit->_size.y) / 2)));
+            r.add_component(shot, component::Position(top_left.x, top_left.y));
+            r.add_component(shot, component::HurtsOnCollision(_ents.first));
+            r.add_component(shot, component::Damage(player_d->_damage));
+            r.add_component(shot, component::Scale(2.0f));
+            if (player_room.has_value())
+                r.add_component<component::Room>(shot, component::Room(player_room->_name));
+            r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {268, 18}));
+            auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
+            tmp->addAnimation("idle", {3, 0}, true);
+            tmp->_state = "idle";
+            r.add_component(shot, component::Hitbox(component::Position(32 * 2.0f, 32 * 2.0f)));
+            r.add_component(shot, component::Pierce());
+            r.add_component(shot, component::Velocity(-32.0f, 0.0f));
+        }
+    } catch (std::exception &e) {
+        //? ignore -> shooter not a player for some reason ???
+    }
 }
 
 /**
@@ -312,7 +355,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
         if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value() && player_nb_shoots.has_value()) {
 
             if (player_nb_shoots->counter % 5 == 0 && player_nb_shoots->counter != 0) {
-                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 2)));
+                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y + ((player_hit->_size.y) / 2)));
                 r.add_component(shot, component::Position(top_left.x, top_left.y));
                 r.add_component(shot, component::HurtsOnCollision(_ents.first));
                 r.add_component(shot, component::Damage(player_d->_damage * 3));
@@ -330,7 +373,7 @@ void ShootEvent::handleEvent(registry &r, EventListener &listener)
                 else
                     r.add_component(shot, component::Velocity(-36.0f, 0.0f));
             } else {
-                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 1.5)));
+                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y + ((player_hit->_size.y) / 2)));
                 r.add_component(shot, component::Position(top_left.x, top_left.y));
                 r.add_component(shot, component::HurtsOnCollision(_ents.first));
                 r.add_component(shot, component::Damage(player_d->_damage));

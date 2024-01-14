@@ -57,7 +57,8 @@ class EnemyGeneration: public ISystems {
                             component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}),
                             {
                                 {"idle", {{0, 7}, true}}
-                            }, allRooms[i]));
+                            }, allRooms[i],
+                            Random::generate(0, 6) == 5));
                     }
                 }
                 timer.restart();
