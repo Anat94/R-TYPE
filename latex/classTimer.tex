@@ -1,14 +1,44 @@
-\doxysection{Timer Class Reference}
-\hypertarget{classTimer}{}\label{classTimer}\index{Timer@{Timer}}
-\doxysubsubsection*{Public Member Functions}
+\hypertarget{classTimer}{}\doxysection{Timer Class Reference}
+\label{classTimer}\index{Timer@{Timer}}
+
+
+\mbox{\hyperlink{classTimer}{Timer}} class, usefull for timing actions, and checking time elapsed.  
+
+
+
+
+{\ttfamily \#include $<$Timer.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{classTimer_aa3f7871196bb56202af2bc982bfbfff6}\label{classTimer_aa3f7871196bb56202af2bc982bfbfff6} 
-void {\bfseries restart} ()
-\item 
-\Hypertarget{classTimer_a4cdd0a66197e47441ed105adb062bbe1}\label{classTimer_a4cdd0a66197e47441ed105adb062bbe1} 
-float {\bfseries get\+Elapsed\+Time} () const
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{classTimer_a5f16e8da27d2a5a5242dead46de05d97}\label{classTimer_a5f16e8da27d2a5a5242dead46de05d97}} 
+\mbox{\hyperlink{classTimer_a5f16e8da27d2a5a5242dead46de05d97}{Timer}} ()
+\begin{DoxyCompactList}\small\item\em Constructor, initializes the clock. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTimer_aa3f7871196bb56202af2bc982bfbfff6}\label{classTimer_aa3f7871196bb56202af2bc982bfbfff6}} 
+void \mbox{\hyperlink{classTimer_aa3f7871196bb56202af2bc982bfbfff6}{restart}} ()
+\begin{DoxyCompactList}\small\item\em restart the clock \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{classTimer_a4cdd0a66197e47441ed105adb062bbe1}{get\+Elapsed\+Time}} () const
+\begin{DoxyCompactList}\small\item\em get elapsed time in milliseconds of the clock \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classTimer}{Timer}} class, usefull for timing actions, and checking time elapsed. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTimer_a4cdd0a66197e47441ed105adb062bbe1}\label{classTimer_a4cdd0a66197e47441ed105adb062bbe1}} 
+\index{Timer@{Timer}!getElapsedTime@{getElapsedTime}}
+\index{getElapsedTime@{getElapsedTime}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{getElapsedTime()}{getElapsedTime()}}
+{\footnotesize\ttfamily float Timer\+::get\+Elapsed\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+get elapsed time in milliseconds of the clock 
+
+\begin{DoxyReturn}{Returns}
+milliseconds elapsed since the clock started. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

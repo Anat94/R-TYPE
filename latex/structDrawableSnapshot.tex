@@ -1,33 +1,61 @@
-\doxysection{Drawable\+Snapshot Struct Reference}
-\hypertarget{structDrawableSnapshot}{}\label{structDrawableSnapshot}\index{DrawableSnapshot@{DrawableSnapshot}}
+\hypertarget{structDrawableSnapshot}{}\doxysection{Drawable\+Snapshot Struct Reference}
+\label{structDrawableSnapshot}\index{DrawableSnapshot@{DrawableSnapshot}}
+
+
+encapsulates drawable data of game entities so that the client can correctly display the entity  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Drawable\+Snapshot\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structDrawableSnapshot}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structDrawableSnapshot_a5c67ea51de3566e51144f63efb4d3dfc}\label{structDrawableSnapshot_a5c67ea51de3566e51144f63efb4d3dfc} 
-{\bfseries Drawable\+Snapshot} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, std\+::string path, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structDrawableSnapshot_a5c67ea51de3566e51144f63efb4d3dfc}{Drawable\+Snapshot}} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, std\+::string path, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structDrawableSnapshot_ac99b58dbc736a03be31a728ca1bfddfa}\label{structDrawableSnapshot_ac99b58dbc736a03be31a728ca1bfddfa} 
-entity\+\_\+t {\bfseries entity} = 0
-\item 
-\Hypertarget{structDrawableSnapshot_a894bb2046d7a1efd666c2bdfcd819f06}\label{structDrawableSnapshot_a894bb2046d7a1efd666c2bdfcd819f06} 
-char {\bfseries data} \mbox{[}1024\mbox{]}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structDrawableSnapshot_ac99b58dbc736a03be31a728ca1bfddfa}\label{structDrawableSnapshot_ac99b58dbc736a03be31a728ca1bfddfa}} 
+entity\+\_\+t \mbox{\hyperlink{structDrawableSnapshot_ac99b58dbc736a03be31a728ca1bfddfa}{entity}} = 0
+\begin{DoxyCompactList}\small\item\em Identifies the associated game entity for which dawable data is transmitted. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDrawableSnapshot_a894bb2046d7a1efd666c2bdfcd819f06}\label{structDrawableSnapshot_a894bb2046d7a1efd666c2bdfcd819f06}} 
+char \mbox{\hyperlink{structDrawableSnapshot_a894bb2046d7a1efd666c2bdfcd819f06}{data}} \mbox{[}1024\mbox{]}
+\begin{DoxyCompactList}\small\item\em Contains the path of the image to display for the entity (e.\+g., "{}assets/players/ship.\+png). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates drawable data of game entities so that the client can correctly display the entity 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structDrawableSnapshot_a5c67ea51de3566e51144f63efb4d3dfc}\label{structDrawableSnapshot_a5c67ea51de3566e51144f63efb4d3dfc}} 
+\index{DrawableSnapshot@{DrawableSnapshot}!DrawableSnapshot@{DrawableSnapshot}}
+\index{DrawableSnapshot@{DrawableSnapshot}!DrawableSnapshot@{DrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{DrawableSnapshot()}{DrawableSnapshot()}}
+{\footnotesize\ttfamily Drawable\+Snapshot\+::\+Drawable\+Snapshot (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{entity\+\_\+t}]{entity\+\_\+,  }\item[{std\+::string}]{path,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em entity\+\_\+} & Identifies the associated game entity for which dawable data is transmitted. \\
+\hline
+{\em path} & Contains the path of the image to display for the entity (e.\+g., "{}assets/players/ship.\+png). \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

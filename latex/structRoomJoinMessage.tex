@@ -1,0 +1,58 @@
+\hypertarget{structRoomJoinMessage}{}\doxysection{Room\+Join\+Message Struct Reference}
+\label{structRoomJoinMessage}\index{RoomJoinMessage@{RoomJoinMessage}}
+
+
+contains the information necessary to join a room  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Room\+Join\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structRoomJoinMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structRoomJoinMessage_a5c6bc0a8bf77d7b31f192eef97b2016b}{Room\+Join\+Message}} (int16\+\_\+t id\+\_\+, std\+::string room\+\_\+name\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structRoomJoinMessage_ac38845c8b76a837e0be67a3b50200bf5}\label{structRoomJoinMessage_ac38845c8b76a837e0be67a3b50200bf5}} 
+char \mbox{\hyperlink{structRoomJoinMessage_ac38845c8b76a837e0be67a3b50200bf5}{room\+\_\+name}} \mbox{[}32\mbox{]}
+\begin{DoxyCompactList}\small\item\em Room Name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains the information necessary to join a room 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structRoomJoinMessage_a5c6bc0a8bf77d7b31f192eef97b2016b}\label{structRoomJoinMessage_a5c6bc0a8bf77d7b31f192eef97b2016b}} 
+\index{RoomJoinMessage@{RoomJoinMessage}!RoomJoinMessage@{RoomJoinMessage}}
+\index{RoomJoinMessage@{RoomJoinMessage}!RoomJoinMessage@{RoomJoinMessage}}
+\doxysubsubsection{\texorpdfstring{RoomJoinMessage()}{RoomJoinMessage()}}
+{\footnotesize\ttfamily Room\+Join\+Message\+::\+Room\+Join\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{room\+\_\+name\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em room\+\_\+name\+\_\+} & Room Name \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

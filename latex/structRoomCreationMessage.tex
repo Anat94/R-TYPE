@@ -1,0 +1,63 @@
+\hypertarget{structRoomCreationMessage}{}\doxysection{Room\+Creation\+Message Struct Reference}
+\label{structRoomCreationMessage}\index{RoomCreationMessage@{RoomCreationMessage}}
+
+
+contains the information necessary to create a room  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Room\+Creation\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structRoomCreationMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structRoomCreationMessage_ae3e4016703f305a5b410f23665e411d0}{Room\+Creation\+Message}} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, std\+::string room\+\_\+name\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structRoomCreationMessage_ad26d2c9a3da2f65fb8142bbc44e1c6ef}\label{structRoomCreationMessage_ad26d2c9a3da2f65fb8142bbc44e1c6ef}} 
+char \mbox{\hyperlink{structRoomCreationMessage_ad26d2c9a3da2f65fb8142bbc44e1c6ef}{username}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Username of host. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structRoomCreationMessage_a5e3eca42793a3e99f03cfcbf4a4b3d93}\label{structRoomCreationMessage_a5e3eca42793a3e99f03cfcbf4a4b3d93}} 
+char \mbox{\hyperlink{structRoomCreationMessage_a5e3eca42793a3e99f03cfcbf4a4b3d93}{room\+\_\+name}} \mbox{[}32\mbox{]}
+\begin{DoxyCompactList}\small\item\em Room Name. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains the information necessary to create a room 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structRoomCreationMessage_ae3e4016703f305a5b410f23665e411d0}\label{structRoomCreationMessage_ae3e4016703f305a5b410f23665e411d0}} 
+\index{RoomCreationMessage@{RoomCreationMessage}!RoomCreationMessage@{RoomCreationMessage}}
+\index{RoomCreationMessage@{RoomCreationMessage}!RoomCreationMessage@{RoomCreationMessage}}
+\doxysubsubsection{\texorpdfstring{RoomCreationMessage()}{RoomCreationMessage()}}
+{\footnotesize\ttfamily Room\+Creation\+Message\+::\+Room\+Creation\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{username\+\_\+,  }\item[{std\+::string}]{room\+\_\+name\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em username\+\_\+} & Username of host. \\
+\hline
+{\em room\+\_\+name\+\_\+} & Room Name \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

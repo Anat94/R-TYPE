@@ -1,0 +1,78 @@
+\hypertarget{classCreateExplosionEvent}{}\doxysection{Create\+Explosion\+Event Class Reference}
+\label{classCreateExplosionEvent}\index{CreateExplosionEvent@{CreateExplosionEvent}}
+
+
+\mbox{\hyperlink{classCreateExplosionEvent}{Create\+Explosion\+Event}} event class.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
+Inheritance diagram for Create\+Explosion\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classCreateExplosionEvent}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCreateExplosionEvent_aff44544f5822263423a7996b5f1b406e}{Create\+Explosion\+Event}} (\mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} pos, int explosion\+\_\+type, std\+::string room\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new Create\+Explosion Event object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCreateExplosionEvent_a5b61ad093d8782d8fdff7753b34e3cb7}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\begin{DoxyCompactList}\small\item\em Handles the event based on the registry objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classCreateExplosionEvent}{Create\+Explosion\+Event}} event class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classCreateExplosionEvent_aff44544f5822263423a7996b5f1b406e}\label{classCreateExplosionEvent_aff44544f5822263423a7996b5f1b406e}} 
+\index{CreateExplosionEvent@{CreateExplosionEvent}!CreateExplosionEvent@{CreateExplosionEvent}}
+\index{CreateExplosionEvent@{CreateExplosionEvent}!CreateExplosionEvent@{CreateExplosionEvent}}
+\doxysubsubsection{\texorpdfstring{CreateExplosionEvent()}{CreateExplosionEvent()}}
+{\footnotesize\ttfamily Create\+Explosion\+Event\+::\+Create\+Explosion\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}}}]{pos,  }\item[{int}]{explosion\+\_\+type,  }\item[{std\+::string}]{room\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Create\+Explosion Event object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & position at which to spawn the explosion \\
+\hline
+{\em explosion\+\_\+type} & type of the explosion \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classCreateExplosionEvent_a5b61ad093d8782d8fdff7753b34e3cb7}\label{classCreateExplosionEvent_a5b61ad093d8782d8fdff7753b34e3cb7}} 
+\index{CreateExplosionEvent@{CreateExplosionEvent}!handleEvent@{handleEvent}}
+\index{handleEvent@{handleEvent}!CreateExplosionEvent@{CreateExplosionEvent}}
+\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
+{\footnotesize\ttfamily void Create\+Explosion\+Event\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{r,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Handles the event based on the registry objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & the registry\+\_\+t object used to store the game engine resources \\
+\hline
+{\em listener} & the event listener used to create new events if needed \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{AEvent}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Events.\+hpp\item 
+src/\+Ecs/Events.\+cpp\end{DoxyCompactItemize}
