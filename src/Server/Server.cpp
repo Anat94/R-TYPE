@@ -197,7 +197,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
         _ecs.add_component(new_player, component::ResetOnMove());
         _ecs.add_component(new_player, component::Controllable());
         _ecs.add_component(new_player, component::Heading());
-        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 20 * (get_amount_of_players_in_room(room_name) % 5)}));
+        _ecs.add_component(new_player, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet42.gif", {5, 1}, {32, 14}, {1, 0}, {1, 3 + (20 * (get_amount_of_players_in_room(room_name) % 5))}));
         _ecs.add_component(new_player, component::Hitbox(component::Position(32 * 6.0f, 14 * 6.0)));
         auto &tmp = _ecs.get_components<component::AnimatedDrawable>()[new_player];
         tmp->addAnimation("idle", {2, 2}, false);
