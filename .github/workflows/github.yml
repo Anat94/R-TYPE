@@ -95,8 +95,8 @@ jobs:
         with:
           name: windows-executables
           path: |
-            Debug/client.exe
-            Debug/server.exe
+            src/Client/Debug/client.exe
+            src/Server/Debug/server.exe
 
   build:
     name: Create Release
@@ -127,7 +127,7 @@ jobs:
       - name: Move Windows executables
         run: |
           mkdir -p windows
-          cp build/windows_executables/* ./windows/
+          cp -r build/windows_executables/* ./windows/
 
       - name: Archive the assets folder
         run: |

@@ -11,8 +11,18 @@
 
 class RotationSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new Rotation System object
+         *
+         */
         RotationSystem() {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra draw object
+         * @param rot rotation matrix
+         */
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot) {
             std::cout << "Rotation system" << std::endl;
             for (auto &&[_, d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {

@@ -9,12 +9,28 @@
 #include <random>
 #include <sqlite3.h>
 
+/**
+ * @brief Callback check if name is in bdd
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackIsNameInBdd(void* data, int argc, char** argv, char** azColName) {
     bool* nameExists = static_cast<bool*>(data);
     *nameExists = true;
     return 0;
 }
 
+/**
+ * @brief Check if name is in bdd
+ *
+ * @param name name to check
+ * @return true name is in bdd
+ * @return false name is not in bdd
+ */
 bool Server::IsNameInBdd(std::string name)
 {
     const std::string tableName = "HighScore";
@@ -30,17 +46,44 @@ bool Server::IsNameInBdd(std::string name)
     return nameExists;
 }
 
+
+/**
+ * @brief Highscore object
+ * 
+ */
 struct HighScore {
+    /**
+     * @brief name of the player
+     * 
+     */
     std::string name;
+    /**
+     * @brief score of the player
+     * 
+     */
     int score;
 };
 
+/**
+ * @brief callback get high score
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackGetHighScore(void* data, int argc, char** argv, char** azColName) {
     std::vector<HighScore>* results = static_cast<std::vector<HighScore>*>(data);
     results->push_back({argv[0], std::stoi(argv[1])});
     return 0;
 }
 
+/**
+ * @brief Get the High Score on db
+ *
+ * @return HighScoreMessage high score message
+ */
 HighScoreMessage Server::getHighScore() {
     const std::string tableName = "HighScore";
     std::string sql = "SELECT * FROM " + tableName + " ORDER BY score DESC LIMIT 3;";
@@ -58,6 +101,15 @@ HighScoreMessage Server::getHighScore() {
     return highscoreMsg;
 }
 
+/**
+ * @brief Callback add get high score
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 void Server::addHighScore(std::string name, int score) {
     const std::string tableName = "HighScore";
     std::string sql;
@@ -77,6 +129,10 @@ void Server::addHighScore(std::string name, int score) {
     }
 }
 
+/**
+ * @brief Connect to database
+ *
+ */
 void Server::connectToDB() {
     int rc;
     rc = sqlite3_open("db/rtype.db", &_db);
@@ -86,17 +142,13 @@ void Server::connectToDB() {
     } else {
         std::cerr << "Database opened successfully" << std::endl;
     }
-    // std::string sql12 = "DELETE FROM FRIENDS";
-    // char *zErrMsg = 0;
-    // rc = sqlite3_exec(_db, sql12.c_str(), NULL, 0, &zErrMsg);
-    // if (rc != SQLITE_OK) {
-    //     fprintf(stderr, "SQL error: %s\n", zErrMsg);
-    //     sqlite3_free(zErrMsg);
-    // } else {
-    //     fprintf(stdout, "Records created successfully\n");
-    // }
 }
 
+/**
+ * @brief make personnal ID
+ *
+ * @return std::string personnal ID
+ */
 std::string Server::makePersonnalID()
 {
     std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
@@ -109,12 +161,29 @@ std::string Server::makePersonnalID()
     return str.substr(0, 10);
 }
 
+/**
+ * @brief Callback check if user exist
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackIsUserExists(void* data, int argc, char** argv, char** azColName) {
     bool* nameExists = static_cast<bool*>(data);
     *nameExists = true;
     return 0;
 }
 
+/**
+ * @brief Check if user exist
+ *
+ * @param name name of the user
+ * @param password password of the user
+ * @return true user exist
+ * @return false user doesn't exist
+ */
 bool Server::checkIfUserExist(std::string name, std::string password) {
     const std::string tableName = "USERS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";
@@ -133,6 +202,15 @@ bool Server::checkIfUserExist(std::string name, std::string password) {
     }
 }
 
+/**
+ * @brief Callback check if user exist
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 bool Server::signUp(std::string name, std::string password) {
     const std::string tableName = "USERS";
     if (checkIfUserExist(name, password) == true) {
@@ -152,12 +230,29 @@ bool Server::signUp(std::string name, std::string password) {
     return false;
 }
 
+/**
+ * @brief Callback check if user exist
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackSignIn(void *data, int argc, char** argv, char** azColName) {
     bool* userExists = static_cast<bool*>(data);
     *userExists = true;
     return 0;
 }
 
+/**
+ * @brief Signin the user
+ *
+ * @param name name of the user
+ * @param password password of the user
+ * @return true user signed in
+ * @return false user does not signed in
+ */
 bool Server::signIn(std::string name, std::string password) {
     std::cout << "username :" << name << std::endl;
     std::cout << "password :" << password << std::endl;
@@ -178,12 +273,29 @@ bool Server::signIn(std::string name, std::string password) {
     return userExists;
 }
 
+/**
+ * @brief Callback check friendship
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackCheckFriendship(void *data, int argc, char** argv, char** azColName) {
     bool* friendshipExists = static_cast<bool*>(data);
     *friendshipExists = true;
     return 0;
 }
 
+/**
+ * @brief Check if friendship exist
+ *
+ * @param name name of the user
+ * @param friendId name of the friend
+ * @return true friendship exist
+ * @return false friendship does not exist
+ */
 bool Server::checkIfFriendshipExist(std::string name, std::string friendId) {
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "' AND friendId = '" + friendId + "';";
@@ -200,6 +312,14 @@ bool Server::checkIfFriendshipExist(std::string name, std::string friendId) {
         return false;
 }
 
+/**
+ * @brief add friends
+ *
+ * @param name your name
+ * @param friendId name of the friend
+ * @return true if success
+ * @return false if failed
+ */
 bool Server::addFriend(std::string name, std::string friendId) {
     if (checkIfFriendshipExist(name, friendId) == true) {
         std::cout << "Friendship already exist" << std::endl;
@@ -217,6 +337,14 @@ bool Server::addFriend(std::string name, std::string friendId) {
     return true;
 }
 
+/**
+ * @brief Remove friends
+ *
+ * @param name your name
+ * @param friendId name of the friend
+ * @return true if success
+ * @return false if failed
+ */
 bool Server::removeFriend(std::string name, std::string friendName) {
     std::string sql = "DELETE FROM FRIENDS WHERE name = '" + name + "' AND friendId = '" + friendName + "';";
     char *zErrMsg = 0;
@@ -229,11 +357,32 @@ bool Server::removeFriend(std::string name, std::string friendName) {
     return true;
 }
 
+/**
+ * @brief Callback data structure
+ * 
+ */
 struct CallbackData {
+    /**
+     * @brief pointer to the server object
+     * 
+     */
     Server* server;
+    /**
+     * @brief list of friends
+     * 
+     */
     std::vector<Friendship>* friends;
 };
 
+/**
+ * @brief Callback display friends
+ *
+ * @param data data return of the request
+ * @param argc number of column
+ * @param argv data of the column
+ * @param azColName name of the column
+ * @return int 0
+ */
 static int callbackDisplayFriends(void *data, int argc, char** argv, char** azColName) {
     std::vector<std::string>* callbackData = static_cast<std::vector<std::string>*>(data);
     std::cout << argv[1] << std::endl;
@@ -241,6 +390,12 @@ static int callbackDisplayFriends(void *data, int argc, char** argv, char** azCo
     return 0;
 }
 
+/**
+ * @brief Display friends
+ *
+ * @param name name of the user
+ * @return std::vector<std::string> list of friends
+ */
 std::vector<std::string> Server::displayFriends(std::string name, entity_t player_entity) {
     const std::string tableName = "FRIENDS";
     std::string sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "';";

@@ -12,8 +12,18 @@
     #include "SparseArray.hpp"
     #include "Components.hpp"
 
+/**
+ * @brief Utility for room related functionnalities
+ * 
+ */
 class RoomUtils {
     public:
+        /**
+         * @brief Get all of the rooms
+         * 
+         * @param all_rooms all the rooms under sparse_array format
+         * @return std::vector<std::string> of all the rooms
+         */
         static std::vector<std::string> GetAll(sparse_array<component::Room> &all_rooms)
         {
             std::vector<std::string> resRooms = {};

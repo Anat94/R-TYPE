@@ -12,7 +12,7 @@
     #define IS_IN(a, b, c) ((a) == (b) || (a) == (c))
     #define IS(a, b) ((a) == (b))
     #define IS_NOT(a, b) ((a) != (b))
-    
+
     #if not defined(ZIPPERITERATOR_HPP)
         #include "../ZipperIterator.hpp"
     #endif
@@ -25,8 +25,16 @@
         #include "../Events.hpp"
     #endif
 
+/**
+ * @brief Pure Virtual Interface for the Systems
+ * 
+ */
 class ISystems {
     public:
+        /**
+         * @brief Destroy the ISystems object
+         * 
+         */
         virtual ~ISystems() = default;
 };
 

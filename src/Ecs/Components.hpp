@@ -12,6 +12,7 @@
     #include <unordered_map>
     #include <asio.hpp>
     #include "../Errors.hpp"
+    #include "../Timer.hpp"
 
 using asio::ip::udp;
 using entity_t = size_t;
@@ -130,6 +131,30 @@ namespace component {
          * @param health the health to be set
          */
         Health(int health) : _health(health) {};
+    };
+
+    /**
+     * @brief Shield component
+     * 
+     */
+    struct Shield {
+        /**
+         * @brief timer to time the shield's effect
+         * 
+         */
+        Timer timer;
+        /**
+         * @brief sheild duration
+         * 
+         */
+        int totalTime = 3000;
+        /**
+         * @brief construct a Shield element
+         * 
+         * @param time sheild duration
+         * 
+         */
+        Shield(int time = 3000): totalTime(time), timer() {};
     };
 
     /**
@@ -344,6 +369,35 @@ namespace component {
     };
 
     /**
+     * @brief KillOnTimer Component
+     * 
+     */
+    struct KillOnTimer {
+        /**
+         * @brief timer to time the entity's life
+         * 
+         */
+        Timer timer;
+        /**
+         * @brief life duration
+         * 
+         */
+        int deathTime = 3000;
+
+        /**
+         * @brief Constructor for the KillOnTimer Component
+         * 
+         * @param time duration which to keep entity alive
+         */
+        KillOnTimer(int time): deathTime(time) {};
+    };
+
+    struct ShootCounter {
+        int counter = 0;
+        ShootCounter() {};
+    };
+
+    /**
      * @brief endpoint system structure
      * 
      */
@@ -366,9 +420,28 @@ namespace component {
      * 
     */
     struct DrawableContent {
+        /**
+         * @brief SFML render window
+         * 
+         */
         sf::RenderWindow *window;
+        /**
+         * @brief SFML event
+         * 
+         */
         sf::Event *event;
+        /**
+         * @brief Drawable Constructor, initialize the window at null
+         * 
+         * @param _event SFML event
+         */
         DrawableContent(sf::Event &_event) : window(nullptr), event(&_event) {};
+        /**
+         * @brief Drawable Constructor, initialize the window at null
+         * 
+         * @param _window SFML Render Window
+         * @param _event SFML event
+         */
         DrawableContent(sf::RenderWindow &_window, sf::Event &_event) : window(&_window), event(&_event) {};
     };
 
@@ -389,7 +462,15 @@ namespace component {
         Heading(float rotation = 0) : _rotation(rotation) {};
     };
 
+    /**
+     * @brief structure to play Music
+     * 
+     */
     struct PlayMusic {
+        /**
+         * @brief Construct a new Play Music object, and plays the music passed as param
+         * @param path path to the music to play
+         */
         PlayMusic(std::string path) {
             sf::Music music;
             if (!music.openFromFile(path))
@@ -411,28 +492,60 @@ namespace component {
         /**
          * @brief Construct a new Hitbox object
          * 
-         * @param top_left the top left position of the hitbox to be set
-         * @param top_right the top right position of the hitbox to be set
-         * @param bottom_left the bottom left position of the hitbox to be set
-         * @param bottom_right the bottom right position of the hitbox to be set
+         * @param top_left size of the hitbox to be set
          */
         Hitbox(const Position &size) :
             _size(size)
         {};
 
+        /**
+         * @brief check if the two hitboxes overlap
+         * 
+         * @param p1 posiition x 1
+         * @param q1 posiition x 2
+         * @param p2 posiition y 1
+         * @param q2 posiition y 2
+         * @return true 
+         * @return false 
+         */
         bool isOverlap(float p1, float q1, float p2, float q2) {
             return (p1 < q2) && (q1 > p2);
         };
+        /**
+         * @brief check if 2 hitboxes are touching
+         * 
+         * @param pos1 first position to check
+         * @param pos2 second position to check
+         * @param other other hitbox to check with
+         * @return true 
+         * @return false 
+         */
         bool isTouching(const Position &pos1, const Position &pos2, const Hitbox &other) {
             return (pos1.x < (pos2.x + other._size.x) &&
                     (pos1.x + other._size.x) > pos2.x &&
                     pos1.y < (pos2.y + other._size.y) &&
                     (pos1.y + other._size.y) > pos2.y);
         };
+        /**
+         * @brief check if hitbox contains position
+         * 
+         * @param pos position of the hitbox
+         * @param x x position to check with
+         * @param y y position to check with
+         * @return true 
+         * @return false 
+         */
         bool contains(const Position &pos, int x, int y) {
             Position bottom_right = {_size.x + pos.x, _size.y + pos.y};
             return (x >= pos.x && y >= pos.y && x <= bottom_right.x && y <= bottom_right.y);
         };
+        /**
+         * @brief equals operator checking current hitbox with other hitbox, compares size
+         * 
+         * @param other hitbox to compare with
+         * @return true 
+         * @return false 
+         */
         bool operator==(const Hitbox& other) const {
             return _size == other._size;
         };
@@ -553,8 +666,22 @@ namespace component {
      * 
      */
     struct Text {
+        /**
+         * @brief content of the text
+         * 
+         */
         std::string _text;
+        /**
+         * @brief size of the text
+         * 
+         */
         int _size;
+        /**
+         * @brief Construct a new Text object
+         * 
+         * @param text content of the text
+         * @param size size of the text
+         */
         Text(const std::string &text, int size = 30) : _text(text), _size(size) {};
     };
 

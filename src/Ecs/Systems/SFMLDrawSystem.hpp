@@ -14,8 +14,22 @@
 
 class SFMLDrawSystem : public ISystems {
     public:
+        /**
+         * @brief Construct a new SFMLDrawSystem object
+         * 
+         * @param window window object
+         * @param mousePos position of the mouse
+         */
         SFMLDrawSystem(sf::RenderWindow *window, sf::Vector2i *mousePos) : _window(window), _mousePos(mousePos), _toDraw() {};
 
+        /**
+         * @brief operator ()
+         *
+         * @param dra draw object
+         * @param pos position of the draw object
+         * @param hit hit box object
+         * @param par parallax object
+        */
         void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, sparse_array<component::Hitbox> &hit, sparse_array<component::Parallax> &par) {
             if (!_window->isOpen())
                 return;

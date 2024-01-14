@@ -76,26 +76,88 @@ class sparse_array {
         /// @param idx The index where you want to access the value.
         /// @return The value at the specified index.
         const_reference_type operator[](size_t idx) const;
+        /**
+         * @brief get the beginning iterator of the sparse array
+         * 
+         * @returns beginning iterator of the sparse_array
+         */
         iterator begin();
+        /**
+         * @brief get the constant beginning iterator of the sparse array
+         * 
+         * @returns constant beginning iterator of the sparse_array
+         */
         const_iterator begin() const;
+        /**
+         * @brief get the constant beginning iterator of the sparse array
+         * 
+         * @returns constant beginning iterator of the sparse_array
+         */
         const_iterator cbegin() const;
+        /**
+         * @brief get the end iterator of the sparse array
+         * 
+         * @returns end iterator of the sparse_array
+         */
         iterator end();
+        /**
+         * @brief get the constant end iterator of the sparse array
+         * 
+         * @returns constant end iterator of the sparse_array
+         */
         const_iterator end() const;
+        /**
+         * @brief get the constant end iterator of the sparse array
+         * 
+         * @returns constant end iterator of the sparse_array
+         */
         const_iterator cend() const;
+        /**
+         * @brief resize the sparse array with a new size
+         * 
+         * @param new_size new wanted size of the sparse_array
+         */
         void resize(size_type new_size);
+        /**
+         * @brief get the size of the sparse_array
+         * 
+         * @return size of the array
+         */
         size_type size() const;
+        /**
+         * @brief insert in the sparse array at said position
+         * 
+         * @param pos position to insert in
+         * @param value value of component you want to insert
+         * @return reference to the sparse_array 
+         */
         reference_type insert_at(size_type pos, const Component &value) {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
             _data[pos] = value;
             return _data[pos];
         }
+        /**
+         * @brief insert in the sparse array at said position
+         * 
+         * @param pos position to insert in
+         * @param value value of component you want to insert
+         * @return reference to the sparse_array 
+         */
         reference_type insert_at(size_type pos, Component &&value) {
             if (pos >= _data.size())
                 _data.resize(pos + 1);
             _data[pos] = std::move(value);
             return _data[pos];
         }
+        /**
+         * @brief 
+         * 
+         * @tparam Params (Containers classes to add)
+         * @param pos position at which to add the components
+         * @param params containers to add
+         * @return reference of the sparse_array
+         */
         template <class ...Params>
         reference_type emplace_at(size_type pos, Params &&...params) {
             if (pos >= _data.size()) {
@@ -104,9 +166,22 @@ class sparse_array {
             new (&_data[pos]) Component(std::forward<Params>(params)...);
             return _data[pos];
         }
+        /**
+         * @brief erase a specific index of the sparse array
+         * 
+         */
         void erase(size_type pos);
+        /**
+         * @brief Get the index of a value
+         * 
+         * @return size_type 
+         */
         size_type get_index(value_type const&) const;
     private:
+        /**
+         * @brief content of the sparse array
+         * 
+         */
         container_t _data;
 };
 
