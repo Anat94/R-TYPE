@@ -36,6 +36,7 @@
     #include "../Errors.hpp"
     #include "../Network.hpp"
     #include "../Timer.hpp"
+    #include "../Logger/logger.hpp"
 
 /**
  * @brief check state of player in game (e.g. in chat, in highscore menu, playing, ...)
@@ -456,6 +457,8 @@ class Client {
          * 
          */
         std::vector<int> _packets_received;
+
+        Logger _logger;
 };
 
 #endif // CLIENT_HPP
