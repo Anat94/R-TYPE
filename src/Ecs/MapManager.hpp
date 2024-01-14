@@ -9,9 +9,9 @@
     #define MAPMANAGER_HPP_
     #include <iostream>
     #include <filesystem>
-    #include <json.hpp>
+    #include "../json.hpp"
     #include <unordered_map>
-    #include "FilesUtils.hpp"
+    #include "../FilesUtils.hpp"
     #include "../Ecs/Events.hpp"
     #include "../Ecs/Components.hpp"
 

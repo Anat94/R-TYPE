@@ -10,8 +10,8 @@
     #include <iostream>
     #include <filesystem>
     #include <unordered_map>
-    #include <json.hpp>
-    #include "FilesUtils.hpp"
+    #include "../json.hpp"
+    #include "../FilesUtils.hpp"
     #include "../Ecs/Events.hpp"
     #include "../Ecs/Components.hpp"
 
