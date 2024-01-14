@@ -11,6 +11,11 @@ add_executable(client
 target_include_directories(client PRIVATE cxx_std_20)
 target_include_directories(client PRIVATE _deps/sfml-src/include)
 set(BUILD_SHARED_LIBS FALSE)
+if (UNIX)
+    set(LIBEC_PATH ${CMAKE_SOURCE_DIR}/libecs.a)
+elseif(WIN32)
+    set(LIBEC_PATH ${CMAKE_SOURCE_DIR}/src/Ecs/Debug/ecs.lib)
+endif()
 target_link_libraries(client
     PRIVATE
         sfml-audio
@@ -18,7 +23,7 @@ target_link_libraries(client
         sfml-system
         sfml-window
         asio
-        ${CMAKE_SOURCE_DIR}/libecs.a
+        ${LIBEC_PATH}
 )
 target_compile_options(client PRIVATE -Wall)
 

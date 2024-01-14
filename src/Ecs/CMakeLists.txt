@@ -3,7 +3,13 @@
 add_library(ecs STATIC
                 Events.cpp
         )
-target_link_libraries(ecs asio)
+target_link_libraries(ecs
+                asio
+                sfml-audio
+                sfml-graphics
+                sfml-system
+                sfml-window
+        )
 target_include_directories(ecs PRIVATE cxx_std_20)
 target_include_directories(ecs PRIVATE _deps/sfml-src/include)
 

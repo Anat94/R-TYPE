@@ -29,6 +29,7 @@ if (UNIX)
                 asio
                 ${BINARY_DIR}/.libs/libsqlite3.so
                 ${CMAKE_SOURCE_DIR}/libecs.a
+
         )
 elseif(WIN32)
         target_link_libraries(server
@@ -39,6 +40,7 @@ elseif(WIN32)
                 sfml-window
                 asio
                 sqlite3
+                ${CMAKE_SOURCE_DIR}/src/Ecs/Debug/ecs.lib
         )
 endif()
 
