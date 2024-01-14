@@ -392,6 +392,11 @@ namespace component {
         KillOnTimer(int time): deathTime(time) {};
     };
 
+    struct ShootCounter {
+        int counter = 0;
+        ShootCounter() {};
+    };
+
     /**
      * @brief endpoint system structure
      * 

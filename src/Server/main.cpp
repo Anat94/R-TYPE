@@ -85,6 +85,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Host>();
     ecs.register_component<component::Shield>();
     ecs.register_component<component::KillOnTimer>();
+    ecs.register_component<component::ShootCounter>();
     entity_t decoy = ecs.spawn_entity();
     ecs.add_component<component::Room>(decoy, component::Room("__"));
 
