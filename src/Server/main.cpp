@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Health>();
     ecs.register_component<component::Hitbox>();
     ecs.register_component<component::Pierce>();
+    ecs.register_component<component::Shield>();
     ecs.register_component<component::Heading>();
     ecs.register_component<component::Drawable>();
     ecs.register_component<component::Endpoint>();
@@ -78,24 +79,24 @@ int main(int argc, char *argv[]) {
     ecs.register_component<component::Username>();
     ecs.register_component<component::Velocity>();
     ecs.register_component<component::PlayMusic>();
+    ecs.register_component<component::KillOnTimer>();
     ecs.register_component<component::ResetOnMove>();
     ecs.register_component<component::CampaignMode>();
     ecs.register_component<component::Controllable>();
     ecs.register_component<component::ServerEntity>();
+    ecs.register_component<component::ShootCounter>();
     ecs.register_component<component::AnimatedDrawable>();
     ecs.register_component<component::HurtsOnCollision>();
-    ecs.register_component<component::Shield>();
-    ecs.register_component<component::KillOnTimer>();
-    ecs.register_component<component::ShootCounter>();
+    ecs.register_component<component::SurvivesOutOfBound>();
     entity_t decoy = ecs.spawn_entity();
     ecs.add_component<component::Room>(decoy, component::Room("__"));
 
     listener.addRegistry(ecs);
 
-    PositionSystem *pos_sys = new PositionSystem();
-    ecs.add_system<component::Position, component::Velocity>(*pos_sys);
-    // KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
-    // ecs.add_system<component::Position, component::Velocity>(*kill_sys);
+    KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
+    ecs.add_system<component::Position, component::Velocity, component::SurvivesOutOfBound>(*kill_sys);
+    PositionSystem *pos_sys = new PositionSystem(&listener);
+    ecs.add_system<component::Position, component::Velocity, component::SurvivesOutOfBound>(*pos_sys);
     EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 2);
     ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room, component::CampaignMode>(*engen_sys);
     CollisionSystem *col_sys = new CollisionSystem(&listener);

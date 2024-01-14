@@ -1,6 +1,6 @@
 {
-    "name": "A fresh start",
-    "map": "stage_1.txt",
+    "name": "A less fresh start",
+    "map": "stage_2.txt",
     "texture": [
         "assets/parallax-space-background.png",
         "assets/parallax-space-stars.png",
