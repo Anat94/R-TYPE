@@ -18,6 +18,8 @@ class RoomUtils {
         {
             std::vector<std::string> resRooms = {};
             for (size_t i = 0; i < all_rooms.size(); ++i) {
+                if (!all_rooms[i].has_value())
+                    continue;
                 if (std::find(resRooms.begin(), resRooms.end(), all_rooms[i]->_name) == resRooms.end()) {
                     resRooms.push_back(all_rooms[i]->_name);
                 }

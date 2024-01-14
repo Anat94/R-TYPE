@@ -15,14 +15,10 @@ class FilesUtils {
         static std::string readJsonFile(const std::string& filename) {
             std::ifstream file(filename);
             if (!file.is_open()) {
-                std::cerr << "Error opening file: " << filename << std::endl;
-                return "";
+                throw std::runtime_error("Error opening file: " + filename);
             }
 
-            std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-            file.close();
-
-            return content;
+            return {std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>()};
         }
 };
 

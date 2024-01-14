@@ -273,7 +273,7 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 
     auto &tmp1 = r.get_components<component::AnimatedDrawable>()[enemy];
     for (auto & anim: _anims) {
-        tmp1->addAnimation(anim.first, anim.second.first, anim.second.second);
+        tmp1->addAnimation(anim.first, anim.second.second, anim.second.first);
     }
     tmp1->_state = "idle";
 }

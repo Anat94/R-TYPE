@@ -773,7 +773,7 @@ void Client::manageCli()
         } else if (command == "WHOAMI") {
             std::cout << "You are " << _username << std::endl;
         } else if (command == "HELP") {
-            if (!params.empty() && params == "SET") {
+            if (params == "SET") {
                 std::cout << "SET [rule] [value]: modifies a rule to the value" << std::endl;
                 std::cout << "Rules available:" << std::endl;
                 std::cout << " - mode 0|1: sets the mode to infinite (0) or campaign (1)" << std::endl;
@@ -785,6 +785,7 @@ void Client::manageCli()
                 std::cout << "SIGNIN [name] [password]: Signin" << std::endl;
                 std::cout << "SIGNUP [name] [password]: Signup" << std::endl;
                 std::cout << "WHOAMI: Show who you are" << std::endl;
+                std::cout << "SET [rule] [value]: modifies a rule to the value" << std::endl;
                 std::cout << "LIST_FRIENDS: List all your friends" << std::endl;
                 std::cout << "ADD_FRIENDS [name]: Add a friend" << std::endl;
                 std::cout << "REMOVE_FRIENDS [name]: Remove a friend" << std::endl;
@@ -808,11 +809,18 @@ void Client::manageCli()
                     std::cout << "Invalid rule - see HELP SET" << std::endl;
                     continue;
                 }
-                if (!std::atoi(param2.c_str()) || 1 < std::atoi(param2.c_str())) {
+                if (std::atoi(param2.c_str()) < 0 || 1 < std::atoi(param2.c_str())) {
                     std::cout << "Invalid value for SET - see HELP SET" << std::endl;
                     continue;
-                } else
-                    _room_mode = std::atoi(param2.c_str());
+                } else {
+                    if (std::atoi(param2.c_str())) {
+                        _room_mode = 1;
+                        std::cout << "Set mode to campaign" << std::endl;
+                    } else {
+                        _room_mode = 0;
+                        std::cout << "Set mode to infinite" << std::endl;
+                    }
+                }
             }
         } else {
             std::cout << "Command not found" << std::endl;
@@ -851,18 +859,18 @@ void Client::initClass()
     _ecs.register_component<component::AnimatedDrawable>();
     _ecs.register_component<component::HurtsOnCollision>();
     _background = _ecs.spawn_entity();
-    // entity_t _background2 = _ecs.spawn_entity();
-    // entity_t _background3 = _ecs.spawn_entity();
+    entity_t _background2 = _ecs.spawn_entity();
+    entity_t _background3 = _ecs.spawn_entity();
     _btn_play = _ecs.spawn_entity();
     _ecs.add_component(_background, component::Position(0.0f, 0.0f));
     _ecs.add_component(_background, component::Drawable("assets/parallax-space-background.png"));
     _ecs.add_component(_background, component::Parallax(1, 0));
-    // _ecs.add_component(_background2, component::Position(0.0f, 0.0f));
-    // _ecs.add_component(_background2, component::Drawable("assets/parallax-space-stars.png"));
-    // _ecs.add_component(_background2, component::Parallax(1, 1));
-    // _ecs.add_component(_background3, component::Position(0.0f, 0.0f));
-    // _ecs.add_component(_background3, component::Drawable("assets/parallax-space-far-planets.png"));
-    // _ecs.add_component(_background3, component::Parallax(1, 2));
+    _ecs.add_component(_background2, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background2, component::Drawable("assets/parallax-space-stars.png"));
+    _ecs.add_component(_background2, component::Parallax(1, 1));
+    _ecs.add_component(_background3, component::Position(0.0f, 0.0f));
+    _ecs.add_component(_background3, component::Drawable("assets/parallax-space-far-planets.png"));
+    _ecs.add_component(_background3, component::Parallax(1, 2));
     if (!_music.openFromFile("./assets/game_music.ogg"))
         throw SFMLError("Music not found");
     _listener.addRegistry(_ecs);

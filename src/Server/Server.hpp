@@ -56,7 +56,7 @@ class Server: public ISystems {
         void receive_from_client();
         void operator()(sparse_array<component::AnimatedDrawable> &dra, sparse_array<component::Scale> &scl, sparse_array<component::Position> &pos, sparse_array<component::Endpoint> &edp);
         entity_t get_player_entity_from_connection_address(udp::endpoint);
-        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name);
+        entity_t connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, int room_mode);
         void send_death_event_to_all_players(entity_t entity, sparse_array<component::Endpoint> &edp);
         void send_all_scale_to_player(entity_t entity);
         void send_all_scale_to_player_by_room(entity_t entity);
@@ -121,6 +121,7 @@ class Server: public ISystems {
         template <typename T>
         void resend_packets(std::vector<T> &, sparse_array<component::Endpoint> &);
     private:
+        void loadLevels(const std::string& room_name);
         std::vector<DeathEventMessage> _death_packets;
         std::vector<SnapshotPosition> _position_packets;
         std::vector<HighScoreMessage> _highscore_packets;

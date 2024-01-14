@@ -127,8 +127,10 @@ Server::Server(asio::io_context& service, int port, registry& ecs, EventListener
       _socket(service, udp::endpoint(udp::v4(), port)),
       _ecs(ecs),
       _listener(listener),
-    //   _send_thread(&Server::receiveThread, this),
-      mtx(mtx_)
+      mtx(mtx_),
+      _stageManager(listener, ecs),
+      _modelManager(listener, ecs),
+      _mapManager(listener, ecs)
 {
     try {
         connectToDB();
@@ -164,7 +166,7 @@ entity_t Server::get_player_entity_from_connection_address(udp::endpoint endpoin
  * @param room_name The player's room name
  * @return entity_t The player's entity
  */
-entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name)
+entity_t Server::connect_player(udp::endpoint player_endpoint, std::string username, std::string room_name, int room_mode)
 {
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
@@ -182,8 +184,13 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
     _ecs.add_component(new_player, component::Username(username));
-    if (username == _lobbies[room_name])
+    if (username == _lobbies[room_name]) {
         _ecs.add_component(new_player, component::Host());
+        if (room_mode) {
+            _ecs.add_component(new_player, component::CampaignMode(room_name));
+            loadLevels(room_name);
+        }
+    }
     _ecs.add_component(new_player, component::Scale(6.0f));
     _ecs.add_component(new_player, component::Rotation(90));
     _ecs.add_component(new_player, component::Health(100));
@@ -650,7 +657,7 @@ int Server::receive_connection_event(std::vector<char> &client_msg, entity_t pla
     if (client_msg.size() < sizeof(JoinGameMessage))
         return -1;
     JoinGameMessage *msg = reinterpret_cast<JoinGameMessage *>(client_msg.data());
-    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name));
+    connect_player(_remote_endpoint, std::string(msg->username), std::string(msg->room_name), msg->room_mode);
     return 0;
 }
 
@@ -773,8 +780,6 @@ int Server::receive_chat_event(std::vector<char>& client_msg, entity_t player_en
  *
  */
 Server::~Server() {
-    // if (_send_thread.joinable())
-    //     _send_thread.join();
 }
 
 /**
@@ -841,5 +846,36 @@ template <typename T>
 void Server::resend_packets(std::vector<T> &packets, sparse_array<component::Endpoint> &edp) {
     for (auto& packet : packets) {
         _socket.send_to(asio::buffer(&packet, sizeof(packet)), _resend_packets_endpoints[packet.packet_id]);
+    }
+}
+
+void Server::loadLevels(const std::string &room_name)
+{
+    _stageManager.loadStages(room_name);
+    _modelManager.loadModels(room_name);
+    _mapManager.loadMaps(room_name);
+
+    std::vector<std::string> titles = _stageManager.getStageNamesForRoom(room_name);
+    std::unordered_map<std::string, std::vector<std::string>> enemies = _stageManager.getEnemiesForRoom(room_name);
+    std::unordered_map<std::string, std::vector<component::Drawable>> bg = _stageManager.getBackgroundsForRoom(room_name);
+
+    std::unordered_map<std::string, std::vector<component::Position>> enemies_positions = _mapManager.getEnemiesPositionForRoom(room_name);
+
+    std::unordered_map<std::string, component::AnimatedDrawable> drawables = _modelManager.getModelsForRoom(room_name);
+
+    std::string current_stage = titles[0];
+    
+    for (auto enemy : enemies[current_stage]) {
+        auto aliases = _modelManager.getAliasesForEntity(enemy);
+        auto anims = _modelManager.getAnimsForEntity(enemy);
+        auto props = _modelManager.getPropertiesForEntity(enemy);
+        auto draw = drawables[enemy];
+        for (auto alias : aliases) {
+            auto pos = enemies_positions[alias];
+            for (auto p : pos) {
+                std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
+                _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name));
+            }
+        }
     }
 }
