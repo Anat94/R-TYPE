@@ -146,122 +146,10 @@ if(NOT googletest_POPULATED)
 endif()
 
 
-
-# COMPILATION FOR SERVER
-
-# message("COMPILING SERVER")
-
-add_executable(server
-        src/Ecs/Events.cpp
-        src/Server/Server.cpp
-        src/Server/main.cpp
-        src/Server/database.cpp
-)
-
-if (UNIX)
-        set(CMAKE_CXX_FLAGS "-pthread -ldl")
-endif()
-target_compile_options(server PRIVATE -ldl)
-if (UNIX)
-        add_dependencies(server sqlite3_external)
-endif()
-# add_dependencies(server sqlite)
-if (UNIX)
-        ExternalProject_Get_Property(sqlite3_external BINARY_DIR)
-endif()
-target_include_directories(server PRIVATE ${BINARY_DIR})
-target_include_directories(server PRIVATE _deps/sfml-src/include)
-if (UNIX)
-        target_link_libraries(server
-        PRIVATE
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
-                asio
-                ${BINARY_DIR}/.libs/libsqlite3.so
-        )
-elseif(WIN32)
-        target_link_libraries(server
-        PRIVATE
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
-                asio
-                sqlite3
-        )
-endif()
-
-target_compile_features(server PRIVATE cxx_std_20)
-
-# COMPILATION FOR ECS
-
-add_library(ecs STATIC
-                src/Ecs/Events.cpp
-        )
-target_link_libraries(ecs asio)
-target_include_directories(ecs PRIVATE cxx_std_20)
-target_include_directories(ecs PRIVATE _deps/sfml-src/include)
-
-# COMPILATION FOR CLIENT
-
-include_directories(include src src/Client)
-add_executable(client
-        src/Ecs/Events.cpp
-        src/Client/Menu.cpp
-        src/Client/Client.cpp
-        src/Client/Game.cpp
-        src/Client/main.cpp
-        src/Client/Button.cpp
-)
-target_include_directories(client PRIVATE cxx_std_20)
-target_include_directories(client PRIVATE _deps/sfml-src/include)
-# target_link_libraries(client PRIVATE ${CMAKE_SOURCE_DIR}/libecs.a)
-set(BUILD_SHARED_LIBS FALSE)
-target_link_libraries(client
-    PRIVATE
-        sfml-audio
-        sfml-graphics
-        sfml-system
-        sfml-window
-        asio
-)
-target_compile_options(client PRIVATE -Wall)
-
-
-# Create binary for unit_tests
-
-add_executable(my_tests
-        tests/TestSparseArray.cpp
-        tests/TestZipperIterator.cpp
-)
-
-if (UNIX)
-        target_link_libraries(my_tests
-        PRIVATE
-                ecs
-                gtest
-                gmock
-                gmock_main
-        )
-elseif(WIN32)
-        target_link_libraries(my_tests
-        PRIVATE
-                ecs
-                asio
-                sfml-audio
-                sfml-graphics
-                sfml-system
-                sfml-window
-                gtest
-                gmock
-                gmock_main
-                sqlite3
-        )
-endif()
-add_test(NAME my_tests COMMAND tests)
-
+add_subdirectory(src/Client)
+add_subdirectory(src/Ecs)
+add_subdirectory(src/Server)
+add_subdirectory(tests)
 
 # COPY ALL LIBRARY TO THE BUILD OUTPOUT
 if (WIN32)
@@ -277,11 +165,6 @@ if (WIN32)
                 ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-graphics-d-2.dll
                 ${CMAKE_SOURCE_DIR}/Debug
         )
-        # add_custom_command(TARGET client POST_BUILD
-        #         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        #         ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-network-d-2.dll
-        #         ${CMAKE_SOURCE_DIR}/Debug
-        # )
         add_custom_command(TARGET client POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${CMAKE_SOURCE_DIR}/_deps/sfml-build/lib/Debug/sfml-system-d-2.dll
