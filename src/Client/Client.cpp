@@ -950,8 +950,10 @@ int Client::run()
         mtx.lock();
         _score_text.setString("Score: " + std::to_string(_score));
         _lives_text.setString("Health: " + std::to_string(_lives));
-        if (manageEvent())
+        if (manageEvent()) {
+            _window.close();
             break;
+        }
         if (_state == INGAMEMENU)
             displayScoreBoardMenu();
         else if (_state == INGAME || _state == CHAT) {
@@ -979,6 +981,5 @@ int Client::run()
         mtx.unlock();
         _window.display();
     }
-    _window.close();
     return 0;
 }
