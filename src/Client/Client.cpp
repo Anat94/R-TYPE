@@ -934,7 +934,7 @@ int Client::run()
     _score = 0; // ((player1_s.has_value()) ? (player1_s->_score) : (0));
     _lives_text.setPosition(1750, 10);
     mtx.unlock();
-    while (true) {
+    while (_window.isOpen()) {
         _mouse_position = sf::Mouse::getPosition(_window);
         _score_text.setString("Score: " + std::to_string(_score));
         _lives_text.setString("Health: " + std::to_string(_lives));

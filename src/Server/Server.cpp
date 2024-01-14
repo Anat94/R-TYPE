@@ -166,6 +166,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     std::cout << "Connection" << std::endl;
     entity_t new_player = _ecs.spawn_entity();
     std::cout << "SPAWNED PLAYER: " << new_player <<std::endl;
+    std::cout << "Name = "<< username << std::endl;
     _ecs.add_component(new_player, component::Position(10.0f, 10.0f));
     _ecs.add_component(new_player, component::ResetOnMove());
     _ecs.add_component(new_player, component::Controllable());
@@ -180,6 +181,7 @@ entity_t Server::connect_player(udp::endpoint player_endpoint, std::string usern
     _ecs.add_component(new_player, component::Endpoint(player_endpoint));
     _ecs.add_component(new_player, component::Room(room_name));
     _ecs.add_component(new_player, component::Username(username));
+    std::cout << new_player << "Name2 = "<< _ecs.get_components<component::Username>()[new_player]->_name << std::endl;
     if (username == _lobbies[room_name])
         _ecs.add_component(new_player, component::Host());
     _ecs.add_component(new_player, component::Scale(6.0f));
@@ -350,13 +352,16 @@ void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &e
  */
 void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
-    auto &score = _ecs.get_components<component::Score>();
+    auto score = _ecs.get_components<component::Score>();
+    auto username = _ecs.get_components<component::Username>();
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && score[i].has_value()) {
             ScoreMessage to_send(24, score[i]->_score, _packet_id);
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
+            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
+            addHighScore(username[i]->_name, score[i]->_score);
         }
     }
 }
