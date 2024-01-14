@@ -1,11 +1,8 @@
 # COMPILATION FOR CLIENT
 include_directories(include src src/Client)
 add_executable(client
-        Menu.cpp
         Client.cpp
-        Game.cpp
         main.cpp
-        Button.cpp
 )
 target_include_directories(client PRIVATE cxx_std_20)
 target_include_directories(client PRIVATE _deps/sfml-src/include)
