@@ -145,6 +145,7 @@ if(NOT googletest_POPULATED)
         message(STATUS "Populating googletest ${googletest_TAG} done; src at ${googletest_SOURCE_DIR}")
 endif()
 
+
 add_subdirectory(src/Ecs)
 add_subdirectory(src/Client)
 add_subdirectory(src/Server)
