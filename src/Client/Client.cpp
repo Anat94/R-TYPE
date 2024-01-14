@@ -484,7 +484,7 @@ int Client::receive_score_event(std::vector<char> &server_msg)
 }
 
 /**
- * @brief Receuve event from the server
+ * @brief Receive event from the server
  *
  * @param server_msg The message from the server
  * @return int  The packet id
