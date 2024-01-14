@@ -24,7 +24,6 @@
 #include <asio.hpp>
 #include "../Errors.hpp"
 #include "Client.hpp"
-#include "Menu.hpp"
 
 using asio::ip::udp;
 
@@ -49,19 +48,8 @@ int main(int argc, char** argv) {
         if (argc != 3) {
             throw ArgumentError("./client <client_ip> <client_port>");
         }
-        enum state state = GAME;
-        while (state != END) {
-            if (state == MENU) {
-                // Menu menu;
-                // state = menu.run();
-                // tmp_username = menu.getUsername();
-            } else if (state == GAME) {
-                Client client(argv[1], atoi(argv[2]), listener, ecs, mtx);
-                return client.run();
-            }
-            if (state == SUCCES)
-                return 0;
-        }
+        Client client(argv[1], atoi(argv[2]), listener, ecs, mtx);
+        return client.run();
     } catch (const ArgumentError &e) {
         std::cerr << "Usage: " << e.what() << std::endl;
         return 84;
