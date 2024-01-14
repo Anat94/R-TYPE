@@ -213,6 +213,7 @@ entity_t Client::init_new_entity(entity_t srvEntity)
     _ecs.add_component(new_entity, component::ServerEntity(srvEntity));
     _ecs.add_component(new_entity, component::Health(100));
     _ecs.add_component(new_entity, component::Score());
+    _ecs.add_component(new_entity, component::Scale(6.0f));
     return new_entity;
 }
 
@@ -959,6 +960,7 @@ void Client::initClass()
     _ecs.register_component<component::Shield>();
     _ecs.register_component<component::ShootCounter>();
     _ecs.register_component<component::KillOnTimer>();
+    _ecs.register_component<component::AutoShoot>();
     _background = _ecs.spawn_entity();
     entity_t _background2 = _ecs.spawn_entity();
     entity_t _background3 = _ecs.spawn_entity();

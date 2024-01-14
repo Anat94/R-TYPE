@@ -400,7 +400,6 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
-            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
             addHighScore(username[i]->_name, score[i]->_score);
         }
     }
@@ -961,7 +960,7 @@ void Server::loadLevels(const std::string &room_name)
                 auto pos = enemies_positions[alias];
                 for (auto p : pos) {
                     std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
-                    _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
+                    _listener.addEvent(new SpawnEnemy(props.damage, props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
                 }
             }
         }
