@@ -124,8 +124,6 @@ void Server::addHighScore(std::string name, int score) {
     if (rc != SQLITE_OK) {
         fprintf(stderr, "12SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
-    } else {
-        fprintf(stdout, "Records created successfully\n");
     }
 }
 
@@ -224,7 +222,6 @@ bool Server::signUp(std::string name, std::string password) {
         fprintf(stderr, "SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     } else {
-        fprintf(stdout, "Records created successfully\n");
         return true;
     }
     return false;

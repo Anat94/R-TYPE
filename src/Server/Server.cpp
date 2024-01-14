@@ -375,7 +375,6 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
-            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
             addHighScore(username[i]->_name, score[i]->_score);
         }
     }
