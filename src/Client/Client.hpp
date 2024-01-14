@@ -205,14 +205,45 @@ class Client {
         /**
          * @brief Get the level
          *
-         * @return int
+         * @return void
          */
         void setLevel(int level) { _level = level; }
+
+        /**
+         * @brief manage sfml event
+         *
+         * @return int
+         */
         int manageEvent();
+
+        /**
+         * @brief Receive event from the server
+         *
+         * @return void
+         */
         void receive();
+
+        /**
+         * @brief Position snapshot update from server
+         *
+         * @return int
+         */
         int receive_position_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Scale snapshot update from server
+         *
+         * @return int
+         */
         int receive_scale_snapshot_update(std::vector<char> &);
+
+        /**
+         * @brief Receive data from the server and store them
+         *
+         * @return std::vector<char>
+         */
         std::vector<char> receive_raw_data_from_client();
+
         int receive_death_event(std::vector<char> &server_msg);
         int receive_high_score(std::vector<char> &server_msg);
         int receive_login_response(std::vector<char> &server_msg);
