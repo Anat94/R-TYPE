@@ -713,19 +713,12 @@ namespace component {
      * @brief Jump structure to to find out if an entity can be jump
      * 
     */
-    struct Jump {
-        /**
-         * @brief group id to refer to the correct parallax
-         * 
-         */
-        bool _jump;
+    struct Gravity {
         /**
          * @brief Construct a new Jump object
          * 
-         * @param group the group id of the parallax 
-         * @param index the z-index of the element for the parallax
          */
-        Jump(bool jump = true) : _jump(jump) {};
+        Gravity() {};
     };
 
 };
