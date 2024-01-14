@@ -36,6 +36,7 @@
 #include "../Ecs/Systems/ScaleSystem.hpp"
 #include "../Ecs/Systems/ButtonSystem.hpp"
 #include "../KeyEventMapping.hpp"
+#include "../Ecs/Systems/JumpSystem.hpp"
 
 bool can_read = true;
 
@@ -139,7 +140,7 @@ int Client::recieve_position_snapshot_update(std::vector<char> &server_msg)
             pos[real_entity]->y = snapshot->data.y;
             }
         } else {
-            if (real_entity == 0)
+            if (real_entity == 0) {}
                 real_entity = init_new_entity(snapshot->entity);
             _ecs.add_component(real_entity, component::Position(snapshot->data.x,  snapshot->data.y));
         }
@@ -734,6 +735,18 @@ void Client::initClass()
     _ecs.add_system<component::AnimatedDrawable, component::Position, component::Scale, component::Rotation>(*tmp_draw_sys);
     ParallaxSystem *par_sys = new ParallaxSystem();
     _ecs.add_system<component::Parallax, component::Position>(*par_sys);
+
+
+    _joueur = _ecs.spawn_entity();
+
+    _ecs.add_component(_joueur, component::Position(100.0f, 600.0f));
+    _ecs.add_component(_joueur, component::Scale(0.5f));
+    _ecs.add_component(_joueur, component::Jump());
+    _ecs.add_component(_joueur, component::AnimatedDrawable("assets/ennemy.png"));
+
+    JumpSystem *jump_sys = new JumpSystem(&_event);
+    _ecs.add_system<component::Position, component::Jump>(*jump_sys);
+
 }
 
 int Client::run()

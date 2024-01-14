@@ -217,6 +217,7 @@ class Client {
         bool _logged_in = false;
         std::vector<int> _packets_received;
         std::string SelectedGame;
+        entity_t _joueur;
 };
 
 #endif // CLIENT_HPP
