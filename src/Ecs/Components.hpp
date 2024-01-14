@@ -369,6 +369,30 @@ namespace component {
     };
 
     /**
+     * @brief KillOnTimer Component
+     * 
+     */
+    struct KillOnTimer {
+        /**
+         * @brief timer to time the entity's life
+         * 
+         */
+        Timer timer;
+        /**
+         * @brief life duration
+         * 
+         */
+        int deathTime = 3000;
+
+        /**
+         * @brief Constructor for the KillOnTimer Component
+         * 
+         * @param time duration which to keep entity alive
+         */
+        KillOnTimer(int time): deathTime(time) {};
+    };
+
+    /**
      * @brief endpoint system structure
      * 
      */

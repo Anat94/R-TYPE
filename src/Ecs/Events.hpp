@@ -185,6 +185,44 @@ class CollisionEvent : public AEvent {
 };
 
 /**
+ * @brief CreateExplosionEvent event class
+ * 
+ */
+class CreateExplosionEvent : public AEvent {
+    public:
+        /**
+         * @brief Construct a new CreateExplosion Event object
+         * 
+         * @param pos position at which to spawn the explosion
+         * @param explosion_type type of the explosion
+         */
+        CreateExplosionEvent(component::Position pos, int explosion_type, std::string room_): e_type(explosion_type), genPos(pos), room(room_) { _ents = {0, 0}; };
+        /**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+        void handleEvent(registry &r, EventListener &listener);
+    private:
+    /**
+     * @brief position at which to spawn the explosion
+     * 
+     */
+        component::Position genPos;
+        /**
+         * @brief explosion type
+         * 
+         */
+        int e_type;
+        /**
+         * @brief room to spawn the explosion in
+         * 
+         */
+        std::string room;
+};
+
+/**
  * @brief SpawnEnemy class used to spawn an enemy
  * 
  */
