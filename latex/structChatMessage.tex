@@ -1,0 +1,63 @@
+\hypertarget{structChatMessage}{}\doxysection{Chat\+Message Struct Reference}
+\label{structChatMessage}\index{ChatMessage@{ChatMessage}}
+
+
+encapsulates the content and sender of a chat message  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Chat\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structChatMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structChatMessage_a350aee8be5608887af7805be47bdd6e9}{Chat\+Message}} (int16\+\_\+t id\+\_\+, std\+::string name\+\_\+, std\+::string content\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structChatMessage_a7a115ef50c77fcc30fec8f50b00a5a3a}\label{structChatMessage_a7a115ef50c77fcc30fec8f50b00a5a3a}} 
+char \mbox{\hyperlink{structChatMessage_a7a115ef50c77fcc30fec8f50b00a5a3a}{name}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em username of the sender. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structChatMessage_aa67ac31a0aee0b1d0f7d52e77fa6fabe}\label{structChatMessage_aa67ac31a0aee0b1d0f7d52e77fa6fabe}} 
+char \mbox{\hyperlink{structChatMessage_aa67ac31a0aee0b1d0f7d52e77fa6fabe}{content}} \mbox{[}256\mbox{]}
+\begin{DoxyCompactList}\small\item\em content of the message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates the content and sender of a chat message 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structChatMessage_a350aee8be5608887af7805be47bdd6e9}\label{structChatMessage_a350aee8be5608887af7805be47bdd6e9}} 
+\index{ChatMessage@{ChatMessage}!ChatMessage@{ChatMessage}}
+\index{ChatMessage@{ChatMessage}!ChatMessage@{ChatMessage}}
+\doxysubsubsection{\texorpdfstring{ChatMessage()}{ChatMessage()}}
+{\footnotesize\ttfamily Chat\+Message\+::\+Chat\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{name\+\_\+,  }\item[{std\+::string}]{content\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em name\+\_\+} & username of the sender. \\
+\hline
+{\em content\+\_\+} & content of the message. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

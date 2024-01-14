@@ -1,0 +1,225 @@
+\doxysection{Client.\+hpp}
+\hypertarget{Client_8hpp_source}{}\label{Client_8hpp_source}\index{src/Client/Client.hpp@{src/Client/Client.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/TYPE}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Client.hpp}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ CLIENT\_HPP}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ CLIENT\_HPP}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#define\ MAX\_POSITION\_MOVE\_THRESHOLD\ 100}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ <asio.hpp>}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/Window.hpp>}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/System.hpp>}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\ \ \ \ \#include\ <vector>}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\ \ \ \ \#include\ <queue>}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\ \ \ \ \#include\ <mutex>}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Ecs/Events.hpp"{}}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Errors.hpp"{}}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Network.hpp"{}}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Timer.hpp"{}}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdata__struct}{data\_struct}}\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ id;}
+\DoxyCodeLine{00042\ \ \ \ \ sf::Event\ event;}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{int}\ package\_id;}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{enum}\ Stage\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ ONE,}
+\DoxyCodeLine{00049\ \ \ \ \ TWO,}
+\DoxyCodeLine{00050\ \ \ \ \ THREE,}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{enum}\ inGameState\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ INGAME,}
+\DoxyCodeLine{00055\ \ \ \ \ INGAMEMENU,}
+\DoxyCodeLine{00056\ \ \ \ \ CHAT}
+\DoxyCodeLine{00057\ \};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structTrophy}{Trophy}}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ sf::Sprite\ sprite;}
+\DoxyCodeLine{00061\ \ \ \ \ sf::Texture\ texture;}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structHighScoreDisplay}{HighScoreDisplay}}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ sf::Text\ title;}
+\DoxyCodeLine{00066\ \ \ \ \ sf::Text\ name1;}
+\DoxyCodeLine{00067\ \ \ \ \ sf::Text\ score1;}
+\DoxyCodeLine{00068\ \ \ \ \ sf::Text\ name2;}
+\DoxyCodeLine{00069\ \ \ \ \ sf::Text\ score2;}
+\DoxyCodeLine{00070\ \ \ \ \ sf::Text\ name3;}
+\DoxyCodeLine{00071\ \ \ \ \ sf::Text\ score3;}
+\DoxyCodeLine{00072\ \ \ \ \ \mbox{\hyperlink{structTrophy}{Trophy}}\ trophy1;}
+\DoxyCodeLine{00073\ \ \ \ \ \mbox{\hyperlink{structTrophy}{Trophy}}\ trophy2;}
+\DoxyCodeLine{00074\ \};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structChatEntity}{ChatEntity}}\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ sf::RectangleShape\ \_rectangle;}
+\DoxyCodeLine{00078\ \ \ \ \ std::vector<std::string>\ \_chat;}
+\DoxyCodeLine{00079\ \ \ \ \ std::vector<sf::Text>\ \_chatText;}
+\DoxyCodeLine{00080\ \ \ \ \ sf::Text\ \_chatTitle;}
+\DoxyCodeLine{00081\ \ \ \ \ sf::RectangleShape\ \_inputBox;}
+\DoxyCodeLine{00082\ \ \ \ \ std::string\ \_input;}
+\DoxyCodeLine{00083\ \ \ \ \ sf::Text\ \_chatTextInput;}
+\DoxyCodeLine{00084\ \ \ \ \ sf::Clock\ \_clock;}
+\DoxyCodeLine{00085\ \};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classClient}{Client}}\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keyword}{typedef}\ int\ (\mbox{\hyperlink{classClient}{Client}}::*messageParserHandle)(std::vector<char>\&);}
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classClient}{Client}}(std::string\ ip,\ \textcolor{keywordtype}{int}\ port,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener,\ \mbox{\hyperlink{classregistry}{registry}}\ \&ecs,\ std::mutex\ \&mtx\_);}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classClient_a840e519ca781888cbd54181572ebe3a7}{\string~Client}}();}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a168399eeddbdde9a219278158914b9d2}{run}}();}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_ad56b05fc35da53496f318c7bdd96ebed}{send\_to\_server}}(\textcolor{keyword}{const}\ T\&\ structure);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ template\ <typename\ T>}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ void\ send\_datas(const\ T\&\ structure);}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ template\ <typename\ T>}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ void\ receive\_datas(T\&\ structure);}}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_afff638ebfd56ee7ab56f9dc1b886e1d8}{receive\_datas}}();}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a85e60f733164296d0c545597f0bd08be}{displayTexts}}();}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a8463da33234bc2c3e3715b786f4cf627}{addLevel}}()\ \{\ \_level++;\ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a81779397297d815088996c7372bfe026}{addScore}}()\ \{\ \_score++;\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_ae31980599eef0c42f08d9755e08a4760}{decreaseLives}}()\ \{\ \_lives-\/-\/;\ \}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_ae06feaf173c523966b816bb505f4ca0d}{increaseLives}}()\ \{\ \_lives++;\ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_aeb5979840f6a1769353f31f7bea764b1}{setLevel}}(\textcolor{keywordtype}{int}\ level)\ \{\ \_level\ =\ level;\ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a84ca2859e7ccceb8abd0858da4674e1d}{manageEvent}}();}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}{receive}}();}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a4a07db434d377496401b3d1163c0e6d2}{receive\_position\_snapshot\_update}}(std::vector<char>\ \&);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a911ddce0764d74e47eab48e196dc5ebe}{receive\_scale\_snapshot\_update}}(std::vector<char>\ \&);}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ std::vector<char>\ \mbox{\hyperlink{classClient_a1062e4d1dda0a8f0844ac3b9bf66d280}{receive\_raw\_data\_from\_client}}();}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_acdebfad53cf68fca1718475c119cc5c3}{receive\_death\_event}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_ae2a2622b8c3c122e0698cf54628b1400}{receive\_high\_score}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a20f8a7a420d3b0aa16a9ecef6e888c33}{receive\_login\_response}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_acf467bfe986134c956b5d893c4475212}{receive\_drawable\_snapshot\_update}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_ac4076ae09ccfbf64b28605675846192a}{receive\_animated\_drawable\_snapshot}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a5780253a5a01dc7a5c810c186bde7a81}{receive\_animated\_drawable\_state\_update}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_ac3f7b703cb03d9785f557147ef8bf244}{receive\_friends\_reponse}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_afef9c25e48c1816a4626697f6c88f91f}{receive\_add\_friends\_reponse}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}{receive\_remove\_friends\_reponse}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classClient_a14c553437a24bc81a743ac3ffac7ce7a}{receive\_chat\_event}}(std::vector<char>\ \&server\_msg);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a29eadc05eecb345c418b20a5a589f15f}{createEnemy}}(std::pair<float,\ float>\ pos,\ std::pair<float,\ float>\ vel,\ \textcolor{keyword}{const}\ std::string\ \&path\_to\_texture,\ std::pair<float,\ float>\ scale,\ \textcolor{keywordtype}{int}\ health,\ \textcolor{keywordtype}{int}\ damage);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a1a37e6650eef7546f32d52b06776770c}{displayScoreBoardMenu}}();}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_ad47257b87ca02f998b8056843172e190}{handleInput}}(sf::Event\ \&event);}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a752971fba33e068a5c12ea41d4cc64e1}{manageCli}}();}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classClient_a36cac90702860598162e1d725201a1a8}{initClass}}();}
+\DoxyCodeLine{00154\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ network}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structEventMessage}{EventMessage}}\ \_send\_structure;}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ asio::io\_context\ \_io\_context;}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ udp::socket\ \_socket;}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ udp::endpoint\ \_server\_endpoint;}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ std::string\ \_username;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ network}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSnapshotPosition}{SnapshotPosition}}\ \_receive\_structure;}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ std::array<char,\ 1024>\ \_receiveBuffer;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ std::vector<sf::Event::EventType>\ eventsToPrint\ =\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::Closed,}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::Resized,}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::LostFocus,}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::GainedFocus,}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TextEntered,}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::KeyPressed,}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::KeyReleased,}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseWheelMoved,}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseWheelScrolled,}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseButtonPressed,}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::MouseButtonReleased,}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//sf::Event::MouseMoved,}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sf::Event::MouseEntered,}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sf::Event::MouseLeft,}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickButtonPressed,}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickButtonReleased,}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickMoved,}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickConnected,}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::JoystickDisconnected,}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchBegan,}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchMoved,}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::TouchEnded,}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sf::Event::SensorChanged}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ ECS}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ entity\_t\ \_player;}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ entity\_t\ \_background;}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ entity\_t\ \_enemy;}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ entity\_t\ \_btn\_play;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ SFML}}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ sf::RenderWindow\ \_window;}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ sf::Event\ \_event;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ sf::Font\ \_font;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ sf::Music\ \_music;}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Content\ for\ gameplay}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_score;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_lives;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_level;}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ sf::Text\ \_score\_text;}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ sf::Text\ \_lives\_text;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ sf::Text\ \_level\_text;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classregistry}{registry}}\ \&\_ecs;}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&\_listener;}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ Stage\ \_stage;}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ content\ for\ enemys}}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ std::thread\ receiveThread;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ std::queue<entity\_t>\ \_enemiesQueue;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ std::map<int16\_t,\ messageParserHandle>\ \_messageParser\ =\ \{}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \{4,\ \&\mbox{\hyperlink{classClient_a4a07db434d377496401b3d1163c0e6d2}{Client::receive\_position\_snapshot\_update}}\},}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \{6,\ \&\mbox{\hyperlink{classClient_acf467bfe986134c956b5d893c4475212}{Client::receive\_drawable\_snapshot\_update}}\},}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \{7,\ \&\mbox{\hyperlink{classClient_ae2a2622b8c3c122e0698cf54628b1400}{Client::receive\_high\_score}}\},}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \{8,\ \&\mbox{\hyperlink{classClient_a20f8a7a420d3b0aa16a9ecef6e888c33}{Client::receive\_login\_response}}\},}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \{9,\ \&\mbox{\hyperlink{classClient_ac3f7b703cb03d9785f557147ef8bf244}{Client::receive\_friends\_reponse}}\},}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \{10,\ \&\mbox{\hyperlink{classClient_afef9c25e48c1816a4626697f6c88f91f}{Client::receive\_add\_friends\_reponse}}\},}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \{11,\ \&\mbox{\hyperlink{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}{Client::receive\_remove\_friends\_reponse}}\},}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \{12,\ \&\mbox{\hyperlink{classClient_a14c553437a24bc81a743ac3ffac7ce7a}{Client::receive\_chat\_event}}\},}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \{13,\ \&\mbox{\hyperlink{classClient_ac4076ae09ccfbf64b28605675846192a}{Client::receive\_animated\_drawable\_snapshot}}\},}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \{14,\ \&\mbox{\hyperlink{classClient_a5780253a5a01dc7a5c810c186bde7a81}{Client::receive\_animated\_drawable\_state\_update}}\},}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \ \ \ \ \{15,\ \&\mbox{\hyperlink{classClient_a911ddce0764d74e47eab48e196dc5ebe}{Client::receive\_scale\_snapshot\_update}}\},}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \ \ \ \ \{16,\ \&\mbox{\hyperlink{classClient_acdebfad53cf68fca1718475c119cc5c3}{Client::receive\_death\_event}}\}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ sf::Vector2i\ \_mouse\_position;}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ sf::Text\ \_mouse\_position\_text;}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structHighScoreDisplay}{HighScoreDisplay}}\ \_highScoreDisplay;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ inGameState\ \_state;}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_packet\_id\ =\ 0;}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ std::string\ friendLists;}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ friendListFinish\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structChatEntity}{ChatEntity}}\ \_chatEntity;}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ std::mutex\ \&mtx;}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classTimer}{Timer}}\ shootTimer;}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classTimer}{Timer}}\ moveTimer;}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ prgrmstop\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00238\ \};}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CLIENT\_HPP}}
+
+\end{DoxyCode}

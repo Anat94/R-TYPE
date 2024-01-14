@@ -1,0 +1,220 @@
+\doxysection{Components.\+hpp}
+\hypertarget{Components_8hpp_source}{}\label{Components_8hpp_source}\index{src/Ecs/Components.hpp@{src/Ecs/Components.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ R-\/Type}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Components}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ COMPONENTS\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ COMPONENTS\_HPP\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/Audio.hpp>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\ \ \ \ \#include\ <unordered\_map>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\ \ \ \ \#include\ <asio.hpp>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}../Errors.hpp"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{using\ }asio::ip::udp;}
+\DoxyCodeLine{00017\ \textcolor{keyword}{using\ }entity\_t\ =\ size\_t;}
+\DoxyCodeLine{00024\ \textcolor{keyword}{using\ }animation\_t\ =\ std::unordered\_map<std::string,\ std::pair<bool,\ std::pair<int,\ int>>>;}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{namespace\ }component\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Position}{Position}}\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}};}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}};}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ Archive>}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ serialize(Archive\ \&\ ar,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ version)\ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ ar\ \&\ \mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ ar\ \&\ \mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Position_a4d3c40ec8938819a5c66d267d26e2f2b}{Position}}(\textcolor{keywordtype}{float}\ \_x,\ \textcolor{keywordtype}{float}\ \_y)\ :\ \mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}(\_x),\ \mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}}(\_y)\ \{\};}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcomponent_1_1Position}{Position}}\&\ other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}\ ==\ other.\mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}\ \&\&\ \mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}}\ ==\ other.\mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}};}
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ Position\&\ other)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}\ ==\ other.x\ \&\&\ \mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}}\ ==\ other.y;\ \};}
+\DoxyCodeLine{00056\ \ \ \ \ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1ServerEntity}{ServerEntity}}\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ entity\_t\ \mbox{\hyperlink{structcomponent_1_1ServerEntity_a484e38a6ce30eba7e84c315b0700dfb9}{entity}};}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1ServerEntity_afafc99a114215d54f2c31c48555525db}{ServerEntity}}(entity\_t\ \_entity)\ :\ \mbox{\hyperlink{structcomponent_1_1ServerEntity_a484e38a6ce30eba7e84c315b0700dfb9}{entity}}(\_entity)\ \{\}}
+\DoxyCodeLine{00074\ \ \ \ \ \};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Button}{Button}}\ \{}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sf::RectangleShape\ shape;}}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ sf::Font\ font\ =\ sf::Font();}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ sf::Text\ text\ =\ sf::Text();}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ std::string\ strText\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ sf::Color\ textColor\ =\ sf::Color();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ sf::Color\ idleColor\ =\ sf::Color();}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ sf::Color\ hoverColor\ =\ sf::Color();}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ sf::Color\ activeColor\ =\ sf::Color();}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ height\ =\ 0.0f;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ width\ =\ 0.0f;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ x\ =\ 0.0f;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ y\ =\ 0.0f;}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Button}{Button}}(\textcolor{keywordtype}{float}\ x\_,\ \textcolor{keywordtype}{float}\ y\_,\ \textcolor{keywordtype}{float}\ width\_,\ \textcolor{keywordtype}{float}\ height\_,\ sf::Font\&\ font\_,\ std::string\ text\_,\ sf::Color\ textColor\_,\ sf::Color\ idleColor\_,\ sf::Color\ hoverColor\_,\ sf::Color\ activeColor\_):}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ x(x\_),\ y(y\_),\ width(width\_),\ height(height\_),\ font(font\_),\ strText(text\_),\ textColor(textColor\_),\ idleColor(idleColor\_),\ hoverColor(hoverColor\_),\ activeColor(activeColor\_)}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \{\}}
+\DoxyCodeLine{00097\ \ \ \ \ \};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Damage}{Damage}}\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcomponent_1_1Damage_a6157f1f5c20e6b4eaa9d73be3e87f66d}{\_damage}};}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Damage_aa6228f880ff1b2f13e857aac7d78379c}{Damage}}(\textcolor{keywordtype}{int}\ damage)\ :\ \mbox{\hyperlink{structcomponent_1_1Damage_a6157f1f5c20e6b4eaa9d73be3e87f66d}{\_damage}}(damage)\ \{\};}
+\DoxyCodeLine{00115\ \ \ \ \ \};}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Health}{Health}}\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcomponent_1_1Health_a21c6729531487f83c84c3782750a41d9}{\_health}};}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Health_a9b1b50264f527624d79aa55de1a660f1}{Health}}(\textcolor{keywordtype}{int}\ health)\ :\ \mbox{\hyperlink{structcomponent_1_1Health_a21c6729531487f83c84c3782750a41d9}{\_health}}(health)\ \{\};}
+\DoxyCodeLine{00133\ \ \ \ \ \};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00139\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Score}{Score}}\ \{}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcomponent_1_1Score_ac96add5dd32c5c20f97d24edce3420a4}{\_score}};}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Score_a7b07263309dc20bdeaee95e1dff1bc8f}{Score}}(\textcolor{keywordtype}{int}\ score\ =\ 0)\ :\ \mbox{\hyperlink{structcomponent_1_1Score_ac96add5dd32c5c20f97d24edce3420a4}{\_score}}(score)\ \{\};}
+\DoxyCodeLine{00151\ \ \ \ \ \};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00157\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1ResetOnMove}{ResetOnMove}}\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1ResetOnMove_a488d190e1fc78482041ae3af543a7375}{ResetOnMove}}()\ \{\};}
+\DoxyCodeLine{00163\ \ \ \ \ \};}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00169\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Pierce}{Pierce}}\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structcomponent_1_1Pierce_af3fdab7f00e8e8437c4e40410925ae0a}{\_pierce}};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Pierce_aa791a9e45e9a7a9ff5c96da1da01ccd3}{Pierce}}(\textcolor{keywordtype}{int}\ pierce\ =\ 1)\ :\ \mbox{\hyperlink{structcomponent_1_1Pierce_af3fdab7f00e8e8437c4e40410925ae0a}{\_pierce}}(pierce)\ \{\};}
+\DoxyCodeLine{00181\ \ \ \ \ \};}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00186\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1HurtsOnCollision}{HurtsOnCollision}}\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ entity\_t\ \_sender;}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1HurtsOnCollision_ac28468e1e48409938ef6110ad8350c82}{HurtsOnCollision}}(entity\_t\ sender\ =\ -\/1)\ :\ \_sender(sender)\ \{\};}
+\DoxyCodeLine{00198\ \ \ \ \ \};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Rotation}{Rotation}}\ \{}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Rotation_a117c47269c49c0bc1dd2846c061bcfc3}{\_degrees}};}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Rotation_a3d924fcf6c7d8550d9ea843d5db530c5}{Rotation}}(\textcolor{keywordtype}{float}\ degrees\ =\ 0)\ :\ \mbox{\hyperlink{structcomponent_1_1Rotation_a117c47269c49c0bc1dd2846c061bcfc3}{\_degrees}}(degrees)\ \{\};}
+\DoxyCodeLine{00216\ \ \ \ \ \};}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Velocity}{Velocity}}\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Velocity_aecb9d635b17a37555e9f2c98389cca3e}{\_dx}};}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Velocity_a2057b82ae9db754b7f1b63a1b1995e20}{\_dy}};}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Velocity_a9c417c79cf8030c322cdd966b5a5b724}{Velocity}}(\textcolor{keywordtype}{float}\ dx,\ \textcolor{keywordtype}{float}\ dy)\ :\ \mbox{\hyperlink{structcomponent_1_1Velocity_aecb9d635b17a37555e9f2c98389cca3e}{\_dx}}(dx),\ \mbox{\hyperlink{structcomponent_1_1Velocity_a2057b82ae9db754b7f1b63a1b1995e20}{\_dy}}(dy)\ \{\}}
+\DoxyCodeLine{00238\ \ \ \ \ \};}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00243\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Drawable}{Drawable}}\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{structcomponent_1_1Drawable_a91729e0a87de945de3229942962031bf}{\_path}};}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Drawable_ae595642beaf9006a4544dd5e037ccbd3}{Drawable}}(\textcolor{keyword}{const}\ std::string\ \&path\_to\_texture)\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Drawable_a91729e0a87de945de3229942962031bf}{\_path}}\ =\ path\_to\_texture;}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00257\ \ \ \ \ \};}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Scale}{Scale}}\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ std::pair<float,\ float>\ \mbox{\hyperlink{structcomponent_1_1Scale_a9d92853104ec22a1ee7d565c55fd800d}{\_scale}};}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Scale_adb23cbe8220a0b7b51ae8dd96c8cd7ca}{Scale}}(\textcolor{keywordtype}{float}\ scale\ =\ 1)\ :\ \mbox{\hyperlink{structcomponent_1_1Scale_a9d92853104ec22a1ee7d565c55fd800d}{\_scale}}(\{scale,\ scale\})\ \{\};}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Scale_a46e831f857a9cf9fe3ce8d48f0e3d7d7}{Scale}}(\textcolor{keywordtype}{float}\ scale\_x,\ \textcolor{keywordtype}{float}\ scale\_y)\ :\ \mbox{\hyperlink{structcomponent_1_1Scale_a9d92853104ec22a1ee7d565c55fd800d}{\_scale}}(\{scale\_x,\ scale\_y\})\ \{\};}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Scale_a3083be8a54b41b758c6dcdf26d5ac24f}{Scale}}(std::pair<float,\ float>\ scale)\ :\ \mbox{\hyperlink{structcomponent_1_1Scale_a9d92853104ec22a1ee7d565c55fd800d}{\_scale}}(\{scale.first,\ scale.second\})\ \{\};}
+\DoxyCodeLine{00288\ \ \ \ \ \};}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Controllable}{Controllable}}\ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Controllable}{Controllable}}()\ \{\};}
+\DoxyCodeLine{00296\ \ \ \ \ \};}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Endpoint}{Endpoint}}\ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ udp::endpoint\ \mbox{\hyperlink{structcomponent_1_1Endpoint_a0539b913a4da355b8ee8f53bed887c9c}{\_endpoint}};}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Endpoint_a069af2de1522e130ca4fa2045b3b20fb}{Endpoint}}(udp::endpoint\ endpoint)\ :\ \mbox{\hyperlink{structcomponent_1_1Endpoint_a0539b913a4da355b8ee8f53bed887c9c}{\_endpoint}}(endpoint)\ \{\};}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ udp::endpoint\ other)\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcomponent_1_1Endpoint_a0539b913a4da355b8ee8f53bed887c9c}{\_endpoint}}\ ==\ other;\ \}}
+\DoxyCodeLine{00314\ \ \ \ \ \};}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1DrawableContent}{DrawableContent}}\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ sf::RenderWindow\ *window;}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ sf::Event\ *event;}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1DrawableContent}{DrawableContent}}(sf::Event\ \&\_event)\ :\ window(\textcolor{keyword}{nullptr}),\ event(\&\_event)\ \{\};}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1DrawableContent}{DrawableContent}}(sf::RenderWindow\ \&\_window,\ sf::Event\ \&\_event)\ :\ window(\&\_window),\ event(\&\_event)\ \{\};}
+\DoxyCodeLine{00325\ \ \ \ \ \};}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00331\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Heading}{Heading}}\ \{}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{structcomponent_1_1Heading_a80e3999e51ea6176edb580d86515e842}{\_rotation}};}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Heading_aba9ad329d29979f1dc6f8e22991a6225}{Heading}}(\textcolor{keywordtype}{float}\ rotation\ =\ 0)\ :\ \mbox{\hyperlink{structcomponent_1_1Heading_a80e3999e51ea6176edb580d86515e842}{\_rotation}}(rotation)\ \{\};}
+\DoxyCodeLine{00342\ \ \ \ \ \};}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1PlayMusic}{PlayMusic}}\ \{}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1PlayMusic}{PlayMusic}}(std::string\ path)\ \{}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ sf::Music\ music;}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!music.openFromFile(path))}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \mbox{\hyperlink{classSFMLError}{SFMLError}}(\textcolor{stringliteral}{"{}Music\ not\ found"{}});}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ music.play();}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00351\ \ \ \ \ \};}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}}\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Position}{Position}}\ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}};}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Hitbox_a66d29a425befa7273ff343dcd66ec2f9}{Hitbox}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structcomponent_1_1Position}{Position}}\ \&size)\ :}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}(size)}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \{\};}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isOverlap(\textcolor{keywordtype}{float}\ p1,\ \textcolor{keywordtype}{float}\ q1,\ \textcolor{keywordtype}{float}\ p2,\ \textcolor{keywordtype}{float}\ q2)\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (p1\ <\ q2)\ \&\&\ (q1\ >\ p2);}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isTouching(\textcolor{keyword}{const}\ Position\ \&pos1,\ \textcolor{keyword}{const}\ Position\ \&pos2,\ \textcolor{keyword}{const}\ Hitbox\ \&other)\ \{}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ Position\ top\_left\ =\ pos1;}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ Position\ bottom\_right\ =\ \{pos1.\mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}\ +\ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}.\mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}},\ pos1.y\ +\ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}.\mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}}\};}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ Position\ top\_left\_other\ =\ pos2;}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ Position\ bottom\_right\_other\ =\ \{pos2.x\ +\ other.\_size.x,\ pos2.y\ +\ other.\_size.y\};}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (top\_left\_other.x\ >=\ top\_left.x\ \&\&\ bottom\_right.x\ <=\ bottom\_right\_other.x)\ \&\&}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (top\_left\_other.y\ >=\ top\_left.y\ \&\&\ bottom\_right.y\ <=\ bottom\_right\_other.y);}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ contains(\textcolor{keyword}{const}\ Position\ \&pos,\ \textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y)\ \{}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ Position\ bottom\_right\ =\ \{\mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}.\mbox{\hyperlink{structcomponent_1_1Position_af35fb44894221e7c9f56e75536b3abb9}{x}}\ +\ pos.x,\ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}.\mbox{\hyperlink{structcomponent_1_1Position_ad325a4701b9cb99c539aa88472a95c86}{y}}\ +\ pos.y\};}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (x\ >=\ pos.x\ \&\&\ y\ >=\ pos.y\ \&\&\ x\ <=\ bottom\_right.x\ \&\&\ y\ <=\ bottom\_right.y);}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ std::ostream\&\ operator<<(std::ostream\&\ os,\ \textcolor{keyword}{const}\ Hitbox\&\ hitbox)\ \{}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ os\ <<\ "{}Top\ Left:\ ("{}\ <<\ hitbox.\_top\_left.x\ <<\ "{},\ "{}\ <<\ hitbox.\_top\_left.y\ <<\ "{}),\ "{};}}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ os\ <<\ "{}Top\ Right:\ ("{}\ <<\ hitbox.\_top\_right.x\ <<\ "{},\ "{}\ <<\ hitbox.\_top\_right.y\ <<\ "{}),\ "{};}}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ os\ <<\ "{}Bottom\ Left:\ ("{}\ <<\ hitbox.\_bottom\_left.x\ <<\ "{},\ "{}\ <<\ hitbox.\_bottom\_left.y\ <<\ "{}),\ "{};}}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ os\ <<\ "{}Bottom\ Right:\ ("{}\ <<\ hitbox.\_bottom\_right.x\ <<\ "{},\ "{}\ <<\ hitbox.\_bottom\_right.y\ <<\ "{})"{};}}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os;}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ Hitbox\&\ other)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\_size}}\ ==\ other.\_size;}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00400\ \ \ \ \ \};}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Clickable}{Clickable}}\ \{}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{structcomponent_1_1Clickable_aa618c408f3963bf3c1d902f934d159b4}{\_status}};}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Clickable_a46882c6b6f5fc1f59286e8120369de1a}{Clickable}}(\textcolor{keyword}{const}\ std::string\&\ status\ =\ \textcolor{stringliteral}{"{}idle"{}})\ :\ \mbox{\hyperlink{structcomponent_1_1Clickable_aa618c408f3963bf3c1d902f934d159b4}{\_status}}(status)\ \{\};}
+\DoxyCodeLine{00418\ \ \ \ \ \};}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00424\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{AnimatedDrawable}}\ \{}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a3188a3bfc925c7bbce3f07fc6db9edc5}{\_path}};}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a974d948e252ccfe776c84c49d595bdb7}{\_nbSprites}};}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aa106749e0fd24a305f71eb703b49df11}{\_spriteSize}};}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aedeb7be63da0681478dfdec4bbad891c}{\_gaps}};}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a7388fc252d3767e83fc98ac9108ab59a}{\_firstOffset}};}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_afe324a8d1b69ad74be699cd198a6c619}{\_currentIdx}};}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_ac3261b49b0a472cbcf7292344da3d66d}{\_state}};}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ animation\_t\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a6008add7d6ee2d3a19d0d94ce1dcb623}{\_anims}};}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a56295226aa1248b5654f4fdaecd9941a}{AnimatedDrawable}}(}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\ \&path,}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ nbSprites,}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ spriteSize,}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ gaps,}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ firstOffset\ =\ \{0,\ 0\},}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ curretnIdx\ =\ \{0,\ 0\}}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ )\ :}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a3188a3bfc925c7bbce3f07fc6db9edc5}{\_path}}(path),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a974d948e252ccfe776c84c49d595bdb7}{\_nbSprites}}(nbSprites),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aa106749e0fd24a305f71eb703b49df11}{\_spriteSize}}(spriteSize),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_aedeb7be63da0681478dfdec4bbad891c}{\_gaps}}(gaps),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a7388fc252d3767e83fc98ac9108ab59a}{\_firstOffset}}(firstOffset),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_afe324a8d1b69ad74be699cd198a6c619}{\_currentIdx}}(curretnIdx),\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_ac3261b49b0a472cbcf7292344da3d66d}{\_state}}(\textcolor{stringliteral}{"{}idle"{}})\ \{\};}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_abfa2f801fa6249ca633d6377982659bf}{addAnimation}}(\textcolor{keyword}{const}\ std::string\ \&state,\ std::pair<int,\ int>\ indexes,\ \textcolor{keywordtype}{bool}\ reset)}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable_a6008add7d6ee2d3a19d0d94ce1dcb623}{\_anims}}.emplace(state,\ std::make\_pair(reset,\ indexes));}
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00510\ \ \ \ \ \};}
+\DoxyCodeLine{00511\ }
+\DoxyCodeLine{00516\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structcomponent_1_1Text}{Text}}\ \{}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ std::string\ \_text;}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_size;}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Text}{Text}}(\textcolor{keyword}{const}\ std::string\ \&text,\ \textcolor{keywordtype}{int}\ size\ =\ 30)\ :\ \_text(text),\ \_size(size)\ \{\};}
+\DoxyCodeLine{00520\ \ \ \ \ \};}
+\DoxyCodeLine{00521\ \};}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !COMPONENTS\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

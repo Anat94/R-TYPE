@@ -1,0 +1,66 @@
+\hypertarget{structSnapshotPosition}{}\doxysection{Snapshot\+Position Struct Reference}
+\label{structSnapshotPosition}\index{SnapshotPosition@{SnapshotPosition}}
+
+
+Position snapshot, encapsulates positional data of game entities to be sent over Network.  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Snapshot\+Position\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structSnapshotPosition}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSnapshotPosition_a894bc0b4a04b08830f36c4efab7b4e8a}\label{structSnapshotPosition_a894bc0b4a04b08830f36c4efab7b4e8a}} 
+\mbox{\hyperlink{structSnapshotPosition_a894bc0b4a04b08830f36c4efab7b4e8a}{Snapshot\+Position}} ()
+\begin{DoxyCompactList}\small\item\em Base constructor of the Position Snapshot structure. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structSnapshotPosition_a801fbef3c0a67806253f138a01c8a11d}{Snapshot\+Position}} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, \mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} data\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em Constructs \mbox{\hyperlink{structSnapshotPosition}{Snapshot\+Position}} with the following data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSnapshotPosition_a77ed5e3afc9b50bafbb2975e08399e7b}\label{structSnapshotPosition_a77ed5e3afc9b50bafbb2975e08399e7b}} 
+entity\+\_\+t \mbox{\hyperlink{structSnapshotPosition_a77ed5e3afc9b50bafbb2975e08399e7b}{entity}}
+\begin{DoxyCompactList}\small\item\em Identifies the associated game entity for which position data is transmitted. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSnapshotPosition_a3ca8ce83506bd6489c68a5a14ee4b72c}\label{structSnapshotPosition_a3ca8ce83506bd6489c68a5a14ee4b72c}} 
+\mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} \mbox{\hyperlink{structSnapshotPosition_a3ca8ce83506bd6489c68a5a14ee4b72c}{data}}
+\begin{DoxyCompactList}\small\item\em Contains positional information (e.\+g., coordinates) of the entity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Position snapshot, encapsulates positional data of game entities to be sent over Network. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structSnapshotPosition_a801fbef3c0a67806253f138a01c8a11d}\label{structSnapshotPosition_a801fbef3c0a67806253f138a01c8a11d}} 
+\index{SnapshotPosition@{SnapshotPosition}!SnapshotPosition@{SnapshotPosition}}
+\index{SnapshotPosition@{SnapshotPosition}!SnapshotPosition@{SnapshotPosition}}
+\doxysubsubsection{\texorpdfstring{SnapshotPosition()}{SnapshotPosition()}}
+{\footnotesize\ttfamily Snapshot\+Position\+::\+Snapshot\+Position (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{entity\+\_\+t}]{entity\+\_\+,  }\item[{\mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}}}]{data\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructs \mbox{\hyperlink{structSnapshotPosition}{Snapshot\+Position}} with the following data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em entity\+\_\+} & Identifies the associated game entity for which position data is transmitted. \\
+\hline
+{\em data\+\_\+} & Contains positional information (e.\+g., coordinates) of the entity. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

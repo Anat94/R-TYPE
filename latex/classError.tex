@@ -1,0 +1,69 @@
+\hypertarget{classError}{}\doxysection{Error Class Reference}
+\label{classError}\index{Error@{Error}}
+
+
+Custom \mbox{\hyperlink{classError}{Error}} class.  
+
+
+
+
+{\ttfamily \#include $<$Errors.\+hpp$>$}
+
+Inheritance diagram for Error\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classError}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classError_a531664ff4c9e228a269aea757d23236f}{Error}} (std\+::string message)
+\begin{DoxyCompactList}\small\item\em Constructor to call in a \char`\"{}throw\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classError_a1a45d42a3a035d510333cdfeb36a0e93}\label{classError_a1a45d42a3a035d510333cdfeb36a0e93}} 
+\mbox{\hyperlink{classError_a1a45d42a3a035d510333cdfeb36a0e93}{$\sim$\+Error}} ()
+\begin{DoxyCompactList}\small\item\em Destroys the structure. \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{classError_a1c49b8ea27ba4008faad5e4b51ce7147}{what}} () const noexcept
+\begin{DoxyCompactList}\small\item\em used to get the error message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Custom \mbox{\hyperlink{classError}{Error}} class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classError_a531664ff4c9e228a269aea757d23236f}\label{classError_a531664ff4c9e228a269aea757d23236f}} 
+\index{Error@{Error}!Error@{Error}}
+\index{Error@{Error}!Error@{Error}}
+\doxysubsubsection{\texorpdfstring{Error()}{Error()}}
+{\footnotesize\ttfamily Error\+::\+Error (\begin{DoxyParamCaption}\item[{std\+::string}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor to call in a \char`\"{}throw\char`\"{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & error message \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classError_a1c49b8ea27ba4008faad5e4b51ce7147}\label{classError_a1c49b8ea27ba4008faad5e4b51ce7147}} 
+\index{Error@{Error}!what@{what}}
+\index{what@{what}!Error@{Error}}
+\doxysubsubsection{\texorpdfstring{what()}{what()}}
+{\footnotesize\ttfamily const char$\ast$ Error\+::what (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+used to get the error message. 
+
+\begin{DoxyReturn}{Returns}
+string containing the error message. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Errors.\+hpp\end{DoxyCompactItemize}

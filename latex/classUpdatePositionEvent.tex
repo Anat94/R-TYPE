@@ -1,0 +1,78 @@
+\hypertarget{classUpdatePositionEvent}{}\doxysection{Update\+Position\+Event Class Reference}
+\label{classUpdatePositionEvent}\index{UpdatePositionEvent@{UpdatePositionEvent}}
+
+
+Update Position event class.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
+Inheritance diagram for Update\+Position\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classUpdatePositionEvent}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classUpdatePositionEvent_a68e5a14f29a153743cdff9489e0538b3}{Update\+Position\+Event}} (entity\+\_\+t to\+\_\+move, std\+::pair$<$ int, int $>$ pos)
+\begin{DoxyCompactList}\small\item\em Construct a new Collision Event object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\begin{DoxyCompactList}\small\item\em Handles the event based on the registry objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Update Position event class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classUpdatePositionEvent_a68e5a14f29a153743cdff9489e0538b3}\label{classUpdatePositionEvent_a68e5a14f29a153743cdff9489e0538b3}} 
+\index{UpdatePositionEvent@{UpdatePositionEvent}!UpdatePositionEvent@{UpdatePositionEvent}}
+\index{UpdatePositionEvent@{UpdatePositionEvent}!UpdatePositionEvent@{UpdatePositionEvent}}
+\doxysubsubsection{\texorpdfstring{UpdatePositionEvent()}{UpdatePositionEvent()}}
+{\footnotesize\ttfamily Update\+Position\+Event\+::\+Update\+Position\+Event (\begin{DoxyParamCaption}\item[{entity\+\_\+t}]{to\+\_\+move,  }\item[{std\+::pair$<$ int, int $>$}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Collision Event object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em to\+\_\+move} & entity id to move \\
+\hline
+{\em pos} & position to move entity by \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}\label{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}} 
+\index{UpdatePositionEvent@{UpdatePositionEvent}!handleEvent@{handleEvent}}
+\index{handleEvent@{handleEvent}!UpdatePositionEvent@{UpdatePositionEvent}}
+\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
+{\footnotesize\ttfamily void Update\+Position\+Event\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{r,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Handles the event based on the registry objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & the registry\+\_\+t object used to store the game engine resources \\
+\hline
+{\em listener} & the event listener used to create new events if needed \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{AEvent}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Events.\+hpp\item 
+src/\+Ecs/Events.\+cpp\end{DoxyCompactItemize}

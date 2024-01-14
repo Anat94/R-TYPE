@@ -4,17 +4,36 @@
 ** File description:
 ** Menu.cpp
 */
-
+//#pragma warning(disable: 4668)
+//#pragma warning(disable: 4626)
+//#pragma warning(disable: 4625)
+//#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
 #include "Menu.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
+/**
+ * @brief Construct a new Menu:: Menu object
+ *
+ */
 Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, sf::Color::White, sf::Color::Red, sf::Color::Blue)
 {
     _window.create(sf::VideoMode(800, 600), "Menu");
-    _font.loadFromFile("src/Client/assets/font.ttf");
+    _font.loadFromFile("./assets/font.ttf");
 
     std::ifstream myFile("db.txt");
     if (!myFile.is_open()) {
@@ -60,10 +79,19 @@ Menu::Menu() : _btnPlay(300, 400, 200, 50, _font, "Playing", sf::Color::Black, s
     username = "";
 }
 
+/**
+ * @brief Destroy the Menu:: Menu object
+ *
+ */
 Menu::~Menu()
 {
 }
 
+/**
+ * @brief run the menu
+ *
+ * @return enum state 
+ */
 enum state Menu::run() {
     while (_window.isOpen()) {
         sf::Event event;
@@ -106,6 +134,12 @@ enum state Menu::run() {
     return SUCCES;
 }
 
+
+/**
+ * @brief handle mouse or text input
+ *
+ * @param event event of the window
+ */
 void Menu::handleInput(sf::Event& event) {
     if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode < 128) {
@@ -119,11 +153,21 @@ void Menu::handleInput(sf::Event& event) {
     }
 }
 
+/**
+ * @brief draw the menu
+ *
+ * @param window window to draw
+ */
 void Menu::draw(sf::RenderWindow& window) {
     window.draw(inputBox);
     window.draw(text);
 }
 
+/**
+ * @brief get username
+ *
+ * @return std::string username
+ */
 std::string Menu::getUsername() const {
     return username;
 }

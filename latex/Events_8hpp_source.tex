@@ -1,0 +1,405 @@
+\doxysection{Events.\+hpp}
+\hypertarget{Events_8hpp_source}{}\label{Events_8hpp_source}\index{src/Ecs/Events.hpp@{src/Ecs/Events.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2023}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ Rtype}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ Event}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ EVENT\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ EVENT\_HPP\_}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4668)}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4626)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4625)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{comment}{//\#pragma\ warning(disable:\ 4820)}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5031)}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4365)}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5027)}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4514)}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4464)}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5026)}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4457)}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5262)}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5204)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\#pragma\ warning(disable:\ 4355)}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5220)}}
+\DoxyCodeLine{00025\ \textcolor{comment}{//\#pragma\ warning(disable:\ 5039)}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\ \ \ \ \#include\ <queue>}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#include\ <unordered\_map>}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}./Registry.hpp"{}}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classregistry}{registry}};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classEventListener}{EventListener}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classIEvent}{IEvent}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{\string~IEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ std::pair<entity\_t,\ entity\_t>\ \mbox{\hyperlink{classIEvent_a5f7d3ddd53102fa2bd29f2d41d2f1b59}{get}}()\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{classIEvent}{IEvent}}\ \&other)\ \textcolor{keyword}{const}\ =\ 0;}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener)\ =\ 0;}
+\DoxyCodeLine{00053\ \};}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00060\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classAEvent}{AEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classIEvent}{IEvent}}\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{classAEvent}{\string~AEvent}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ std::pair<entity\_t,\ entity\_t>\ \mbox{\hyperlink{classAEvent_ad3824df16d31a5f97f3afe91336448d6}{get}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}};\ \}}
+\DoxyCodeLine{00071\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{operator==}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classIEvent}{IEvent}}\ \&other)\textcolor{keyword}{\ const\ override}}
+\DoxyCodeLine{00072\ \textcolor{keyword}{\ \ \ \ \ \ \ \ }\{}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{dynamic\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classAEvent}{AEvent}}*\textcolor{keyword}{>}(\&other)\ !=\ \textcolor{keyword}{nullptr})\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \&otherAEvent\ =\ \textcolor{keyword}{dynamic\_cast<}\textcolor{keyword}{const\ }\mbox{\hyperlink{classAEvent}{AEvent}}\&\textcolor{keyword}{>}(other);}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ ==\ otherAEvent.\mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}};}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener)\ =\ 0;}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ std::pair<entity\_t,\ entity\_t>\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}};}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \};}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00100\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classEventListener}{EventListener}}\ \{}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEventListener_ac8cfe1097cbec18fac9313feccdb0e20}{EventListener}}()\ \{\};}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classEventListener_a4984b3727ac41de6cdfa875dbc05580d}{\string~EventListener}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEventListener_a682d1f11e033fb485637811887fec392}{addEvent}}(\mbox{\hyperlink{classIEvent}{IEvent}}\ *event);}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEventListener_a316f6e24f1c252555507e18a956d4ad4}{popEvent}}();}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classEventListener_a98b65ba5319b89b539da5a5fd265a01e}{addRegistry}}(\mbox{\hyperlink{classregistry}{registry}}\ \&reg);}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classEventListener_a6b3902728a263e3b5878dd04b239d425}{hasEvent}}(\mbox{\hyperlink{classIEvent}{IEvent}}\ *event);}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ std::queue<IEvent*>\ \mbox{\hyperlink{classEventListener_a4f9aa745b63e6e58b00d08e2350a6b72}{\_events}};}
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classregistry}{registry}}\ *\_reg;}
+\DoxyCodeLine{00152\ \};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00158\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCollisionEvent}{CollisionEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classCollisionEvent_a669274962a215c8e018c858ff92b28f7}{CollisionEvent}}(entity\_t\ gotTouched,\ entity\_t\ touched)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{gotTouched,\ touched\};\ \};}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classCollisionEvent_a1e1dfd40751ad19489c2173f6693ff8f}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00174\ \};}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSpawnEnemy}{SpawnEnemy}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSpawnEnemy_ae3780deeaf3345c4b631cacbbe26ce89}{SpawnEnemy}}(\textcolor{keywordtype}{int}\ health,\ \textcolor{keywordtype}{float}\ scale,\ \mbox{\hyperlink{structcomponent_1_1Velocity}{component::Velocity}}\ vel,\ \mbox{\hyperlink{structcomponent_1_1Position}{component::Position}}\ pos,\ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component::AnimatedDrawable}}\ animatedDrawable,\ std::unordered\_map<std::string,\ std::pair<std::pair<int,\ int>,\ \textcolor{keywordtype}{bool}>>\ anims):\ \_animatedDrawable(animatedDrawable),\ \_health(health),\ \_scale(scale),\ \_vel(vel.\_dx,\ vel.\_dy),\ \_pos(pos.x,\ pos.y),\ \_anims(anims)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{-\/1,\ -\/1\};\ \};}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00192\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \_health\ =\ 200;}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \_scale\ =\ 6.0f;}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Velocity}{component::Velocity}}\ \_vel\ =\ \{-\/8.0f,\ 0.0f\};}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1Position}{component::Position}}\ \_pos\ =\ \{1920,\ 500\};}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component::AnimatedDrawable}}\ \_animatedDrawable;}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ std::unordered\_map<std::string,\ std::pair<std::pair<int,\ int>,\ \textcolor{keywordtype}{bool}>>\ \_anims;}
+\DoxyCodeLine{00199\ \};}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00205\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classDeathEvent}{DeathEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classDeathEvent_a189385a1aeb4aa4ada2dd3d9e9f2cdcf}{DeathEvent}}(entity\_t\ gotTouched,\ entity\_t\ touched)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{gotTouched,\ touched\};\ \};}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classDeathEvent_a940a23b261cc52393d431ac6c5b4ca06}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00221\ \};}
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00227\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSpawnEvent}{SpawnEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSpawnEvent_aba8de5ce3c11de3d1b98e08235408e4b}{SpawnEvent}}(entity\_t\ spawned,\ entity\_t\ pos)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{spawned,\ pos\};\ \};}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00243\ \};}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00249\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classUpdatePositionEvent}{UpdatePositionEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classUpdatePositionEvent_a68e5a14f29a153743cdff9489e0538b3}{UpdatePositionEvent}}(entity\_t\ to\_move,\ std::pair<int,\ int>\ pos)\ \{\ \_to\_move\ =\ \{to\_move\};\ \_pos\ =\ pos;\ \};}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classUpdatePositionEvent_adebd5bb3b9a9f41f063b79f7a9e07632}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ entity\_t\ \_to\_move;}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \_pos;}
+\DoxyCodeLine{00276\ \};}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classPositionStayInWindowBounds}{PositionStayInWindowBounds}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classPositionStayInWindowBounds_add78785ac373949340f38637dcb1f88d}{PositionStayInWindowBounds}}(entity\_t\ to\_move,\ std::vector<int>\ windowBounds)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{to\_move,\ -\/1\};\ \_windowBounds\ =\ windowBounds;\ \};}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPositionStayInWindowBounds_a83a760a12a7409626b23622e384e59c6}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ std::vector<int>\ \_windowBounds;}
+\DoxyCodeLine{00300\ \};}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00306\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classShootEvent}{ShootEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classShootEvent_a580347547955d82354cc14841b587d28}{ShootEvent}}(entity\_t\ shooter,\ entity\_t\ projectile)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{shooter,\ projectile\};\ \};}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classShootEvent_ac6f6a2fd8d4d6330b8644a1e95de9756}{handleEvent}}(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00323\ \};}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00325\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classHoverBtnEvent}{HoverBtnEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00331\ \ \ \ \ \mbox{\hyperlink{classHoverBtnEvent}{HoverBtnEvent}}(entity\_t\ btn)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{btn,\ -\/1\};\ \};}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00340\ \};}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classClickBtnEvent}{ClickBtnEvent}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classAEvent}{AEvent}}\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \mbox{\hyperlink{classClickBtnEvent}{ClickBtnEvent}}(entity\_t\ btn)\ \{\ \mbox{\hyperlink{classAEvent_a15705b58df8f0e0bfd3cd775b01d2ec6}{\_ents}}\ =\ \{btn,\ -\/1\};\ \};}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00357\ \ \ \ \ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{classregistry}{registry}}\ \&r,\ \mbox{\hyperlink{classEventListener}{EventListener}}\ \&listener);}
+\DoxyCodeLine{00358\ \};}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00364\ \textcolor{comment}{//\ namespace\ rtype\ \{}}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{comment}{//\ \ \ \ \ /**}}
+\DoxyCodeLine{00367\ \textcolor{comment}{//\ \ \ \ \ \ *\ @brief\ Namespace\ for\ the\ project's\ events}}
+\DoxyCodeLine{00368\ \textcolor{comment}{//\ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00369\ \textcolor{comment}{//\ \ \ \ \ \ */}}
+\DoxyCodeLine{00370\ \textcolor{comment}{//\ \ \ \ \ namespace\ event\ \{}}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00373\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Pre-\/definition\ of\ the\ EventListener\ class}}
+\DoxyCodeLine{00374\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00375\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00376\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ EventListener;}}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00379\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Main\ event\ interface,\ used\ for\ creating\ events\ instances}}
+\DoxyCodeLine{00380\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00381\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00382\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ IEvent\ \{}}
+\DoxyCodeLine{00383\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00384\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00385\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Destroy\ the\ IEvent\ object}}
+\DoxyCodeLine{00386\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00387\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00388\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ \string~IEvent()\ =\ default;}}
+\DoxyCodeLine{00389\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00390\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Returns\ the\ two\ main\ objects\ id\ responsible\ for\ the\ event}}
+\DoxyCodeLine{00391\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00392\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ std::pair<entity\_t,\ entity\_t>\ }}
+\DoxyCodeLine{00393\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00394\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ std::pair<entity\_t,\ entity\_t>\ get()\ const\ =\ 0;}}
+\DoxyCodeLine{00395\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ bool\ operator==(const\ IEvent\ \&other)\ const\ =\ 0;}}
+\DoxyCodeLine{00396\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener)\ =\ 0;}}
+\DoxyCodeLine{00397\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00399\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00400\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Abstract\ class\ for\ events}}
+\DoxyCodeLine{00401\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00402\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ Implementing\ operator==}}
+\DoxyCodeLine{00403\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00404\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ AEvent\ :\ public\ IEvent\ \{}}
+\DoxyCodeLine{00405\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00406\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ \string~AEvent()\ =\ default;}}
+\DoxyCodeLine{00407\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<entity\_t,\ entity\_t>\ get()\ const\ \{\ return\ \_ents;\ \}}}
+\DoxyCodeLine{00408\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00409\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ operator==\ allows\ comparison\ between\ two\ events}}
+\DoxyCodeLine{00410\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00411\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ other\ The\ even\ to\ compare\ with\ the\ actual\ one}}
+\DoxyCodeLine{00412\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ true\ if\ the\ values\ of\ the\ events\ are\ equals,}}
+\DoxyCodeLine{00413\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ false\ otherwise}}
+\DoxyCodeLine{00414\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00415\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ operator==(const\ IEvent\ \&other)\ const\ override}}
+\DoxyCodeLine{00416\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}}
+\DoxyCodeLine{00417\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (dynamic\_cast<const\ AEvent*>(\&other)\ !=\ nullptr)\ \{}}
+\DoxyCodeLine{00418\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ const\ AEvent\ \&otherAEvent\ =\ dynamic\_cast<const\ AEvent\&>(other);}}
+\DoxyCodeLine{00419\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ \_ents\ ==\ otherAEvent.\_ents;}}
+\DoxyCodeLine{00420\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{00421\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ return\ false;}}
+\DoxyCodeLine{00422\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00423\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00424\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Main\ function\ of\ the\ Event,\ used\ to\ aply\ changes\ on\ the\ registery\ passed\ as\ paramter}}
+\DoxyCodeLine{00425\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00426\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ registery\_t\ object,\ containig\ the\ game\ instance\ and\ objects}}
+\DoxyCodeLine{00427\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener,\ used\ to\ create\ new\ events\ from\ this\ one\ when\ needed}}
+\DoxyCodeLine{00428\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00429\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ virtual\ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener)\ =\ 0;}}
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ protected:}}
+\DoxyCodeLine{00432\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00433\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ The\ two\ main\ objects\ id\ responsible\ for\ the\ event}}
+\DoxyCodeLine{00434\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00435\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00436\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<entity\_t,\ entity\_t>\ \_ents;}}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00441\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Real\ class\ declaration}}
+\DoxyCodeLine{00442\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00443\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00444\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ EventListener\ \{}}
+\DoxyCodeLine{00445\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00446\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00447\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Event\ Listener\ object}}
+\DoxyCodeLine{00448\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00449\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00450\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EventListener()\ \{\};}}
+\DoxyCodeLine{00451\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00452\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Destroy\ the\ Event\ Listener\ object}}
+\DoxyCodeLine{00453\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00454\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00455\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \string~EventListener()\ =\ default;}}
+\DoxyCodeLine{00456\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00457\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Adds\ an\ event\ passed\ as\ parameter\ to\ the\ queue\ of\ events}}
+\DoxyCodeLine{00458\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00459\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ event\ the\ event\ to\ add}}
+\DoxyCodeLine{00460\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ true\ if\ the\ event\ was\ successfully\ added,}}
+\DoxyCodeLine{00461\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ false\ otherwise}}
+\DoxyCodeLine{00462\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00463\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ addEvent(IEvent\ *event);}}
+\DoxyCodeLine{00464\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00465\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Removes\ the\ first\ event\ in\ the\ queue\ of\ events}}
+\DoxyCodeLine{00466\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00467\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ true\ if\ the\ event\ whas\ successfully\ removed\ and\ executed,}}
+\DoxyCodeLine{00468\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ false\ otherwise}}
+\DoxyCodeLine{00469\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00470\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ popEvent();}}
+\DoxyCodeLine{00471\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00472\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Stores\ the\ regitry\_t\ object\ inside\ of\ the\ listener}}
+\DoxyCodeLine{00473\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00474\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ reg\ the\ registry\_t\ instance\ pointer}}
+\DoxyCodeLine{00475\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00476\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ addRegistry(registry\ \&reg);}}
+\DoxyCodeLine{00477\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00478\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Checks\ if\ the\ listener\ currently\ has\ the\ event\ passed\ as\ parameter}}
+\DoxyCodeLine{00479\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00480\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ event\ }}
+\DoxyCodeLine{00481\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ true\ }}
+\DoxyCodeLine{00482\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @return\ false\ }}
+\DoxyCodeLine{00483\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00484\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bool\ hasEvent(IEvent\ *event);}}
+\DoxyCodeLine{00485\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00486\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ The\ (FIFO)\ queue\ of\ events}}
+\DoxyCodeLine{00487\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00488\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00489\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::queue<IEvent*>\ \_events;}}
+\DoxyCodeLine{00490\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ private:}}
+\DoxyCodeLine{00491\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00492\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Pointer\ to\ the\ registery\ object\ used\ to\ store\ the\ objects\ of\ the\ game\ engine}}
+\DoxyCodeLine{00493\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00494\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00495\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ registry\ *\_reg;}}
+\DoxyCodeLine{00496\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00499\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Collision\ event\ class}}
+\DoxyCodeLine{00500\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00501\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00502\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ CollisionEvent\ :\ public\ AEvent\ \{}}
+\DoxyCodeLine{00503\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00504\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00505\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Collision\ Event\ object}}
+\DoxyCodeLine{00506\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00507\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ gotTouched\ entity\ id\ that\ got\ touched\ in\ the\ event}}
+\DoxyCodeLine{00508\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ touched\ entity\ id\ that\ touched\ during\ the\ event}}
+\DoxyCodeLine{00509\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00510\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CollisionEvent(entity\_t\ gotTouched,\ entity\_t\ touched)\ \{\ \_ents\ =\ \{gotTouched,\ touched\};\ \};}}
+\DoxyCodeLine{00511\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00512\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Handles\ the\ event\ based\ on\ the\ registry\ objects}}
+\DoxyCodeLine{00513\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00514\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ the\ registry\_t\ object\ used\ to\ store\ the\ game\ engine\ resources}}
+\DoxyCodeLine{00515\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener\ used\ to\ create\ new\ events\ if\ needed}}
+\DoxyCodeLine{00516\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00517\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener);}}
+\DoxyCodeLine{00518\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00521\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Death\ event\ class}}
+\DoxyCodeLine{00522\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00523\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00524\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ DeathEvent\ :\ public\ AEvent\ \{}}
+\DoxyCodeLine{00525\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00526\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00527\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Death\ Event\ object}}
+\DoxyCodeLine{00528\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00529\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ gotTouched\ the\ entity\ id\ that\ got\ touched\ in\ the\ event}}
+\DoxyCodeLine{00530\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ touched\ the\ entity\ id\ that\ touched\ during\ the\ event}}
+\DoxyCodeLine{00531\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00532\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DeathEvent(entity\_t\ gotTouched,\ entity\_t\ touched)\ \{\ \_ents\ =\ \{gotTouched,\ touched\};\ \};}}
+\DoxyCodeLine{00533\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00534\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Handles\ the\ event\ based\ on\ the\ registry\ objects}}
+\DoxyCodeLine{00535\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00536\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ the\ registry\_t\ object\ used\ to\ store\ the\ game\ engine\ resources}}
+\DoxyCodeLine{00537\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener\ used\ to\ create\ new\ events\ if\ needed}}
+\DoxyCodeLine{00538\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00539\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener);}}
+\DoxyCodeLine{00540\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00541\ }
+\DoxyCodeLine{00542\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00543\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Spawn\ event\ class}}
+\DoxyCodeLine{00544\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00545\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00546\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ SpawnEvent\ :\ public\ AEvent\ \{}}
+\DoxyCodeLine{00547\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00548\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00549\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Spawn\ Event\ object}}
+\DoxyCodeLine{00550\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00551\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ spawned\ the\ entity\ id\ that\ got\ spawned\ in\ the\ event}}
+\DoxyCodeLine{00552\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ pos\ the\ position\ id\ of\ the\ newly\ spawned\ entity}}
+\DoxyCodeLine{00553\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00554\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SpawnEvent(entity\_t\ spawned,\ entity\_t\ pos)\ \{\ \_ents\ =\ \{spawned,\ pos\};\ \};}}
+\DoxyCodeLine{00555\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00556\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Handles\ the\ event\ based\ on\ the\ registry\ objects}}
+\DoxyCodeLine{00557\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00558\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ the\ registry\_t\ object\ used\ to\ store\ the\ game\ engine\ resources}}
+\DoxyCodeLine{00559\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener\ used\ to\ create\ new\ events\ if\ needed}}
+\DoxyCodeLine{00560\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00561\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener);}}
+\DoxyCodeLine{00562\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00565\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Update\ Position\ event\ class}}
+\DoxyCodeLine{00566\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00567\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00568\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ UpdatePositionEvent\ :\ public\ AEvent\ \{}}
+\DoxyCodeLine{00569\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00570\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00571\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Collision\ Event\ object}}
+\DoxyCodeLine{00572\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00573\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ to\_move\ entity\ id\ to\ move}}
+\DoxyCodeLine{00574\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ pos\ position\ to\ move\ entity\ by}}
+\DoxyCodeLine{00575\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00576\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ UpdatePositionEvent(entity\_t\ to\_move,\ std::pair<int,\ int>\ pos)\ \{\ \_to\_move\ =\ \{to\_move\};\ \_pos\ =\ pos;\ \};}}
+\DoxyCodeLine{00577\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00578\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Handles\ the\ event\ based\ on\ the\ registry\ objects}}
+\DoxyCodeLine{00579\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00580\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ the\ registry\_t\ object\ used\ to\ store\ the\ game\ engine\ resources}}
+\DoxyCodeLine{00581\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener\ used\ to\ create\ new\ events\ if\ needed}}
+\DoxyCodeLine{00582\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00583\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener);}}
+\DoxyCodeLine{00584\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ private:}}
+\DoxyCodeLine{00585\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00586\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ entity\ to\ move}}
+\DoxyCodeLine{00587\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00588\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00589\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entity\_t\ \_to\_move;}}
+\DoxyCodeLine{00590\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00591\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ position\ to\ move\ entity\ by}}
+\DoxyCodeLine{00592\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00593\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00594\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::pair<int,\ int>\ \_pos;}}
+\DoxyCodeLine{00595\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00596\ }
+\DoxyCodeLine{00597\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00598\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ @brief\ Shoot\ event\ class}}
+\DoxyCodeLine{00599\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00600\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00601\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ class\ ShootEvent\ :\ public\ AEvent\ \{}}
+\DoxyCodeLine{00602\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ public:}}
+\DoxyCodeLine{00603\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00604\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Construct\ a\ new\ Shoot\ Event\ object}}
+\DoxyCodeLine{00605\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00606\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ shooter\ the\ entity\ id\ that\ shot\ in\ the\ event}}
+\DoxyCodeLine{00607\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ projectile\ the\ entity\ id\ that\ got\ spawned\ during\ the\ event}}
+\DoxyCodeLine{00608\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00609\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ShootEvent(entity\_t\ shooter,\ entity\_t\ projectile)\ \{\ \_ents\ =\ \{shooter,\ projectile\};\ \};}}
+\DoxyCodeLine{00610\ }
+\DoxyCodeLine{00611\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /**}}
+\DoxyCodeLine{00612\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @brief\ Handles\ the\ event\ based\ on\ the\ registry\ objects}}
+\DoxyCodeLine{00613\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ }}
+\DoxyCodeLine{00614\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ r\ the\ registry\_t\ object\ used\ to\ store\ the\ game\ engine\ resources}}
+\DoxyCodeLine{00615\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ @param\ listener\ the\ event\ listener\ used\ to\ create\ new\ events\ if\ needed}}
+\DoxyCodeLine{00616\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{00617\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ void\ handleEvent(registry\ \&r,\ EventListener\ \&listener);}}
+\DoxyCodeLine{00618\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00619\ \textcolor{comment}{//\ \ \ \ \ \};}}
+\DoxyCodeLine{00620\ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00621\ }
+\DoxyCodeLine{00622\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !EVENT\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

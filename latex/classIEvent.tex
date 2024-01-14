@@ -1,0 +1,75 @@
+\hypertarget{classIEvent}{}\doxysection{IEvent Class Reference}
+\label{classIEvent}\index{IEvent@{IEvent}}
+
+
+Main event interface, used for creating events instances.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
+Inheritance diagram for IEvent\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{classIEvent}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}\label{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}} 
+virtual \mbox{\hyperlink{classIEvent_a37c201e7a45ac21a4ad0e387a6d9b47d}{$\sim$\+IEvent}} ()=default
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classIEvent}{IEvent}} object. \end{DoxyCompactList}\item 
+virtual std\+::pair$<$ entity\+\_\+t, entity\+\_\+t $>$ \mbox{\hyperlink{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}{get}} () const =0
+\begin{DoxyCompactList}\small\item\em Returns the two main objects id responsible for the event. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classIEvent_ac0454a3291e5f49988507c04fd2a904b}{operator==}} (const \mbox{\hyperlink{classIEvent}{IEvent}} \&other) const =0
+\begin{DoxyCompactList}\small\item\em verifies if other Ievent is equal to current one \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}\label{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}} 
+virtual void \mbox{\hyperlink{classIEvent_a4825f3913231c8b9cafc6a17ad0388b1}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)=0
+\begin{DoxyCompactList}\small\item\em event handler called when it is popped from the event queue \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main event interface, used for creating events instances. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}\label{classIEvent_af0f8e02010da0ef2a811f45d4a6b3e2c}} 
+\index{IEvent@{IEvent}!get@{get}}
+\index{get@{get}!IEvent@{IEvent}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily virtual std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ IEvent\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Returns the two main objects id responsible for the event. 
+
+\begin{DoxyReturn}{Returns}
+std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classAEvent_aae61c3d66a44cdfa208642bb495571e1}{AEvent}}.
+
+\mbox{\Hypertarget{classIEvent_ac0454a3291e5f49988507c04fd2a904b}\label{classIEvent_ac0454a3291e5f49988507c04fd2a904b}} 
+\index{IEvent@{IEvent}!operator==@{operator==}}
+\index{operator==@{operator==}!IEvent@{IEvent}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily virtual bool IEvent\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIEvent}{IEvent}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+verifies if other Ievent is equal to current one 
+
+\begin{DoxyReturn}{Returns}
+std\+::pair$<$entity\+\_\+t, entity\+\_\+t$>$ 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classAEvent_aa3918d23f109d0d2153237f0b2f86117}{AEvent}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Events.\+hpp\end{DoxyCompactItemize}

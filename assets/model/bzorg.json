@@ -1,0 +1,24 @@
+{
+    "name": "bzorg",
+    "aliases": [
+        "b",
+        "B"
+    ],
+    "type": "animated_entity",
+    "health": 100,
+    "velocity": -8,
+    "damage": 25,
+    "scale": 6,
+    "texture": "assets/ennemy.png",
+    "number_of_sprites": 7,
+    "sprite_size": [21, 24],
+    "gaps": [12, 0],
+    "offset": [5, 5],
+    "animations": [
+        {
+            "name": "idle",
+            "sprites": [0, 6],
+            "reset": true
+        }
+    ]
+}

@@ -1,0 +1,78 @@
+\hypertarget{classSpawnEvent}{}\doxysection{Spawn\+Event Class Reference}
+\label{classSpawnEvent}\index{SpawnEvent@{SpawnEvent}}
+
+
+Spawn event class.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
+Inheritance diagram for Spawn\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classSpawnEvent}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpawnEvent_aba8de5ce3c11de3d1b98e08235408e4b}{Spawn\+Event}} (entity\+\_\+t spawned, entity\+\_\+t pos)
+\begin{DoxyCompactList}\small\item\em Construct a new Spawn Event object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\begin{DoxyCompactList}\small\item\em Handles the event based on the registry objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Spawn event class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpawnEvent_aba8de5ce3c11de3d1b98e08235408e4b}\label{classSpawnEvent_aba8de5ce3c11de3d1b98e08235408e4b}} 
+\index{SpawnEvent@{SpawnEvent}!SpawnEvent@{SpawnEvent}}
+\index{SpawnEvent@{SpawnEvent}!SpawnEvent@{SpawnEvent}}
+\doxysubsubsection{\texorpdfstring{SpawnEvent()}{SpawnEvent()}}
+{\footnotesize\ttfamily Spawn\+Event\+::\+Spawn\+Event (\begin{DoxyParamCaption}\item[{entity\+\_\+t}]{spawned,  }\item[{entity\+\_\+t}]{pos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Spawn Event object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spawned} & the entity id that got spawned in the event \\
+\hline
+{\em pos} & the position id of the newly spawned entity \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}\label{classSpawnEvent_ab95b1c959caea13961b057a42cc745ff}} 
+\index{SpawnEvent@{SpawnEvent}!handleEvent@{handleEvent}}
+\index{handleEvent@{handleEvent}!SpawnEvent@{SpawnEvent}}
+\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
+{\footnotesize\ttfamily void Spawn\+Event\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{r,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Handles the event based on the registry objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & the registry\+\_\+t object used to store the game engine resources \\
+\hline
+{\em listener} & the event listener used to create new events if needed \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{AEvent}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Events.\+hpp\item 
+src/\+Ecs/Events.\+cpp\end{DoxyCompactItemize}

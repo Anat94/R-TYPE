@@ -7,7 +7,22 @@
 
 #ifndef LIBLOADER_HPP
     #define LIBLOADER_HPP
-
+    //#pragma warning(disable: 4668)
+    //#pragma warning(disable: 4626)
+    //#pragma warning(disable: 4625)
+    //#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
     #ifdef _WIN32
         #include <windows.h>
     #else
@@ -17,6 +32,11 @@
 
 class LibLoader {
     public:
+        /**
+         * @brief Construct a new Lib Loader object
+         *
+         * @param libName  name of the library
+         */
         LibLoader(const char* libName) {
             #ifdef _WIN32
                 _lib = LoadLibrary(libName);
@@ -28,6 +48,10 @@ class LibLoader {
             }
         }
 
+        /**
+         * @brief Destroy the Lib Loader object
+         *
+         */
         virtual ~LibLoader() {
             if (_lib) {
                 #ifdef _WIN32
@@ -38,6 +62,12 @@ class LibLoader {
             }
         }
 
+        /**
+         * @brief Get the Function object
+         *
+         * @param funcName name of the function
+         * @return void* pointer to the function
+         */
         void* getFunction(const char* funcName) {
             #ifdef _WIN32
                 return GetProcAddress((HMODULE)_lib, funcName);

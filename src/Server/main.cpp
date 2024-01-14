@@ -4,16 +4,41 @@
 ** File description:
 ** main
 */
-
+//#pragma warning(disable: 4668)
+//#pragma warning(disable: 4626)
+//#pragma warning(disable: 4625)
+//#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
 #include <iostream>
-#include <boost/asio.hpp>
+#include <asio.hpp>
 #include "Server.hpp"
 #include "../Errors.hpp"
+#include "../Ecs/Systems/KillWhenOutOfBounds.hpp"
+#include "../Ecs/Systems/EnemyGeneration.hpp"
+#include "../Ecs/Systems/ShieldSystem.hpp"
+#include "../Ecs/Systems/KillOnTimerSystem.hpp"
 
-using boost::asio::ip::udp;
+using asio::ip::udp;
 
-rtype::event::EventListener listener;
+EventListener listener;
 
+/**
+ * @brief error handling
+ *
+ * @param nb_args number of arguments
+ * @return int 0 if success
+ */
 int error_handling(int nb_args)
 {
     if (nb_args != 2)
@@ -21,168 +46,74 @@ int error_handling(int nb_args)
     return 0;
 }
 
-
-auto position_system = [](sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel, component::DrawableContent& _) {
-    for (auto &&[p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
-        if (p.has_value() && v.has_value()) {
-            p->x += v->_dx;
-            p->y += v->_dy;
-        }
-    }
-};
-
-auto reset_on_move_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::ResetOnMove> &res, component::DrawableContent& _) {
-    for (auto &&[v, r] : zipper<sparse_array<component::Velocity>, sparse_array<component::ResetOnMove>>(vel, res)) {
-        if (v.has_value() && r.has_value()) {
-            v->_dx = 0;
-            v->_dy = 0;
-        }
-    }
-};
-
-auto control_system = [](sparse_array<component::Velocity> &vel, sparse_array<component::Controllable> &con, component::DrawableContent& content) {
-    int first_ent_idx = 0;
-    for (auto &&[v, c] : zipper<sparse_array<component::Velocity>, sparse_array<component::Controllable>>(vel, con)) {
-        if (c.has_value() && v.has_value()) {
-            if (content.event->type == sf::Event::KeyPressed) {
-                if (content.event->key.code == sf::Keyboard::Up)
-                    v->_dy = -30;
-                if (content.event->key.code == sf::Keyboard::Down)
-                    v->_dy = 30;
-                if (content.event->key.code == sf::Keyboard::Left)
-                    v->_dx = -30;
-                if (content.event->key.code == sf::Keyboard::Right)
-                    v->_dx = 30;
-                if (content.event->key.code == sf::Keyboard::Space)
-                    listener.addEvent(new rtype::event::ShootEvent(first_ent_idx, -1));
-            }
-        }
-        first_ent_idx++;
-    }
-};
-
-auto scale_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Scale> &sca, component::DrawableContent& _) {
-    for (auto &&[d, s] : zipper<sparse_array<component::Drawable>, sparse_array<component::Scale>>(dra, sca)) {
-        if (d.has_value() && s.has_value())
-            d->_sprite.setScale(s->_scale.first, s->_scale.second);
-    }
-};
-
-auto rotation_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot, component::DrawableContent& _) {
-    for (auto &&[d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
-        if (d.has_value() && r.has_value())
-            d->_sprite.setRotation(r->_degrees);
-    }
-};
-
-auto collision_system = [](sparse_array<component::Drawable> &dra, sparse_array<component::Position> &pos, component::DrawableContent& _)
-{
-    int first_ent_idx = 0;
-    for (auto &&[d1, p1] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-        if (!d1.has_value() || !p1.has_value()) continue;
-        int second_ent_idx = 0;
-        for (auto &&[d2, p2] : zipper<sparse_array<component::Drawable>, sparse_array<component::Position>>(dra, pos)) {
-            if (first_ent_idx == second_ent_idx)
-                continue;
-            if ((p1->x <= p2->x &&
-                p1->y <= p2->y &&
-                (p1->x + 100) >= p2->x &&
-                (p1->y + 100) >= p2->y) ||
-                (p2->x <= p1->x &&
-                p2->y <= p1->y &&
-                (p2->x + 100) >= p1->x &&
-                (p2->y + 100) >= p1->y)) {
-                    rtype::event::CollisionEvent* new_event = new rtype::event::CollisionEvent(second_ent_idx, first_ent_idx);
-                if (listener.hasEvent(new_event)) {
-                    second_ent_idx++;
-                    delete new_event;
-                    continue;
-                } else
-                    listener.addEvent(new_event);
-            } else {
-
-            }
-            second_ent_idx++;
-        }
-        first_ent_idx++;
-    }
-};
-
-void logging_system(sparse_array<component::Position> &pos, sparse_array<component::Velocity> &vel) {
-    for (auto&& [p, v] : zipper<sparse_array<component::Position>, sparse_array<component::Velocity>>(pos, vel)) {
-        std::cout << 0 << ": Position = { " << p.value().x << ", " << p.value().y
-            << " }, Velocity = { " << v.value()._dx << ", " << v.value()._dy << " }" << std::endl;
-    }
-}
-
-void runServer(const char *argv, registry &ecs) {
-    boost::asio::io_service service;
-    Server server(service, std::atoi(argv), ecs, listener);
-    service.run();
-}
-
+/**
+ * @brief main function
+ *
+ * @param argc number of arguments
+ * @param argv arguments given
+ * @return int 0 if success
+ * @return int 84 if failure
+ */
 int main(int argc, char *argv[]) {
-    // sf::RenderWindow window;
+    std::mutex mtx;
     sf::Event event;
     registry ecs;
-    // sf::Texture _texture;
-    // _texture.loadFromFile(argv[1]);
+    ecs.mtx = &mtx;
 
-    // sf::Sprite _sprite;
-    // _sprite.setTexture(_texture);
-    // _sprite.setPosition(100, 100);
+    error_handling(argc);
 
+    ecs.register_component<component::Host>();
+    ecs.register_component<component::Room>();
     ecs.register_component<component::Scale>();
     ecs.register_component<component::Score>();
     ecs.register_component<component::Damage>();
     ecs.register_component<component::Health>();
+    ecs.register_component<component::Hitbox>();
     ecs.register_component<component::Pierce>();
     ecs.register_component<component::Heading>();
-    ecs.register_component<component::Position>();
-    ecs.register_component<component::Velocity>();
     ecs.register_component<component::Drawable>();
+    ecs.register_component<component::Endpoint>();
+    ecs.register_component<component::Position>();
     ecs.register_component<component::Rotation>();
+    ecs.register_component<component::Username>();
+    ecs.register_component<component::Velocity>();
     ecs.register_component<component::PlayMusic>();
     ecs.register_component<component::ResetOnMove>();
-    ecs.register_component<component::ServerEntity>();
+    ecs.register_component<component::CampaignMode>();
     ecs.register_component<component::Controllable>();
+    ecs.register_component<component::ServerEntity>();
+    ecs.register_component<component::AnimatedDrawable>();
     ecs.register_component<component::HurtsOnCollision>();
-    ecs.register_component<component::Endpoint>();
-
-    // entity_t entity1 = ecs.spawn_entity();
-
-    // ecs.add_component(entity1, component::Position(10.0f, 10.0f));
-    // ecs.add_component(entity1, component::Velocity(0.0f, 0.0f, true));
-    // ecs.add_component(entity1, component::Player(100, 20));
-    // ecs.add_component(entity1, component::Controllable());
-    // ecs.add_component(entity1, component::Heading());
-    // ecs.add_component(entity1, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
-
-    // entity_t entity2 = ecs.spawn_entity();
-
-    // ecs.add_component(entity2, component::Position(700.0f, 500.0f));
-    // ecs.add_component(entity2, component::Velocity(0.0f, 0.0f));
-    // // ecs.add_component(entity2, component::HurtsOnCollision(10));
-    // ecs.add_component(entity2, component::Player(300, 30));
-    // ecs.add_component(entity2, component::Drawable("../../temp/assets/textures/sprites/Hobbit-Idle1.png"));
+    ecs.register_component<component::Shield>();
+    ecs.register_component<component::KillOnTimer>();
+    ecs.register_component<component::ShootCounter>();
+    entity_t decoy = ecs.spawn_entity();
+    ecs.add_component<component::Room>(decoy, component::Room("__"));
 
     listener.addRegistry(ecs);
 
-    ecs.add_system<component::Velocity, component::Controllable>(control_system);
-    ecs.add_system<component::Position, component::Velocity>(position_system);
-    ecs.add_system<component::Velocity, component::ResetOnMove>(reset_on_move_system);
-    ecs.add_system<component::Drawable, component::Position>(collision_system);
-    ecs.add_system<component::Drawable, component::Scale>(scale_system);
-    ecs.add_system<component::Drawable, component::Rotation>(rotation_system);
+    PositionSystem *pos_sys = new PositionSystem();
+    ecs.add_system<component::Position, component::Velocity>(*pos_sys);
+    // KillWhenOutOfBounds *kill_sys = new KillWhenOutOfBounds(&listener, {1920, 1080});
+    // ecs.add_system<component::Position, component::Velocity>(*kill_sys);
+    EnemyGeneration *engen_sys = new EnemyGeneration(&listener, 2);
+    ecs.add_system<component::Position, component::Health, component::Endpoint, component::Room, component::CampaignMode>(*engen_sys);
+    CollisionSystem *col_sys = new CollisionSystem(&listener);
+    ecs.add_system<component::Hitbox, component::Position, component::Room, component::Shield>(*col_sys);
+    ShieldSystem *shd_sys = new ShieldSystem(&listener);
+    ecs.add_system<component::Shield>(*shd_sys);
+    KillOnTimerSystem *kot_sys = new KillOnTimerSystem(&listener);
+    ecs.add_system<component::KillOnTimer>(*kot_sys);
+    asio::io_context service;
+    Server *server = new Server(service, std::atoi(argv[1]), ecs, listener, mtx);
+    service.run();
+    ecs.add_system<component::AnimatedDrawable, component::Scale, component::Position, component::Endpoint>(*server);
 
-    error_handling(argc);
-    std::thread serverThread([&]() {
-        runServer(argv[1], ecs);
-    });
     while (true) {
-        component::DrawableContent content = component::DrawableContent(event);
-        ecs.run_systems(content);
+        mtx.lock();
+        ecs.run_systems();
         while (listener.popEvent());
+        mtx.unlock();
     }
     return 0;
 }

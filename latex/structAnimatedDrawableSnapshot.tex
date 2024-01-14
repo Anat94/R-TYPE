@@ -1,0 +1,160 @@
+\hypertarget{structAnimatedDrawableSnapshot}{}\doxysection{Animated\+Drawable\+Snapshot Struct Reference}
+\label{structAnimatedDrawableSnapshot}\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+
+
+encapsulates the necessary information to initiate an animated drawable for a given entity  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Animated\+Drawable\+Snapshot\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structAnimatedDrawableSnapshot}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}} \& \mbox{\hyperlink{structAnimatedDrawableSnapshot_ada57b14219cbe34498f9a6a1674ce95e}{operator=}} (const \mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}} \&snapshot)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structAnimatedDrawableSnapshot_a7fb5f8c5ecec4110846516af8b9d0f9d}{Animated\+Drawable\+Snapshot}} (int16\+\_\+t id\+\_\+, entity\+\_\+t entity\+\_\+, const std\+::string \&path, std\+::pair$<$ int, int $>$ nb\+Sprites, std\+::pair$<$ int, int $>$ sprite\+Size, std\+::pair$<$ int, int $>$ gaps, std\+::pair$<$ int, int $>$ first\+Offset, std\+::pair$<$ int, int $>$ curretn\+Idx, animation\+\_\+t anims\+\_\+, const std\+::string \&state, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}\label{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}} 
+entity\+\_\+t \mbox{\hyperlink{structAnimatedDrawableSnapshot_aba8bf8c64181641cc3e1500244d583e9}{entity}} = 0
+\begin{DoxyCompactList}\small\item\em entity to initialize an \mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}} for \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}\label{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}} 
+char \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7695d2278cc71a2784c51f2781e9741d}{\+\_\+path}} \mbox{[}256\mbox{]}
+\begin{DoxyCompactList}\small\item\em Contains the path of the image to display for the entity (e.\+g., "{}assets/players/ship.\+png). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_ab8635ca2f8703219c061279043ba582d}\label{structAnimatedDrawableSnapshot_ab8635ca2f8703219c061279043ba582d}} 
+char \mbox{\hyperlink{structAnimatedDrawableSnapshot_ab8635ca2f8703219c061279043ba582d}{\+\_\+state}} \mbox{[}16\mbox{]}
+\begin{DoxyCompactList}\small\item\em current state of the animated drawable to determin its animation (e.\+g., \char`\"{}idle\char`\"{}). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_aa313836f38c340c828d08604c82e14b0}\label{structAnimatedDrawableSnapshot_aa313836f38c340c828d08604c82e14b0}} 
+std\+::array$<$ std\+::pair$<$ char\mbox{[}16\mbox{]}, std\+::pair$<$ bool, std\+::pair$<$ int, int $>$ $>$ $>$, 5 $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa313836f38c340c828d08604c82e14b0}{\+\_\+anims}}
+\begin{DoxyCompactList}\small\item\em an array of 5 elements maximum (5 $\ast$ 25 bytes) representing the animations of the drawable. \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}{\+\_\+nb\+Sprites}} = \{0, 0\}
+\begin{DoxyCompactList}\small\item\em number of sprites on the x \& y axis \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}{\+\_\+sprite\+Size}} = \{0, 0\}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the sprites to load \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}{\+\_\+gaps}} = \{0, 0\}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the gapes between sprites \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}\label{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}} 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_ae0d2b66c017a7608245555c7b9eba471}{\+\_\+first\+Offset}} = \{0, 0\}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the size of the offset of the first sprite \end{DoxyCompactList}\item 
+std\+::pair$<$ int, int $>$ \mbox{\hyperlink{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}{\+\_\+current\+Idx}} = \{0, 0\}
+\begin{DoxyCompactList}\small\item\em set of numbers representing the indexes of the animation \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates the necessary information to initiate an animated drawable for a given entity 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_a7fb5f8c5ecec4110846516af8b9d0f9d}\label{structAnimatedDrawableSnapshot_a7fb5f8c5ecec4110846516af8b9d0f9d}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{AnimatedDrawableSnapshot()}{AnimatedDrawableSnapshot()}}
+{\footnotesize\ttfamily Animated\+Drawable\+Snapshot\+::\+Animated\+Drawable\+Snapshot (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{entity\+\_\+t}]{entity\+\_\+,  }\item[{const std\+::string \&}]{path,  }\item[{std\+::pair$<$ int, int $>$}]{nb\+Sprites,  }\item[{std\+::pair$<$ int, int $>$}]{sprite\+Size,  }\item[{std\+::pair$<$ int, int $>$}]{gaps,  }\item[{std\+::pair$<$ int, int $>$}]{first\+Offset,  }\item[{std\+::pair$<$ int, int $>$}]{curretn\+Idx,  }\item[{animation\+\_\+t}]{anims\+\_\+,  }\item[{const std\+::string \&}]{state,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em entity\+\_\+} & entity to initialize an \mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}} for \\
+\hline
+{\em path} & Contains the path of the image to display for the entity. \\
+\hline
+{\em nb\+Sprites} & number of sprites on the x \& y axis \\
+\hline
+{\em sprite\+Size} & set of numbers representing the size of the sprites to load \\
+\hline
+{\em gaps} & set of numbers representing the size of the gapes between sprites \\
+\hline
+{\em first\+Offset} & set of numbers representing the size of the offset of the first sprite \\
+\hline
+{\em curretn\+Idx} & set of numbers representing the indexes of the animation \\
+\hline
+{\em anims\+\_\+} & an array of 5 elements maximum (5 $\ast$ 25 bytes) representing the animations of the drawable. \\
+\hline
+{\em state} & current state of the animated drawable to determin its animation \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_ada57b14219cbe34498f9a6a1674ce95e}\label{structAnimatedDrawableSnapshot_ada57b14219cbe34498f9a6a1674ce95e}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!operator=@{operator=}}
+\index{operator=@{operator=}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}}\& Animated\+Drawable\+Snapshot\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structAnimatedDrawableSnapshot}{Animated\+Drawable\+Snapshot}} \&}]{snapshot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em snapshot} & copies values from the snapshot parameter to the current structure members.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to the modified structure 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}\label{structAnimatedDrawableSnapshot_aa898a798489efa3632778d3b44cedd0f}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!\_currentIdx@{\_currentIdx}}
+\index{\_currentIdx@{\_currentIdx}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{\_currentIdx}{\_currentIdx}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ Animated\+Drawable\+Snapshot\+::\+\_\+current\+Idx = \{0, 0\}}
+
+
+
+set of numbers representing the indexes of the animation 
+
+(ex\+: \{2, 0\} to start with the 3rd sprite) ! The second argument is not used yet ! \mbox{\Hypertarget{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}\label{structAnimatedDrawableSnapshot_a664f78e41196443d624deb215576dfb9}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!\_gaps@{\_gaps}}
+\index{\_gaps@{\_gaps}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{\_gaps}{\_gaps}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ Animated\+Drawable\+Snapshot\+::\+\_\+gaps = \{0, 0\}}
+
+
+
+set of numbers representing the size of the gapes between sprites 
+
+(ex\+: \{3, 1\} for a 3x1 gap) \mbox{\Hypertarget{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}\label{structAnimatedDrawableSnapshot_a7a782e63ba9eb6d9c2705dff381ca31e}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!\_nbSprites@{\_nbSprites}}
+\index{\_nbSprites@{\_nbSprites}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{\_nbSprites}{\_nbSprites}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ Animated\+Drawable\+Snapshot\+::\+\_\+nb\+Sprites = \{0, 0\}}
+
+
+
+number of sprites on the x \& y axis 
+
+(ex\+: \{3, 4\} for a 3 Sprites per line \& 4 lines) \mbox{\Hypertarget{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}\label{structAnimatedDrawableSnapshot_a8812e579bc96a08b3e826ec56983a4f0}} 
+\index{AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}!\_spriteSize@{\_spriteSize}}
+\index{\_spriteSize@{\_spriteSize}!AnimatedDrawableSnapshot@{AnimatedDrawableSnapshot}}
+\doxysubsubsection{\texorpdfstring{\_spriteSize}{\_spriteSize}}
+{\footnotesize\ttfamily std\+::pair$<$int, int$>$ Animated\+Drawable\+Snapshot\+::\+\_\+sprite\+Size = \{0, 0\}}
+
+
+
+set of numbers representing the size of the sprites to load 
+
+(ex\+: \{32, 14\} for a 32x14 sprite) 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

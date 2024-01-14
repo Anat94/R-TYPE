@@ -1,0 +1,153 @@
+\hypertarget{structcomponent_1_1Hitbox}{}\doxysection{component\+::Hitbox Struct Reference}
+\label{structcomponent_1_1Hitbox}\index{component::Hitbox@{component::Hitbox}}
+
+
+\mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} structure to store the hitbox of an entity.  
+
+
+
+
+{\ttfamily \#include $<$Components.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structcomponent_1_1Hitbox_a66d29a425befa7273ff343dcd66ec2f9}{Hitbox}} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&size)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structcomponent_1_1Hitbox_ac124a03e974676d5c345664d5acd527c}{is\+Overlap}} (float p1, float q1, float p2, float q2)
+\begin{DoxyCompactList}\small\item\em check if the two hitboxes overlap \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structcomponent_1_1Hitbox_a6a2c65b12522b26200203051d8415420}{is\+Touching}} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&pos1, const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&pos2, const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&other)
+\begin{DoxyCompactList}\small\item\em check if 2 hitboxes are touching \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structcomponent_1_1Hitbox_ae6f6d6212ae5b15b1f63fe0154606e5f}{contains}} (const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&pos, int x, int y)
+\begin{DoxyCompactList}\small\item\em check if hitbox contains position \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structcomponent_1_1Hitbox_aa865af3d69cb71fea151fe422707a5a8}{operator==}} (const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&other) const
+\begin{DoxyCompactList}\small\item\em equals operator checking current hitbox with other hitbox, compares size \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}\label{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}} 
+\mbox{\hyperlink{structcomponent_1_1Position}{Position}} \mbox{\hyperlink{structcomponent_1_1Hitbox_a53755ac397117edd9fdcc37e7870ea4c}{\+\_\+size}}
+\begin{DoxyCompactList}\small\item\em the size of the hitbox \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} structure to store the hitbox of an entity. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_a66d29a425befa7273ff343dcd66ec2f9}\label{structcomponent_1_1Hitbox_a66d29a425befa7273ff343dcd66ec2f9}} 
+\index{component::Hitbox@{component::Hitbox}!Hitbox@{Hitbox}}
+\index{Hitbox@{Hitbox}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{Hitbox()}{Hitbox()}}
+{\footnotesize\ttfamily component\+::\+Hitbox\+::\+Hitbox (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em top\+\_\+left} & size of the hitbox to be set \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_ae6f6d6212ae5b15b1f63fe0154606e5f}\label{structcomponent_1_1Hitbox_ae6f6d6212ae5b15b1f63fe0154606e5f}} 
+\index{component::Hitbox@{component::Hitbox}!contains@{contains}}
+\index{contains@{contains}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool component\+::\+Hitbox\+::contains (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{pos,  }\item[{int}]{x,  }\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+check if hitbox contains position 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & position of the hitbox \\
+\hline
+{\em x} & x position to check with \\
+\hline
+{\em y} & y position to check with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_ac124a03e974676d5c345664d5acd527c}\label{structcomponent_1_1Hitbox_ac124a03e974676d5c345664d5acd527c}} 
+\index{component::Hitbox@{component::Hitbox}!isOverlap@{isOverlap}}
+\index{isOverlap@{isOverlap}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{isOverlap()}{isOverlap()}}
+{\footnotesize\ttfamily bool component\+::\+Hitbox\+::is\+Overlap (\begin{DoxyParamCaption}\item[{float}]{p1,  }\item[{float}]{q1,  }\item[{float}]{p2,  }\item[{float}]{q2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+check if the two hitboxes overlap 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p1} & posiition x 1 \\
+\hline
+{\em q1} & posiition x 2 \\
+\hline
+{\em p2} & posiition y 1 \\
+\hline
+{\em q2} & posiition y 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_a6a2c65b12522b26200203051d8415420}\label{structcomponent_1_1Hitbox_a6a2c65b12522b26200203051d8415420}} 
+\index{component::Hitbox@{component::Hitbox}!isTouching@{isTouching}}
+\index{isTouching@{isTouching}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{isTouching()}{isTouching()}}
+{\footnotesize\ttfamily bool component\+::\+Hitbox\+::is\+Touching (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{pos1,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Position}{Position}} \&}]{pos2,  }\item[{const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+check if 2 hitboxes are touching 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos1} & first position to check \\
+\hline
+{\em pos2} & second position to check \\
+\hline
+{\em other} & other hitbox to check with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structcomponent_1_1Hitbox_aa865af3d69cb71fea151fe422707a5a8}\label{structcomponent_1_1Hitbox_aa865af3d69cb71fea151fe422707a5a8}} 
+\index{component::Hitbox@{component::Hitbox}!operator==@{operator==}}
+\index{operator==@{operator==}!component::Hitbox@{component::Hitbox}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool component\+::\+Hitbox\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structcomponent_1_1Hitbox}{Hitbox}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+equals operator checking current hitbox with other hitbox, compares size 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & hitbox to compare with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Components.\+hpp\end{DoxyCompactItemize}

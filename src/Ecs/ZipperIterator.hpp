@@ -7,6 +7,22 @@
 
 #ifndef ZIPPERITERATOR_HPP
     #define ZIPPERITERATOR_HPP
+    //#pragma warning(disable: 4668)
+    //#pragma warning(disable: 4626)
+    //#pragma warning(disable: 4625)
+    //#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
     #include <vector>
     #include <memory>
     #include <optional>
@@ -25,7 +41,7 @@ class zipper_iterator {
     template <class Container>
     using it_reference_t = typename iterator_t<Container>::reference;
     public:
-        using value_type = std::tuple<it_reference_t<Containers>...>;
+        using value_type = std::tuple<size_t, it_reference_t<Containers>...>;
         using reference = value_type;
         using pointer = void;
         using difference_type = size_t;
@@ -38,7 +54,7 @@ class zipper_iterator {
          * @param it_tuple tuple containing iterators for the templated containers
          * @param max maximum size of the iterator range
          * @param idx current index of the iterator_tuple previously passed in parameter
-         */
+        */
         zipper_iterator(const iterator_tuple& it_tuple, size_t max, size_t idx): _current(it_tuple), _max(max), _idx(idx) {}
         /**
          * @brief Copy constructor for the zipper_iterator
@@ -140,7 +156,7 @@ class zipper_iterator {
          */
         template <size_t... Is>
         value_type to_value(std::index_sequence<Is...>) {
-            return value_type(*(std::get<Is>(_current))...);
+            return value_type(_idx, *(std::get<Is>(_current))...);
         }
     private:
         /**

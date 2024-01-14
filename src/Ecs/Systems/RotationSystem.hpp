@@ -1,0 +1,37 @@
+/*
+** EPITECH PROJECT, 2023
+** R-Type
+** File description:
+** RotationSystem
+*/
+
+#ifndef ROTATIONSYSTEM_HPP_
+#define ROTATIONSYSTEM_HPP_
+#include "Systems.hpp"
+
+class RotationSystem : public ISystems {
+    public:
+        /**
+         * @brief Construct a new Rotation System object
+         *
+         */
+        RotationSystem() {};
+
+        /**
+         * @brief operator ()
+         *
+         * @param dra draw object
+         * @param rot rotation matrix
+         */
+        void operator()(sparse_array<component::Drawable> &dra, sparse_array<component::Rotation> &rot) {
+            std::cout << "Rotation system" << std::endl;
+            for (auto &&[_, d, r] : zipper<sparse_array<component::Drawable>, sparse_array<component::Rotation>>(dra, rot)) {
+                if (d.has_value() && r.has_value())
+                    // d->_sprite.setRotation(r->_degrees);
+                    continue;
+            }
+        };
+    private:
+};
+
+#endif /* !ROTATIONSYSTEM_HPP_ */

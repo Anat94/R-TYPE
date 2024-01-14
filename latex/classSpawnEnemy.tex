@@ -1,0 +1,78 @@
+\hypertarget{classSpawnEnemy}{}\doxysection{Spawn\+Enemy Class Reference}
+\label{classSpawnEnemy}\index{SpawnEnemy@{SpawnEnemy}}
+
+
+\mbox{\hyperlink{classSpawnEnemy}{Spawn\+Enemy}} class used to spawn an enemy.  
+
+
+
+
+{\ttfamily \#include $<$Events.\+hpp$>$}
+
+Inheritance diagram for Spawn\+Enemy\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classSpawnEnemy}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpawnEnemy_aa432630ccecb730ff0add26485c7413a}{Spawn\+Enemy}} (int health, float scale, \mbox{\hyperlink{structcomponent_1_1Velocity}{component\+::\+Velocity}} vel, \mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}} pos, \mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}} animated\+Drawable, std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ std\+::pair$<$ int, int $>$, bool $>$$>$ anims, std\+::string room\+Name)
+\begin{DoxyCompactList}\small\item\em Construct a new Collision Event object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}{handle\+Event}} (\mbox{\hyperlink{classregistry}{registry}} \&r, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener)
+\begin{DoxyCompactList}\small\item\em Handles the event based on the registry objects. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{classSpawnEnemy}{Spawn\+Enemy}} class used to spawn an enemy. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpawnEnemy_aa432630ccecb730ff0add26485c7413a}\label{classSpawnEnemy_aa432630ccecb730ff0add26485c7413a}} 
+\index{SpawnEnemy@{SpawnEnemy}!SpawnEnemy@{SpawnEnemy}}
+\index{SpawnEnemy@{SpawnEnemy}!SpawnEnemy@{SpawnEnemy}}
+\doxysubsubsection{\texorpdfstring{SpawnEnemy()}{SpawnEnemy()}}
+{\footnotesize\ttfamily Spawn\+Enemy\+::\+Spawn\+Enemy (\begin{DoxyParamCaption}\item[{int}]{health,  }\item[{float}]{scale,  }\item[{\mbox{\hyperlink{structcomponent_1_1Velocity}{component\+::\+Velocity}}}]{vel,  }\item[{\mbox{\hyperlink{structcomponent_1_1Position}{component\+::\+Position}}}]{pos,  }\item[{\mbox{\hyperlink{structcomponent_1_1AnimatedDrawable}{component\+::\+Animated\+Drawable}}}]{animated\+Drawable,  }\item[{std\+::unordered\+\_\+map$<$ std\+::string, std\+::pair$<$ std\+::pair$<$ int, int $>$, bool $>$$>$}]{anims,  }\item[{std\+::string}]{room\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Collision Event object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em got\+Touched} & entity id that got touched in the event \\
+\hline
+{\em touched} & entity id that touched during the event \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}\label{classSpawnEnemy_a7f2da0818deeb5a6779d632f604b60ad}} 
+\index{SpawnEnemy@{SpawnEnemy}!handleEvent@{handleEvent}}
+\index{handleEvent@{handleEvent}!SpawnEnemy@{SpawnEnemy}}
+\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
+{\footnotesize\ttfamily void Spawn\+Enemy\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{r,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Handles the event based on the registry objects. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em r} & the registry\+\_\+t object used to store the game engine resources \\
+\hline
+{\em listener} & the event listener used to create new events if needed \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classAEvent_a5fb7336a5e208376b6987ade7db49ba9}{AEvent}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Events.\+hpp\item 
+src/\+Ecs/Events.\+cpp\end{DoxyCompactItemize}

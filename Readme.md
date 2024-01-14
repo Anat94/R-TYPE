@@ -99,6 +99,7 @@ For the client:
 ```powershell
 ./Debug/client.exe <ip_addr> <port>
 ```
+
 # Further explanations of the project
 
 The goal of the project is to re-create a game called R-Type. It was created by [Irem](https://en.wikipedia.org/wiki/Irem) in 1987. In this game, the player controls a star ship in its efforts to destroy the Bydo, a powerful alien race bent on wiping out all of mankind.
@@ -127,3 +128,10 @@ Like its name, there are 3 parts in an ECS:
 ### UDP connection
 
 **UDP Communication**: Our ECS multiplayer game project leverages the User Datagram Protocol (UDP) for network communication between game entities. UDP is chosen for its lightweight, connectionless nature, making it ideal for real-time, latency-sensitive applications like multiplayer games. Its low overhead and reduced latency compared to TCP (Transmission Control Protocol) are well-suited for the rapid exchange of game data packets. While UDP doesn't guarantee packet delivery or ordering like TCP, it offers faster transmission, making it optimal for scenarios where speed and responsiveness are paramount, essential qualities for delivering an immersive multiplayer gaming experience. Our implementation carefully handles data integrity and synchronization within the ECS framework, ensuring smooth, near-instantaneous communication between game clients and the server, crucial for seamless multiplayer interactions.
+
+## Start unit tests
+
+
+```shell
+cmake --build . --target my_tests
+```

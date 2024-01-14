@@ -7,30 +7,54 @@
 
 #include "Events.hpp"
 
-bool rtype::event::EventListener::addEvent(rtype::event::IEvent *event)
+/**
+ * @brief Adds an event passed as parameter to the queue of events
+ *
+ * @param event the event to add
+ * @return true if the event was successfully added,
+ * @return false otherwise
+ */
+bool EventListener::addEvent(IEvent *event)
 {
     _events.push(event);
     return true;
 }
 
-bool rtype::event::EventListener::popEvent()
+/**
+ * @brief Removes the first event in the queue of events
+ *
+ * @return true if the event whas successfully removed and executed,
+ * @return false otherwise
+ */
+bool EventListener::popEvent()
 {
     if (!_events.empty()) {
         IEvent* event = _events.front();
         _events.pop();
-
         event->handleEvent(*_reg, *this);
         return true;
     } else
         return false;
 }
 
-void rtype::event::EventListener::addRegistry(registry &reg)
+/**
+ * @brief Stores the regitry_t object inside of the listener
+ *
+ * @param reg the registry_t instance pointer
+ */
+void EventListener::addRegistry(registry &reg)
 {
     _reg = &reg;
 }
 
-bool rtype::event::EventListener::hasEvent(rtype::event::IEvent *event)
+/**
+ * @brief Checks if the listener currently has the event passed as parameter
+ *
+ * @param event
+ * @return true
+ * @return false
+ */
+bool EventListener::hasEvent(IEvent *event)
 {
     const std::type_info& eventType = typeid(*(event));
     std::queue<IEvent*> tempQueue = _events;
@@ -44,21 +68,75 @@ bool rtype::event::EventListener::hasEvent(rtype::event::IEvent *event)
     return false;
 }
 
-void rtype::event::UpdatePositionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
+void UpdatePositionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
 
         auto &player1_pla = r.get_components<component::Position>()[_to_move];
 
-        player1_pla.value().x += _pos.first;
-        player1_pla.value().y += _pos.second;
+        if (player1_pla.has_value()) {
+            player1_pla->x += _pos.first;
+            player1_pla->y += _pos.second;
+        }
+    } catch (const std::exception &e) {
+        e.what();
+    }
+}
+
+/**
+ * @brief Handle to keep an entity within window bounds
+ *
+ * @param r registery_t object, containig the game instance and objects
+ * @param listener the event listener, used to create new events from this one when needed
+ */
+void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listener)
+{
+    try {
+        auto &pos = r.get_components<component::Position>()[_ents.first];
+
+        if (pos->x < _windowBounds[0])
+            pos->x = _windowBounds[0];
+        if (pos->x > _windowBounds[1])
+            pos->x = _windowBounds[1];
+        if (pos->y < _windowBounds[2])
+            pos->y = _windowBounds[2];
+        if (pos->y > _windowBounds[3])
+            pos->y = _windowBounds[3];
     } catch (const std::exception &e) {
         e.what();
     }
 }
 
 
-void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void CreateExplosionEvent::handleEvent(registry &r, EventListener &listener)
+{
+    if (e_type == 1) {
+        entity_t enemy = r.spawn_entity();
+        r.add_component<component::Position>(enemy, component::Position(genPos.x, genPos.y));
+        r.add_component<component::Scale>(enemy, component::Scale(5.5f));
+        if (room.size() != 0)
+            r.add_component<component::Room>(enemy, component::Room(room));
+        r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/explosion.png", {6, 0}, {34, 32}, {0, 0}, {0, 0}, {6, 0}));
+        r.add_component<component::KillOnTimer>(enemy, component::KillOnTimer(2200));
+        auto &tmp = r.get_components<component::AnimatedDrawable>()[enemy];
+        tmp->addAnimation("idle", {6, 0}, true);
+        tmp->_state = "idle";
+    }
+}
+
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+void CollisionEvent::handleEvent(registry &r, EventListener &listener)
 {
     try {
         auto &player1_h = r.get_components<component::Health>()[_ents.first];
@@ -67,19 +145,30 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
         auto &player2_d = r.get_components<component::Damage>()[_ents.second];
         auto &player2_p = r.get_components<component::Pierce>()[_ents.second];
 
+        if (_ents.first == player2_hurt->_sender)
+            return;
+
         if (player1_h.has_value() && player2_hurt.has_value()
             && player2_d.has_value()) {
             player1_h->_health -= player2_d->_damage;
+            r.add_component<component::Shield>(_ents.first, component::Shield(3000));
             if (player1_h->_health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
+                auto &room = r.get_components<component::Room>()[_ents.second];
+                DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
+                auto &posToSend = r.get_components<component::Position>()[_ents.second];
+                CreateExplosionEvent *exp_event = new CreateExplosionEvent(*posToSend, 1, room->_name);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
                     listener.addEvent(new_event);
+                if (listener.hasEvent(exp_event))
+                    delete exp_event;
+                else
+                    listener.addEvent(exp_event);
             }
             player2_p->_pierce -= 1;
-            if (player2_p->_pierce <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, -1);
+            if (player2_p->_pierce == 0) {
+                DeathEvent *new_event = new DeathEvent(_ents.second, 0);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -103,15 +192,15 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
             && player1_p.has_value() && player1_d.has_value()) {
             player2_h->_health -= player1_d->_damage;
             if (player2_h->_health <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.second, player1_hurt->_sender);
+                DeathEvent *new_event = new DeathEvent(_ents.second, player1_hurt->_sender);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
                     listener.addEvent(new_event);
             }
             player1_p->_pierce -= 1;
-            if (player1_p->_pierce <= 0) {
-                rtype::event::DeathEvent *new_event = new DeathEvent(_ents.first, -1);
+            if (player1_p->_pierce == 0) {
+                DeathEvent *new_event = new DeathEvent(_ents.first, 0);
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
@@ -125,74 +214,183 @@ void rtype::event::CollisionEvent::handleEvent(registry &r, rtype::event::EventL
     }
 }
 
-void rtype::event::DeathEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
+void DeathEvent::handleEvent(registry &r, EventListener &listener)
 {
-    //! remove player
-    try {
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Health>(_ents.first);
-            r.remove_component<component::Score>(_ents.first);
-            r.remove_component<component::Controllable>(_ents.first);
-            r.remove_component<component::Scale>(_ents.first);
-            r.remove_component<component::Rotation>(_ents.first);
-            r.remove_component<component::ResetOnMove>(_ents.first);
-            r.remove_component<component::Damage>(_ents.first);
-            r.remove_component<component::Heading>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::Velocity>(_ents.first);
-            r.kill_entity(_ents.first);
-            auto &enemy_score = r.get_components<component::Score>()[_ents.second];
-            std::cout << _ents.second << std::endl;
-            if (enemy_score.has_value())
-                enemy_score->_score += 10;
-        }
-        return;
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a player
-    }
+    //! remove entity
+    r.remove_component<component::Scale>(_ents.first);
+    r.remove_component<component::Damage>(_ents.first);
+    r.remove_component<component::Health>(_ents.first);
+    r.remove_component<component::Hitbox>(_ents.first);
+    r.remove_component<component::Pierce>(_ents.first);
+    r.remove_component<component::Heading>(_ents.first);
+    r.remove_component<component::Position>(_ents.first);
+    r.remove_component<component::Velocity>(_ents.first);
+    r.remove_component<component::Drawable>(_ents.first);
+    r.remove_component<component::Rotation>(_ents.first);
+    r.remove_component<component::ResetOnMove>(_ents.first);
+    r.remove_component<component::ServerEntity>(_ents.first);
+    // r.remove_component<component::Controllable>(_ents.first);
+    r.remove_component<component::HurtsOnCollision>(_ents.first);
+    r.remove_component<component::AnimatedDrawable>(_ents.first);
+    r.remove_component<component::Shield>(_ents.first);
+    r.remove_component<component::ShootCounter>(_ents.first);
+    r.remove_component<component::KillOnTimer>(_ents.first);
 
-    try {
-        if (r.entity_exists(_ents.first)) {
-            r.remove_component<component::Velocity>(_ents.first);
-            r.remove_component<component::Drawable>(_ents.first);
-            r.remove_component<component::Position>(_ents.first);
-            r.remove_component<component::HurtsOnCollision>(_ents.first);
-            r.kill_entity(_ents.first);
-        }
-    } catch (const std::exception &e) {
-        e.what();
-        //? ignore -> entity not a projectile
+    auto &killer_score = r.get_components<component::Score>()[_ents.second];
+    if (killer_score.has_value()) {
+        killer_score->_score += 10;
     }
 }
 
-void rtype::event::SpawnEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
+void SpawnEvent::handleEvent(registry &r, EventListener &listener)
 {
     // Todo: ping all other to connect new player
 }
 
-void rtype::event::ShootEvent::handleEvent(registry &r, rtype::event::EventListener &listener)
+void RemoveShieldEvent::handleEvent(registry &r, EventListener &listener)
+{
+    r.remove_component<component::Shield>(_ents.first);
+}
+
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+ */
+void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
+{
+    entity_t enemy = r.spawn_entity();
+    r.add_component<component::Position>(enemy, component::Position(_pos.x, _pos.y));
+    r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
+    r.add_component<component::Scale>(enemy, component::Scale(_scale));
+    r.add_component<component::Health>(enemy, component::Health(_health));
+    r.add_component<component::Damage>(enemy, component::Damage(20));
+    r.add_component<component::HurtsOnCollision>(enemy, component::HurtsOnCollision(-1));
+    if (_roomName.size() != 0)
+        r.add_component<component::Room>(enemy, component::Room(_roomName));
+    r.add_component<component::Hitbox>(enemy, component::Hitbox(component::Position(_animatedDrawable._spriteSize.first * _scale, _animatedDrawable._spriteSize.second * _scale)));
+    r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable(_animatedDrawable._path, _animatedDrawable._nbSprites, _animatedDrawable._spriteSize, _animatedDrawable._gaps, _animatedDrawable._firstOffset, _animatedDrawable._currentIdx));
+
+    auto &tmp1 = r.get_components<component::AnimatedDrawable>()[enemy];
+    for (auto & anim: _anims) {
+        tmp1->addAnimation(anim.first, anim.second.second, anim.second.first);
+    }
+    tmp1->_state = "idle";
+}
+
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+*/
+void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
 
     try {
+        auto player_hit = r.get_components<component::Hitbox>()[_ents.first];
         auto player_p = r.get_components<component::Position>()[_ents.first];
         auto player_h = r.get_components<component::Heading>()[_ents.first];
         auto player_d = r.get_components<component::Damage>()[_ents.first];
+        auto player_room = r.get_components<component::Room>()[_ents.first];
+        auto player_nb_shoots = r.get_components<component::ShootCounter>()[_ents.first];
 
-        if (player_h.has_value() && player_p.has_value()
-            && player_d.has_value()) {
-            r.add_component(shot, component::Position((player_p->x + 200), (player_p->y + 30)));
-            r.add_component(shot, component::HurtsOnCollision(_ents.first));
-            r.add_component(shot, component::Damage(player_d->_damage));
-            r.add_component(shot, component::Drawable("./temp/assets/textures/sprites/Hobbit-Idle1.png"));
-            if (player_h->_rotation <= 180)
-                r.add_component(shot, component::Velocity(5.0f, 0.0f));
+        if (player_hit.has_value() && player_d.has_value() && player_h.has_value() && player_p.has_value() && player_nb_shoots.has_value()) {
+
+            if (player_nb_shoots->counter % 5 == 0 && player_nb_shoots->counter != 0) {
+                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 2)));
+                r.add_component(shot, component::Position(top_left.x, top_left.y));
+                r.add_component(shot, component::HurtsOnCollision(_ents.first));
+                r.add_component(shot, component::Damage(player_d->_damage * 3));
+                r.add_component(shot, component::Scale(4.0f));
+                if (player_room.has_value())
+                    r.add_component<component::Room>(shot, component::Room(player_room->_name));
+                r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet2.gif", {5, 0}, {27, 22}, {3, 0}, {123, 66}));
+                auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
+                tmp->addAnimation("idle", {0, 5}, true);
+                tmp->_state = "idle";
+                r.add_component(shot, component::Hitbox(component::Position(26 * 4.0f, 22 * 4.0f)));
+                r.add_component(shot, component::Pierce(3));
+                if (player_h->_rotation <= 180)
+                    r.add_component(shot, component::Velocity(36.0f, 0.0f));
+                else
+                    r.add_component(shot, component::Velocity(-36.0f, 0.0f));
+            } else {
+                component::Position top_left = component::Position(((player_p->x + player_hit->_size.x) + 1), (player_p->y - ((player_hit->_size.y) / 1.5)));
+                r.add_component(shot, component::Position(top_left.x, top_left.y));
+                r.add_component(shot, component::HurtsOnCollision(_ents.first));
+                r.add_component(shot, component::Damage(player_d->_damage));
+                r.add_component(shot, component::Scale(2.0f));
+                if (player_room.has_value())
+                    r.add_component<component::Room>(shot, component::Room(player_room->_name));
+                r.add_component(shot, component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet1.gif", {4, 0}, {32, 32}, {1, 0}, {136, 18}));
+                auto &tmp = r.get_components<component::AnimatedDrawable>()[shot];
+                tmp->addAnimation("idle", {0, 3}, true);
+                tmp->_state = "idle";
+                r.add_component(shot, component::Hitbox(component::Position(32 * 2.0f, 32 * 2.0f)));
+                r.add_component(shot, component::Pierce());
+                if (player_h->_rotation <= 180)
+                    r.add_component(shot, component::Velocity(32.0f, 0.0f));
+                else
+                    r.add_component(shot, component::Velocity(-32.0f, 0.0f));
+            }
+            IncrementNbShoots *evt = new IncrementNbShoots(_ents.first);
+            if (listener.hasEvent(evt))
+                delete evt;
             else
-                r.add_component(shot, component::Velocity(-5.0f, 0.0f));
+                listener.addEvent(evt);
         }
     } catch (std::exception &e) {
         //? ignore -> shooter not a player for some reason ???
     }
+}
+
+/**
+         * @brief Handles the event based on the registry objects
+         * 
+         * @param r the registry_t object used to store the game engine resources
+         * @param listener the event listener used to create new events if needed
+         */
+void IncrementNbShoots::handleEvent(registry &r, EventListener &listener)
+{
+    auto &nbShoots = r.get_components<component::ShootCounter>()[_ents.first];
+
+    if (nbShoots.has_value())
+        nbShoots->counter++;
+}
+
+/**
+ * @brief Handles the event based on the registry objects
+ *
+ * @param r the registry_t object used to store the game engine resources
+ * @param listener the event listener used to create new events if needed
+*/
+void ClickBtnEvent::handleEvent(registry &r, EventListener &listener)
+{
+    // lance la fonction qui est passer en seconde dans _ents
+}
+
+/**
+     * @brief Handles the event based on the registry objects
+     *
+     * @param r the registry_t object used to store the game engine resources
+     * @param listener the event listener used to create new events if needed
+     */
+void HoverBtnEvent::handleEvent(registry &r, EventListener &listener)
+{
+    // chnage la couleur du bouton
 }

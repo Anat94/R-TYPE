@@ -1,29 +1,64 @@
+//#pragma warning(disable: 4668)
+//#pragma warning(disable: 4626)
+//#pragma warning(disable: 4625)
+//#pragma warning(disable: 4820)
+//#pragma warning(disable: 5031)
+//#pragma warning(disable: 4365)
+//#pragma warning(disable: 5027)
+//#pragma warning(disable: 4514)
+//#pragma warning(disable: 4464)
+//#pragma warning(disable: 5026)
+//#pragma warning(disable: 4457)
+//#pragma warning(disable: 5262)
+//#pragma warning(disable: 5204)
+//#pragma warning(disable: 4355)
+//#pragma warning(disable: 5220)
+//#pragma warning(disable: 5039)
 #include <iostream>
 #include "LibLoader.hpp"
 #include "Game.hpp"
 
+
+/**
+ * @brief Construct a new Game:: Game object
+ *
+ * @param sizeX size on x size of the windows
+ * @param sizeY size on y size of the windows
+ * @param title title of the windows
+ */
 Game::Game(int sizeX, int sizeY, std::string title): _lib("./libecs.so")
 {
     this->_window.create(sf::VideoMode(sizeX, sizeY), title);
     initParalaxBackground();
 }
 
+/**
+ * @brief Destroy the Game:: Game object
+ *
+ */
 Game::~Game()
 {
     if (this->_window.isOpen())
         this->_window.close();
 }
 
+/**
+ * @brief init the background to make some paralax
+ *
+ */
 void Game::initParalaxBackground() {
     sf::Texture texture;
-    if (!texture.loadFromFile("src/Client/assets/background.png")) {
+    if (!texture.loadFromFile("./assets/background.png")) {
         std::cout << "Error loading background" << std::endl;
     }
     _spriteBackground.scale(2, 2);
     _spriteBackground.setTexture(texture);
 }
 
-
+/**
+ * @brief manage event from the windows
+ *
+ */
 void Game::manageEvent()
 {
     while (this->_window.pollEvent(_event))
@@ -45,6 +80,11 @@ void Game::manageEvent()
     }
 }
 
+
+/**
+ * @brief run the game loop
+ *
+ */
 void Game::run()
 {
     while (this->_window.isOpen()) {

@@ -1,0 +1,208 @@
+\hypertarget{classzipper__iterator}{}\doxysection{zipper\+\_\+iterator$<$ Containers $>$ Class Template Reference}
+\label{classzipper__iterator}\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+
+
+Zipper Iterator class usefull for looping through multiple sparse arrays at the same time.  
+
+
+
+
+{\ttfamily \#include $<$Zipper\+Iterator.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzipper__iterator_a2b53b7d421bdf88a586367bd6ab09ea6}\label{classzipper__iterator_a2b53b7d421bdf88a586367bd6ab09ea6}} 
+using {\bfseries value\+\_\+type} = std\+::tuple$<$ size\+\_\+t, it\+\_\+reference\+\_\+t$<$ Containers $>$... $>$
+\item 
+\mbox{\Hypertarget{classzipper__iterator_ac22f9af35da6b7afa0a6def5836d972b}\label{classzipper__iterator_ac22f9af35da6b7afa0a6def5836d972b}} 
+using {\bfseries reference} = value\+\_\+type
+\item 
+\mbox{\Hypertarget{classzipper__iterator_a2a95bfdc5a6527977daa6c8dfa2c63eb}\label{classzipper__iterator_a2a95bfdc5a6527977daa6c8dfa2c63eb}} 
+using {\bfseries pointer} = void
+\item 
+\mbox{\Hypertarget{classzipper__iterator_a00d2f77338051f8c980507c9402096b6}\label{classzipper__iterator_a00d2f77338051f8c980507c9402096b6}} 
+using {\bfseries difference\+\_\+type} = size\+\_\+t
+\item 
+\mbox{\Hypertarget{classzipper__iterator_afdc6a09eec39571c4019a73ecd969627}\label{classzipper__iterator_afdc6a09eec39571c4019a73ecd969627}} 
+using {\bfseries iterator\+\_\+category} = std\+::input\+\_\+iterator\+\_\+tag
+\item 
+\mbox{\Hypertarget{classzipper__iterator_ad0d535e3400fd7ad9fef802093d67838}\label{classzipper__iterator_ad0d535e3400fd7ad9fef802093d67838}} 
+using {\bfseries iterator\+\_\+tuple} = std\+::tuple$<$ iterator\+\_\+t$<$ Containers $>$... $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classzipper__iterator_a30c5ed7c5ac4ca2939a27da46d5ac107}{zipper\+\_\+iterator}} (const iterator\+\_\+tuple \&it\+\_\+tuple, size\+\_\+t max, size\+\_\+t idx)
+\begin{DoxyCompactList}\small\item\em Construct a zipper iterator from an iterator tuple. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classzipper__iterator_a84b00d3f9fbd379844660abcdd4cf703}{zipper\+\_\+iterator}} (const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \&z)
+\begin{DoxyCompactList}\small\item\em Copy constructor for the \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \mbox{\hyperlink{classzipper__iterator_a2d88de1788822dfd82f499cbb5ffac78}{operator++}} ()
+\begin{DoxyCompactList}\small\item\em Incrementor for the zipper iterator, increments all iterators in memory by 1. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \& \mbox{\hyperlink{classzipper__iterator_a3bd8f70854f5500a95b517335a212bf8}{operator++}} (int)
+\begin{DoxyCompactList}\small\item\em Incrementor for the zipper iterator, increments all iterators in memory by 1. \end{DoxyCompactList}\item 
+value\+\_\+type \mbox{\hyperlink{classzipper__iterator_aeb9e6c14750f23b638940ac587d24c8a}{operator$\ast$}} ()
+\begin{DoxyCompactList}\small\item\em pointer operation on \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \end{DoxyCompactList}\item 
+value\+\_\+type \mbox{\hyperlink{classzipper__iterator_a301d7035bcf5ad05be11908309b39fb1}{operator-\/$>$}} ()
+\begin{DoxyCompactList}\small\item\em pointer operation on \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classzipper__iterator_a8eec2806817ff84c5568eb84c0acf5e6}{operator==}} (const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \&lhs, const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \&rhs)
+\begin{DoxyCompactList}\small\item\em assertion operator on 2 zipper iterators \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classzipper__iterator_a245a1e3612d529a73301cff8e319f895}{operator!=}} (const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \&lhs, const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \&rhs)
+\begin{DoxyCompactList}\small\item\em not equal assertion operator on 2 zipper iterators \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class... Containers$>$\newline
+class zipper\+\_\+iterator$<$ Containers $>$}
+
+Zipper Iterator class usefull for looping through multiple sparse arrays at the same time. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classzipper__iterator_a30c5ed7c5ac4ca2939a27da46d5ac107}\label{classzipper__iterator_a30c5ed7c5ac4ca2939a27da46d5ac107}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!zipper\_iterator@{zipper\_iterator}}
+\index{zipper\_iterator@{zipper\_iterator}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{zipper\_iterator()}{zipper\_iterator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} (\begin{DoxyParamCaption}\item[{const iterator\+\_\+tuple \&}]{it\+\_\+tuple,  }\item[{size\+\_\+t}]{max,  }\item[{size\+\_\+t}]{idx }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a zipper iterator from an iterator tuple. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em it\+\_\+tuple} & tuple containing iterators for the templated containers \\
+\hline
+{\em max} & maximum size of the iterator range \\
+\hline
+{\em idx} & current index of the iterator\+\_\+tuple previously passed in parameter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classzipper__iterator_a84b00d3f9fbd379844660abcdd4cf703}\label{classzipper__iterator_a84b00d3f9fbd379844660abcdd4cf703}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!zipper\_iterator@{zipper\_iterator}}
+\index{zipper\_iterator@{zipper\_iterator}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{zipper\_iterator()}{zipper\_iterator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$ \&}]{z }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy constructor for the \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em z} & another \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classzipper__iterator_aeb9e6c14750f23b638940ac587d24c8a}\label{classzipper__iterator_aeb9e6c14750f23b638940ac587d24c8a}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+value\+\_\+type \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::operator$\ast$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+pointer operation on \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} 
+
+\begin{DoxyReturn}{Returns}
+tuple of values corresponding to the associated iterators of each container 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classzipper__iterator_a2d88de1788822dfd82f499cbb5ffac78}\label{classzipper__iterator_a2d88de1788822dfd82f499cbb5ffac78}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::operator++ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Incrementor for the zipper iterator, increments all iterators in memory by 1. 
+
+\begin{DoxyReturn}{Returns}
+current \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classzipper__iterator_a3bd8f70854f5500a95b517335a212bf8}\label{classzipper__iterator_a3bd8f70854f5500a95b517335a212bf8}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}\& \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Incrementor for the zipper iterator, increments all iterators in memory by 1. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} object before the operation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classzipper__iterator_a301d7035bcf5ad05be11908309b39fb1}\label{classzipper__iterator_a301d7035bcf5ad05be11908309b39fb1}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/$>$()}{operator->()}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+value\+\_\+type \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$\+::operator-\/$>$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+pointer operation on \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} 
+
+\begin{DoxyReturn}{Returns}
+tuple of values corresponding to the associated iterators of each container 
+\end{DoxyReturn}
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classzipper__iterator_a245a1e3612d529a73301cff8e319f895}\label{classzipper__iterator_a245a1e3612d529a73301cff8e319f895}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator"!=}{operator!=}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+bool operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+not equal assertion operator on 2 zipper iterators 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & first \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} to compare \\
+\hline
+{\em rhs} & second \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+false if the two zipper\+\_\+iterators are at the same index and contain the same values, true otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classzipper__iterator_a8eec2806817ff84c5568eb84c0acf5e6}\label{classzipper__iterator_a8eec2806817ff84c5568eb84c0acf5e6}} 
+\index{zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!zipper\_iterator$<$ Containers $>$@{zipper\_iterator$<$ Containers $>$}}
+\doxysubsubsection{\texorpdfstring{operator==}{operator==}}
+{\footnotesize\ttfamily template$<$class... Containers$>$ \\
+bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$ \&}]{lhs,  }\item[{const \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}}$<$ Containers $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+assertion operator on 2 zipper iterators 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & first \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} to compare \\
+\hline
+{\em rhs} & second \mbox{\hyperlink{classzipper__iterator}{zipper\+\_\+iterator}} to compare\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the two zipper\+\_\+iterators are at the same index and contain the same values, false otherwise 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Ecs/Zipper\+Iterator.\+hpp\end{DoxyCompactItemize}

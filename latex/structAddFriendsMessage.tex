@@ -1,0 +1,76 @@
+\hypertarget{structAddFriendsMessage}{}\doxysection{Add\+Friends\+Message Struct Reference}
+\label{structAddFriendsMessage}\index{AddFriendsMessage@{AddFriendsMessage}}
+
+
+contains the information necessary to request a friend  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Add\+Friends\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structAddFriendsMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structAddFriendsMessage_acca5b302ada3fba8219264f3dd0ae169}{Add\+Friends\+Message}} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, std\+::string friend\+Name\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em Constructor initializing following parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char \mbox{\hyperlink{structAddFriendsMessage_a397c133c3d527faf60a3baa963c87bf5}{username}} \mbox{[}20\mbox{]}
+\item 
+char \mbox{\hyperlink{structAddFriendsMessage_ae41c069d337b284c19fcdd2d4833af4e}{friend\+Name}} \mbox{[}20\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+contains the information necessary to request a friend 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structAddFriendsMessage_acca5b302ada3fba8219264f3dd0ae169}\label{structAddFriendsMessage_acca5b302ada3fba8219264f3dd0ae169}} 
+\index{AddFriendsMessage@{AddFriendsMessage}!AddFriendsMessage@{AddFriendsMessage}}
+\index{AddFriendsMessage@{AddFriendsMessage}!AddFriendsMessage@{AddFriendsMessage}}
+\doxysubsubsection{\texorpdfstring{AddFriendsMessage()}{AddFriendsMessage()}}
+{\footnotesize\ttfamily Add\+Friends\+Message\+::\+Add\+Friends\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{username\+\_\+,  }\item[{std\+::string}]{friend\+Name\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor initializing following parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em username\+\_\+} & Username of user. \\
+\hline
+{\em friend\+Name\+\_\+} & Username of friend to remove. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structAddFriendsMessage_ae41c069d337b284c19fcdd2d4833af4e}\label{structAddFriendsMessage_ae41c069d337b284c19fcdd2d4833af4e}} 
+\index{AddFriendsMessage@{AddFriendsMessage}!friendName@{friendName}}
+\index{friendName@{friendName}!AddFriendsMessage@{AddFriendsMessage}}
+\doxysubsubsection{\texorpdfstring{friendName}{friendName}}
+{\footnotesize\ttfamily char Add\+Friends\+Message\+::friend\+Name\mbox{[}20\mbox{]}}
+
+Username of friend to remove. \mbox{\Hypertarget{structAddFriendsMessage_a397c133c3d527faf60a3baa963c87bf5}\label{structAddFriendsMessage_a397c133c3d527faf60a3baa963c87bf5}} 
+\index{AddFriendsMessage@{AddFriendsMessage}!username@{username}}
+\index{username@{username}!AddFriendsMessage@{AddFriendsMessage}}
+\doxysubsubsection{\texorpdfstring{username}{username}}
+{\footnotesize\ttfamily char Add\+Friends\+Message\+::username\mbox{[}20\mbox{]}}
+
+Username of user. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

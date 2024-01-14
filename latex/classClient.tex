@@ -1,0 +1,602 @@
+\hypertarget{classClient}{}\doxysection{Client Class Reference}
+\label{classClient}\index{Client@{Client}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classClient_aa785458c19de1737aa616a4d7f14cdef}{Client}} (std\+::string ip, int port, \mbox{\hyperlink{classEventListener}{Event\+Listener}} \&listener, \mbox{\hyperlink{classregistry}{registry}} \&ecs, std\+::mutex \&mtx\+\_\+)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classClient}{Client}}\+:\+: \mbox{\hyperlink{classClient}{Client}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_a840e519ca781888cbd54181572ebe3a7}\label{classClient_a840e519ca781888cbd54181572ebe3a7}} 
+\mbox{\hyperlink{classClient_a840e519ca781888cbd54181572ebe3a7}{$\sim$\+Client}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classClient}{Client}}\+:\+: \mbox{\hyperlink{classClient}{Client}} object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a168399eeddbdde9a219278158914b9d2}{run}} ()
+\begin{DoxyCompactList}\small\item\em run the client window \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{classClient_ad56b05fc35da53496f318c7bdd96ebed}{send\+\_\+to\+\_\+server}} (const T \&structure)
+\begin{DoxyCompactList}\small\item\em send a structure to the server \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_a85e60f733164296d0c545597f0bd08be}\label{classClient_a85e60f733164296d0c545597f0bd08be}} 
+void \mbox{\hyperlink{classClient_a85e60f733164296d0c545597f0bd08be}{display\+Texts}} ()
+\begin{DoxyCompactList}\small\item\em display on-\/screen texts. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_a8463da33234bc2c3e3715b786f4cf627}\label{classClient_a8463da33234bc2c3e3715b786f4cf627}} 
+void \mbox{\hyperlink{classClient_a8463da33234bc2c3e3715b786f4cf627}{add\+Level}} ()
+\begin{DoxyCompactList}\small\item\em Increase the level. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_a81779397297d815088996c7372bfe026}\label{classClient_a81779397297d815088996c7372bfe026}} 
+void \mbox{\hyperlink{classClient_a81779397297d815088996c7372bfe026}{add\+Score}} ()
+\begin{DoxyCompactList}\small\item\em Increase the score. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_ae31980599eef0c42f08d9755e08a4760}\label{classClient_ae31980599eef0c42f08d9755e08a4760}} 
+void \mbox{\hyperlink{classClient_ae31980599eef0c42f08d9755e08a4760}{decrease\+Lives}} ()
+\begin{DoxyCompactList}\small\item\em Decrease the lives. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classClient_ae06feaf173c523966b816bb505f4ca0d}\label{classClient_ae06feaf173c523966b816bb505f4ca0d}} 
+void \mbox{\hyperlink{classClient_ae06feaf173c523966b816bb505f4ca0d}{increase\+Lives}} ()
+\begin{DoxyCompactList}\small\item\em Increase the lives. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_aeb5979840f6a1769353f31f7bea764b1}{set\+Level}} (int level)
+\begin{DoxyCompactList}\small\item\em Get the level. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a84ca2859e7ccceb8abd0858da4674e1d}{manage\+Event}} ()
+\begin{DoxyCompactList}\small\item\em manage sfml event \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}{receive}} ()
+\begin{DoxyCompactList}\small\item\em Receive event from the server. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a4a07db434d377496401b3d1163c0e6d2}{receive\+\_\+position\+\_\+snapshot\+\_\+update}} (std\+::vector$<$ char $>$ \&)
+\begin{DoxyCompactList}\small\item\em Position snapshot update from server. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a911ddce0764d74e47eab48e196dc5ebe}{receive\+\_\+scale\+\_\+snapshot\+\_\+update}} (std\+::vector$<$ char $>$ \&)
+\begin{DoxyCompactList}\small\item\em Scale snapshot update from server. \end{DoxyCompactList}\item 
+std\+::vector$<$ char $>$ \mbox{\hyperlink{classClient_a1062e4d1dda0a8f0844ac3b9bf66d280}{receive\+\_\+raw\+\_\+data\+\_\+from\+\_\+client}} ()
+\begin{DoxyCompactList}\small\item\em Receive data from the server and store them. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_acdebfad53cf68fca1718475c119cc5c3}{receive\+\_\+death\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em get when a player dead \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_ae2a2622b8c3c122e0698cf54628b1400}{receive\+\_\+high\+\_\+score}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em get best 3 highscores from server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a20f8a7a420d3b0aa16a9ecef6e888c33}{receive\+\_\+login\+\_\+response}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em while login, this get the login response from server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_acf467bfe986134c956b5d893c4475212}{receive\+\_\+drawable\+\_\+snapshot\+\_\+update}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive thr drawable from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_ac4076ae09ccfbf64b28605675846192a}{receive\+\_\+animated\+\_\+drawable\+\_\+snapshot}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive the animated drawable from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a5780253a5a01dc7a5c810c186bde7a81}{receive\+\_\+animated\+\_\+drawable\+\_\+state\+\_\+update}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive animation update from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_ac3f7b703cb03d9785f557147ef8bf244}{receive\+\_\+friends\+\_\+reponse}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em get friends from server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_afef9c25e48c1816a4626697f6c88f91f}{receive\+\_\+add\+\_\+friends\+\_\+reponse}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em response of adding friends from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}{receive\+\_\+remove\+\_\+friends\+\_\+reponse}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em reponse of removing friends from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a14c553437a24bc81a743ac3ffac7ce7a}{receive\+\_\+chat\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive a chat from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a2228b2d798703ac586d55424ad676c56}{recieve\+\_\+room\+\_\+creation\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive from the server a room creation event \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_abfaf172d44543ef98139144176640905}{receive\+\_\+room\+\_\+join\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive from the server a room join event \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_a0562bd83f8eef59e647f529ffe973926}{receive\+\_\+health\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive health event from the server \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classClient_ab027ca29b175e97f363a594ad14606a0}{receive\+\_\+score\+\_\+event}} (std\+::vector$<$ char $>$ \&server\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em receive score event from the server \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_a1a37e6650eef7546f32d52b06776770c}{display\+Score\+Board\+Menu}} ()
+\begin{DoxyCompactList}\small\item\em Display the scoreboard menu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_ad47257b87ca02f998b8056843172e190}{handle\+Input}} (sf\+::\+Event \&event)
+\begin{DoxyCompactList}\small\item\em Handle input from the user. \end{DoxyCompactList}\item 
+entity\+\_\+t \mbox{\hyperlink{classClient_aa1bf6f4b16099f2cb0e0bfbc07e0b273}{init\+\_\+new\+\_\+entity}} (entity\+\_\+t srv\+Entity)
+\begin{DoxyCompactList}\small\item\em initialize a new entity \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_a752971fba33e068a5c12ea41d4cc64e1}{manage\+Cli}} ()
+\begin{DoxyCompactList}\small\item\em manage the client cli at the beginning of the program \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classClient_a36cac90702860598162e1d725201a1a8}{init\+Class}} ()
+\begin{DoxyCompactList}\small\item\em Init client class. \end{DoxyCompactList}\item 
+entity\+\_\+t \mbox{\hyperlink{classClient_a6820e027724294e9744c08018885b8d7}{get\+\_\+entity\+\_\+from\+\_\+server\+\_\+entity}} (entity\+\_\+t srv\+Entity)
+\begin{DoxyCompactList}\small\item\em Get client entity from the server\textquotesingle{}s entity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classClient_aa785458c19de1737aa616a4d7f14cdef}\label{classClient_aa785458c19de1737aa616a4d7f14cdef}} 
+\index{Client@{Client}!Client@{Client}}
+\index{Client@{Client}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{Client()}{Client()}}
+{\footnotesize\ttfamily Client\+::\+Client (\begin{DoxyParamCaption}\item[{std\+::string}]{ip,  }\item[{int}]{port,  }\item[{\mbox{\hyperlink{classEventListener}{Event\+Listener}} \&}]{listener,  }\item[{\mbox{\hyperlink{classregistry}{registry}} \&}]{ecs,  }\item[{std\+::mutex \&}]{mtx\+\_\+ }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{classClient}{Client}}\+:\+: \mbox{\hyperlink{classClient}{Client}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & ip to connect \\
+\hline
+{\em port} & port to connect \\
+\hline
+{\em listener} & event listener \\
+\hline
+{\em ecs} & ecs registry \\
+\hline
+{\em mtx\+\_\+} & mutex for thread safety \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classClient_a1a37e6650eef7546f32d52b06776770c}\label{classClient_a1a37e6650eef7546f32d52b06776770c}} 
+\index{Client@{Client}!displayScoreBoardMenu@{displayScoreBoardMenu}}
+\index{displayScoreBoardMenu@{displayScoreBoardMenu}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{displayScoreBoardMenu()}{displayScoreBoardMenu()}}
+{\footnotesize\ttfamily void Client\+::display\+Score\+Board\+Menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Display the scoreboard menu. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a6820e027724294e9744c08018885b8d7}\label{classClient_a6820e027724294e9744c08018885b8d7}} 
+\index{Client@{Client}!get\_entity\_from\_server\_entity@{get\_entity\_from\_server\_entity}}
+\index{get\_entity\_from\_server\_entity@{get\_entity\_from\_server\_entity}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{get\_entity\_from\_server\_entity()}{get\_entity\_from\_server\_entity()}}
+{\footnotesize\ttfamily entity\+\_\+t Client\+::get\+\_\+entity\+\_\+from\+\_\+server\+\_\+entity (\begin{DoxyParamCaption}\item[{entity\+\_\+t}]{srv\+Entity }\end{DoxyParamCaption})}
+
+
+
+Get client entity from the server\textquotesingle{}s entity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em srv\+Entity} & server entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+client entity 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ad47257b87ca02f998b8056843172e190}\label{classClient_ad47257b87ca02f998b8056843172e190}} 
+\index{Client@{Client}!handleInput@{handleInput}}
+\index{handleInput@{handleInput}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{handleInput()}{handleInput()}}
+{\footnotesize\ttfamily void Client\+::handle\+Input (\begin{DoxyParamCaption}\item[{sf\+::\+Event \&}]{event }\end{DoxyParamCaption})}
+
+
+
+Handle input from the user. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Event of the window \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classClient_aa1bf6f4b16099f2cb0e0bfbc07e0b273}\label{classClient_aa1bf6f4b16099f2cb0e0bfbc07e0b273}} 
+\index{Client@{Client}!init\_new\_entity@{init\_new\_entity}}
+\index{init\_new\_entity@{init\_new\_entity}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{init\_new\_entity()}{init\_new\_entity()}}
+{\footnotesize\ttfamily entity\+\_\+t Client\+::init\+\_\+new\+\_\+entity (\begin{DoxyParamCaption}\item[{entity\+\_\+t}]{srv\+Entity }\end{DoxyParamCaption})}
+
+
+
+initialize a new entity 
+
+
+\begin{DoxyParams}{Parameters}
+{\em srv\+Entity} & server entity to initialize for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+created entity 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a36cac90702860598162e1d725201a1a8}\label{classClient_a36cac90702860598162e1d725201a1a8}} 
+\index{Client@{Client}!initClass@{initClass}}
+\index{initClass@{initClass}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{initClass()}{initClass()}}
+{\footnotesize\ttfamily void Client\+::init\+Class (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Init client class. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a752971fba33e068a5c12ea41d4cc64e1}\label{classClient_a752971fba33e068a5c12ea41d4cc64e1}} 
+\index{Client@{Client}!manageCli@{manageCli}}
+\index{manageCli@{manageCli}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{manageCli()}{manageCli()}}
+{\footnotesize\ttfamily void Client\+::manage\+Cli (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+manage the client cli at the beginning of the program 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a84ca2859e7ccceb8abd0858da4674e1d}\label{classClient_a84ca2859e7ccceb8abd0858da4674e1d}} 
+\index{Client@{Client}!manageEvent@{manageEvent}}
+\index{manageEvent@{manageEvent}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{manageEvent()}{manageEvent()}}
+{\footnotesize\ttfamily int Client\+::manage\+Event (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+manage sfml event 
+
+manage event of the window
+
+\begin{DoxyReturn}{Returns}
+int
+
+int 0 if no error, 1 on error or on window close 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}\label{classClient_a1cbd83a26acc32a68d35f4b94bc9af68}} 
+\index{Client@{Client}!receive@{receive}}
+\index{receive@{receive}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive()}{receive()}}
+{\footnotesize\ttfamily void Client\+::receive (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Receive event from the server. 
+
+\begin{DoxyReturn}{Returns}
+void
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_afef9c25e48c1816a4626697f6c88f91f}\label{classClient_afef9c25e48c1816a4626697f6c88f91f}} 
+\index{Client@{Client}!receive\_add\_friends\_reponse@{receive\_add\_friends\_reponse}}
+\index{receive\_add\_friends\_reponse@{receive\_add\_friends\_reponse}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_add\_friends\_reponse()}{receive\_add\_friends\_reponse()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+add\+\_\+friends\+\_\+reponse (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+response of adding friends from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ac4076ae09ccfbf64b28605675846192a}\label{classClient_ac4076ae09ccfbf64b28605675846192a}} 
+\index{Client@{Client}!receive\_animated\_drawable\_snapshot@{receive\_animated\_drawable\_snapshot}}
+\index{receive\_animated\_drawable\_snapshot@{receive\_animated\_drawable\_snapshot}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_animated\_drawable\_snapshot()}{receive\_animated\_drawable\_snapshot()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+animated\+\_\+drawable\+\_\+snapshot (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive the animated drawable from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a5780253a5a01dc7a5c810c186bde7a81}\label{classClient_a5780253a5a01dc7a5c810c186bde7a81}} 
+\index{Client@{Client}!receive\_animated\_drawable\_state\_update@{receive\_animated\_drawable\_state\_update}}
+\index{receive\_animated\_drawable\_state\_update@{receive\_animated\_drawable\_state\_update}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_animated\_drawable\_state\_update()}{receive\_animated\_drawable\_state\_update()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+animated\+\_\+drawable\+\_\+state\+\_\+update (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive animation update from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a14c553437a24bc81a743ac3ffac7ce7a}\label{classClient_a14c553437a24bc81a743ac3ffac7ce7a}} 
+\index{Client@{Client}!receive\_chat\_event@{receive\_chat\_event}}
+\index{receive\_chat\_event@{receive\_chat\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_chat\_event()}{receive\_chat\_event()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+chat\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive a chat from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_acdebfad53cf68fca1718475c119cc5c3}\label{classClient_acdebfad53cf68fca1718475c119cc5c3}} 
+\index{Client@{Client}!receive\_death\_event@{receive\_death\_event}}
+\index{receive\_death\_event@{receive\_death\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_death\_event()}{receive\_death\_event()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+death\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+get when a player dead 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_acf467bfe986134c956b5d893c4475212}\label{classClient_acf467bfe986134c956b5d893c4475212}} 
+\index{Client@{Client}!receive\_drawable\_snapshot\_update@{receive\_drawable\_snapshot\_update}}
+\index{receive\_drawable\_snapshot\_update@{receive\_drawable\_snapshot\_update}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_drawable\_snapshot\_update()}{receive\_drawable\_snapshot\_update()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+drawable\+\_\+snapshot\+\_\+update (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive thr drawable from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ac3f7b703cb03d9785f557147ef8bf244}\label{classClient_ac3f7b703cb03d9785f557147ef8bf244}} 
+\index{Client@{Client}!receive\_friends\_reponse@{receive\_friends\_reponse}}
+\index{receive\_friends\_reponse@{receive\_friends\_reponse}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_friends\_reponse()}{receive\_friends\_reponse()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+friends\+\_\+reponse (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+get friends from server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a0562bd83f8eef59e647f529ffe973926}\label{classClient_a0562bd83f8eef59e647f529ffe973926}} 
+\index{Client@{Client}!receive\_health\_event@{receive\_health\_event}}
+\index{receive\_health\_event@{receive\_health\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_health\_event()}{receive\_health\_event()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+health\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive health event from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & raw server message \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ae2a2622b8c3c122e0698cf54628b1400}\label{classClient_ae2a2622b8c3c122e0698cf54628b1400}} 
+\index{Client@{Client}!receive\_high\_score@{receive\_high\_score}}
+\index{receive\_high\_score@{receive\_high\_score}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_high\_score()}{receive\_high\_score()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+high\+\_\+score (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+get best 3 highscores from server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a20f8a7a420d3b0aa16a9ecef6e888c33}\label{classClient_a20f8a7a420d3b0aa16a9ecef6e888c33}} 
+\index{Client@{Client}!receive\_login\_response@{receive\_login\_response}}
+\index{receive\_login\_response@{receive\_login\_response}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_login\_response()}{receive\_login\_response()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+login\+\_\+response (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+while login, this get the login response from server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a4a07db434d377496401b3d1163c0e6d2}\label{classClient_a4a07db434d377496401b3d1163c0e6d2}} 
+\index{Client@{Client}!receive\_position\_snapshot\_update@{receive\_position\_snapshot\_update}}
+\index{receive\_position\_snapshot\_update@{receive\_position\_snapshot\_update}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_position\_snapshot\_update()}{receive\_position\_snapshot\_update()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+position\+\_\+snapshot\+\_\+update (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+Position snapshot update from server. 
+
+get the player position from the server
+
+\begin{DoxyReturn}{Returns}
+int
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a1062e4d1dda0a8f0844ac3b9bf66d280}\label{classClient_a1062e4d1dda0a8f0844ac3b9bf66d280}} 
+\index{Client@{Client}!receive\_raw\_data\_from\_client@{receive\_raw\_data\_from\_client}}
+\index{receive\_raw\_data\_from\_client@{receive\_raw\_data\_from\_client}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_raw\_data\_from\_client()}{receive\_raw\_data\_from\_client()}}
+{\footnotesize\ttfamily std\+::vector$<$ char $>$ Client\+::receive\+\_\+raw\+\_\+data\+\_\+from\+\_\+client (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Receive data from the server and store them. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$char$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}\label{classClient_a3ba457d759cff151c353f4e6fe2ac0b9}} 
+\index{Client@{Client}!receive\_remove\_friends\_reponse@{receive\_remove\_friends\_reponse}}
+\index{receive\_remove\_friends\_reponse@{receive\_remove\_friends\_reponse}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_remove\_friends\_reponse()}{receive\_remove\_friends\_reponse()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+remove\+\_\+friends\+\_\+reponse (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+reponse of removing friends from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_abfaf172d44543ef98139144176640905}\label{classClient_abfaf172d44543ef98139144176640905}} 
+\index{Client@{Client}!receive\_room\_join\_event@{receive\_room\_join\_event}}
+\index{receive\_room\_join\_event@{receive\_room\_join\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_room\_join\_event()}{receive\_room\_join\_event()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+room\+\_\+join\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive from the server a room join event 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & raw server message \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a911ddce0764d74e47eab48e196dc5ebe}\label{classClient_a911ddce0764d74e47eab48e196dc5ebe}} 
+\index{Client@{Client}!receive\_scale\_snapshot\_update@{receive\_scale\_snapshot\_update}}
+\index{receive\_scale\_snapshot\_update@{receive\_scale\_snapshot\_update}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_scale\_snapshot\_update()}{receive\_scale\_snapshot\_update()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+scale\+\_\+snapshot\+\_\+update (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+Scale snapshot update from server. 
+
+get the scale from the server
+
+\begin{DoxyReturn}{Returns}
+int
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & The message from the server \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int The packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ab027ca29b175e97f363a594ad14606a0}\label{classClient_ab027ca29b175e97f363a594ad14606a0}} 
+\index{Client@{Client}!receive\_score\_event@{receive\_score\_event}}
+\index{receive\_score\_event@{receive\_score\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{receive\_score\_event()}{receive\_score\_event()}}
+{\footnotesize\ttfamily int Client\+::receive\+\_\+score\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive score event from the server 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & raw server message \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+packet id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a2228b2d798703ac586d55424ad676c56}\label{classClient_a2228b2d798703ac586d55424ad676c56}} 
+\index{Client@{Client}!recieve\_room\_creation\_event@{recieve\_room\_creation\_event}}
+\index{recieve\_room\_creation\_event@{recieve\_room\_creation\_event}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{recieve\_room\_creation\_event()}{recieve\_room\_creation\_event()}}
+{\footnotesize\ttfamily int Client\+::recieve\+\_\+room\+\_\+creation\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::vector$<$ char $>$ \&}]{server\+\_\+msg }\end{DoxyParamCaption})}
+
+
+
+receive from the server a room creation event 
+
+
+\begin{DoxyParams}{Parameters}
+{\em server\+\_\+msg} & raw server message \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_a168399eeddbdde9a219278158914b9d2}\label{classClient_a168399eeddbdde9a219278158914b9d2}} 
+\index{Client@{Client}!run@{run}}
+\index{run@{run}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily int Client\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+run the client window 
+
+\begin{DoxyReturn}{Returns}
+int return 0 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classClient_ad56b05fc35da53496f318c7bdd96ebed}\label{classClient_ad56b05fc35da53496f318c7bdd96ebed}} 
+\index{Client@{Client}!send\_to\_server@{send\_to\_server}}
+\index{send\_to\_server@{send\_to\_server}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{send\_to\_server()}{send\_to\_server()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void Client\+::send\+\_\+to\+\_\+server (\begin{DoxyParamCaption}\item[{const T \&}]{structure }\end{DoxyParamCaption})}
+
+
+
+send a structure to the server 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em structure} & stucture to send \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classClient_aeb5979840f6a1769353f31f7bea764b1}\label{classClient_aeb5979840f6a1769353f31f7bea764b1}} 
+\index{Client@{Client}!setLevel@{setLevel}}
+\index{setLevel@{setLevel}!Client@{Client}}
+\doxysubsubsection{\texorpdfstring{setLevel()}{setLevel()}}
+{\footnotesize\ttfamily void Client\+::set\+Level (\begin{DoxyParamCaption}\item[{int}]{level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the level. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Client/Client.\+hpp\item 
+src/\+Client/Client.\+cpp\end{DoxyCompactItemize}

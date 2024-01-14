@@ -1,0 +1,58 @@
+\hypertarget{structFriendsMessage}{}\doxysection{Friends\+Message Struct Reference}
+\label{structFriendsMessage}\index{FriendsMessage@{FriendsMessage}}
+
+
+is used as a request from the client to the server for a friend list  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
+Inheritance diagram for Friends\+Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{structFriendsMessage}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structFriendsMessage_a1982e2b9c27d782522a366f21d006689}{Friends\+Message}} (int16\+\_\+t id\+\_\+, std\+::string username\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em Constructor initiating the following parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structFriendsMessage_aec5549bb3c38150d18c7270c616d4974}\label{structFriendsMessage_aec5549bb3c38150d18c7270c616d4974}} 
+char \mbox{\hyperlink{structFriendsMessage_aec5549bb3c38150d18c7270c616d4974}{username}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Username of the user to fetch the friend list for. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+is used as a request from the client to the server for a friend list 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structFriendsMessage_a1982e2b9c27d782522a366f21d006689}\label{structFriendsMessage_a1982e2b9c27d782522a366f21d006689}} 
+\index{FriendsMessage@{FriendsMessage}!FriendsMessage@{FriendsMessage}}
+\index{FriendsMessage@{FriendsMessage}!FriendsMessage@{FriendsMessage}}
+\doxysubsubsection{\texorpdfstring{FriendsMessage()}{FriendsMessage()}}
+{\footnotesize\ttfamily Friends\+Message\+::\+Friends\+Message (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{username\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor initiating the following parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em username\+\_\+} & Username of the user to fetch the friend list for. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Network.\+hpp\end{DoxyCompactItemize}

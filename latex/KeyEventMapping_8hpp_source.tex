@@ -1,0 +1,120 @@
+\doxysection{Key\+Event\+Mapping.\+hpp}
+\hypertarget{KeyEventMapping_8hpp_source}{}\label{KeyEventMapping_8hpp_source}\index{src/KeyEventMapping.hpp@{src/KeyEventMapping.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{**\ EPITECH\ PROJECT,\ 2024}}
+\DoxyCodeLine{00003\ \textcolor{comment}{**\ rtype}}
+\DoxyCodeLine{00004\ \textcolor{comment}{**\ File\ description:}}
+\DoxyCodeLine{00005\ \textcolor{comment}{**\ KeyEventMapping}}
+\DoxyCodeLine{00006\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ KEYEVENTMAPPING\_HPP\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#define\ KEYEVENTMAPPING\_HPP\_}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\ \ \ \ \#include\ <SFML/Graphics.hpp>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\ \ \ \ \#include\ <iostream>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\ \ \ \ \#include\ <unordered\_map>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{static}\ std::unordered\_map<std::string,\ int>\ KeyIds\ =\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ \{\textcolor{stringliteral}{"{}A"{}},\ 0\},}
+\DoxyCodeLine{00016\ \ \ \ \ \{\textcolor{stringliteral}{"{}B"{}},\ 1\},}
+\DoxyCodeLine{00017\ \ \ \ \ \{\textcolor{stringliteral}{"{}C"{}},\ 2\},}
+\DoxyCodeLine{00018\ \ \ \ \ \{\textcolor{stringliteral}{"{}D"{}},\ 3\},}
+\DoxyCodeLine{00019\ \ \ \ \ \{\textcolor{stringliteral}{"{}E"{}},\ 4\},}
+\DoxyCodeLine{00020\ \ \ \ \ \{\textcolor{stringliteral}{"{}F"{}},\ 5\},}
+\DoxyCodeLine{00021\ \ \ \ \ \{\textcolor{stringliteral}{"{}G"{}},\ 6\},}
+\DoxyCodeLine{00022\ \ \ \ \ \{\textcolor{stringliteral}{"{}H"{}},\ 7\},}
+\DoxyCodeLine{00023\ \ \ \ \ \{\textcolor{stringliteral}{"{}I"{}},\ 8\},}
+\DoxyCodeLine{00024\ \ \ \ \ \{\textcolor{stringliteral}{"{}J"{}},\ 9\},}
+\DoxyCodeLine{00025\ \ \ \ \ \{\textcolor{stringliteral}{"{}K"{}},\ 10\},}
+\DoxyCodeLine{00026\ \ \ \ \ \{\textcolor{stringliteral}{"{}L"{}},\ 11\},}
+\DoxyCodeLine{00027\ \ \ \ \ \{\textcolor{stringliteral}{"{}M"{}},\ 12\},}
+\DoxyCodeLine{00028\ \ \ \ \ \{\textcolor{stringliteral}{"{}N"{}},\ 13\},}
+\DoxyCodeLine{00029\ \ \ \ \ \{\textcolor{stringliteral}{"{}O"{}},\ 14\},}
+\DoxyCodeLine{00030\ \ \ \ \ \{\textcolor{stringliteral}{"{}P"{}},\ 15\},}
+\DoxyCodeLine{00031\ \ \ \ \ \{\textcolor{stringliteral}{"{}Q"{}},\ 16\},}
+\DoxyCodeLine{00032\ \ \ \ \ \{\textcolor{stringliteral}{"{}R"{}},\ 17\},}
+\DoxyCodeLine{00033\ \ \ \ \ \{\textcolor{stringliteral}{"{}S"{}},\ 18\},}
+\DoxyCodeLine{00034\ \ \ \ \ \{\textcolor{stringliteral}{"{}T"{}},\ 19\},}
+\DoxyCodeLine{00035\ \ \ \ \ \{\textcolor{stringliteral}{"{}U"{}},\ 20\},}
+\DoxyCodeLine{00036\ \ \ \ \ \{\textcolor{stringliteral}{"{}V"{}},\ 21\},}
+\DoxyCodeLine{00037\ \ \ \ \ \{\textcolor{stringliteral}{"{}W"{}},\ 22\},}
+\DoxyCodeLine{00038\ \ \ \ \ \{\textcolor{stringliteral}{"{}X"{}},\ 23\},}
+\DoxyCodeLine{00039\ \ \ \ \ \{\textcolor{stringliteral}{"{}Y"{}},\ 24\},}
+\DoxyCodeLine{00040\ \ \ \ \ \{\textcolor{stringliteral}{"{}Z"{}},\ 25\},}
+\DoxyCodeLine{00041\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num0"{}},\ 26\},}
+\DoxyCodeLine{00042\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num1"{}},\ 27\},}
+\DoxyCodeLine{00043\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num2"{}},\ 28\},}
+\DoxyCodeLine{00044\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num3"{}},\ 29\},}
+\DoxyCodeLine{00045\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num4"{}},\ 30\},}
+\DoxyCodeLine{00046\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num5"{}},\ 31\},}
+\DoxyCodeLine{00047\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num6"{}},\ 32\},}
+\DoxyCodeLine{00048\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num7"{}},\ 33\},}
+\DoxyCodeLine{00049\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num8"{}},\ 34\},}
+\DoxyCodeLine{00050\ \ \ \ \ \{\textcolor{stringliteral}{"{}Num9"{}},\ 35\},}
+\DoxyCodeLine{00051\ \ \ \ \ \{\textcolor{stringliteral}{"{}Space"{}},\ 36\},}
+\DoxyCodeLine{00052\ \ \ \ \ \{\textcolor{stringliteral}{"{}Backspace"{}},\ 37\},}
+\DoxyCodeLine{00053\ \ \ \ \ \{\textcolor{stringliteral}{"{}Comma"{}},\ 38\},}
+\DoxyCodeLine{00054\ \ \ \ \ \{\textcolor{stringliteral}{"{}SemiColon"{}},\ 39\},}
+\DoxyCodeLine{00055\ \ \ \ \ \{\textcolor{stringliteral}{"{}Enter"{}},\ 40\},}
+\DoxyCodeLine{00056\ \ \ \ \ \{\textcolor{stringliteral}{"{}Left"{}},\ 41\},}
+\DoxyCodeLine{00057\ \ \ \ \ \{\textcolor{stringliteral}{"{}Right"{}},\ 42\},}
+\DoxyCodeLine{00058\ \ \ \ \ \{\textcolor{stringliteral}{"{}Up"{}},\ 43\},}
+\DoxyCodeLine{00059\ \ \ \ \ \{\textcolor{stringliteral}{"{}Down"{}},\ 44\},}
+\DoxyCodeLine{00060\ \ \ \ \ \{\textcolor{stringliteral}{"{}Lshift"{}},\ 45\},}
+\DoxyCodeLine{00061\ \ \ \ \ \{\textcolor{stringliteral}{"{}Tab"{}},\ 46\},}
+\DoxyCodeLine{00062\ \};}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{static}\ std::unordered\_map<sf::Keyboard::Key,\ std::string>\ SFMLKeys\ =\ \{}
+\DoxyCodeLine{00065\ \ \ \ \ \{sf::Keyboard::A,\ \textcolor{stringliteral}{"{}A"{}}\},}
+\DoxyCodeLine{00066\ \ \ \ \ \{sf::Keyboard::B,\ \textcolor{stringliteral}{"{}B"{}}\},}
+\DoxyCodeLine{00067\ \ \ \ \ \{sf::Keyboard::C,\ \textcolor{stringliteral}{"{}C"{}}\},}
+\DoxyCodeLine{00068\ \ \ \ \ \{sf::Keyboard::D,\ \textcolor{stringliteral}{"{}D"{}}\},}
+\DoxyCodeLine{00069\ \ \ \ \ \{sf::Keyboard::E,\ \textcolor{stringliteral}{"{}E"{}}\},}
+\DoxyCodeLine{00070\ \ \ \ \ \{sf::Keyboard::F,\ \textcolor{stringliteral}{"{}F"{}}\},}
+\DoxyCodeLine{00071\ \ \ \ \ \{sf::Keyboard::G,\ \textcolor{stringliteral}{"{}G"{}}\},}
+\DoxyCodeLine{00072\ \ \ \ \ \{sf::Keyboard::H,\ \textcolor{stringliteral}{"{}H"{}}\},}
+\DoxyCodeLine{00073\ \ \ \ \ \{sf::Keyboard::I,\ \textcolor{stringliteral}{"{}I"{}}\},}
+\DoxyCodeLine{00074\ \ \ \ \ \{sf::Keyboard::J,\ \textcolor{stringliteral}{"{}J"{}}\},}
+\DoxyCodeLine{00075\ \ \ \ \ \{sf::Keyboard::K,\ \textcolor{stringliteral}{"{}K"{}}\},}
+\DoxyCodeLine{00076\ \ \ \ \ \{sf::Keyboard::L,\ \textcolor{stringliteral}{"{}L"{}}\},}
+\DoxyCodeLine{00077\ \ \ \ \ \{sf::Keyboard::M,\ \textcolor{stringliteral}{"{}M"{}}\},}
+\DoxyCodeLine{00078\ \ \ \ \ \{sf::Keyboard::N,\ \textcolor{stringliteral}{"{}N"{}}\},}
+\DoxyCodeLine{00079\ \ \ \ \ \{sf::Keyboard::O,\ \textcolor{stringliteral}{"{}O"{}}\},}
+\DoxyCodeLine{00080\ \ \ \ \ \{sf::Keyboard::P,\ \textcolor{stringliteral}{"{}P"{}}\},}
+\DoxyCodeLine{00081\ \ \ \ \ \{sf::Keyboard::Q,\ \textcolor{stringliteral}{"{}Q"{}}\},}
+\DoxyCodeLine{00082\ \ \ \ \ \{sf::Keyboard::R,\ \textcolor{stringliteral}{"{}R"{}}\},}
+\DoxyCodeLine{00083\ \ \ \ \ \{sf::Keyboard::S,\ \textcolor{stringliteral}{"{}S"{}}\},}
+\DoxyCodeLine{00084\ \ \ \ \ \{sf::Keyboard::T,\ \textcolor{stringliteral}{"{}T"{}}\},}
+\DoxyCodeLine{00085\ \ \ \ \ \{sf::Keyboard::U,\ \textcolor{stringliteral}{"{}U"{}}\},}
+\DoxyCodeLine{00086\ \ \ \ \ \{sf::Keyboard::V,\ \textcolor{stringliteral}{"{}V"{}}\},}
+\DoxyCodeLine{00087\ \ \ \ \ \{sf::Keyboard::W,\ \textcolor{stringliteral}{"{}W"{}}\},}
+\DoxyCodeLine{00088\ \ \ \ \ \{sf::Keyboard::X,\ \textcolor{stringliteral}{"{}X"{}}\},}
+\DoxyCodeLine{00089\ \ \ \ \ \{sf::Keyboard::Y,\ \textcolor{stringliteral}{"{}Y"{}}\},}
+\DoxyCodeLine{00090\ \ \ \ \ \{sf::Keyboard::Z,\ \textcolor{stringliteral}{"{}Z"{}}\},}
+\DoxyCodeLine{00091\ \ \ \ \ \{sf::Keyboard::Num0,\ \textcolor{stringliteral}{"{}Num0"{}}\},}
+\DoxyCodeLine{00092\ \ \ \ \ \{sf::Keyboard::Num1,\ \textcolor{stringliteral}{"{}Num1"{}}\},}
+\DoxyCodeLine{00093\ \ \ \ \ \{sf::Keyboard::Num2,\ \textcolor{stringliteral}{"{}Num2"{}}\},}
+\DoxyCodeLine{00094\ \ \ \ \ \{sf::Keyboard::Num3,\ \textcolor{stringliteral}{"{}Num3"{}}\},}
+\DoxyCodeLine{00095\ \ \ \ \ \{sf::Keyboard::Num4,\ \textcolor{stringliteral}{"{}Num4"{}}\},}
+\DoxyCodeLine{00096\ \ \ \ \ \{sf::Keyboard::Num5,\ \textcolor{stringliteral}{"{}Num5"{}}\},}
+\DoxyCodeLine{00097\ \ \ \ \ \{sf::Keyboard::Num6,\ \textcolor{stringliteral}{"{}Num6"{}}\},}
+\DoxyCodeLine{00098\ \ \ \ \ \{sf::Keyboard::Num7,\ \textcolor{stringliteral}{"{}Num7"{}}\},}
+\DoxyCodeLine{00099\ \ \ \ \ \{sf::Keyboard::Num8,\ \textcolor{stringliteral}{"{}Num8"{}}\},}
+\DoxyCodeLine{00100\ \ \ \ \ \{sf::Keyboard::Num9,\ \textcolor{stringliteral}{"{}Num9"{}}\},}
+\DoxyCodeLine{00101\ \ \ \ \ \{sf::Keyboard::Space,\ \textcolor{stringliteral}{"{}Space"{}}\},}
+\DoxyCodeLine{00102\ \ \ \ \ \{sf::Keyboard::BackSpace,\ \textcolor{stringliteral}{"{}Backspace"{}}\},}
+\DoxyCodeLine{00103\ \ \ \ \ \{sf::Keyboard::Comma,\ \textcolor{stringliteral}{"{}Comma"{}}\},}
+\DoxyCodeLine{00104\ \ \ \ \ \{sf::Keyboard::SemiColon,\ \textcolor{stringliteral}{"{}SemiColon"{}}\},}
+\DoxyCodeLine{00105\ \ \ \ \ \{sf::Keyboard::Enter,\ \textcolor{stringliteral}{"{}Enter"{}}\},}
+\DoxyCodeLine{00106\ \ \ \ \ \{sf::Keyboard::Left,\ \textcolor{stringliteral}{"{}Left"{}}\},}
+\DoxyCodeLine{00107\ \ \ \ \ \{sf::Keyboard::Right,\ \textcolor{stringliteral}{"{}Right"{}}\},}
+\DoxyCodeLine{00108\ \ \ \ \ \{sf::Keyboard::Up,\ \textcolor{stringliteral}{"{}Up"{}}\},}
+\DoxyCodeLine{00109\ \ \ \ \ \{sf::Keyboard::Down,\ \textcolor{stringliteral}{"{}Down"{}}\},}
+\DoxyCodeLine{00110\ \ \ \ \ \{sf::Keyboard::LShift,\ \textcolor{stringliteral}{"{}Lshift"{}}\},}
+\DoxyCodeLine{00111\ \ \ \ \ \{sf::Keyboard::Tab,\ \textcolor{stringliteral}{"{}Tab"{}}\},}
+\DoxyCodeLine{00112\ \};}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ !KEYEVENTMAPPING\_HPP\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

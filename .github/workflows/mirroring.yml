@@ -1,9 +1,8 @@
-name: mirroring
+name: on_pr_merged
 
 on:
   pull_request:
-    types:
-      - closed
+    types: [closed]
 
 jobs:
   mirroring:

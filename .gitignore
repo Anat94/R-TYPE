@@ -14,8 +14,12 @@ ZERO_CHECK*
 *.sln
 *.filters
 x64
-Debug
 *.dir
 *.smn
 asio*
 .github
+db.txt
+my_tests
+sqlite3/
+lib/
+db/rtype.db
