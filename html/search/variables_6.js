@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['id_0',['id',['../classdetail_1_1exception.html#a63b819fbb2ef34df9dad1e309207fa24',1,'detail::exception']]],
-  ['indent_5fchar_1',['indent_char',['../classdetail_1_1serializer.html#acf6f783e3299d8b18ce4b5d9746f39f6',1,'detail::serializer']]],
-  ['indent_5fstring_2',['indent_string',['../classdetail_1_1serializer.html#a7f6f1d36859514ab42984deb28d2521e',1,'detail::serializer']]]
+  ['friendname_1349',['friendName',['../structAddFriendsMessage.html#ae41c069d337b284c19fcdd2d4833af4e',1,'AddFriendsMessage::friendName()'],['../structRemoveFriendsMessage.html#a525e4466919d01d00cd0ab882cea6aef',1,'RemoveFriendsMessage::friendName()']]],
+  ['friends_1350',['friends',['../structFriendsResponse.html#aed1fbd5409517bf79a2891265d29d5f7',1,'FriendsResponse::friends()'],['../structCallbackData.html#aa0c9d4cef51dff645d5553f94970a0e3',1,'CallbackData::friends()']]]
 ];

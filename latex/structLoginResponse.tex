@@ -1,33 +1,61 @@
-\doxysection{Login\+Response Struct Reference}
-\hypertarget{structLoginResponse}{}\label{structLoginResponse}\index{LoginResponse@{LoginResponse}}
+\hypertarget{structLoginResponse}{}\doxysection{Login\+Response Struct Reference}
+\label{structLoginResponse}\index{LoginResponse@{LoginResponse}}
+
+
+encapsulates the login / signup response from the server to the user  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Login\+Response\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structLoginResponse}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structLoginResponse_a85767836d260431c684f9cebdb876f4d}\label{structLoginResponse_a85767836d260431c684f9cebdb876f4d} 
-{\bfseries Login\+Response} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int type\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structLoginResponse_a85767836d260431c684f9cebdb876f4d}{Login\+Response}} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int type\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em Constructor initiating hte following parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structLoginResponse_a2779f0cea93e2f6c5e9ff48bec5f0882}\label{structLoginResponse_a2779f0cea93e2f6c5e9ff48bec5f0882} 
-bool {\bfseries response}
-\item 
-\Hypertarget{structLoginResponse_a205cde05efe142639930469d80217001}\label{structLoginResponse_a205cde05efe142639930469d80217001} 
-int {\bfseries logintype}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structLoginResponse_a2779f0cea93e2f6c5e9ff48bec5f0882}\label{structLoginResponse_a2779f0cea93e2f6c5e9ff48bec5f0882}} 
+bool \mbox{\hyperlink{structLoginResponse_a2779f0cea93e2f6c5e9ff48bec5f0882}{response}}
+\begin{DoxyCompactList}\small\item\em response of the login request, 1 if successfull, 0 if not. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structLoginResponse_a205cde05efe142639930469d80217001}\label{structLoginResponse_a205cde05efe142639930469d80217001}} 
+int \mbox{\hyperlink{structLoginResponse_a205cde05efe142639930469d80217001}{logintype}}
+\begin{DoxyCompactList}\small\item\em type of the login\+: 0 = register, 1 = login. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates the login / signup response from the server to the user 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structLoginResponse_a85767836d260431c684f9cebdb876f4d}\label{structLoginResponse_a85767836d260431c684f9cebdb876f4d}} 
+\index{LoginResponse@{LoginResponse}!LoginResponse@{LoginResponse}}
+\index{LoginResponse@{LoginResponse}!LoginResponse@{LoginResponse}}
+\doxysubsubsection{\texorpdfstring{LoginResponse()}{LoginResponse()}}
+{\footnotesize\ttfamily Login\+Response\+::\+Login\+Response (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{bool}]{success\+\_\+,  }\item[{int}]{type\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor initiating hte following parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em response} & response of the login request, 1 if successfull, 0 if not. \\
+\hline
+{\em logintype} & type of the login\+: 0 = register, 1 = login. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

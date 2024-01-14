@@ -1,30 +1,56 @@
-\doxysection{Friends\+Response Struct Reference}
-\hypertarget{structFriendsResponse}{}\label{structFriendsResponse}\index{FriendsResponse@{FriendsResponse}}
+\hypertarget{structFriendsResponse}{}\doxysection{Friends\+Response Struct Reference}
+\label{structFriendsResponse}\index{FriendsResponse@{FriendsResponse}}
+
+
+encapsulates a friend of the user\textquotesingle{}s friend list  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Friends\+Response\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structFriendsResponse}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structFriendsResponse_a92c8aee4b729cba338711e1118c57c82}\label{structFriendsResponse_a92c8aee4b729cba338711e1118c57c82} 
-{\bfseries Friends\+Response} (int16\+\_\+t id\+\_\+, std\+::string friends\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structFriendsResponse_a92c8aee4b729cba338711e1118c57c82}{Friends\+Response}} (int16\+\_\+t id\+\_\+, std\+::string friends\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initiating the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structFriendsResponse_aed1fbd5409517bf79a2891265d29d5f7}\label{structFriendsResponse_aed1fbd5409517bf79a2891265d29d5f7} 
-char {\bfseries friends} \mbox{[}20\mbox{]}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structFriendsResponse_aed1fbd5409517bf79a2891265d29d5f7}\label{structFriendsResponse_aed1fbd5409517bf79a2891265d29d5f7}} 
+char \mbox{\hyperlink{structFriendsResponse_aed1fbd5409517bf79a2891265d29d5f7}{friends}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em username of the friend of the user\textquotesingle{}s friend list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates a friend of the user\textquotesingle{}s friend list 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structFriendsResponse_a92c8aee4b729cba338711e1118c57c82}\label{structFriendsResponse_a92c8aee4b729cba338711e1118c57c82}} 
+\index{FriendsResponse@{FriendsResponse}!FriendsResponse@{FriendsResponse}}
+\index{FriendsResponse@{FriendsResponse}!FriendsResponse@{FriendsResponse}}
+\doxysubsubsection{\texorpdfstring{FriendsResponse()}{FriendsResponse()}}
+{\footnotesize\ttfamily Friends\+Response\+::\+Friends\+Response (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{std\+::string}]{friends\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initiating the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em friends\+\_\+} & username of the friend of the user\textquotesingle{}s friend list. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

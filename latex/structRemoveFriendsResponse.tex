@@ -1,30 +1,56 @@
-\doxysection{Remove\+Friends\+Response Struct Reference}
-\hypertarget{structRemoveFriendsResponse}{}\label{structRemoveFriendsResponse}\index{RemoveFriendsResponse@{RemoveFriendsResponse}}
+\hypertarget{structRemoveFriendsResponse}{}\doxysection{Remove\+Friends\+Response Struct Reference}
+\label{structRemoveFriendsResponse}\index{RemoveFriendsResponse@{RemoveFriendsResponse}}
+
+
+encapsulates the friend removal request response from the server to the player  
+
+
+
+
+{\ttfamily \#include $<$Network.\+hpp$>$}
+
 Inheritance diagram for Remove\+Friends\+Response\+:\begin{figure}[H]
 \begin{center}
 \leavevmode
 \includegraphics[height=2.000000cm]{structRemoveFriendsResponse}
 \end{center}
 \end{figure}
-\doxysubsubsection*{Public Member Functions}
+\doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structRemoveFriendsResponse_acd0208cacd277f3dd0516523f2fe97dd}\label{structRemoveFriendsResponse_acd0208cacd277f3dd0516523f2fe97dd} 
-{\bfseries Remove\+Friends\+Response} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int packet\+\_\+id\+\_\+)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Public Attributes}
+\mbox{\hyperlink{structRemoveFriendsResponse_acd0208cacd277f3dd0516523f2fe97dd}{Remove\+Friends\+Response}} (int16\+\_\+t id\+\_\+, bool success\+\_\+, int packet\+\_\+id\+\_\+)
+\begin{DoxyCompactList}\small\item\em constructor initializing the following parameters \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\Hypertarget{structRemoveFriendsResponse_afd08ee7875ceaeb58f810046ef09311c}\label{structRemoveFriendsResponse_afd08ee7875ceaeb58f810046ef09311c} 
-bool {\bfseries response}
-\end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{structBaseMessage}{Base\+Message}}}
-\begin{DoxyCompactItemize}
-\item 
-int16\+\_\+t {\bfseries id}
-\item 
-int {\bfseries packet\+\_\+id}
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{structRemoveFriendsResponse_afd08ee7875ceaeb58f810046ef09311c}\label{structRemoveFriendsResponse_afd08ee7875ceaeb58f810046ef09311c}} 
+bool \mbox{\hyperlink{structRemoveFriendsResponse_afd08ee7875ceaeb58f810046ef09311c}{response}}
+\begin{DoxyCompactList}\small\item\em response of the friend removal request, 1 if successfull, 0 if not. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+encapsulates the friend removal request response from the server to the player 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structRemoveFriendsResponse_acd0208cacd277f3dd0516523f2fe97dd}\label{structRemoveFriendsResponse_acd0208cacd277f3dd0516523f2fe97dd}} 
+\index{RemoveFriendsResponse@{RemoveFriendsResponse}!RemoveFriendsResponse@{RemoveFriendsResponse}}
+\index{RemoveFriendsResponse@{RemoveFriendsResponse}!RemoveFriendsResponse@{RemoveFriendsResponse}}
+\doxysubsubsection{\texorpdfstring{RemoveFriendsResponse()}{RemoveFriendsResponse()}}
+{\footnotesize\ttfamily Remove\+Friends\+Response\+::\+Remove\+Friends\+Response (\begin{DoxyParamCaption}\item[{int16\+\_\+t}]{id\+\_\+,  }\item[{bool}]{success\+\_\+,  }\item[{int}]{packet\+\_\+id\+\_\+ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+constructor initializing the following parameters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id\+\_\+} & id of the message that is going to be sent through the network. Identifies the type of message. \\
+\hline
+{\em success\+\_\+} & response of the friend removal request, 1 if successfull, 0 if not. \\
+\hline
+{\em packet\+\_\+id\+\_\+} & packet id of the message, used to identify individual packets \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}

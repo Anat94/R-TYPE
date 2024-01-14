@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['text_0',['Text',['../structcomponent_1_1Text.html',1,'component']]],
-  ['timer_1',['Timer',['../classTimer.html',1,'']]],
-  ['to_5fjson_5ffn_2',['to_json_fn',['../structdetail_1_1to__json__fn.html',1,'detail']]],
-  ['trophy_3',['Trophy',['../structTrophy.html',1,'']]],
-  ['tuple_5felement_3c_20n_2c_20_3a_3anlohmann_3a_3adetail_3a_3aiteration_5fproxy_5fvalue_3c_20iteratortype_20_3e_20_3e_4',['tuple_element&lt; N, ::nlohmann::detail::iteration_proxy_value&lt; IteratorType &gt; &gt;',['../classstd_1_1tuple__element_3_01N_00_01_1_1nlohmann_1_1detail_1_1iteration__proxy__value_3_01IteratorType_01_4_01_4.html',1,'std']]],
-  ['tuple_5fsize_3c_3a_3anlohmann_3a_3adetail_3a_3aiteration_5fproxy_5fvalue_3c_20iteratortype_20_3e_20_3e_5',['tuple_size&lt;::nlohmann::detail::iteration_proxy_value&lt; IteratorType &gt; &gt;',['../classstd_1_1tuple__size_3_1_1nlohmann_1_1detail_1_1iteration__proxy__value_3_01IteratorType_01_4_01_4.html',1,'std']]],
-  ['two_6',['two',['../structdetail_1_1is__ordered__map_1_1two.html',1,'detail::is_ordered_map']]],
-  ['type_5ferror_7',['type_error',['../classdetail_1_1type__error.html',1,'detail']]]
+  ['scale_908',['Scale',['../structcomponent_1_1Scale.html',1,'component']]],
+  ['scalesnapshot_909',['ScaleSnapshot',['../structScaleSnapshot.html',1,'']]],
+  ['score_910',['Score',['../structcomponent_1_1Score.html',1,'component']]],
+  ['scoremessage_911',['ScoreMessage',['../structScoreMessage.html',1,'']]],
+  ['serializer_912',['serializer',['../classdetail_1_1serializer.html',1,'detail']]],
+  ['server_913',['Server',['../classServer.html',1,'']]],
+  ['serverentity_914',['ServerEntity',['../structcomponent_1_1ServerEntity.html',1,'component']]],
+  ['sfmlerror_915',['SFMLError',['../classSFMLError.html',1,'']]],
+  ['shield_916',['Shield',['../structcomponent_1_1Shield.html',1,'component']]],
+  ['shootcounter_917',['ShootCounter',['../structcomponent_1_1ShootCounter.html',1,'component']]],
+  ['shootevent_918',['ShootEvent',['../classShootEvent.html',1,'']]],
+  ['snapshotposition_919',['SnapshotPosition',['../structSnapshotPosition.html',1,'']]],
+  ['span_5finput_5fadapter_920',['span_input_adapter',['../classdetail_1_1span__input__adapter.html',1,'detail']]],
+  ['sparse_5farray_921',['sparse_array',['../classsparse__array.html',1,'']]],
+  ['spawnenemy_922',['SpawnEnemy',['../classSpawnEnemy.html',1,'']]],
+  ['spawnevent_923',['SpawnEvent',['../classSpawnEvent.html',1,'']]],
+  ['static_5fconst_924',['static_const',['../structdetail_1_1static__const.html',1,'detail']]]
 ];
