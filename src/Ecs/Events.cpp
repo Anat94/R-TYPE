@@ -113,6 +113,24 @@ void PositionStayInWindowBounds::handleEvent(registry &r, EventListener &listene
     }
 }
 
+
+void CreateExplosionEvent::handleEvent(registry &r, EventListener &listener)
+{
+    std::cout << "IN CREATE EXPLOSION EVENT ! " << e_type << std::endl;
+    if (e_type == 1) {
+        entity_t enemy = r.spawn_entity();
+        r.add_component<component::Position>(enemy, component::Position(genPos.x, genPos.y));
+        r.add_component<component::Scale>(enemy, component::Scale(5.5f));
+        if (room.size() != 0)
+            r.add_component<component::Room>(enemy, component::Room(room));
+        r.add_component<component::AnimatedDrawable>(enemy, component::AnimatedDrawable("temp/assets/textures/sprites/explosion.png", {6, 0}, {34, 32}, {0, 0}, {0, 0}, {6, 0}));
+        r.add_component<component::KillOnTimer>(enemy, component::KillOnTimer(2200));
+        auto &tmp = r.get_components<component::AnimatedDrawable>()[enemy];
+        tmp->addAnimation("idle", {6, 0}, true);
+        tmp->_state = "idle";
+    }
+}
+
 /**
          * @brief Handles the event based on the registry objects
          * 
@@ -136,11 +154,20 @@ void CollisionEvent::handleEvent(registry &r, EventListener &listener)
             player1_h->_health -= player2_d->_damage;
             r.add_component<component::Shield>(_ents.first, component::Shield(3000));
             if (player1_h->_health <= 0) {
+                auto &room = r.get_components<component::Room>()[_ents.second];
+                std::cout << "DEATH EVENT FOR ENEMY\n";
                 DeathEvent *new_event = new DeathEvent(_ents.first, player2_hurt->_sender);
+                auto &posToSend = r.get_components<component::Position>()[_ents.second];
+                CreateExplosionEvent *exp_event = new CreateExplosionEvent(*posToSend, 1, room->_name);
+                std::cout << "CREATED EXPLOSION EVENT\n";
                 if (listener.hasEvent(new_event))
                     delete new_event;
                 else
                     listener.addEvent(new_event);
+                if (listener.hasEvent(exp_event))
+                    delete exp_event;
+                else
+                    listener.addEvent(exp_event);
             }
             player2_p->_pierce -= 1;
             if (player2_p->_pierce == 0) {
@@ -276,7 +303,6 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
 void ShootEvent::handleEvent(registry &r, EventListener &listener)
 {
     entity_t shot = r.spawn_entity();
-    std::cerr << "shot === " << shot << std::endl;
 
     try {
         auto player_hit = r.get_components<component::Hitbox>()[_ents.first];

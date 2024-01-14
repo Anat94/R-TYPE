@@ -336,7 +336,6 @@ void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &e
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && health[i].has_value()) {
             HealthMessage to_send(23, health[i].value()._health, _packet_id);
-            printf("health ======== %d\n", health[i].value()._health);
             _packet_id++;
             _health_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
@@ -355,7 +354,6 @@ void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &ed
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && score[i].has_value()) {
             ScoreMessage to_send(24, score[i]->_score, _packet_id);
-            printf("score ======== %d\n", score[i]->_score);
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
