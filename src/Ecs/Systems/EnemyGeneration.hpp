@@ -29,6 +29,7 @@ class EnemyGeneration: public ISystems {
         void generateEnemy(std::string room) {
             if (Random::generate(0, 20) > 18) {
                 _listener->addEvent(new SpawnEnemy(
+                            100,
                             1000,
                             10.0f,
                             component::Velocity(-6.0f, 0.0f),
@@ -40,6 +41,7 @@ class EnemyGeneration: public ISystems {
                             false, false));
             } else if (Random::generate(0, 10) > 6) {
                 _listener->addEvent(new SpawnEnemy(
+                            30,
                             300,
                             3.0f,
                             component::Velocity(-15.0f, 0.0f),
@@ -51,6 +53,7 @@ class EnemyGeneration: public ISystems {
                             false, Random::generate(0, 5) == 4));
             } else {
                 _listener->addEvent(new SpawnEnemy(
+                            20,
                             200,
                             6.0f,
                             component::Velocity(-12.0f, 0.0f),

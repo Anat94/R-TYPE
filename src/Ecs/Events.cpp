@@ -278,7 +278,7 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     r.add_component<component::Velocity>(enemy, component::Velocity(_vel._dx, _vel._dy));
     r.add_component<component::Scale>(enemy, component::Scale(_scale));
     r.add_component<component::Health>(enemy, component::Health(_health));
-    r.add_component<component::Damage>(enemy, component::Damage(20));
+    r.add_component<component::Damage>(enemy, component::Damage(_damage));
     r.add_component<component::HurtsOnCollision>(enemy, component::HurtsOnCollision(-1));
     if (_roomName.size() != 0)
         r.add_component<component::Room>(enemy, component::Room(_roomName));

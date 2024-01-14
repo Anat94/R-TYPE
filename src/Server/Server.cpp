@@ -960,7 +960,7 @@ void Server::loadLevels(const std::string &room_name)
                 auto pos = enemies_positions[alias];
                 for (auto p : pos) {
                     std::cout << "new entity loaded with position: " << p.x << ", " << p.y << std::endl;
-                    _listener.addEvent(new SpawnEnemy(props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
+                    _listener.addEvent(new SpawnEnemy(props.damage, props.health, props.scale, props.velocity, p, draw, anims, room_name, true));
                 }
             }
         }
