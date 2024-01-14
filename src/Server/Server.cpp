@@ -367,13 +367,16 @@ void Server::send_health_to_specific_client(sparse_array<component::Endpoint> &e
  */
 void Server::send_score_to_specific_client(sparse_array<component::Endpoint> &edp)
 {
-    auto &score = _ecs.get_components<component::Score>();
+    auto score = _ecs.get_components<component::Score>();
+    auto username = _ecs.get_components<component::Username>();
     for (size_t i = 0; i < edp.size(); i++) {
         if (edp[i].has_value() && score[i].has_value()) {
             ScoreMessage to_send(24, score[i]->_score, _packet_id);
             _packet_id++;
             _score_packets_to_send.push_back(to_send);
             send_data_to_client_by_entity(to_send, i);
+            std::cout << "SENDING SCORE TO " << username[i]->_name << ': ' << score[i]->_score<< std::endl;
+            addHighScore(username[i]->_name, score[i]->_score);
         }
     }
 }
