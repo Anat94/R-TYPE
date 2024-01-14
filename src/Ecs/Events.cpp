@@ -292,7 +292,6 @@ void SpawnEnemy::handleEvent(registry &r, EventListener &listener)
     tmp1->_state = "idle";
     if (survives)
         r.add_component(enemy, component::SurvivesOutOfBound());
-    std::cout << automaticShooting << std::endl;
     if (automaticShooting) {
         r.add_component<component::AutoShoot>(enemy, component::AutoShoot());
     }

@@ -37,7 +37,7 @@ class EnemyGeneration: public ISystems {
                             {
                                 {"idle", {true, {0, 2}}}
                             }, room,
-                            false));
+                            false, false));
             } else if (Random::generate(0, 10) > 6) {
                 _listener->addEvent(new SpawnEnemy(
                             300,
@@ -48,7 +48,7 @@ class EnemyGeneration: public ISystems {
                             {
                                 {"idle", {true, {0, 3}}}
                             }, room,
-                            Random::generate(0, 5) == 4));
+                            false, Random::generate(0, 5) == 4));
             } else {
                 _listener->addEvent(new SpawnEnemy(
                             200,
@@ -59,7 +59,7 @@ class EnemyGeneration: public ISystems {
                             {
                                 {"idle", {true, {0, 7}}}
                             }, room,
-                            Random::generate(0, 6) == 5));
+                            false, Random::generate(0, 6) == 5));
             }
         }
 
