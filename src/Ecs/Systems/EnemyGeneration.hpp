@@ -25,6 +25,20 @@ class EnemyGeneration: public ISystems {
             timer.restart();
         };
 
+        void generateEnemy(std::string room) {
+            // if (Random::generate())
+            _listener->addEvent(new SpawnEnemy(
+                200,
+                6.0f,
+                component::Velocity(-12.0f, 0.0f),
+                component::Position(1920, Random::generate(0, 920)),
+                component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}),
+                {
+                    {"idle", {{0, 7}, true}}
+                }, room,
+                Random::generate(0, 6) == 5));
+        }
+
         /**
          * @brief  operator ()
          *
@@ -49,16 +63,7 @@ class EnemyGeneration: public ISystems {
                         }
                     };
                     if ((maxEnemiesPerPlayer * totalPlayers) > totalEnemies) {
-                        _listener->addEvent(new SpawnEnemy(
-                            200,
-                            6.0f,
-                            component::Velocity(-12.0f, 0.0f),
-                            component::Position(1920, Random::generate(0, 920)),
-                            component::AnimatedDrawable("temp/assets/textures/sprites/r-typesheet5.gif", {7, 0}, {21, 24}, {12, 0}, {5, 5}),
-                            {
-                                {"idle", {{0, 7}, true}}
-                            }, allRooms[i],
-                            Random::generate(0, 6) == 5));
+                        generateEnemy(allRooms[i]);
                     }
                 }
                 timer.restart();
