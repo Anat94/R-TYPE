@@ -244,12 +244,60 @@ class Client {
          */
         std::vector<char> receive_raw_data_from_client();
 
+        /**
+         * @brief get when a player dead
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_death_event(std::vector<char> &server_msg);
+
+        /**
+         * @brief get best 3 highscores from server
+         *
+         * @param server_msg The message from the server
+         * @return The packet id
+         */
         int receive_high_score(std::vector<char> &server_msg);
+
+        /**
+         * @brief while login, this get the login response from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_login_response(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive thr drawable from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_drawable_snapshot_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive the animated drawable from the server
+         * 
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_snapshot(std::vector<char> &server_msg);
+
+        /**
+         * @brief receive animation update from the server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_animated_drawable_state_update(std::vector<char> &server_msg);
+
+        /**
+         * @brief get friends from server
+         *
+         * @param server_msg The message from the server
+         * @return int  The packet id
+         */
         int receive_friends_reponse(std::vector<char> &server_msg);
         int receive_add_friends_reponse(std::vector<char> &server_msg);
         int receive_remove_friends_reponse(std::vector<char> &server_msg);
